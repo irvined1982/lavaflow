@@ -1,0 +1,16 @@
+<h2>Job Info</h2>
+<dl class="dl-horizontal">
+	<dt>Job ID</dt><dd><a href='{{ job.get_absolute_url }}'>{{ job.jobId }}</a> (<a href='{{job.cluster.get_absolute_url}}'>{{job.cluster.name}}</a>)</dd>
+	<dt>Owner</dt><dd>{{ job.user.userName }} ({{ job.userId }})</dd>
+</dl>
+
+<h2>Times</h2>
+<dl class="dl-horizontal">
+	<dt>Job Submit Time</dt><dd> {{ job.submitTimeDT }} from: {{ job.submitHost.hostName }}</dd>
+	<dt>First element started</dt><dd> {{ job.firstStartTimeDT }}</dd>
+	<dt>Last element finished</dt><dd>{{ job.lastFinishTimeDT }}</dd>
+	<dt>Total Pend Time</dt><dd>{{ job.pendTimeDelta }}</dd>
+	<dt>Pend time for first job</dt><dd>{{ job.firstRun.pendTimeDelta }}</dd>
+	<dt>CPU Time consumed</dt><dd>{{ job.cpuTimeDelta }}</dd>
+	<dt>Wall Time elapsed</dt><dd> {{ job.wallTimeDelta }}</dd>
+</dl>

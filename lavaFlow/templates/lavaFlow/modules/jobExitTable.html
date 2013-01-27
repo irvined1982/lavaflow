@@ -1,0 +1,22 @@
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Cluster</td>
+			<th># Runs</th>
+			<th>Total CPU Time </th>
+			<th>Total Wall Time </th>
+			<th>Total Pend Time </th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for r in rows %}
+		<tr>
+			<td>{{ r.exit }}</td>
+			<td>{{ r.numRuns }}</td>
+			<td title="Average: {{ r.avgCpuTime }}, Min: {{ r.minCpuTime }}, Max: {{ r.maxCpuTime }}" >{{ r.sumCpuTime }}</td>
+			<td title="Average: {{ r.avgWallTime }}, Min: {{ r.minWallTime }}, Max: {{ r.maxWallTime }}" >{{ r.sumWallTime }}</td>
+			<td title="Average: {{ r.avgPendTime }}, Min: {{ r.minPendTime }}, Max: {{ r.maxPendTime }}" >{{ r.sumPendTime }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>

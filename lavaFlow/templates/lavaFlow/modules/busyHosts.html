@@ -1,0 +1,18 @@
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Host</th>
+			<th># Runs</th>
+			<th>Total CPU Time </th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for h in hosts %}
+		<tr>
+			<td><a href='{{h.host.get_absolute_url}}'>{{ h.host.hostName }}</a></td>
+			<td>{{ h.numRuns }}</td>
+			<td>{{ h.sumCpu }} </td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>

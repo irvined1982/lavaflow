@@ -1,0 +1,46 @@
+{% extends "lavaFlow/base.html" %}
+
+{% block main_body %}
+<h1>{{ user.userName}}</h1>
+<h2>Job Submissions</h2>
+<table class="tablesorter">
+	<thead>
+		<tr>
+			<th>Cluster</th>
+			<th>Queue</th>
+			<th>Job Size</th>
+			<th># Jobs</th>
+			<th># Elements</th>
+			<th># Runs</th>
+			<th>Wall Time</th>
+			<th>CPU Time</th>
+			<th>Pend Time</th>
+		</tr>
+	</thead>
+	<tbody>
+		{%for u in user.submitUsage %}		
+			<tr>
+				<td><a href='{{ u.cluster.get_absolute_url }}'>{{ u.cluster.name }}</a></td>
+				<td>{{ u.queue.name }}</td>
+				<td>{{ u.numProcessors }}</td>
+				<td>{{ u.numJobs }}</td>
+				<td>{{ u.numElements}}</td>
+				<td>{{ u.numRuns}}</td>
+				<td>{{ u.wallTime }}</td>
+				<td>{{ u.cpuTime }}</td>
+				<td>{{ u.pendTime }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<h2>UtilizationView</h2>
+<div class="largeGraph">
+{{ user.utilizationGraphSVG|safe }}
+</div>
+<h2>Job Sizes</h2>
+<div class="largeGraph">
+{{ user.jobSizeGraphSVG|safe }}
+</div>
+
+{% endblock %}

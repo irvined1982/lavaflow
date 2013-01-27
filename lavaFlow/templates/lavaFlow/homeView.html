@@ -1,0 +1,189 @@
+{% extends "lavaFlow/base.html" %}
+{% block main_body %}
+		<div id="rangeSelector">
+			<div id="slider"></div>
+			<p id="rangeText">Loading report range....</p>
+		</div>
+		<script>
+			 var selectedMin=-1;
+			 var selectedMax=-1;
+			 $.getJSON("{% url lavaFlow.views.getReportRange %}", function(data) {
+				 var endTime=selectedMax;
+				 var startTime=selectedMin;
+				 if ( selectedMin < 0 || selectedMax < 0 ){
+	 
+					 selectedMax=data.endTime;
+					 selectedMin=data.endTime-60*60*24*7;
+					 if (selectedMin<data.startDate ){
+						 selectedMin=data.startTime;
+					 }
+				 }
+
+				 var startDate=new Date(selectedMin * 1000);
+				 var endDate=new Date(selectedMax * 1000);
+				 $("#rangeText").text('Report start: ' + startDate + ', report end: ' + endDate );
+
+				 $( "#slider" ).slider({
+					 range: true,
+					 max: data.endTime,
+					 min: data.startTime,
+					 values: [selectedMin, selectedMax],
+					 slide: function( event, ui ){
+						 var startDate=new Date(ui.values[0]*1000);
+						 var endDate=new Date(ui.values[1]*1000);
+						 $("#rangeText").text('Report start: ' + startDate + ', report end: ' + endDate );
+					 },
+					 change: function(event, ui){
+						 selectedMin=ui.values[0];
+						 selectedMax=ui.values[1];
+						updateReport();
+				 	 },
+				 });
+				 updateReport();
+			 });
+		 </script>
+
+		<div id="reportData"></div>
+		<h2>Cluster Overview</h2>
+		<div id="clusterOverview"></div>
+		<h2>Utilization Graph</h2>
+		<div id='utilizationChart'>
+			<svg style='height:500px'> </svg>
+		</div>
+		<script>
+			var utilChart;
+			nv.addGraph(function() {
+				utilChart = nv.models.stackedAreaChart();
+				utilChart.clipEdge(true);
+				utilChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
+				d3.select('#utilizationChart svg')
+				.datum([])
+				.transition().duration(500)
+				.call(utilChart);
+				nv.utils.windowResize(utilChart.update);
+				return utilChart;
+			});
+		</script>
+		<h2>Exit Status</h2>
+
+		<div id='jobExitChart'>
+			<svg style='height:500px'> </svg>
+		</div>
+
+		<script>
+			var exitChart;
+			nv.addGraph(function() {
+				exitChart = nv.models.multiBarChart();
+				d3.select('#jobExitChart svg')
+				.datum([])
+				.transition().duration(500)
+				.call(exitChart);
+				nv.utils.windowResize(exitChart.update);
+				return exitChart;
+			});
+		</script>
+
+		<div id="jobExitTable"></div>
+
+		<h2>Job Sizes</h2>
+		<div id='jobSizeChart'>
+			<svg style='height:500px'> </svg>
+		</div>
+
+		<script>
+			var sizeChart;
+			nv.addGraph(function() {
+				sizeChart = nv.models.multiBarChart();
+				d3.select('#jobSizeChart svg')
+				.datum([])
+				.transition().duration(500)
+				.call(exitChart);
+				nv.utils.windowResize(sizeChart.update);
+				return sizeChart;
+			});
+		</script>
+		<div id="jobSizeTable"></div>
+
+		<h2>Busiest Users by CPU Time</h2>
+		<div id="heavyUsers"></div>
+
+		<h2>Most Patient users by Pend Time</h2>
+		<div id="patientUsers"></div>
+
+		<h2>Best Hosts</h2>
+		<p>The best hosts are the hosts that have accumulated the most successful jobs through this period.</p>
+		<div id="bestHosts"></div>
+
+		<h2>Worst Hosts</h2>
+		<p>The following hosts have the highest number of jobs that failed to finish.  This happens when the job does not exit with exit code zero.  This includes situations where the job did not complete because the user killed the job.  Typically the figures for CPU time should be be fairly similar accross all nodes on the same cluster, a peak in value here may indicate a host that is malfunctioning.</p>
+		<div id="worstHosts"></div>
+
+		<h2>Busiest Submit Hosts</h2>
+		<p>The following hosts submitted the most jobs</p>
+		<div id="busySubmits"></div>
+
+		<h2>Jobs</h2>
+		<div id="jobList"></div>
+		<script>
+			function getJobListPage(page){
+				 $.get("./modules/jobList/"+selectedMin+"/"+selectedMax+"/?page="+page, function(data) {
+					 $('#jobList').html(data);
+				 });
+			}
+		</script>
+
+		<script>
+			 function updateReport(){
+				 $("#reportData").text('Updating Report...');
+				 $.get("./modules/clusterOverview/"+selectedMin+"/"+selectedMax+"/", function(data) {
+					 $('#clusterOverview').html(data);
+				 });
+				 $.get("./modules/busyUsers/"+selectedMin+"/"+selectedMax+"/-sumCpu/", function(data) {
+					 $('#heavyUsers').html(data);
+				 });
+				 $.get("./modules/busyUsers/"+selectedMin+"/"+selectedMax+"/-sumPend/", function(data) {
+					 $('#patientUsers').html(data);
+				 });
+				 $.get("./modules/bestHosts/"+selectedMin+"/"+selectedMax+"/", function(data) {
+					 $('#bestHosts').html(data);
+				 });
+				 $.get("./modules/worstHosts/"+selectedMin+"/"+selectedMax+"/", function(data) {
+					 $('#worstHosts').html(data);
+				 });
+				 $.get("./modules/busySubmit/"+selectedMin+"/"+selectedMax+"/", function(data) {
+					 $('#busySubmits').html(data);
+				 });
+				 $.get("./modules/jobSizeTable/"+selectedMin+"/"+selectedMax+"/", function(data) {
+					 $('#jobSizeTable').html(data);
+				 });
+
+				 $.get("./modules/jobExitTable/"+selectedMin+"/"+selectedMax+"/", function(data) {
+					 $('#jobExitTable').html(data);
+				 });
+				 $.get("./modules/jobList/"+selectedMin+"/"+selectedMax+"/", function(data) {
+					 $('#jobList').html(data);
+				 });
+				 $.getJSON("./modules/jobExitChart/"+selectedMin+"/"+selectedMax+"/", function(data) {
+							d3.select('#jobExitChart svg')
+							.datum(data)
+							.transition().duration(500)
+							.call(exitChart);
+				});
+				 $.getJSON("./modules/utilization/"+selectedMin+"/"+selectedMax+"/", function(data) {
+							d3.select('#utilizationChart svg')
+							.datum(data)
+							.transition().duration(500)
+							.call(utilChart);
+				});
+				 $.getJSON("./modules/jobSizeChart/"+selectedMin+"/"+selectedMax+"/", function(data) {
+							d3.select('#jobSizeChart svg')
+							.datum(data)
+							.transition().duration(500)
+							.call(sizeChart);
+				});
+				 $("#reportData").text('');
+
+			 }
+
+		</script>
+{% endblock %}

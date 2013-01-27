@@ -1,0 +1,26 @@
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Cluster Name</th>
+			<th># Jobs</th>
+			<th># Elements</th>
+			<th># Runs </th>
+			<th>Total CPU Time </th>
+			<th>Total Wall Time </th>
+			<th>Total Pend Time </th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for cluster in clusters %}
+		<tr>
+			<td><a href='{{cluster.cluster.get_absolute_url}}'>{{ cluster.cluster.name }}</a></td>
+			<td>{{ cluster.totalJobs }}</td>
+			<td>{{ cluster.totalElements}}</td>
+			<td>{{ cluster.totalRuns }}</td>
+			<td>{{ cluster.CPUTime }}</td>
+			<td>{{ cluster.wallTime }}</td>
+			<td>{{ cluster.pendTime }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>

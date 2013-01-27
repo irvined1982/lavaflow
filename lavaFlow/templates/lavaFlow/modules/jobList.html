@@ -1,0 +1,43 @@
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Cluster</th>
+			<th>Job ID</th>
+			<th>User</th>
+			<th>Pend Time</th>
+			<th>Wall Time</th>
+			<th>CPU Time</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for job in jobs.object_list %}
+		<tr>
+			<td><a href='{{job.cluster.get_absolute_url}}'>{{ job.cluster.name }}</a></td>
+			<td><a href='{{ job.get_absolute_url }}'>{{ job.jobId }}</a></td>
+			<td><a href='{{job.user.get_absolute_url}}'>{{ job.user.userName }}</a></td>
+			<td>{{ job.pendTimeDelta }}</td>
+			<td>{{ job.wallTimeDelta }}</td>
+			<td>{{ job.cpuTimeDelta }}</td>
+		</tr>
+		{% empty %}
+		<tr>
+			<td colspan=7>No Data</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+<div class="pagination">
+	<span class="step-links">
+		{% if jobs.has_previous %}
+		<a href="#" onClick="getJobListPage( {{ jobs.previous_page_number }});return false;">previous</a>
+		{% endif %}
+		<span class="current">
+			Page {{ jobs.number }} of {{ jobs.paginator.num_pages }}.
+		</span>
+		{% if jobs.has_next %}
+		<a href="#" onClick="getJobListPage( {{ jobs.next_page_number }});return false;">next</a>
+		{% endif %}
+	</span>
+</div>
+
+

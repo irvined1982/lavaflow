@@ -1,0 +1,37 @@
+{% extends "lavaFlow/base.html" %}
+{% block main_body %}
+	{% include "lavaFlow/widgets/jobHeader.html" with job=job %}
+	{% if job.jobSubmitInfo %}
+		<h2>Job Submission Info</h2>
+		{% include "lavaFlow/widgets/jobSubmitInfoDetail.html" with s=job.jobSubmitInfo %}
+	{% endif %}
+
+
+	<h2>Job Throughput</h2>
+
+	<div id='utilizationChart'>
+		<svg style='height:500px'> </svg>
+	</div>
+
+	<script>
+		nv.addGraph(function() {
+			var chartData={{job.utilizationN3DS|safe }};
+			var chart = nv.models.stackedAreaChart();
+			chart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
+			d3.select('#utilizationChart svg')
+			.datum(chartData)
+			.transition().duration(500)
+			.call(chart);
+			nv.utils.windowResize(chart.update);
+			return chart;
+		});
+	</script>
+
+
+
+
+   <h2>Elements</h2>
+	{% include "lavaFlow/widgets/elementList.html" with elements=job.elements.all %}
+{% endblock %}
+
+

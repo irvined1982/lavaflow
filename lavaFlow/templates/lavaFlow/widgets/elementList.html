@@ -1,0 +1,34 @@
+<table class="table table-striped">
+	<thead>
+	<tr>
+		<th>Job ID</th>
+		<th>Element ID</th>
+		<th>Start Time</th>
+		<th>End Time</th>
+		<th>Pend Time</th>
+		<th>Wall Time</th>
+		<th>CPU Time</th>
+		<th>Hosts Spanned</th>
+		<th>Status</th>
+		<th>Exit Reason</th>
+	</tr>
+</thead>
+<tbody>
+   {% for element in elements %}
+	   {% for run in element.runs.all %}
+		   <tr>
+			   <td><a href='{{ run.element.job.get_absolute_url }}'>{{ run.element.job.jobId }}</a></td>
+			   <td><a href='{{ run.get_absolute_url }}'>{{ element.elementId }}</a></td>
+			   <td>{{ run.startTimeDT }}</td>
+			   <td>{{ run.endTimeDT }}</td>
+			   <td>{{ run.pendTimeDelta }}</td>
+			   <td>{{ run.wallTimeDelta }}</td>
+			   <td>{{ run.cpuTimeDelta }}</td>
+			   <td>{{ run.executions.count }}</td>
+			   <td>{{ run.runFinishInfo.jStatus.jStatus }}</td>
+			   <td>{{ run.runFinishInfo.exitInfo.name }}</td>
+			</tr>	
+		{% endfor %}
+   {% endfor %}
+   </tbody>
+  </table>
