@@ -23,10 +23,10 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</a>
-					<a class="brand" href="#">LavaFlow</a>
+					<a class="brand" href="{% url lavaFlow.views.homeView %}">LavaFlow</a>
 					<div class="nav-collapse collapse">
 						<ul class="nav">
-							<li><a href="{% url lavaFlow.views.homeView %}">Clusters</a></li>
+							<li><a href="{% url lavaFlow.views.clusterList %}">Clusters</a></li>
 							<li><a href="{% url lavaFlow.views.hostList %}">Hosts</a></li>
 							<li><a href="{% url lavaFlow.views.userList %}">Users</a></li>
 						</ul>

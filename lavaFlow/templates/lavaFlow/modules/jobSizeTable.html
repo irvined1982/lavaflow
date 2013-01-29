@@ -12,7 +12,7 @@
 	<tbody>
 		{% for r in rows %}
 		<tr>
-			<td>{{ r.numProcessors }}</td>
+			<td><a href='{% url lavaFlow.views.homeView startTime endTime filterString|add:"/"|add:r.filterString %}'>{{ r.numProcessors }}</a></td>
 			<td>{{ r.numRuns }}</td>
 			<td title="Average: {{ r.avgCpuTime }}, Min: {{ r.minCpuTime }}, Max: {{ r.maxCpuTime }}" >{{ r.sumCpuTime }}</td>
 			<td title="Average: {{ r.avgWallTime }}, Min: {{ r.minWallTime }}, Max: {{ r.maxWallTime }}" >{{ r.sumWallTime }}</td>

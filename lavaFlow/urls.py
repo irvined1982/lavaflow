@@ -25,17 +25,41 @@ from lavaFlow.models import *
 
 urlpatterns = patterns('',
 	url(r'^$', 'lavaFlow.views.homeView'),
+	url(r'^(\d+)/(\d+)/$', 'lavaFlow.views.homeView'),
+	url(r'^(\d+)/(\d+)/(.*)/$', 'lavaFlow.views.homeView'),
 	url(r'^modules/clusterOverview/(\d+)/(\d+)/$', 'lavaFlow.views.clusterOverviewModule'),
-	url(r'^modules/busyUsers/(\d+)/(\d+)/(.*)/$', 'lavaFlow.views.busyUsersModule'),
+	url(r'^modules/clusterOverview/(\d+)/(\d+)/(.*)/$', 'lavaFlow.views.clusterOverviewModule'),
+	
+	url(r'^modules/busyUsers/(\d+)/(\d+)/(-?\w+)/$', 'lavaFlow.views.busyUsersModule'),
+	url(r'^modules/busyUsers/(\d+)/(\d+)/(-?\w+)/(.*)/$', 'lavaFlow.views.busyUsersModule'),
+	
 	url(r'^modules/bestHosts/(\d+)/(\d+)/$', 'lavaFlow.views.bestHostModule'),
+	url(r'^modules/bestHosts/(\d+)/(\d+)/(.*)/$', 'lavaFlow.views.bestHostModule'),
+	
 	url(r'^modules/worstHosts/(\d+)/(\d+)/$', 'lavaFlow.views.worstHostModule'),
+	url(r'^modules/worstHosts/(\d+)/(\d+)/(.*)/$', 'lavaFlow.views.worstHostModule'),
+
 	url(r'^modules/busySubmit/(\d+)/(\d+)/$', 'lavaFlow.views.busySubmitModule'),
+	url(r'^modules/busySubmit/(\d+)/(\d+)/(.*)/$', 'lavaFlow.views.busySubmitModule'),
+	
 	url(r'^modules/jobSizeChart/(\d+)/(\d+)/$', 'lavaFlow.views.jobSizeChartModule'),
+	url(r'^modules/jobSizeChart/(\d+)/(\d+)/(.*)/$', 'lavaFlow.views.jobSizeChartModule'),
+
 	url(r'^modules/jobSizeTable/(\d+)/(\d+)/$', 'lavaFlow.views.jobSizeTableModule'),
+	url(r'^modules/jobSizeTable/(\d+)/(\d+)/(.*)/$', 'lavaFlow.views.jobSizeTableModule'),
+
 	url(r'^modules/jobExitTable/(\d+)/(\d+)/$', 'lavaFlow.views.jobExitTableModule'),
+	url(r'^modules/jobExitTable/(\d+)/(\d+)/(.*)/$', 'lavaFlow.views.jobExitTableModule'),
+
 	url(r'^modules/jobExitChart/(\d+)/(\d+)/$', 'lavaFlow.views.jobExitChartModule'),
+	url(r'^modules/jobExitChart/(\d+)/(\d+)/(.*)/$', 'lavaFlow.views.jobExitChartModule'),
+
 	url(r'^modules/jobList/(\d+)/(\d+)/$', 'lavaFlow.views.jobListModule'),
+	url(r'^modules/jobList/(\d+)/(\d+)/(.*)/$', 'lavaFlow.views.jobListModule'),
+
 	url(r'^modules/utilization/(\d+)/(\d+)/$', 'lavaFlow.views.utilizationModule'),
+	url(r'^modules/utilization/(\d+)/(\d+)/(.*)/$', 'lavaFlow.views.utilizationModule'),
+
 	url(r'^reportRange$', 'lavaFlow.views.getReportRange'),
 
 	url(r'^jobSearch/$','lavaFlow.views.jobSearchView'), 
@@ -44,6 +68,8 @@ urlpatterns = patterns('',
 
 	url(r'^hostView/(\d+)/$','lavaFlow.views.hostView'),
 	url(r'^hostView/$', 'lavaFlow.views.hostList'),
+	
+	url(r'^clusterView/$', 'lavaFlow.views.clusterList'),
 
 	url(r'^userView/(\d+)/$','lavaFlow.views.userView'), 
 	url(r'^userView/$', 'lavaFlow.views.userList'),

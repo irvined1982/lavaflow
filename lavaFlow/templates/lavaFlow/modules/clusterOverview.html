@@ -13,7 +13,7 @@
 	<tbody>
 		{% for cluster in clusters %}
 		<tr>
-			<td><a href='{{cluster.cluster.get_absolute_url}}'>{{ cluster.cluster.name }}</a></td>
+			<td><a href='{% url lavaFlow.views.homeView startTime endTime filterString|add:"/"|add:cluster.cluster.get_filter_string %}'>{{ cluster.cluster.name }}</a></td>
 			<td>{{ cluster.totalJobs }}</td>
 			<td>{{ cluster.totalElements}}</td>
 			<td>{{ cluster.totalRuns }}</td>

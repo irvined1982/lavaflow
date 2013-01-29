@@ -22,9 +22,12 @@
 import array
 import datetime
 import json
+import logging
 from django.db import models
 from django.db.models import Avg, Count, Sum, Min, Max
 from django.core.urlresolvers import reverse
+from django.core.cache import cache
+log=logging.getLogger(__name__)
 
 
 class QuerySetManager(models.Manager):
@@ -45,6 +48,7 @@ class QuerySetManager(models.Manager):
 
 class RunQuerySet(models.query.QuerySet):
 	def utilizationN3DS(self, reportStartTime, reportEndTime,maxBlocks,filterString):
+		log.debug("TEST")
 		blockSize=60 # 60 second block size which will then be downsampled as required.
 		reportStartTime=int(int(reportStartTime)/blockSize)*blockSize
 		reportEndTime=int(int(reportEndTime)/blockSize)*blockSize
@@ -205,6 +209,10 @@ class ExitReason(models.Model):
 		return u'%s' % self.name
 	def __str__(self):
 		return self.name
+		
+	def get_filter_string(self):
+		return 'filter/exitStatus/%s' % self.id
+
 
 
 class JobStatus(models.Model):
@@ -217,7 +225,39 @@ class Cluster(models.Model):
 	def __str__(self):
 		return self.name
 	def get_absolute_url(self):
-		return '/lavaFlow/clusterView/%s/' % self.id
+		endTime=self.lastJobExit()
+		firstTime=self.firstSubmitTime()
+		startTime=endTime-(7*24*60*60)
+		if startTime<firstTime:
+			startTime=firstTime
+		return reverse('lavaFlow.views.homeView', args=[startTime,endTime,self.get_filter_string()])
+	def get_filter_string(self):
+		return 'filter/cluster/%s' % self.id
+	def firstSubmitTime(self):
+		time=cache.get('cluster_firstSubmitTime_%s' %self.id )
+		if time:
+			log.debug("firstSubmitTime: Read time from cache")
+			return time
+		else:
+			time=Job.objects.filter(cluster=self).aggregate(Min('submitTime'))['submitTime__min']
+			log.debug("firstSubmitTime: Writing time to cache")
+			cache.set('cluster_firstSubmitTime_%s' %self.id, time, 360)
+			return time
+	def lastJobExit(self):
+		time=cache.get('cluster_lastJobExit_%s' %self.id )
+		if time:
+			log.debug("lastJobExit: Read time from cache")
+			return time
+		else:
+			time=Run.objects.filter(element__job__cluster=self).aggregate(Max('endTime'))['endTime__max']
+			log.debug("lastJobExit: Writing time to cache")
+			cache.set('cluster_lastJobExit_%s' %self.id, time, 360)
+			return time
+			
+	def lastJobExitDT(self):
+		return datetime.datetime.utcfromtimestamp(self.lastJobExit())
+	def firstSubmitTimeDT(self):
+		return datetime.datetime.utcfromtimestamp(self.firstSubmitTime())
 
 	def userStats(self,field):
 		users=self.jobs.values('user').annotate(

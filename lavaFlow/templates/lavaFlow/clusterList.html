@@ -1,0 +1,35 @@
+{% extends "lavaFlow/base.html" %}
+{% block main_body %}
+		<h2>All Clusters</h2>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Cluster Name</th>
+					<th>First Job Submitted</th>
+					<th>Last Job Ended</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for c in clusters.object_list %}
+				<tr>
+					<td><a href='{{c.get_absolute_url}}'>{{ c.name }}</a></td>
+					<td>{{ c.firstSubmitTimeDT }}</td>
+					<td>{{ c.lastJobExitDT }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+<div class="pagination">
+	<span class="step-links">
+		{% if clusters.has_previous %}
+		<a href="?page={{clusters.previous_page_number}}">Previous</a>
+		{% endif %}
+		<span class="current">
+			Page {{ clusters.number }} of {{ clusters.paginator.num_pages }}.
+		</span>
+		{% if clusters.has_next %}
+		<a href="?page={{clusters.next_page_number}}">next</a>
+		{% endif %}
+	</span>
+</div>
+{% endblock %}
