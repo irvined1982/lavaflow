@@ -1,6 +1,7 @@
 <table class="table table-striped">
 	<thead>
 		<tr>
+			<th>Action</th>
 			<th>User</th>
 			<th># Jobs</th>
 			<th># Elements</th>
@@ -13,7 +14,20 @@
 	<tbody>
 		{% for u in users %}
 		<tr>
-			<td><a href='{{ u.user.get_absolute_url }}'>{{ u.user.userName }}</a></td>
+			<td>	
+				<div class="btn-group">
+					<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Refine
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a onClick='addFilter("filter","userName","User Name","{{u.user.userName}}","{{u.user.id}}");return false;' href="#">Filter on User={{ u.user.userName }}</a></li>
+						<li><a href="#">Exclude on User={{ u.user.userName }}</a></li>
+					</ul>
+				</div>
+			</td>
+			<td>{{u.userName}}</td>	
+					
+					
 			<td>{{ u.numJobs }}</td>
 			<td>{{ u.numElements }}</td>
 			<td>{{ u.numRuns }}</td>
@@ -21,6 +35,8 @@
 			<td title="Average: {{ u.avgCpu }}, Min: {{ u.minCpu }}, Max: {{ u.maxCpu }}">{{ u.sumCpu }}</td>
 			<td title="Average: {{ u.avgPend }}, Min: {{ u.minPend }}, Max: {{ u.maxPend }}">{{ u.sumPend }}</td>
 		</tr>
+		{% empty %}
+		<tr><td colspan=8>No hosts match your query</td></tr>
 		{% endfor %}
 	</tbody>
 </table>

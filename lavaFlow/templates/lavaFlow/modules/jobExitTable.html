@@ -1,7 +1,8 @@
 <table class="table table-striped">
 	<thead>
 		<tr>
-			<th>Cluster</td>
+			<th>Action</th>
+			<th>Exit Status</th>
 			<th># Runs</th>
 			<th>Total CPU Time </th>
 			<th>Total Wall Time </th>
@@ -11,7 +12,18 @@
 	<tbody>
 		{% for r in rows %}
 		<tr>
-			<td><a href='{% url lavaFlow.views.homeView startTime endTime filterString|add:"/"|add:r.exit.get_filter_string %}'>{{ r.exit }}</a></td>
+			<td>	
+				<div class="btn-group">
+					<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Refine
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a onClick='addFilter("filter","exitStatus","Exit Status","{{r.exit}}","{{r.exit.id}}");return false;' href="#">Filter on jobs with exit status {{ r.exit }}</a></li>
+						<li><a onClick='addFilter("exclude","exitStatus","Exit Status","{{r.exit}}","{{r.exit.id}}");return false;' href="#">Filter on jobs with exit status {{ r.exit }}</a></li>
+					</ul>
+				</div>
+			</td>
+			<td>{{r.exit}}</td>
 			<td>{{ r.numRuns }}</td>
 			<td title="Average: {{ r.avgCpuTime }}, Min: {{ r.minCpuTime }}, Max: {{ r.maxCpuTime }}" >{{ r.sumCpuTime }}</td>
 			<td title="Average: {{ r.avgWallTime }}, Min: {{ r.minWallTime }}, Max: {{ r.maxWallTime }}" >{{ r.sumWallTime }}</td>

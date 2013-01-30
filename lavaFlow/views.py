@@ -170,6 +170,7 @@ def filterJobs(jobs,filterString):
 		'cluster':'cluster',
 		'numProcessors':'elements__runs__numProcessors',
 		'exitStatus':'elements__runs__runFinishInfo__exitStatus',
+		'userName':'user',
 		}
 	return filterSet(jobs, fields, filterString)
 def filterRuns(runs, filterString):
@@ -177,6 +178,7 @@ def filterRuns(runs, filterString):
 		'cluster':'element__job__cluster',
 		'numProcessors':'numProcessors',
 		'exitStatus':'runFinishInfo__exitStatus',
+		'userName':'element__job__user',
 		}
 	return filterSet(runs,fields,filterString)
 

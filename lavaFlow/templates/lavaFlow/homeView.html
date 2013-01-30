@@ -4,6 +4,14 @@
 			<div id="slider"></div>
 			<p id="rangeText">Loading report range....</p>
 		</div>
+		<div id="filterList">
+			<h3>Included Entries</h4>
+			<div id="filterIncludes"></div>
+			<h3>Excluded Entries</h4>
+			<div id="filterExcludes"></div>
+		</div>
+		<div id="filterString"></div>
+		<button class="btn" onClick="updateReport();">Update</button>
 		<script>
 			 var selectedMin={{ startTime }};
 			 var selectedMax={{ endTime }};
@@ -36,14 +44,104 @@
 					 change: function(event, ui){
 						 selectedMin=ui.values[0];
 						 selectedMax=ui.values[1];
-						updateReport();
+						 updateReport();
 				 	 },
 				 });
 				 updateReport();
 			 });
-		 </script>
-		<div>FilteR: {{filterString}}</div>
-			url: {% url lavaFlow.views.homeView %}
+
+		var filters={
+			"filter":{},
+			"exclude":{},
+		}
+		
+		function addFilter(action,filterName,friendlyName,friendlyValue, value){
+			if (!filters.hasOwnProperty(action) ){
+				console.log(action + " is not a valid action");
+				return;
+			}
+			var acts=filters[action];
+			if ( !acts.hasOwnProperty(filterName) ){
+				acts[filterName]={
+					"friendlyName":friendlyName,
+					"filterName":filterName,
+					"values":[]
+				};
+			}
+			acts[filterName].values.push({"friendlyValue":friendlyValue,"value":value});
+			updateFilterList();
+		}
+		function removeFilter(action,filterName,index){
+			if (!filters.hasOwnProperty(action) ){
+				console.log(action + " is not a valid action");
+				return;
+			}
+			var acts=filters[action];
+			if ( !acts.hasOwnProperty(filterName) ){
+				return;
+			}
+			var v=acts[filterName].values;
+			v.splice(index,1);
+			if ( v.length < 1 ){
+				delete acts[filterName];
+			}
+			updateFilterList();
+		}
+		function getFilterString(action, filter){
+			var s="";
+			for (var filterName in filter){
+				for (var idx in filter[filterName].values){
+					if (s.length>0){
+						s+="/"
+					}
+					s+=action+"/"+filterName+"/"+filter[filterName].values[idx].value;
+				}
+			}
+			return encodeURI(s);
+		}	
+		function buildFilterString(){
+			var f=getFilterString("filter",filters.filter);
+			var x=getFilterString("exclude",filters.exclude);
+			if (f.length>0 && x.length>0){
+				return f+"/"+x;
+			}else{
+				return f+x;
+			}
+
+		}
+		function buildFilterHtml(action, filter){
+			var h=""
+			for (var filterName in filter){
+				h+="<div class='row'>";
+				h+=	"<div class='span3'><h5>"+filter[filterName].friendlyName+"</h5></div>";
+				h+=	"<div class='span9'>";
+				for (var idx in filter[filterName].values){
+					var o="onclick='";
+					o+='removeFilter("'+action+'","'+filterName+'",'+idx+");'";
+
+
+					h+=	"<button class='btn' "+o+" >"+filter[filterName].values[idx].friendlyValue+" &times;</button>";
+				}
+				h+=	"</div>";
+				h+="</div>";
+			}
+			if (h.length<1){
+				h="No active filters";
+			}
+			return h;
+		}
+		
+		function updateFilterList(){
+			$("#filterIncludes").html("");
+			$("#filterIncludes").append(buildFilterHtml("filter", filters.filter));
+			$("#filterExcludes").html("");
+			$("#filterExcludes").append(buildFilterHtml("exclude", filters.exclude));
+			$("#filterString").text(buildFilterString());
+
+			
+		}
+		updateFilterList();
+		</script>
 		<div id="reportData"></div>
 		<h2>Cluster Overview</h2>
 		<div id="clusterOverview"></div>
@@ -127,7 +225,11 @@
 		<div id="jobList"></div>
 		<script>
 			function getJobListPage(page){
-				 $.get("{% url lavaFlow.views.homeView %}modules/jobList/"+selectedMin+"/"+selectedMax+"/{% if filterString and filterString.strip %}{{filterString}}/{% endif %}?page="+page, function(data) {
+				var filterString=buildFilterString();
+				if (filterString.length>0){
+					filterString+="/";
+				}
+				 $.get("{% url lavaFlow.views.homeView %}modules/jobList/"+selectedMin+"/"+selectedMax+"/"+filterString+"?page="+page, function(data) {
 					 $('#jobList').html(data);
 				 });
 			}
@@ -135,48 +237,52 @@
 
 		<script>
 			 function updateReport(){
+				var filterString=buildFilterString();
+				if (filterString.length>0){
+					filterString+="/";
+				}
 				 $("#reportData").text('Updating Report...');
-				 $.get("{% url lavaFlow.views.homeView %}modules/clusterOverview/"+selectedMin+"/"+selectedMax+"/{% if filterString and filterString.strip %}{{filterString}}/{% endif %}", function(data) {
+				 $.get("{% url lavaFlow.views.homeView %}modules/clusterOverview/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
 					 $('#clusterOverview').html(data);
 				 });
-				 $.get("{% url lavaFlow.views.homeView %}modules/busyUsers/"+selectedMin+"/"+selectedMax+"/-sumCpu/{% if filterString and filterString.strip %}{{filterString}}/{% endif %}", function(data) {
+				 $.get("{% url lavaFlow.views.homeView %}modules/busyUsers/"+selectedMin+"/"+selectedMax+"/-sumCpu/"+filterString, function(data) {
 					 $('#heavyUsers').html(data);
 				 });
-				 $.get("{% url lavaFlow.views.homeView %}modules/busyUsers/"+selectedMin+"/"+selectedMax+"/-sumPend/{% if filterString and filterString.strip %}{{filterString}}/{% endif %}", function(data) {
+				 $.get("{% url lavaFlow.views.homeView %}modules/busyUsers/"+selectedMin+"/"+selectedMax+"/-sumPend/"+filterString, function(data) {
 					 $('#patientUsers').html(data);
 				 });
-				 $.get("{% url lavaFlow.views.homeView %}modules/bestHosts/"+selectedMin+"/"+selectedMax+"/{% if filterString and filterString.strip %}{{filterString}}/{% endif %}", function(data) {
+				 $.get("{% url lavaFlow.views.homeView %}modules/bestHosts/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
 					 $('#bestHosts').html(data);
 				 });
-				 $.get("{% url lavaFlow.views.homeView %}modules/worstHosts/"+selectedMin+"/"+selectedMax+"/{% if filterString and filterString.strip %}{{filterString}}/{% endif %}", function(data) {
+				 $.get("{% url lavaFlow.views.homeView %}modules/worstHosts/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
 					 $('#worstHosts').html(data);
 				 });
-				 $.get("{% url lavaFlow.views.homeView %}modules/busySubmit/"+selectedMin+"/"+selectedMax+"/{% if filterString and filterString.strip %}{{filterString}}/{% endif %}", function(data) {
+				 $.get("{% url lavaFlow.views.homeView %}modules/busySubmit/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
 					 $('#busySubmits').html(data);
 				 });
-				 $.get("{% url lavaFlow.views.homeView %}modules/jobSizeTable/"+selectedMin+"/"+selectedMax+"/{% if filterString and filterString.strip %}{{filterString}}/{% endif %}", function(data) {
+				 $.get("{% url lavaFlow.views.homeView %}modules/jobSizeTable/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
 					 $('#jobSizeTable').html(data);
 				 });
 
-				 $.get("{% url lavaFlow.views.homeView %}modules/jobExitTable/"+selectedMin+"/"+selectedMax+"/{% if filterString and filterString.strip %}{{filterString}}/{% endif %}", function(data) {
+				 $.get("{% url lavaFlow.views.homeView %}modules/jobExitTable/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
 					 $('#jobExitTable').html(data);
 				 });
-				 $.get("{% url lavaFlow.views.homeView %}modules/jobList/"+selectedMin+"/"+selectedMax+"/{% if filterString and filterString.strip %}{{filterString}}/{% endif %}", function(data) {
+				 $.get("{% url lavaFlow.views.homeView %}modules/jobList/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
 					 $('#jobList').html(data);
 				 });
-				 $.getJSON("{% url lavaFlow.views.homeView %}modules/jobExitChart/"+selectedMin+"/"+selectedMax+"/{% if filterString and filterString.strip %}{{filterString}}/{% endif %}", function(data) {
+				 $.getJSON("{% url lavaFlow.views.homeView %}modules/jobExitChart/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
 							d3.select('#jobExitChart svg')
 							.datum(data)
 							.transition().duration(500)
 							.call(exitChart);
 				});
-				 $.getJSON("{% url lavaFlow.views.homeView %}modules/utilization/"+selectedMin+"/"+selectedMax+"/{% if filterString and filterString.strip %}{{filterString}}/{% endif %}", function(data) {
+				 $.getJSON("{% url lavaFlow.views.homeView %}modules/utilization/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
 							d3.select('#utilizationChart svg')
 							.datum(data)
 							.transition().duration(500)
 							.call(utilChart);
 				});
-				 $.getJSON("{% url lavaFlow.views.homeView %}modules/jobSizeChart/"+selectedMin+"/"+selectedMax+"/{% if filterString and filterString.strip %}{{filterString}}/{% endif %}", function(data) {
+				 $.getJSON("{% url lavaFlow.views.homeView %}modules/jobSizeChart/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
 							d3.select('#jobSizeChart svg')
 							.datum(data)
 							.transition().duration(500)

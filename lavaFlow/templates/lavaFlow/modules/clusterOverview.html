@@ -1,6 +1,7 @@
 <table class="table table-striped">
 	<thead>
 		<tr>
+			<th>Action</th>
 			<th>Cluster Name</th>
 			<th># Jobs</th>
 			<th># Elements</th>
@@ -13,6 +14,17 @@
 	<tbody>
 		{% for cluster in clusters %}
 		<tr>
+			<td>
+				<div class="btn-group">
+					<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Refine
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a onClick='addFilter("filter","cluster","Cluster","{{cluster.cluster.name}}","{{cluster.cluster.id}}");return false;' href="#">Filter on jobs submitted to {{ cluster.cluster.name }}</a></li>
+						<li><a onClick='addFilter("exclude","cluster","Cluster","{{cluster.cluster.name}}","{{cluster.cluster.id}}");return false;' href="#">Exclude jobs submitted to {{ cluster.cluster.name }}</a></li>
+					</ul>
+				</div>
+			</td>
 			<td><a href='{% url lavaFlow.views.homeView startTime endTime filterString|add:"/"|add:cluster.cluster.get_filter_string %}'>{{ cluster.cluster.name }}</a></td>
 			<td>{{ cluster.totalJobs }}</td>
 			<td>{{ cluster.totalElements}}</td>

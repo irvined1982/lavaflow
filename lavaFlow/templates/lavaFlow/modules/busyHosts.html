@@ -1,6 +1,7 @@
 <table class="table table-striped">
 	<thead>
 		<tr>
+			<th>Action</th>
 			<th>Host</th>
 			<th># Runs</th>
 			<th>Total CPU Time </th>
@@ -9,6 +10,19 @@
 	<tbody>
 		{% for h in hosts %}
 		<tr>
+			<td>	
+				<div class="btn-group">
+					<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Refine
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a onClick='addFilter("filter","submitHost","Submit Host","{{h.host.hostName}}","{{h.host.id}}");return false;' href="#">Filter on jobs submitted from {{ h.host.hostName }}</a></li>
+						<li><a onClick='addFilter("exclude","submitHost","Submit Host","{{h.host.hostName}}","{{h.host.id}}");return false;' href="#">Exclude jobs submitted from {{ h.host.hostName }}</a></li>
+						<li><a onClick='addFilter("filter","execHost","Execution Host","{{h.host.hostName}}","{{h.host.id}}");return false;' href="#">Filter on jobs executed on {{ h.host.hostName }}</a></li>
+						<li><a onClick='addFilter("exclude","execHost","Execution Host","{{h.host.hostName}}","{{h.host.id}}");return false;' href="#">Exclude jobs executed on {{ h.host.hostName }}</a></li>
+					</ul>
+				</div>
+			</td>
 			<td><a href='{{h.host.get_absolute_url}}'>{{ h.host.hostName }}</a></td>
 			<td>{{ h.numRuns }}</td>
 			<td>{{ h.sumCpu }} </td>
