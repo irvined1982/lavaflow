@@ -122,6 +122,12 @@ def jobDetailView(request,id):
 
 
 
+FRIENDLY_NAMES={
+		'cluster':"Cluster",
+		'numProcessors':'Num Processors',
+		'exitStatus':"Exit Status",
+		'userName':"User Name",
+		}
 
 
 def homeView(request,startTime=-1, endTime=-1, filterString=''):
@@ -140,9 +146,13 @@ def filterStringToFilterJson(filterString):
 				except KeyError:
 					continue
 				try:
-					filters[type][name].append(value)
+					filters[type][name]['values'].append(value)
 				except KeyError:
-					filters[type][name]=[value]
+					filters[type][name]={
+							'friendlyName':FRIENDLY_NAMES[name],
+							'filterName':name,
+							'values':[value],
+							}
 	return json.dumps(filters)
 ## Returns a JSON object with the timestamps from the 
 #  first job submitted and last job to exit
