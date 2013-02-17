@@ -126,8 +126,24 @@ def jobDetailView(request,id):
 
 def homeView(request,startTime=-1, endTime=-1, filterString=''):
 	log.debug(filterString)
-	return render_to_response("lavaFlow/homeView.html",{'startTime':startTime,'endTime':endTime,'filterString':filterString},context_instance=RequestContext(request))
+	return render_to_response("lavaFlow/homeView.html",{'filters':filterStringToFilterJson(filterString), 'startTime':startTime,'endTime':endTime,'filterString':filterString},context_instance=RequestContext(request))
 
+def filterStringToFilterJson(filterString):
+	filters={'filter':{},'exclude':{}}
+	if len(filterString) > 0:
+		entries=filterString.split("/")
+		if len(entries)>0 and len(entries)%3 == 0:
+			entries=iter(entries)
+			for type,name,value in zip(entries,entries,entries):
+				try:
+					f=filters[type]
+				except KeyError:
+					continue
+				try:
+					filters[type][name].append(value)
+				except KeyError:
+					filters[type][name]=[value]
+	return json.dumps(filters)
 ## Returns a JSON object with the timestamps from the 
 #  first job submitted and last job to exit
 #  Times are seconds since Epoch in UTC time.
