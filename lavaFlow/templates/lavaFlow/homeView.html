@@ -49,12 +49,8 @@
 				 });
 				 updateReport();
 			 });
+		var filters={{filters|safe}};
 
-		var filters={
-			"filter":{},
-			"exclude":{},
-		}
-		
 		function addFilter(action,filterName,friendlyName,friendlyValue, value){
 			if (!filters.hasOwnProperty(action) ){
 				console.log(action + " is not a valid action");
