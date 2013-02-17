@@ -127,6 +127,8 @@ FRIENDLY_NAMES={
 		'numProcessors':'Num Processors',
 		'exitStatus':"Exit Status",
 		'userName':"User Name",
+		'submitHost':"Submit Host",
+		'executionHost':"Execution Host",
 		}
 
 
