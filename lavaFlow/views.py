@@ -123,12 +123,29 @@ def jobDetailView(request,id):
 
 
 FRIENDLY_NAMES={
-		'cluster':"Cluster",
-		'numProcessors':'Num Processors',
-		'exitStatus':"Exit Status",
-		'userName':"User Name",
-		'submitHost':"Submit Host",
-		'executionHost':"Execution Host",
+		'cluster':{
+			'name':"Cluster",
+			'value':Cluster.objects.get,
+			},
+		'numProcessors':{
+			'name':'Num Processors',
+			},
+		'exitStatus':{
+			'name':"Exit Status",
+			'value':ExitReason.objects.get,
+			},
+		'userName':{
+			'name':"User Name",
+			'value':User.objects.get,
+			},
+		'submitHost':{
+			'name':"Submit Host",
+			'value':Host.objects.get,
+			},
+		'executionHost':{
+			'name':"Execution Host",
+			'value':Host.objects.get,
+			},
 		}
 
 
@@ -147,13 +164,19 @@ def filterStringToFilterJson(filterString):
 					f=filters[type]
 				except KeyError:
 					continue
+				fValue=value
 				try:
-					filters[type][name]['values'].append(value)
+					fValue=str(FRIENDLY_NAMES[name]['value'](pk=value))
+				except KeyError:
+					pass
+				try:
+					filters[type][name]['values'].append({'value':value,'friendlyValue':fValue})
 				except KeyError:
 					filters[type][name]={
-							'friendlyName':FRIENDLY_NAMES[name],
+							'friendlyName':FRIENDLY_NAMES[name]['name'],
 							'filterName':name,
-							'values':[value],
+							'friendlyValue':fValue,
+							'values':[{'value':value,'friendlyValue':fValue}],
 							}
 	return json.dumps(filters)
 ## Returns a JSON object with the timestamps from the 
