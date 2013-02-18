@@ -14,15 +14,9 @@
 		{% for r in rows %}
 		<tr>
 			<td>	
-				<div class="btn-group">
-					<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Refine
-						<span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu">
-						<li><a onClick='addFilter("filter","numProcessors","Num Processors","{{r.numProcessors}}","{{r.numProcessors}}");return false;' href="#">Filter on {{ r.numProcessors}} core jobs</a></li>
-						<li><a onClick='addFilter("exclude","numProcessors","Num Processors","{{r.numProcessors}}","{{r.numProcessors}}");return false;' href="#">Exclude {{ r.numProcessors}} core jobs</a></li>
-					</ul>
-				</div>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Only display jobs that used {{ r.numProcessors }} processors."  onClick='addFilter("filter","numProcessors","Num Processors","{{r.numProcessors}}","{{r.numProcessors}}");return false;'><l class="icon-filter"></a>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Do not display jobs that used {{r.numProcessors }} processors." onClick='addFilter("exclude","numProcessors","Num Processors","{{r.numProcessors}}","{{r.numProcessors}}");return false;'><l class="icon-minus"></l></a>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Remove all filters and excludes for jobs that used {{r.numProcessors}} processors." onclick='removeAllFilters("numProcessors","{{r.numProcessors}}");return false;'><l class="icon-remove"></l></a>
 			</td>
 			<td>{{ r.numProcessors }}</td>
 			<td>{{ r.numRuns }}</td>
@@ -34,3 +28,8 @@
 		{% endfor %}
 	</tbody>
 </table>
+<script type="text/javascript">
+	$(function () {
+		$("[rel='tooltip']").tooltip();
+	});
+</script>

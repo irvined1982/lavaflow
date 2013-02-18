@@ -127,20 +127,16 @@ FRIENDLY_NAMES={
 			'name':"Cluster",
 			'value':Cluster.objects.get,
 			},
-		'numProcessors':{
-			'name':'Num Processors',
-			},
 		'exitStatus':{
 			'name':"Exit Status",
 			'value':ExitReason.objects.get,
 			},
+		'numProcessors':{
+			'name':'Num Processors',
+			},
 		'userName':{
 			'name':"User Name",
 			'value':User.objects.get,
-			},
-		'submitHost':{
-			'name':"Submit Host",
-			'value':Host.objects.get,
 			},
 		'executionHost':{
 			'name':"Execution Host",
@@ -219,17 +215,19 @@ def filterSet(set,fields,filterString):
 def filterJobs(jobs,filterString):
 	fields={
 		'cluster':'cluster',
-		'numProcessors':'elements__runs__numProcessors',
 		'exitStatus':'elements__runs__runFinishInfo__exitStatus',
+		'numProcessors':'elements__runs__numProcessors',
 		'userName':'user',
+		'executionHost':'elements__runs__executions__host',
 		}
 	return filterSet(jobs, fields, filterString)
 def filterRuns(runs, filterString):
 	fields={
 		'cluster':'element__job__cluster',
-		'numProcessors':'numProcessors',
 		'exitStatus':'runFinishInfo__exitStatus',
+		'numProcessors':'numProcessors',
 		'userName':'element__job__user',
+		'executionHost':'executions__host',
 		}
 	return filterSet(runs,fields,filterString)
 

@@ -13,15 +13,9 @@
 		{% for r in rows %}
 		<tr>
 			<td>	
-				<div class="btn-group">
-					<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Refine
-						<span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu">
-						<li><a onClick='addFilter("filter","exitStatus","Exit Status","{{r.exit}}","{{r.exit.id}}");return false;' href="#">Filter on jobs with exit status {{ r.exit }}</a></li>
-						<li><a onClick='addFilter("exclude","exitStatus","Exit Status","{{r.exit}}","{{r.exit.id}}");return false;' href="#">Filter on jobs with exit status {{ r.exit }}</a></li>
-					</ul>
-				</div>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Only display jobs that have an exit status of {{r.exit}}" onClick='addFilter("filter","exitStatus","Exit Status","{{r.exit}}","{{r.exit.id}}");return false;' href="#"><l class="icon-filter"></l></a>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Do not display jobs that have an exit status of {{r.exit}}" onClick='addFilter("exclude","exitStatus","Exit Status","{{r.exit}}","{{r.exit.id}}");return false;' href="#"><l class="icon-minus"></l></a>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Remove all filters and excludes for exit status {{r.exit}}." onclick='removeAllFilters("exitStatus","{{r.exit.id}}");return false;'><l class="icon-remove"></l></a>
 			</td>
 			<td>{{r.exit}}</td>
 			<td>{{ r.numRuns }}</td>
@@ -32,3 +26,8 @@
 		{% endfor %}
 	</tbody>
 </table>
+<script type="text/javascript">
+	$(function () {
+		$("[rel='tooltip']").tooltip();
+	});
+</script>

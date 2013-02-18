@@ -1,8 +1,8 @@
 <table class="table table-striped">
 	<thead>
 		<tr>
-			<th>Cluster</th>
 			<th>Job ID</th>
+			<th>Cluster</th>
 			<th>User</th>
 			<th>Pend Time</th>
 			<th>Wall Time</th>
@@ -12,9 +12,9 @@
 	<tbody>
 		{% for job in jobs.object_list %}
 		<tr>
-			<td><a href='{{job.cluster.get_absolute_url}}'>{{ job.cluster.name }}</a></td>
 			<td><a href='{{ job.get_absolute_url }}'>{{ job.jobId }}</a></td>
-			<td><a href='{{job.user.get_absolute_url}}'>{{ job.user.userName }}</a></td>
+			<td>{{ job.cluster.name }}</td>
+			<td>{{ job.user.userName }}</td>
 			<td>{{ job.pendTimeDelta }}</td>
 			<td>{{ job.wallTimeDelta }}</td>
 			<td>{{ job.cpuTimeDelta }}</td>
@@ -39,5 +39,3 @@
 		{% endif %}
 	</span>
 </div>
-
-

@@ -15,15 +15,9 @@
 		{% for u in users %}
 		<tr>
 			<td>	
-				<div class="btn-group">
-					<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Refine
-						<span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu">
-						<li><a onClick='addFilter("filter","userName","User Name","{{u.user.userName}}","{{u.user.id}}");return false;' href="#">Filter on User={{ u.user.userName }}</a></li>
-						<li><a href="#">Exclude on User={{ u.user.userName }}</a></li>
-					</ul>
-				</div>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Only display jobs owned by user: {{ u.user.userName}}." onClick='addFilter("filter","userName","User Name","{{u.user.userName}}","{{u.user.id}}");return false;'><l class="icon-filter"></l></a>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Do not display jobs owned by user {{ u.user.userName}}" onClick='addFilter("exclude","userName","User Name","{{u.user.userName}}","{{u.user.id}}");return false;' href><l class="icon-minus"></l></a>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Remove all filters and excludes for jobs owned by user {{ u.user.id}}." onclick='removeAllFilters("userName","{{u.user.id}}");return false;'><l class="icon-remove"></l></a>
 			</td>
 			<td>{{u.user.userName}}</td>	
 					
@@ -40,3 +34,9 @@
 		{% endfor %}
 	</tbody>
 </table>
+<script type="text/javascript">
+	$(function () {
+		$("[rel='tooltip']").tooltip();
+	});
+</script>
+	

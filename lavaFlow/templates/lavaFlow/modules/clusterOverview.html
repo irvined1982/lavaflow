@@ -1,4 +1,4 @@
-<table class="table table-striped">
+<table class="table table-striped" id='clusterTable'>
 	<thead>
 		<tr>
 			<th>Action</th>
@@ -15,17 +15,11 @@
 		{% for cluster in clusters %}
 		<tr>
 			<td>
-				<div class="btn-group">
-					<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Refine
-						<span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu">
-						<li><a onClick='addFilter("filter","cluster","Cluster","{{cluster.cluster.name}}","{{cluster.cluster.id}}");return false;' href="#">Filter on jobs submitted to {{ cluster.cluster.name }}</a></li>
-						<li><a onClick='addFilter("exclude","cluster","Cluster","{{cluster.cluster.name}}","{{cluster.cluster.id}}");return false;' href="#">Exclude jobs submitted to {{ cluster.cluster.name }}</a></li>
-					</ul>
-				</div>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Filter on cluster {{cluster.cluster.name}}" onClick='addFilter("filter","cluster","Cluster","{{cluster.cluster.name}}","{{cluster.cluster.id}}");return false;' href="#"><l class="icon-filter"></l></a>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Exclude {{cluster.cluster.name}} from the results" onClick='addFilter("exclude","cluster","Cluster","{{cluster.cluster.name}}","{{cluster.cluster.id}}");return false;'><l class="icon-minus"></l></a>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Remove all filters and excludes for {{cluster.cluster.name}}." onclick='removeAllFilters("cluster","{{cluster.cluster.id}}");return false;'><l class="icon-remove"></l></a>
 			</td>
-			<td><a href='{% url lavaFlow.views.homeView startTime endTime filterString|add:"/"|add:cluster.cluster.get_filter_string %}'>{{ cluster.cluster.name }}</a></td>
+			<td>{{ cluster.cluster.name }}</td>
 			<td>{{ cluster.totalJobs }}</td>
 			<td>{{ cluster.totalElements}}</td>
 			<td>{{ cluster.totalRuns }}</td>
@@ -36,3 +30,8 @@
 		{% endfor %}
 	</tbody>
 </table>
+<script type="text/javascript">
+	$(function () {
+		$("[rel='tooltip']").tooltip();
+	});
+</script>

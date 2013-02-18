@@ -83,6 +83,28 @@
 			}
 			updateFilterList();
 		}
+		function findIndexByVal(filter,filterName,filterValue){
+			tree=filters[filter];
+			if (!tree.hasOwnProperty(filterName)){
+				return null;
+			}
+			for (var idx in tree[filterName].values){
+				if (tree[filterName].values[idx].value==filterValue){
+					return idx;
+				}
+			}
+			return null;
+		}
+
+		function removeAllFilters(filterName,filterValue){
+			var idx;
+			while(idx=findIndexByVal('exclude',filterName,filterValue)){
+				removeFilter('exclude',filterName,idx);
+			}
+			while(idx=findIndexByVal('filter',filterName,filterValue)){
+				removeFilter('filter',filterName,idx);
+			}
+		}
 		function getFilterString(action, filter){
 			var s="";
 			for (var filterName in filter){

@@ -11,17 +11,9 @@
 		{% for h in hosts %}
 		<tr>
 			<td>	
-				<div class="btn-group">
-					<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Refine
-						<span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu">
-						<li><a onClick='addFilter("filter","submitHost","Submit Host","{{h.host.hostName}}","{{h.host.id}}");return false;' href="#">Filter on jobs submitted from {{ h.host.hostName }}</a></li>
-						<li><a onClick='addFilter("exclude","submitHost","Submit Host","{{h.host.hostName}}","{{h.host.id}}");return false;' href="#">Exclude jobs submitted from {{ h.host.hostName }}</a></li>
-						<li><a onClick='addFilter("filter","execHost","Execution Host","{{h.host.hostName}}","{{h.host.id}}");return false;' href="#">Filter on jobs executed on {{ h.host.hostName }}</a></li>
-						<li><a onClick='addFilter("exclude","execHost","Execution Host","{{h.host.hostName}}","{{h.host.id}}");return false;' href="#">Exclude jobs executed on {{ h.host.hostName }}</a></li>
-					</ul>
-				</div>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Only display jobs that executed on {{h.host.hostName}}" onClick='addFilter("filter","executionHost","Execution Host","{{h.host.hostName}}","{{h.host.id}}");return false;'><l class="icon-filter"></l></a>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Do not display jobs that executed on {{h.host.hostName}}" onClick='addFilter("exclude","executionHost","Execution Host","{{h.host.hostName}}","{{h.host.id}}");return false;'><l class="icon-minus"></l></a>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Remove all filters and excludes for jobs that executed on {{h.host.hostName}}." onclick='removeAllFilters("executionHost","{{h.host.id}}");return false;'><l class="icon-remove"></l></a>
 			</td>
 			<td><a href='{{h.host.get_absolute_url}}'>{{ h.host.hostName }}</a></td>
 			<td>{{ h.numRuns }}</td>
@@ -30,3 +22,8 @@
 		{% endfor %}
 	</tbody>
 </table>
+<script type="text/javascript">
+ 	$(function () {
+		$("[rel='tooltip']").tooltip();
+	});
+</script>
