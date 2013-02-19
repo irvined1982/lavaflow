@@ -57,6 +57,9 @@ urlpatterns = patterns('',
 	url(r'^modules/jobList/(\d+)/(\d+)/$', 'lavaFlow.views.jobListModule'),
 	url(r'^modules/jobList/(\d+)/(\d+)/(.*)/$', 'lavaFlow.views.jobListModule'),
 
+	url(r'^modules/groupedUtilization/(\d+)/(\d+)/group/(.*)/group/$', 'lavaFlow.views.groupedUtilizationChartModule'),
+	url(r'^modules/groupedUtilization/(\d+)/(\d+)/group/(.*)/group/(.*)/$', 'lavaFlow.views.groupedUtilizationChartModule'),
+
 	url(r'^modules/utilization/(\d+)/(\d+)/$', 'lavaFlow.views.utilizationModule'),
 	url(r'^modules/utilization/(\d+)/(\d+)/(.*)/$', 'lavaFlow.views.utilizationModule'),
 

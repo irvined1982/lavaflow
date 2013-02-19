@@ -477,6 +477,20 @@ def utilizationModule(request, startTime, endTime,filterString=''):
 	data=util.utilizationN3DS(startTime, endTime,500,"")
 	return HttpResponse(data, mimetype='application/json')
 
+def groupedUtilizationChartModule(request, startTime, endTime, groupString, filterString=''):
+	groups=groupString.split("/")
+	util=filterRuns(Run.objects.filter(
+				element__job__submitTime__lte=endTime, 
+				endTime__gte=startTime
+			),filterString)
+	ALLOWED_GROUPS=['queue__name','element__job__user__userName']
+	for group in groups:
+		if group not in ALLOWED_GROUPS:
+			raise Http404( "Group not allowed")
+	
+	data=util.complexUtilization(startTime, endTime,500,groups)
+	return HttpResponse(data, mimetype='application/json')
+
 def jobSearchView(request):
 	query = request.GET.get('jobid')
 	jobs=None

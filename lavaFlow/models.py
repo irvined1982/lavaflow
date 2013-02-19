@@ -48,6 +48,8 @@ class QuerySetManager(models.Manager):
 
 class RunQuerySet(models.query.QuerySet):
 	def utilizationN3DS(self, reportStartTime, reportEndTime,maxBlocks,filterString):
+		return json.dumps(self.utilization(reportStartTime, reportEndTime,maxBlocks,filterString))
+	def utilization(self, reportStartTime, reportEndTime,maxBlocks,filterString):
 		log.debug("TEST")
 		blockSize=60 # 60 second block size which will then be downsampled as required.
 		reportStartTime=int(int(reportStartTime)/blockSize)*blockSize
@@ -132,7 +134,29 @@ class RunQuerySet(models.query.QuerySet):
 					'values':rPending,
 				},
 			]
-		return json.dumps(data)
+		return data
+	
+	def complexUtilization(self, reportStartTime, reportEndTime, maxBlocks, groups=[]):
+		if len(groups)<1:
+			raise ValueError
+
+		seriesList=[]
+		for run in self.filter(endTime__gte=reportStartTime, startTime__lte=reportEndTime).values(*groups).distinct(*groups):
+			gdict={}
+			groupName=""
+			for group in groups:
+				if len(groupName)>0:
+					groupName+=" "
+				groupName+=run[group]
+				gdict[group]=run[group]
+			runs=self.filter(**gdict)
+			data=runs.utilization(reportStartTime, reportEndTime, maxBlocks,"")
+			data[0]['key']=groupName+" Running"
+			data[1]['key']=groupName+" Pending"
+			seriesList.append(data[0])
+			seriesList.append(data[1])
+		return json.dumps(seriesList)
+
 
 class Host(models.Model):
 	hostName=models.CharField(max_length=100)

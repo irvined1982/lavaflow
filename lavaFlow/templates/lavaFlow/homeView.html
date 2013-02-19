@@ -181,6 +181,52 @@
 				return utilChart;
 			});
 		</script>
+		<h2>Utilization by Queue</h2>
+		<div id='utilizationQueueChart'>
+			<svg style='height:500px'> </svg>
+		</div>
+		<script>
+			var utilQueueChart;
+			nv.addGraph(function() {
+				utilQueueChart = nv.models.stackedAreaChart();
+				utilQueueChart.clipEdge(true);
+				utilQueueChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
+				utilQueueChart.xAxis.rotateLabels(-45);
+				utilQueueChart.margin({bottom: 120, left:100});
+				utilQueueChart.xAxis.axisLabel('Date');
+
+				d3.select('#utilizationQueueChart svg')
+				.datum([])
+				.transition().duration(500)
+				.call(utilQueueChart);
+
+				nv.utils.windowResize(utilQueueChart.update);
+				return utilQueueChart;
+			});
+		</script>
+		<h2>Utilization by User</h2>
+		<div id='utilizationUserChart'>
+			<svg style='height:500px'> </svg>
+		</div>
+		<script>
+			var utilUserChart;
+			nv.addGraph(function() {
+				utilUserChart = nv.models.stackedAreaChart();
+				utilUserChart.clipEdge(true);
+				utilUserChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
+				utilUserChart.xAxis.rotateLabels(-45);
+				utilUserChart.margin({bottom: 120, left:100});
+				utilUserChart.xAxis.axisLabel('Date');
+
+				d3.select('#utilizationUserChart svg')
+				.datum([])
+				.transition().duration(500)
+				.call(utilChart);
+
+				nv.utils.windowResize(utilUserChart.update);
+				return utilUserChart;
+			});
+		</script>
 		<h2>Exit Status</h2>
 
 		<div id='jobExitChart'>
@@ -303,6 +349,18 @@
 							.datum(data)
 							.transition().duration(500)
 							.call(utilChart);
+				});
+				 $.getJSON("{% url lavaFlow.views.homeView %}modules/groupedUtilization/"+selectedMin+"/"+selectedMax+"/group/queue__name/group/"+filterString, function(data) {
+							d3.select('#utilizationQueueChart svg')
+							.datum(data)
+							.transition().duration(500)
+							.call(utilUserChart);
+				});
+				 $.getJSON("{% url lavaFlow.views.homeView %}modules/groupedUtilization/"+selectedMin+"/"+selectedMax+"/group/element__job__user__userName/group/"+filterString, function(data) {
+							d3.select('#utilizationUserChart svg')
+							.datum(data)
+							.transition().duration(500)
+							.call(utilUserChart);
 				});
 				 $.getJSON("{% url lavaFlow.views.homeView %}modules/jobSizeChart/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
 							d3.select('#jobSizeChart svg')
