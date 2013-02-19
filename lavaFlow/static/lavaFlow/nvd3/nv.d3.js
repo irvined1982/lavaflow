@@ -476,7 +476,7 @@ nv.models.axis = function() {
             var xLabelMargin = (sin ? sin*maxTextWidth : maxTextWidth)+30;
             //Rotate all xTicks
             xTicks
-              .attr('transform', function(d,i,j) { return 'rotate(' + rotateLabels + ' 0,0)' })
+              .attr('transform', function(d,i,j) { return 'translate (-45 40) rotate(' + rotateLabels + ' 0,0)' })
               .attr('text-anchor', rotateLabels%360 > 0 ? 'start' : 'end');
           }
           axisLabel.enter().append('text').attr('class', 'nv-axislabel')

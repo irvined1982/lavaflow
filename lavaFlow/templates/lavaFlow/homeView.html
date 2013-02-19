@@ -168,10 +168,15 @@
 				utilChart = nv.models.stackedAreaChart();
 				utilChart.clipEdge(true);
 				utilChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
+				utilChart.xAxis.rotateLabels(-45);
+				utilChart.margin({bottom: 120, left:100});
+				utilChart.xAxis.axisLabel('Date');
+
 				d3.select('#utilizationChart svg')
 				.datum([])
 				.transition().duration(500)
 				.call(utilChart);
+
 				nv.utils.windowResize(utilChart.update);
 				return utilChart;
 			});
@@ -186,6 +191,8 @@
 			var exitChart;
 			nv.addGraph(function() {
 				exitChart = nv.models.multiBarChart();
+				exitChart.xAxis.axisLabel('Exit State');
+				exitChart.margin({bottom:120,left:100});
 				d3.select('#jobExitChart svg')
 				.datum([])
 				.transition().duration(500)
@@ -206,6 +213,8 @@
 			var sizeChart;
 			nv.addGraph(function() {
 				sizeChart = nv.models.multiBarChart();
+				sizeChart.xAxis.axisLabel('Number of Processors');
+				sizeChart.margin({bottom:120,left:100});
 				d3.select('#jobSizeChart svg')
 				.datum([])
 				.transition().duration(500)
