@@ -4,14 +4,6 @@
 			<div id="slider"></div>
 			<p id="rangeText">Loading report range....</p>
 		</div>
-		<div id="filterList">
-			<h3>Included Entries</h4>
-			<div id="filterIncludes"></div>
-			<h3>Excluded Entries</h4>
-			<div id="filterExcludes"></div>
-		</div>
-		<div id="filterString"></div>
-		<button class="btn" onClick="updateReport();">Update</button>
 		<script>
 			 var selectedMin={{ startTime }};
 			 var selectedMax={{ endTime }};
@@ -65,7 +57,7 @@
 				};
 			}
 			acts[filterName].values.push({"friendlyValue":friendlyValue,"value":value});
-			updateFilterList();
+			updatePopover();
 		}
 		function removeFilter(action,filterName,index){
 			if (!filters.hasOwnProperty(action) ){
@@ -81,7 +73,11 @@
 			if ( v.length < 1 ){
 				delete acts[filterName];
 			}
-			updateFilterList();
+			updatePopover();
+		}
+		function updatePopover(){
+			$('#filterDetails').data('popover').setContent(buildPopoverText());
+			$('#filterDetails').data('popover').$tip.addClass($('#filterDetails').data('popover').options.placement);
 		}
 		function findIndexByVal(filter,filterName,filterValue){
 			tree=filters[filter];
@@ -104,6 +100,7 @@
 			while(idx=findIndexByVal('filter',filterName,filterValue)){
 				removeFilter('filter',filterName,idx);
 			}
+			updatePopover();
 		}
 		function getFilterString(action, filter){
 			var s="";
@@ -129,36 +126,34 @@
 		}
 		function buildFilterHtml(action, filter){
 			var h=""
+			var actionName;
+			var i=0;
+			if (action=="exclude"){
+				actionName="not";
+			}
+			else{
+				actionName="is";
+			}
 			for (var filterName in filter){
-				h+="<div class='row'>";
-				h+=	"<div class='span3'><h5>"+filter[filterName].friendlyName+"</h5></div>";
-				h+=	"<div class='span9'>";
+				h+="<li>";
+				h+=filterName + " " + actionName + " ";
 				for (var idx in filter[filterName].values){
+					if (i>0){
+						h+= "or ";
+					}
+					i++;
+					h+=filter[filterName].values[idx].friendlyValue;
+
 					var o="onclick='";
 					o+='removeFilter("'+action+'","'+filterName+'",'+idx+");'";
 
-
-					h+=	"<button class='btn' "+o+" >"+filter[filterName].values[idx].friendlyValue+" &times;</button>";
+					h+=	"<a href='#' "+o+"><l class='icon-remove'></l></a> ";
 				}
-				h+=	"</div>";
-				h+="</div>";
-			}
-			if (h.length<1){
-				h="No active filters";
+				h+="</li>";
 			}
 			return h;
 		}
 		
-		function updateFilterList(){
-			$("#filterIncludes").html("");
-			$("#filterIncludes").append(buildFilterHtml("filter", filters.filter));
-			$("#filterExcludes").html("");
-			$("#filterExcludes").append(buildFilterHtml("exclude", filters.exclude));
-			$("#filterString").text(buildFilterString());
-
-			
-		}
-		updateFilterList();
 		</script>
 		<div id="reportData"></div>
 		<h2>Cluster Overview</h2>
