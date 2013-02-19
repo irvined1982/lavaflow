@@ -302,6 +302,7 @@ def bestHostModule(request, startTime, endTime, filterString=''):
 			h['host']=Host.objects.get(pk=h['executions__host'])
 		except:
 			h['host']='None'
+		h['sumCpu']=datetime.timedelta(seconds=h['sumCpu'])
 	return render_to_response("lavaFlow/modules/busyHosts.html",{'hosts':hosts},context_instance=RequestContext(request))
 
 
@@ -315,6 +316,7 @@ def worstHostModule(request, startTime, endTime,filterString=''):
 			h['host']=Host.objects.get(pk=h['executions__host'])
 		except:
 			h['host']='None'
+		h['sumCpu']=datetime.timedelta(seconds=h['sumCpu'])
 	return render_to_response("lavaFlow/modules/busyHosts.html",{'hosts':hosts},context_instance=RequestContext(request))
 
 def busySubmitModule(request, startTime, endTime,filterString=''):
@@ -327,6 +329,7 @@ def busySubmitModule(request, startTime, endTime,filterString=''):
 			h['host']=Host.objects.get(pk=h['element__job__submitHost'])
 		except:
 			h['host']='None'
+		h['sumCpu']=datetime.timedelta(seconds=h['sumCpu'])
 	return render_to_response("lavaFlow/modules/busyHosts.html",{'hosts':hosts},context_instance=RequestContext(request))
 
 
