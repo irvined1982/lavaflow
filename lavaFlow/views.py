@@ -255,8 +255,8 @@ def groupedUtilizationTableModule(request, startTime,endTime,groupString,filterS
 	for row in rows:
 		r=[]
 		for field in groups:
-			r.append(getattr(row,field))
-		row.fields=r
+			r.append(row[field])
+		row['fields']=r
 		row['CPUTime']=datetime.timedelta(seconds=row['totalCPUTime'])
 		row['wallTime']=datetime.timedelta(seconds=row['totalWallTime'])
 		row['pendTime']=datetime.timedelta(seconds=row['totalPendTime'])
