@@ -27,8 +27,6 @@ urlpatterns = patterns('',
 	url(r'^$', 'lavaFlow.views.homeView'),
 	url(r'^(\d+)/(\d+)/$', 'lavaFlow.views.homeView'),
 	url(r'^(\d+)/(\d+)/(.*)/$', 'lavaFlow.views.homeView'),
-	url(r'^modules/clusterOverview/(\d+)/(\d+)/$', 'lavaFlow.views.clusterOverviewModule'),
-	url(r'^modules/clusterOverview/(\d+)/(\d+)/(.*)/$', 'lavaFlow.views.clusterOverviewModule'),
 	
 	url(r'^modules/busyUsers/(\d+)/(\d+)/(-?\w+)/$', 'lavaFlow.views.busyUsersModule'),
 	url(r'^modules/busyUsers/(\d+)/(\d+)/(-?\w+)/(.*)/$', 'lavaFlow.views.busyUsersModule'),

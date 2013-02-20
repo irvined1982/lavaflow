@@ -280,26 +280,6 @@ def groupedUtilizationTableModule(request, startTime,endTime,groupString,filterS
 		row['pendTime']=datetime.timedelta(seconds=row['totalPendTime'])
 	return render_to_response("lavaFlow/modules/groupedUtilization.html",{'fields':friendlyNames,'rows':rows,},context_instance=RequestContext(request))
 
-def clusterOverviewModule(request, startTime,endTime,filterString=''):
-	startTime=int(startTime)
-	endTime=int(endTime)
-	log.debug(filterString)
-	clusters=filterRuns(Run.objects.filter(element__job__submitTime__lte=endTime, endTime__gte=startTime),filterString).values('element__job__cluster__id').annotate(
-			totalJobs=Count('element__job__id'),
-			totalElements=Count('element__id'),
-			totalRuns=Count('id'),
-			totalCPUTime=Sum('cpuTime'),
-			totalWallTime=Sum('wallTime'),
-			totalPendTime=Sum('pendTime'),
-		)
-	for cluster in clusters:
-		cluster['cluster']=Cluster.objects.get(pk=cluster['element__job__cluster__id'])
-		cluster['CPUTime']=datetime.timedelta(seconds=cluster['totalCPUTime'])
-		cluster['wallTime']=datetime.timedelta(seconds=cluster['totalWallTime'])
-		cluster['pendTime']=datetime.timedelta(seconds=cluster['totalPendTime'])
-	log.debug(filterString)
-	return render_to_response("lavaFlow/modules/clusterOverview.html",{'clusters':clusters,'startTime':startTime,'endTime':endTime,'filterString':filterString},context_instance=RequestContext(request))
-
 def busyUsersModule(request, startTime, endTime, field, filterString=''):
 	ALLOWED_FIELDS=['sumPend','sumWall','sumCpu','avgPend','avgWall','avgCpu','maxPend','maxWall','maxCpu','minPend','minWall','minCpu']
 	if field.lstrip('-') not in ALLOWED_FIELDS:
