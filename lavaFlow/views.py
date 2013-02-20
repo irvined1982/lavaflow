@@ -231,12 +231,31 @@ def filterRuns(runs, filterString):
 		}
 	return filterSet(runs,fields,filterString)
 
+	ALLOWED_GROUPS={
+			'element__job__cluster__name':{
+				'friendlyName':"Cluster",
+			}
+			'projects__name':{
+				'friendlyName':'Project',
+			},
+			'queue__name':{
+				'friendlyName':'Queue',
+			},
+			'numProcessors':{
+				'friendlyName':"Num Processors",
+			}
+			'element__job__user__userName':{
+				'friendlyName':"User",
+			}
+		}
 def groupedUtilizationTableModule(request, startTime,endTime,groupString,filterString=''):
 	groups=groupString.split("/")
-	ALLOWED_GROUPS=['projects__name','queue__name','element__job__user__userName']
 	for group in groups:
 		if group not in ALLOWED_GROUPS:
 			raise Http404( "Group not allowed")
+	friendlyNames=[]
+	for group in ALLOWED_GROUPS.values():
+		friendlyNames.append(group['friendlyName'])
 	
 	startTime=int(startTime)
 	endTime=int(endTime)
@@ -260,8 +279,7 @@ def groupedUtilizationTableModule(request, startTime,endTime,groupString,filterS
 		row['CPUTime']=datetime.timedelta(seconds=row['totalCPUTime'])
 		row['wallTime']=datetime.timedelta(seconds=row['totalWallTime'])
 		row['pendTime']=datetime.timedelta(seconds=row['totalPendTime'])
-	return render_to_response("lavaFlow/modules/groupedUtilization.html",{'fields':groups,'rows':rows,},context_instance=RequestContext(request))
-
+	return render_to_response("lavaFlow/modules/groupedUtilization.html",{'fields':friendlyNames,'rows':rows,},context_instance=RequestContext(request))
 
 def clusterOverviewModule(request, startTime,endTime,filterString=''):
 	startTime=int(startTime)

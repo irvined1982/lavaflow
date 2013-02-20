@@ -185,6 +185,7 @@
 		<div id='utilizationQueueChart'>
 			<svg style='height:500px'> </svg>
 		</div>
+		<div id="utilizationQueueTable"></div>
 		<script>
 			var utilQueueChart;
 			nv.addGraph(function() {
@@ -204,10 +205,35 @@
 				return utilQueueChart;
 			});
 		</script>
+		<h2>Utilization by Project</h2>
+		<div id='utilizationProjectChart'>
+			<svg style='height:500px'> </svg>
+		</div>
+		<div id="utilizationProjectTable"></div>
+		<script>
+			var utilProjChart;
+			nv.addGraph(function() {
+				utilProjChart = nv.models.stackedAreaChart();
+				utilProjChart.clipEdge(true);
+				utilProjChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
+				utilProjChart.xAxis.rotateLabels(-45);
+				utilProjChart.margin({bottom: 120, left:100});
+				utilProjChart.xAxis.axisLabel('Date');
+
+				d3.select('#utilizationQueueChart svg')
+				.datum([])
+				.transition().duration(500)
+				.call(utilProjChart);
+
+				nv.utils.windowResize(utilProjChart.update);
+				return utilProjChart;
+			});
+		</script>
 		<h2>Utilization by User</h2>
 		<div id='utilizationUserChart'>
 			<svg style='height:500px'> </svg>
 		</div>
+		<div id="utilizationUserTable"></div>
 		<script>
 			var utilUserChart;
 			nv.addGraph(function() {
@@ -310,8 +336,17 @@
 					filterString+="/";
 				}
 				 $("#reportData").text('Updating Report...');
-				 $.get("{% url lavaFlow.views.homeView %}modules/clusterOverview/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
+				 $.get("{% url lavaFlow.views.homeView %}modules/groupedUtilizationTable/"+selectedMin+"/"+selectedMax+"/group/element__job__cluster__name/group/"+filterString, function(data) {
 					 $('#clusterOverview').html(data);
+				 });
+				 $.get("{% url lavaFlow.views.homeView %}modules/groupedUtilizationTable/"+selectedMin+"/"+selectedMax+"/group/queue__name/group/"+filterString, function(data) {
+					 $('#utilizationQueueTable').html(data);
+				 });
+				 $.get("{% url lavaFlow.views.homeView %}modules/groupedUtilizationTable/"+selectedMin+"/"+selectedMax+"/group/element__job__user__userName/group/"+filterString, function(data) {
+					 $('#utilizationUserTable').html(data);
+				 });
+				 $.get("{% url lavaFlow.views.homeView %}modules/groupedUtilizationTable/"+selectedMin+"/"+selectedMax+"/group/projects__name/group/"+filterString, function(data) {
+					 $('#utilizationProjectTable').html(data);
 				 });
 				 $.get("{% url lavaFlow.views.homeView %}modules/busyUsers/"+selectedMin+"/"+selectedMax+"/-sumCpu/"+filterString, function(data) {
 					 $('#heavyUsers').html(data);
@@ -358,6 +393,12 @@
 				});
 				 $.getJSON("{% url lavaFlow.views.homeView %}modules/groupedUtilization/"+selectedMin+"/"+selectedMax+"/group/element__job__user__userName/group/"+filterString, function(data) {
 							d3.select('#utilizationUserChart svg')
+							.datum(data)
+							.transition().duration(500)
+							.call(utilUserChart);
+				});
+				 $.getJSON("{% url lavaFlow.views.homeView %}modules/groupedUtilization/"+selectedMin+"/"+selectedMax+"/group/projects__name/group/"+filterString, function(data) {
+							d3.select('#utilizationProjectChart svg')
 							.datum(data)
 							.transition().duration(500)
 							.call(utilUserChart);
