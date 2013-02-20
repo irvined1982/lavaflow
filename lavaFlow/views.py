@@ -231,9 +231,10 @@ def filterRuns(runs, filterString):
 		}
 	return filterSet(runs,fields,filterString)
 
+ALLOWED_GROUPS=['element__job__cluster','projects__name','queue__name','element__job__user__userName']
+
 def groupedUtilizationTableModule(request, startTime,endTime,groupString,filterString=''):
 	groups=groupString.split("/")
-	ALLOWED_GROUPS=['queue__name','element__job__user__userName']
 	for group in groups:
 		if group not in ALLOWED_GROUPS:
 			raise Http404( "Group not allowed")
@@ -242,6 +243,7 @@ def groupedUtilizationTableModule(request, startTime,endTime,groupString,filterS
 	endTime=int(endTime)
 	log.debug(filterString)
 	rows=filterRuns(Run.objects.filter(element__job__submitTime__lte=endTime, endTime__gte=startTime),filterString)
+	raise ValueError(groups)
 	rows=rows.values(*groups).order_by(*groups)
 	rows=rows.annotate(
 			totalJobs=Count('element__job__id'),
@@ -514,7 +516,6 @@ def groupedUtilizationChartModule(request, startTime, endTime, groupString, filt
 				element__job__submitTime__lte=endTime, 
 				endTime__gte=startTime
 			),filterString)
-	ALLOWED_GROUPS=['queue__name','element__job__user__userName']
 	for group in groups:
 		if group not in ALLOWED_GROUPS:
 			raise Http404( "Group not allowed")
