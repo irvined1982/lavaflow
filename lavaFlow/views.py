@@ -250,12 +250,11 @@ def filterRuns(runs, filterString):
 		}
 def groupedUtilizationTableModule(request, startTime,endTime,groupString,filterString=''):
 	groups=groupString.split("/")
+	friendlyNames=[]
 	for group in groups:
 		if group not in ALLOWED_GROUPS:
 			raise Http404( "Group not allowed")
-	friendlyNames=[]
-	for group in ALLOWED_GROUPS.values():
-		friendlyNames.append(group['friendlyName'])
+			friendlyNames.append(group['friendlyName'])
 	
 	startTime=int(startTime)
 	endTime=int(endTime)
