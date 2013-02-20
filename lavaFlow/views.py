@@ -241,9 +241,7 @@ def groupedUtilizationTableModule(request, startTime,endTime,groupString,filterS
 	startTime=int(startTime)
 	endTime=int(endTime)
 	log.debug(filterString)
-	rows=filterRuns(Run.objects.filter(element__job__submitTime__lte=endTime, endTime__gte=startTime),filterString)
-	rows=rows.values(*groups).order_by(*groups)
-	rows=rows.annotate(
+	rows=filterRuns(Run.objects.filter(element__job__submitTime__lte=endTime, endTime__gte=startTime),filterString).values(*groups).order_by(*groups).annotate(
 			totalJobs=Count('element__job__id'),
 			totalElements=Count('element__id'),
 			totalRuns=Count('id'),
@@ -255,8 +253,8 @@ def groupedUtilizationTableModule(request, startTime,endTime,groupString,filterS
 	for row in rows:
 		r=[]
 		for field in groups:
-			r.append(getattr(row,field))
-		row.fields=r
+			r.append(row[field])
+		row['fields']=r
 		row['CPUTime']=datetime.timedelta(seconds=row['totalCPUTime'])
 		row['wallTime']=datetime.timedelta(seconds=row['totalWallTime'])
 		row['pendTime']=datetime.timedelta(seconds=row['totalPendTime'])
