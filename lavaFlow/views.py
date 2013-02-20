@@ -231,10 +231,10 @@ def filterRuns(runs, filterString):
 		}
 	return filterSet(runs,fields,filterString)
 
-	ALLOWED_GROUPS={
+ALLOWED_GROUPS={
 			'element__job__cluster__name':{
 				'friendlyName':"Cluster",
-			}
+			},
 			'projects__name':{
 				'friendlyName':'Project',
 			},
@@ -243,7 +243,7 @@ def filterRuns(runs, filterString):
 			},
 			'numProcessors':{
 				'friendlyName':"Num Processors",
-			}
+			},
 			'element__job__user__userName':{
 				'friendlyName':"User",
 			}
@@ -253,8 +253,8 @@ def groupedUtilizationTableModule(request, startTime,endTime,groupString,filterS
 	friendlyNames=[]
 	for group in groups:
 		if group not in ALLOWED_GROUPS:
-			raise Http404( "Group not allowed")
-			friendlyNames.append(group['friendlyName'])
+			raise Http404( "Group: %s not allowed" % group)
+		friendlyNames.append(ALLOWED_GROUPS[group]['friendlyName'])
 	
 	startTime=int(startTime)
 	endTime=int(endTime)
