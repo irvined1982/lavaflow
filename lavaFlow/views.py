@@ -531,10 +531,9 @@ def groupedUtilizationChartModule(request, startTime, endTime, groupString, filt
 				element__job__submitTime__lte=endTime, 
 				endTime__gte=startTime
 			),filterString)
-	ALLOWED_GROUPS=['queue__name','element__job__user__userName']
 	for group in groups:
 		if group not in ALLOWED_GROUPS:
-			raise Http404( "Group not allowed")
+			raise Http404( "Group: %s not allowed"% group)
 	
 	data=util.complexUtilization(startTime, endTime,500,groups)
 	return HttpResponse(data, mimetype='application/json')
