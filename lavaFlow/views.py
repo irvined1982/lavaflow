@@ -231,7 +231,7 @@ def filterRuns(runs, filterString):
 		}
 	return filterSet(runs,fields,filterString)
 
-def groupedOverviewTable(request, startTime,endTime,groupString,filterString=''):
+def groupedUtilizationTableModule(request, startTime,endTime,groupString,filterString=''):
 	groups=groupString.split("/")
 	ALLOWED_GROUPS=['queue__name','element__job__user__userName']
 	for group in groups:
