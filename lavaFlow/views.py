@@ -231,6 +231,37 @@ def filterRuns(runs, filterString):
 		}
 	return filterSet(runs,fields,filterString)
 
+def groupedOverviewTable(request, startTime,endTime,groupString,filterString=''):
+	groups=groupString.split("/")
+	ALLOWED_GROUPS=['queue__name','element__job__user__userName']
+	for group in groups:
+		if group not in ALLOWED_GROUPS:
+			raise Http404( "Group not allowed")
+	
+	startTime=int(startTime)
+	endTime=int(endTime)
+	log.debug(filterString)
+	rows=filterRuns(Run.objects.filter(element__job__submitTime__lte=endTime, endTime__gte=startTime),filterString)
+	rows=rows.values(*groups).order_by(*groups)
+	rows=rows.annotate(
+			totalJobs=Count('element__job__id'),
+			totalElements=Count('element__id'),
+			totalRuns=Count('id'),
+			totalCPUTime=Sum('cpuTime'),
+			totalWallTime=Sum('wallTime'),
+			totalPendTime=Sum('pendTime'),
+		)
+
+	for row in rows:
+		r=[]
+		for field in groups:
+			r.append(getattr(row,field))
+		row.fields=r
+		row['CPUTime']=datetime.timedelta(seconds=row['totalCPUTime'])
+		row['wallTime']=datetime.timedelta(seconds=row['totalWallTime'])
+		row['pendTime']=datetime.timedelta(seconds=row['totalPendTime'])
+	return render_to_response("lavaFlow/modules/groupedUtilization.html",{'fields':groups,'rows':rows,},context_instance=RequestContext(request))
+
 
 def clusterOverviewModule(request, startTime,endTime,filterString=''):
 	startTime=int(startTime)
