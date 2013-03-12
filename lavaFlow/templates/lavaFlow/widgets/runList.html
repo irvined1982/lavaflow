@@ -17,14 +17,14 @@
 <tbody>
 	   {% for run in runs %}
 		   <tr>
-			   <td><a href='{{ run.element.job.get_absolute_url }}'>{{ run.element.job.jobId }}</a></td>
+			   <td><a href='{{ run.element.job.get_absolute_url }}'>{{ run.element.job.job_id }}</a></td>
 			   <td><a href='{{ run.get_absolute_url }}'>{{ run.element.elementId }}</a></td>
 			   <td>{{ run.element.job.user.userName }}</td>
 			   <td>{{ run.startTimeDT }}</td>
 			   <td>{{ run.endTimeDT }}</td>
-			   <td>{{ run.pendTimeDelta }}</td>
-			   <td>{{ run.wallTimeDelta }}</td>
-			   <td>{{ run.cpuTimeDelta }}</td>
+			   <td>{{ run.pend_timedelta }}</td>
+			   <td>{{ run.wall_timedelta }}</td>
+			   <td>{{ run.cpu_timedelta }}</td>
 			   <td>{{ run.executions.count }}</td>
 			   <td>{{ run.runFinishInfo.jStatus.jStatus }}</td>
 			   <td>{{ run.runFinishInfo.exitInfo.name }}</td>

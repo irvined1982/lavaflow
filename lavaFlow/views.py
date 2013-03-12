@@ -181,7 +181,7 @@ def filterStringToFilterJson(filterString):
 def getReportRange(date):
 	data={
 		'endTime':Run.objects.aggregate(Max('endTime'))['endTime__max'],
-		'startTime':Job.objects.aggregate(Min('submitTime'))['submitTime__min'],
+		'startTime':Job.objects.aggregate(Min('submit_time'))['submit_time__min'],
 	}
 	return HttpResponse(json.dumps(data), mimetype='application/json')
 
@@ -259,15 +259,15 @@ def groupedUtilizationTableModule(request, startTime,endTime,groupString,filterS
 	startTime=int(startTime)
 	endTime=int(endTime)
 	log.debug(filterString)
-	rows=filterRuns(Run.objects.filter(element__job__submitTime__lte=endTime, endTime__gte=startTime),filterString)
+	rows=filterRuns(Run.objects.filter(element__job__submit_time__lte=endTime, endTime__gte=startTime),filterString)
 	rows=rows.values(*groups).order_by(*groups)
 	rows=rows.annotate(
 			totalJobs=Count('element__job__id'),
 			totalElements=Count('element__id'),
 			totalRuns=Count('id'),
-			totalCPUTime=Sum('cpuTime'),
-			totalWallTime=Sum('wallTime'),
-			totalPendTime=Sum('pendTime'),
+			totalCPUTime=Sum('cpu_time'),
+			totalWallTime=Sum('wall_time'),
+			totalPendTime=Sum('pend_time'),
 		)
 
 	for row in rows:
@@ -276,8 +276,8 @@ def groupedUtilizationTableModule(request, startTime,endTime,groupString,filterS
 			r.append(row[field])
 		row['fields']=r
 		row['CPUTime']=datetime.timedelta(seconds=row['totalCPUTime'])
-		row['wallTime']=datetime.timedelta(seconds=row['totalWallTime'])
-		row['pendTime']=datetime.timedelta(seconds=row['totalPendTime'])
+		row['wall_time']=datetime.timedelta(seconds=row['totalWallTime'])
+		row['pend_time']=datetime.timedelta(seconds=row['totalPendTime'])
 	return render_to_response("lavaFlow/modules/groupedUtilization.html",{'fields':friendlyNames,'rows':rows,},context_instance=RequestContext(request))
 
 def busyUsersModule(request, startTime, endTime, field, filterString=''):
@@ -285,22 +285,22 @@ def busyUsersModule(request, startTime, endTime, field, filterString=''):
 	if field.lstrip('-') not in ALLOWED_FIELDS:
 		raise Http404(field)
 
-	users=filterRuns(Run.objects.filter(element__job__submitTime__lte=endTime, endTime__gte=startTime),filterString).values('element__job__user__id').annotate(
+	users=filterRuns(Run.objects.filter(element__job__submit_time__lte=endTime, endTime__gte=startTime),filterString).values('element__job__user__id').annotate(
 			numJobs=Count('element__job__id'),
 			numElements=Count('element__id'),
 			numRuns=Count('id'),
-			sumPend=Sum('pendTime'),
-			sumWall=Sum('wallTime'),
-			sumCpu=Sum('cpuTime'),
-			avgPend=Avg('pendTime'),
-			avgWall=Avg('wallTime'),
-			avgCpu=Avg('cpuTime'),
-			maxPend=Max('pendTime'),
-			maxWall=Max('wallTime'),
-			maxCpu=Max('cpuTime'),
-			minPend=Min('pendTime'),
-			minWall=Min('wallTime'),
-			minCpu=Min('cpuTime'),
+			sumPend=Sum('pend_time'),
+			sumWall=Sum('wall_time'),
+			sumCpu=Sum('cpu_time'),
+			avgPend=Avg('pend_time'),
+			avgWall=Avg('wall_time'),
+			avgCpu=Avg('cpu_time'),
+			maxPend=Max('pend_time'),
+			maxWall=Max('wall_time'),
+			maxCpu=Max('cpu_time'),
+			minPend=Min('pend_time'),
+			minWall=Min('wall_time'),
+			minCpu=Min('cpu_time'),
 			).order_by(field)[0:10]
 	for u in users:
 		for f in [
@@ -321,9 +321,9 @@ def busyUsersModule(request, startTime, endTime, field, filterString=''):
 	return render_to_response("lavaFlow/modules/busyUsers.html",{'users':users},context_instance=RequestContext(request))
 
 def bestHostModule(request, startTime, endTime, filterString=''):
-	hosts=filterRuns(Run.objects.filter(element__job__submitTime__lte=endTime, endTime__gte=startTime, runFinishInfo__jStatus__jStatus="Done"),filterString).values('executions__host').annotate(
+	hosts=filterRuns(Run.objects.filter(element__job__submit_time__lte=endTime, endTime__gte=startTime, runFinishInfo__jStatus__jStatus="Done"),filterString).values('executions__host').annotate(
 			numRuns=Count('id'),
-			sumCpu=Sum('cpuTime'),
+			sumCpu=Sum('cpu_time'),
 		).order_by('-numRuns')[0:10]
 	for h in hosts:
 		try:
@@ -335,9 +335,9 @@ def bestHostModule(request, startTime, endTime, filterString=''):
 
 
 def worstHostModule(request, startTime, endTime,filterString=''):
-	hosts=filterRuns(Run.objects.exclude(element__job__submitTime__lte=endTime, endTime__gte=startTime, runFinishInfo__jStatus__jStatus="Done"),filterString).exclude(executions__host__isnull=True).values('executions__host').annotate(
+	hosts=filterRuns(Run.objects.exclude(element__job__submit_time__lte=endTime, endTime__gte=startTime, runFinishInfo__jStatus__jStatus="Done"),filterString).exclude(executions__host__isnull=True).values('executions__host').annotate(
 			numRuns=Count('id'),
-			sumCpu=Sum('cpuTime'),
+			sumCpu=Sum('cpu_time'),
 		).order_by('-numRuns')[0:10]
 	for h in hosts:
 		try:
@@ -348,13 +348,13 @@ def worstHostModule(request, startTime, endTime,filterString=''):
 	return render_to_response("lavaFlow/modules/busyHosts.html",{'hosts':hosts},context_instance=RequestContext(request))
 
 def busySubmitModule(request, startTime, endTime,filterString=''):
-	hosts=filterRuns(Run.objects.filter(element__job__submitTime__lte=endTime, endTime__gte=startTime),filterString).values('element__job__submitHost').annotate(
+	hosts=filterRuns(Run.objects.filter(element__job__submit_time__lte=endTime, endTime__gte=startTime),filterString).values('element__job__submit_host').annotate(
 			numRuns=Count('id'),
-			sumCpu=Sum('cpuTime'),
+			sumCpu=Sum('cpu_time'),
 			).order_by('-numRuns')[0:10]
 	for h in hosts:
 		try:
-			h['host']=Host.objects.get(pk=h['element__job__submitHost'])
+			h['host']=Host.objects.get(pk=h['element__job__submit_host'])
 		except:
 			h['host']='None'
 		h['sumCpu']=datetime.timedelta(seconds=h['sumCpu'])
@@ -362,20 +362,20 @@ def busySubmitModule(request, startTime, endTime,filterString=''):
 
 
 def jobSizeChartModule(request, startTime, endTime, filterString=''):
-	rows=filterRuns(Run.objects.filter(element__job__submitTime__lte=endTime, endTime__gte=startTime),filterString).values('numProcessors').annotate(
+	rows=filterRuns(Run.objects.filter(element__job__submit_time__lte=endTime, endTime__gte=startTime),filterString).values('numProcessors').annotate(
 			numRuns=Count('numProcessors'),
-			sumPendTime=Sum('pendTime'),
-			sumWallTime=Sum('wallTime'),
-			sumCpuTime=Sum('cpuTime'),
-			avgPendTime=Sum('pendTime'),
-			avgWallTime=Sum('wallTime'),
-			avgCpuTime=Sum('cpuTime'),
-			minPendTime=Sum('pendTime'),
-			minWallTime=Sum('wallTime'),
-			minCpuTime=Sum('cpuTime'),
-			maxPendTime=Sum('pendTime'),
-			maxWallTime=Sum('wallTime'),
-			maxCpuTime=Sum('cpuTime'),
+			sumPendTime=Sum('pend_time'),
+			sumWallTime=Sum('wall_time'),
+			sumCpuTime=Sum('cpu_time'),
+			avgPendTime=Sum('pend_time'),
+			avgWallTime=Sum('wall_time'),
+			avgCpuTime=Sum('cpu_time'),
+			minPendTime=Sum('pend_time'),
+			minWallTime=Sum('wall_time'),
+			minCpuTime=Sum('cpu_time'),
+			maxPendTime=Sum('pend_time'),
+			maxWallTime=Sum('wall_time'),
+			maxCpuTime=Sum('cpu_time'),
 		).order_by('numProcessors')
 	
 	values=[]
@@ -397,20 +397,20 @@ def jobSizeChartModule(request, startTime, endTime, filterString=''):
 
 
 def jobSizeTableModule(request, startTime, endTime,filterString=''):
-	rows=filterRuns(Run.objects.filter(element__job__submitTime__lte=endTime, endTime__gte=startTime),filterString).values('numProcessors').annotate(
+	rows=filterRuns(Run.objects.filter(element__job__submit_time__lte=endTime, endTime__gte=startTime),filterString).values('numProcessors').annotate(
 			numRuns=Count('numProcessors'),
-			sumPendTime=Sum('pendTime'),
-			sumWallTime=Sum('wallTime'),
-			sumCpuTime=Sum('cpuTime'),
-			avgPendTime=Sum('pendTime'),
-			avgWallTime=Sum('wallTime'),
-			avgCpuTime=Sum('cpuTime'),
-			minPendTime=Sum('pendTime'),
-			minWallTime=Sum('wallTime'),
-			minCpuTime=Sum('cpuTime'),
-			maxPendTime=Sum('pendTime'),
-			maxWallTime=Sum('wallTime'),
-			maxCpuTime=Sum('cpuTime'),
+			sumPendTime=Sum('pend_time'),
+			sumWallTime=Sum('wall_time'),
+			sumCpuTime=Sum('cpu_time'),
+			avgPendTime=Sum('pend_time'),
+			avgWallTime=Sum('wall_time'),
+			avgCpuTime=Sum('cpu_time'),
+			minPendTime=Sum('pend_time'),
+			minWallTime=Sum('wall_time'),
+			minCpuTime=Sum('cpu_time'),
+			maxPendTime=Sum('pend_time'),
+			maxWallTime=Sum('wall_time'),
+			maxCpuTime=Sum('cpu_time'),
 		).order_by('numProcessors')
 	for r in rows:
 		try:
@@ -425,24 +425,24 @@ def jobSizeTableModule(request, startTime, endTime,filterString=''):
 
 def jobExitTableModule(request, startTime, endTime,filterString=''):
 	info=filterRuns(Run.objects.filter(
-				element__job__submitTime__lte=endTime, 
+				element__job__submit_time__lte=endTime, 
 				endTime__gte=startTime
 			),filterString).values(
 					'runFinishInfo__exitInfo'
 			).annotate(
 				numRuns=Count('numProcessors'),
-				sumPendTime=Sum('pendTime'),
-				sumWallTime=Sum('wallTime'),
-				sumCpuTime=Sum('cpuTime'),
-				avgPendTime=Sum('pendTime'),
-				avgWallTime=Sum('wallTime'),
-				avgCpuTime=Sum('cpuTime'),
-				minPendTime=Sum('pendTime'),
-				minWallTime=Sum('wallTime'),
-				minCpuTime=Sum('cpuTime'),
-				maxPendTime=Sum('pendTime'),
-				maxWallTime=Sum('wallTime'),
-				maxCpuTime=Sum('cpuTime'),
+				sumPendTime=Sum('pend_time'),
+				sumWallTime=Sum('wall_time'),
+				sumCpuTime=Sum('cpu_time'),
+				avgPendTime=Sum('pend_time'),
+				avgWallTime=Sum('wall_time'),
+				avgCpuTime=Sum('cpu_time'),
+				minPendTime=Sum('pend_time'),
+				minWallTime=Sum('wall_time'),
+				minCpuTime=Sum('cpu_time'),
+				maxPendTime=Sum('pend_time'),
+				maxWallTime=Sum('wall_time'),
+				maxCpuTime=Sum('cpu_time'),
 			).order_by('-numRuns')
 	for i in info:
 		for f in ['sumPendTime','sumWallTime','sumCpuTime','avgPendTime','avgWallTime','avgCpuTime','minPendTime','minWallTime','minCpuTime','maxPendTime','maxWallTime','maxCpuTime',]:
@@ -452,15 +452,15 @@ def jobExitTableModule(request, startTime, endTime,filterString=''):
 
 def jobExitChartModule(request, startTime, endTime,filterString=''):
 	rows=filterRuns(Run.objects.filter(
-				element__job__submitTime__lte=endTime, 
+				element__job__submit_time__lte=endTime, 
 				endTime__gte=startTime
 			),filterString).values(
 					'runFinishInfo__exitInfo'
 			).annotate(
 				numRuns=Count('numProcessors'),
-				sumPendTime=Sum('pendTime'),
-				sumWallTime=Sum('wallTime'),
-				sumCpuTime=Sum('cpuTime'),
+				sumPendTime=Sum('pend_time'),
+				sumWallTime=Sum('wall_time'),
+				sumCpuTime=Sum('cpu_time'),
 			).order_by('-numRuns')
 	values=[]
 	for s in [('numRuns','Num Runs'),('sumPendTime','Pend Time'),('sumWallTime','Wall Time'),('sumCpuTime','CPU Time')]:
@@ -482,7 +482,7 @@ def jobExitChartModule(request, startTime, endTime,filterString=''):
 
 def jobListModule(request, startTime, endTime, filterString=''):
 	jobs=filterJobs(Job.objects.filter(
-			submitTime__lte=endTime, 
+			submit_time__lte=endTime, 
 			elements__runs__endTime__gte=startTime
 	),filterString)
 	paginator = Paginator(jobs, 30)
@@ -499,7 +499,7 @@ def jobListModule(request, startTime, endTime, filterString=''):
 
 def utilizationModule(request, startTime, endTime,filterString=''):
 	util=filterRuns(Run.objects.filter(
-				element__job__submitTime__lte=endTime, 
+				element__job__submit_time__lte=endTime, 
 				endTime__gte=startTime
 			),filterString)
 	data=util.utilizationN3DS(startTime, endTime,500,"")
@@ -508,7 +508,7 @@ def utilizationModule(request, startTime, endTime,filterString=''):
 def groupedUtilizationChartModule(request, startTime, endTime, groupString, filterString=''):
 	groups=groupString.split("/")
 	util=filterRuns(Run.objects.filter(
-				element__job__submitTime__lte=endTime, 
+				element__job__submit_time__lte=endTime, 
 				endTime__gte=startTime
 			),filterString)
 	for group in groups:
@@ -524,7 +524,7 @@ def jobSearchView(request):
 	if query:
 		try:
 			query=int(query)
-			jobs=Job.objects.filter(jobId=query)
+			jobs=Job.objects.filter(job_id=query)
 		except ValueError:
 			pass
 	return render_to_response("lavaFlow/jobSearch.html",{'jobs':jobs},context_instance=RequestContext(request))

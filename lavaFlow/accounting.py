@@ -184,11 +184,11 @@ FIELD_LOOKUP=	{
 					'eventType':{ 'field':0, 'type':'str' },
 					'versionNumber':{ 'field':1, 'type':'str' },
 					'eventTime':{ 'field':2, 'type':'int' },
-					'jobId':{ 'field':3, 'type':'int' },
+					'job_id':{ 'field':3, 'type':'int' },
 					'userId':{ 'field':4, 'type':'int' },
 					'options':{ 'field':5, 'type':'int' },
 					'numProcessors':{ 'field':6, 'type':'int' },
-					'submitTime':{ 'field':7, 'type':'int' },
+					'submit_time':{ 'field':7, 'type':'int' },
 					'beginTime':{ 'field':8, 'type':'int' },
 					'termTime':{ 'field':9, 'type':'int' },
 					'startTime':{ 'field':10, 'type':'int' },
@@ -197,7 +197,7 @@ FIELD_LOOKUP=	{
 					'resReq':{ 'field':13, 'type':'str' },
 					'dependCond':{ 'field':14, 'type':'str' },
 					'preExecCmd':{ 'field':15, 'type':'str' },
-					'submitHost':{ 'field':16, 'type':'str' },
+					'submit_host':{ 'field':16, 'type':'str' },
 					'cwd':{ 'field':17, 'type':'str' },
 					'inFile':{ 'field':18, 'type':'str' },
 					'outFile':{ 'field':19, 'type':'str' },
@@ -266,11 +266,11 @@ FIELD_LOOKUP=	{
 					'eventType':{ 'field':0, 'type':'str' },
 					'versionNumber':{ 'field':1, 'type':'str' },
 					'eventTime':{ 'field':2, 'type':'int' },
-					'jobId':{ 'field':3, 'type':'int' },
+					'job_id':{ 'field':3, 'type':'int' },
 					'userId':{ 'field':4, 'type':'int' },
 					'options':{ 'field':5, 'type':'int' },
 					'numProcessors':{ 'field':6, 'type':'int' },
-					'submitTime':{ 'field':7, 'type':'int' },
+					'submit_time':{ 'field':7, 'type':'int' },
 					'beginTime':{ 'field':8, 'type':'int' },
 					'termTime':{ 'field':9, 'type':'int' },
 					'startTime':{ 'field':10, 'type':'int' },
@@ -279,7 +279,7 @@ FIELD_LOOKUP=	{
 					'resReq':{ 'field':13, 'type':'str' },
 					'dependCond':{ 'field':14, 'type':'str' },
 					'preExecCmd':{ 'field':15, 'type':'str' },
-					'submitHost':{ 'field':16, 'type':'str' },
+					'submit_host':{ 'field':16, 'type':'str' },
 					'cwd':{ 'field':17, 'type':'str' },
 					'inFile':{ 'field':18, 'type':'str' },
 					'outFile':{ 'field':19, 'type':'str' },
@@ -349,11 +349,11 @@ FIELD_LOOKUP=	{
 					'eventType':{ 'field':0, 'type':'str' },
 					'versionNumber':{ 'field':1, 'type':'str' },
 					'eventTime':{ 'field':2, 'type':'int' },
-					'jobId':{ 'field':3, 'type':'int' },
+					'job_id':{ 'field':3, 'type':'int' },
 					'userId':{ 'field':4, 'type':'int' },
 					'options':{ 'field':5, 'type':'int' },
 					'numProcessors':{ 'field':6, 'type':'int' },
-					'submitTime':{ 'field':7, 'type':'int' },
+					'submit_time':{ 'field':7, 'type':'int' },
 					'beginTime':{ 'field':8, 'type':'int' },
 					'termTime':{ 'field':9, 'type':'int' },
 					'startTime':{ 'field':10, 'type':'int' },
@@ -362,7 +362,7 @@ FIELD_LOOKUP=	{
 					'resReq':{ 'field':13, 'type':'str' },
 					'dependCond':{ 'field':14, 'type':'str' },
 					'preExecCmd':{ 'field':15, 'type':'str' },
-					'submitHost':{ 'field':16, 'type':'str' },
+					'submit_host':{ 'field':16, 'type':'str' },
 					'cwd':{ 'field':17, 'type':'str' },
 					'inFile':{ 'field':18, 'type':'str' },
 					'outFile':{ 'field':19, 'type':'str' },
@@ -441,11 +441,11 @@ FIELD_LOOKUP=	{
 					'eventType':{ 'field':0, 'type':'str' },
 					'versionNumber':{ 'field':1, 'type':'str' },
 					'eventTime':{'field':2, 'type':'int'},
-					'jobId':{ 'field':3, 'type':'int' },
+					'job_id':{ 'field':3, 'type':'int' },
 					'userId':{ 'field':4, 'type':'int' },
 					'options':{ 'field':5, 'type':'int' },
 					'numProcessors':{ 'field':6, 'type':'int' },
-					'submitTime':{ 'field':7, 'type':'int' },
+					'submit_time':{ 'field':7, 'type':'int' },
 					'beginTime':{ 'field':8, 'type':'int' },
 					'termTime':{ 'field':9, 'type':'int' },
 					'sigValue':{ 'field':10,'type':'int' },
@@ -468,7 +468,7 @@ FIELD_LOOKUP=	{
 					'umask':{ 'field':27, 'type':'int' },
 					'queue':{ 'field':28, 'type':'str' },
 					'resReq':{ 'field':29, 'type':'str' },
-					'submitHost':{ 'field':30, 'type':'str' },
+					'submit_host':{ 'field':30, 'type':'str' },
 					'cwd':{ 'field':31, 'type':'str' },
 					'chkpntDir':{ 'field':32, 'type':'str' },
 					'inFile':{ 'field':33, 'type':'str' },
@@ -526,11 +526,11 @@ FIELD_LOOKUP=	{
 					'eventType':{ 'field':0, 'type':'str' },
 					'versionNumber':{ 'field':1, 'type':'str' },
 					'eventTime':{'field':2, 'type':'int'},
-					'jobId':{ 'field':3, 'type':'int' },
+					'job_id':{ 'field':3, 'type':'int' },
 					'userId':{ 'field':4, 'type':'int' },
 					'options':{ 'field':5, 'type':'int' },
 					'numProcessors':{ 'field':6, 'type':'int' },
-					'submitTime':{ 'field':7, 'type':'int' },
+					'submit_time':{ 'field':7, 'type':'int' },
 					'beginTime':{ 'field':8, 'type':'int' },
 					'termTime':{ 'field':9, 'type':'int' },
 					'sigValue':{ 'field':10,'type':'int' },
@@ -553,7 +553,7 @@ FIELD_LOOKUP=	{
 					'umask':{ 'field':27, 'type':'int' },
 					'queue':{ 'field':28, 'type':'str' },
 					'resReq':{ 'field':29, 'type':'str' },
-					'submitHost':{ 'field':30, 'type':'str' },
+					'submit_host':{ 'field':30, 'type':'str' },
 					'cwd':{ 'field':31, 'type':'str' },
 					'chkpntDir':{ 'field':32, 'type':'str' },
 					'inFile':{ 'field':33, 'type':'str' },
@@ -629,12 +629,12 @@ class JobFinishEvent(object):
 		if self.startTime<1:
 			# job never started
 			# Possibly change to raise exception
-			self.wallTime=0
-			self.pendTime=self.endTime-self.submitTime
+			self.wall_time=0
+			self.pend_time=self.endTime-self.submit_time
 			self.startTime=self.endTime
 		else:
-			self.wallTime=self.endTime-self.startTime
-			self.pendTime=self.startTime-self.submitTime
+			self.wall_time=self.endTime-self.startTime
+			self.pend_time=self.startTime-self.submit_time
 		if self.jStatus==32:
 			self.jStatus="Exit"
 		else:

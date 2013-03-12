@@ -60,11 +60,11 @@ class RunQuerySet(models.query.QuerySet):
 		running=array.array('l', [0]) * (actualBlocks)
 		pending=array.array('l', [0]) * (actualBlocks)
 
-		for run in self.filter(endTime__gte=reportStartTime, startTime__lte=reportEndTime).values('numProcessors','element__job__submitTime','startTime','endTime'):
+		for run in self.filter(endTime__gte=reportStartTime, startTime__lte=reportEndTime).values('numProcessors','element__job__submit_time','startTime','endTime'):
 			cores=run['numProcessors']
 			startMinute=int(run['startTime']/blockSize)*blockSize
 			endMinute=int(run['endTime']/blockSize)*blockSize
-			subMinute=int(run['element__job__submitTime']/blockSize)*blockSize
+			subMinute=int(run['element__job__submit_time']/blockSize)*blockSize
 
 			if (subMinute<=reportStartTime):
 				pending[0]+=cores
@@ -176,51 +176,52 @@ class Host(models.Model):
 			i['exit']=ExitReason.objects.get(pk=i['run__runFinishInfo__exitInfo'])
 		return info
 	def submittedJobs(self):
-		return Job.objects.filter(submitHost=self).count()
+		return Job.objects.filter(submit_host=self).count()
 	def executedJobs(self):
 		return Job.objects.filter(elements__runs__executions__host=self).distinct().count()
 
 	def submitUsage(self):
-		info=Run.objects.filter(element__job__submitHost=self).values('element__job__cluster','queue').annotate(
+		info=Run.objects.filter(element__job__submit_host=self).values('element__job__cluster','queue').annotate(
 				numJobs=Count('element__job'),
 				numElements=Count('element'),
 				numRuns=Count('numProcessors'),
-				cpuTime=Sum('cpuTime'),
-				wallTime=Sum('wallTime'),
+				cpu_time=Sum('cpu_time'),
+				wall_time=Sum('wall_time'),
 				)
 		for i in info:
 			i['cluster']=Cluster.objects.get(pk=i['element__job__cluster'])
 			i['queue']=Queue.objects.get(pk=i['queue'])
-			i['cpuTime']=datetime.timedelta(seconds=i['cpuTime'])
-			i['wallTime']=datetime.timedelta(seconds=i['wallTime'])
+			i['cpu_time']=datetime.timedelta(seconds=i['cpu_time'])
+			i['wall_time']=datetime.timedelta(seconds=i['wall_time'])
 		return info
 
+class Service(models.Model):
+	name=models.CharField(max_length=512)
+
 class Outage(models.Model):
-	service=models.CharField(max_length=512)
-	startTime=models.IntegerField()
-	endTime=models.IntegerField()
+	service=models.ForeignKey(Service, related_name='outages')
+	start_time=models.IntegerField()
+	end_time=models.IntegerField()
 	duration=models.IntegerField()
 	host=models.ForeignKey(Host, related_name='outages')
 	def get_absolute_url(self):
-		return '/lavaFlow/outageView/%s/' % self.id
-	def durationDelta(self):
+		raise NotImplementedError
+	def duration_delta(self):
 		return datetime.timedelta(seconds=self.duration)
-	def startTimeDT(self):
+	def start_time_datetime(self):
 		return datetime.datetime.utcfromtimestamp(self.startTime)
-	def endTimeDT(self):
+	def end_time_datetime(self):
 		return datetime.datetime.utcfromtimestamp(self.endTime)
-	def runList(self):
+	def run_list(self):
 		return Run.objects.filter(startTime__gte=self.startTime, endTime__lte=self.endTime).filter(executions__host=self.host)
-	def impactedRuns(self):
+	def num_impacted_runs(self):
 		return self.runList().count()
-
-
 
 class OutageLog(models.Model):
 	time=models.IntegerField()
 	message=models.TextField()
 	outage=models.ForeignKey(Outage, related_name="logEntries")
-	def timeDT(self):
+	def time_datetime(self):
 		return datetime.datetime.utcfromtimestamp(self.time)
 
 
@@ -263,7 +264,7 @@ class Cluster(models.Model):
 			log.debug("firstSubmitTime: Read time from cache")
 			return time
 		else:
-			time=Job.objects.filter(cluster=self).aggregate(Min('submitTime'))['submitTime__min']
+			time=Job.objects.filter(cluster=self).aggregate(Min('submit_time'))['submit_time__min']
 			log.debug("firstSubmitTime: Writing time to cache")
 			cache.set('cluster_firstSubmitTime_%s' %self.id, time, 360)
 			return time
@@ -285,21 +286,21 @@ class Cluster(models.Model):
 
 	def userStats(self,field):
 		users=self.jobs.values('user').annotate(
-				numJobs=Count('jobId'),
+				numJobs=Count('job_id'),
 				numElements=Count('elements'),
 				numRuns=Count('elements__runs'),
-				sumPend=Sum('elements__runs__pendTime'),
-				sumWall=Sum('elements__runs__wallTime'),
-				sumCpu=Sum('elements__runs__cpuTime'),
-				avgPend=Avg('elements__runs__pendTime'),
-				avgWall=Avg('elements__runs__wallTime'),
-				avgCpu=Avg('elements__runs__cpuTime'),
-				maxPend=Max('elements__runs__pendTime'),
-				maxWall=Max('elements__runs__wallTime'),
-				maxCpu=Max('elements__runs__cpuTime'),
-				minPend=Min('elements__runs__pendTime'),
-				minWall=Min('elements__runs__wallTime'),
-				minCpu=Min('elements__runs__cpuTime'),
+				sumPend=Sum('elements__runs__pend_time'),
+				sumWall=Sum('elements__runs__wall_time'),
+				sumCpu=Sum('elements__runs__cpu_time'),
+				avgPend=Avg('elements__runs__pend_time'),
+				avgWall=Avg('elements__runs__wall_time'),
+				avgCpu=Avg('elements__runs__cpu_time'),
+				maxPend=Max('elements__runs__pend_time'),
+				maxWall=Max('elements__runs__wall_time'),
+				maxCpu=Max('elements__runs__cpu_time'),
+				minPend=Min('elements__runs__pend_time'),
+				minWall=Min('elements__runs__wall_time'),
+				minCpu=Min('elements__runs__cpu_time'),
 				).order_by(field)[0:10]
 		for u in users:
 			for f in [
@@ -360,12 +361,12 @@ class Cluster(models.Model):
 		return hosts
 		
 	def busySubmitHosts(self):
-		hosts=self.jobs.values('submitHost').annotate(
-				numRuns=Count('jobId')
+		hosts=self.jobs.values('submit_host').annotate(
+				numRuns=Count('job_id')
 				).order_by('-numRuns')[0:10]
 		for h in hosts:
 			try:
-				h['host']=Host.objects.get(pk=h['submitHost'])
+				h['host']=Host.objects.get(pk=h['submit_host'])
 			except:
 				h['host']='None'
 		return hosts
@@ -376,18 +377,18 @@ class Cluster(models.Model):
 		return Element.objects.filter(job__cluster=self).count()
 	def totalRuns(self):
 		return Run.objects.filter(element__job__cluster=self).count()
-	def cpuTime(self):
-		return Run.objects.filter(element__job__cluster=self).aggregate(Sum('cpuTime'))['cpuTime__sum']
-	def cpuTimeDelta(self):
-		return datetime.timedelta(seconds=self.cpuTime())
-	def wallTime(self):
-		return Run.objects.filter(element__job__cluster=self).aggregate(Sum('wallTime'))['wallTime__sum']
-	def wallTimeDelta(self):
-		return datetime.timedelta(seconds=self.wallTime())
-	def pendTime(self):
-		return Run.objects.filter(element__job__cluster=self).aggregate(Sum('pendTime'))['pendTime__sum']
-	def pendTimeDelta(self):
-		return datetime.timedelta(seconds=self.pendTime())
+	def cpu_time(self):
+		return Run.objects.filter(element__job__cluster=self).aggregate(Sum('cpu_time'))['cpu_time__sum']
+	def cpu_timedelta(self):
+		return datetime.timedelta(seconds=self.cpu_time())
+	def wall_time(self):
+		return Run.objects.filter(element__job__cluster=self).aggregate(Sum('wall_time'))['wall_time__sum']
+	def wall_timedelta(self):
+		return datetime.timedelta(seconds=self.wall_time())
+	def pend_time(self):
+		return Run.objects.filter(element__job__cluster=self).aggregate(Sum('pend_time'))['pend_time__sum']
+	def pend_timedelta(self):
+		return datetime.timedelta(seconds=self.pend_time())
 
 class Project(models.Model):
 	name=models.CharField(max_length=100)
@@ -399,20 +400,20 @@ class Project(models.Model):
 				numJobs=Count('element__job'),
 				numElements=Count('element'),
 				numRuns=Count('numProcessors'),
-				cpu=Sum('cpuTime'),
-				wall=Sum('wallTime'),
-				pend=Sum('pendTime'),
-				avgCpu=Avg('cpuTime'),
-				avgWall=Avg('wallTime'),
-				avgPend=Avg('pendTime'),
+				cpu=Sum('cpu_time'),
+				wall=Sum('wall_time'),
+				pend=Sum('pend_time'),
+				avgCpu=Avg('cpu_time'),
+				avgWall=Avg('wall_time'),
+				avgPend=Avg('pend_time'),
 				).order_by('element__job__cluster','element__job__user','queue','numProcessors')
 		for i in info:
 			i['cluster']=Cluster.objects.get(pk=i['element__job__cluster'])
 			i['user']=User.objects.get(pk=i['element__job__user'])
 			i['queue']=Queue.objects.get(pk=i['queue'])
-			i['cpuTime']=datetime.timedelta(seconds=i['cpu'])
-			i['wallTime']=datetime.timedelta(seconds=i['wall'])
-			i['pendTime']=datetime.timedelta(seconds=i['pend'])
+			i['cpu_time']=datetime.timedelta(seconds=i['cpu'])
+			i['wall_time']=datetime.timedelta(seconds=i['wall'])
+			i['pend_time']=datetime.timedelta(seconds=i['pend'])
 			i['avgWall']=datetime.timedelta(seconds=i['avgWall'])
 			i['avgPend']=datetime.timedelta(seconds=i['avgPend'])
 			i['avgCpu']=datetime.timedelta(seconds=i['avgCpu'])
@@ -429,20 +430,20 @@ class User(models.Model):
 				numJobs=Count('element__job'),
 				numElements=Count('element'),
 				numRuns=Count('numProcessors'),
-				cpu=Sum('cpuTime'),
-				wall=Sum('wallTime'),
-				pend=Sum('pendTime'),
-				avgCpu=Avg('cpuTime'),
-				avgWall=Avg('wallTime'),
-				avgPend=Avg('pendTime'),
+				cpu=Sum('cpu_time'),
+				wall=Sum('wall_time'),
+				pend=Sum('pend_time'),
+				avgCpu=Avg('cpu_time'),
+				avgWall=Avg('wall_time'),
+				avgPend=Avg('pend_time'),
 
 				)
 		for i in info:
 			i['cluster']=Cluster.objects.get(pk=i['element__job__cluster'])
 			i['queue']=Queue.objects.get(pk=i['queue'])
-			i['cpuTime']=datetime.timedelta(seconds=i['cpu'])
-			i['wallTime']=datetime.timedelta(seconds=i['wall'])
-			i['pendTime']=datetime.timedelta(seconds=i['pend'])
+			i['cpu_time']=datetime.timedelta(seconds=i['cpu'])
+			i['wall_time']=datetime.timedelta(seconds=i['wall'])
+			i['pend_time']=datetime.timedelta(seconds=i['pend'])
 			i['avgWall']=datetime.timedelta(seconds=i['avgWall'])
 			i['avgPend']=datetime.timedelta(seconds=i['avgPend'])
 			i['avgCpu']=datetime.timedelta(seconds=i['avgCpu'])
@@ -470,68 +471,67 @@ class JobQuerySet(models.query.QuerySet):
 	def uniqUsers(self):
 		return self.values('user__userName').distinct().count()
 
-	def wallTime(self):
-		return self.aggregate(Sum('elements__runs__wallTime'))['elements__runs__wallTime__sum']
+	def wall_time(self):
+		return self.aggregate(Sum('elements__runs__wall_time'))['elements__runs__wall_time__sum']
 
-	def wallTimeDelta(self):
-		return datetime.timedelta(seconds=self.wallTime())
+	def wall_timedelta(self):
+		return datetime.timedelta(seconds=self.wall_time())
 
-	def pendTime(self):
-		return self.aggregate(Sum('elements__runs__pendTime'))['elements__runs__pendTime__sum']
+	def pend_time(self):
+		return self.aggregate(Sum('elements__runs__pend_time'))['elements__runs__pend_time__sum']
 
-	def pendTimeDelta(self):
-		return datetime.timedelta(seconds=self.pendTime())
+	def pend_timedelta(self):
+		return datetime.timedelta(seconds=self.pend_time())
 
-	def cpuTime(self):
-		return self.aggregate(Sum('elements__runs__cpuTime'))['elements__runs__cpuTime__sum']
+	def cpu_time(self):
+		return self.aggregate(Sum('elements__runs__cpu_time'))['elements__runs__cpu_time__sum']
 
-	def cpuTimeDelta(self):
-		return datetime.timedelta(seconds=self.cpuTime())
+	def cpu_timedelta(self):
+		return datetime.timedelta(seconds=self.cpu_time())
 
 class Job(models.Model):
 	objects=QuerySetManager(JobQuerySet)
-	jobId=models.IntegerField()
+	job_id=models.IntegerField()
 	cluster=models.ForeignKey(Cluster, related_name='jobs')
 	user=models.ForeignKey(User, related_name='jobs')
-	submitHost=models.ForeignKey(Host, related_name='submitted_jobs')
-	submitTime=models.IntegerField()
+	submit_host=models.ForeignKey(Host, related_name='submitted_jobs')
+	submit_time=models.IntegerField()
 	def get_absolute_url(self):
 		return reverse('lavaFlow.views.jobDetailView', args=[self.id,])
 
-	def wallTime(self):
-		return self.elements.aggregate(Sum('runs__wallTime'))['runs__wallTime__sum']
-	def wallTimeDelta(self):
-		return datetime.timedelta(seconds=self.wallTime())
+	def wall_time(self):
+		return self.runs.aggregate(Sum('wall_time'))['wall_time__sum']
+	def wall_timedelta(self):
+		return datetime.timedelta(seconds=self.wall_time())
 
-	def pendTime(self):
-		return self.elements.aggregate(Sum('runs__pendTime'))['runs__pendTime__sum']
-	def pendTimeDelta(self):
-		return datetime.timedelta(seconds=self.pendTime())
+	def pend_time(self):
+		return self.runs.aggregate(Sum('pend_time'))['pend_time__sum']
+	def pend_timedelta(self):
+		return datetime.timedelta(seconds=self.pend_time())
 
-	def cpuTime(self):
-		return self.elements.aggregate(Sum('runs__cpuTime'))['runs__cpuTime__sum']
+	def cpu_time(self):
+		return self.runs.aggregate(Sum('cpu_time'))['cpu_time__sum']
 
-	def cpuTimeDelta(self):
-		return datetime.timedelta(seconds=self.cpuTime())
+	def cpu_timedelta(self):
+		return datetime.timedelta(seconds=self.cpu_time())
 
-	def submitTimeDT(self):
-		return datetime.datetime.utcfromtimestamp(self.submitTime)
+	def submit_time_datetime(self):
+		return datetime.datetime.utcfromtimestamp(self.submit_time)
 
-	def firstStartTime(self):
-		return self.elements.aggregate(Min('runs__startTime'))['runs__startTime__min']
-	def firstStartTimeDT(self):
-		return datetime.datetime.utcfromtimestamp(self.firstStartTime())
+	def first_start_time(self):
+		return self.runs.aggregate(Min('startTime'))['startTime__min']
+	def first_start_time_datetime(self):
+		return datetime.datetime.utcfromtimestamp(self.first_start_time())
 
-	def lastFinishTime(self):
-		return self.elements.aggregate(Max('runs__endTime'))['runs__endTime__max']
-	def lastFinishTimeDT(self):
-		return datetime.datetime.utcfromtimestamp(self.lastFinishTime())
+	def last_finish_time(self):
+		return self.runs.aggregate(Max('endTime'))['endTime__max']
+	def last_finish_time_datetime(self):
+		return datetime.datetime.utcfromtimestamp(self.last_finish_time())
 
-	def firstRun(self):
-		return self.elements.order_by('runs__startTime')[0].runs.order_by('startTime')[0]
+	def first_run(self):
+		return self.runs.order_by('startTime')[0]
 	def utilizationN3DS(self):
-		runs=Run.objects.filter(element__job=self)
-		return runs.utilizationN3DS(self.submitTime, self.lastFinishTime(),100, "")
+		return self.runs.utilizationN3DS(self.submit_time, self.last_finish_time(),100, "")
 
 class Element(models.Model):
 	elementId=models.IntegerField()
@@ -540,25 +540,26 @@ class Element(models.Model):
 
 class Run(models.Model):
 	objects = QuerySetManager(RunQuerySet)
+	job=models.ForeignKey(Job,related_name='runs')
 	element=models.ForeignKey(Element, related_name='runs')
 	numProcessors=models.IntegerField()
 	projects=models.ManyToManyField(Project, related_name='runs')
 	startTime=models.IntegerField()
 	endTime=models.IntegerField()
-	cpuTime=models.IntegerField()
-	wallTime=models.IntegerField()
-	pendTime=models.IntegerField()
+	cpu_time=models.IntegerField()
+	wall_time=models.IntegerField()
+	pend_time=models.IntegerField()
 	queue=models.ForeignKey(Queue, related_name='runs')
 	def otherRuns(self):
 		hosts=self.executions.values('host').distinct()
 		runs=Run.objects.filter(startTime__gte=self.startTime, startTime__lte=self.endTime).filter(endTime__gte=self.endTime).filter(executions__host__in=self.executions.values('host').distinct()).exclude(pk=self.id).distinct()
 		return runs
-	def pendTimeDelta(self):
-		return datetime.timedelta(seconds=self.pendTime)
-	def wallTimeDelta(self):
-		return datetime.timedelta(seconds=self.wallTime)
-	def cpuTimeDelta(self):
-		return datetime.timedelta(seconds=self.cpuTime)
+	def pend_timedelta(self):
+		return datetime.timedelta(seconds=self.pend_time)
+	def wall_timedelta(self):
+		return datetime.timedelta(seconds=self.wall_time)
+	def cpu_timedelta(self):
+		return datetime.timedelta(seconds=self.cpu_time)
 	def startTimeDT(self):
 		return datetime.datetime.utcfromtimestamp(self.startTime)
 
@@ -570,7 +571,7 @@ class Run(models.Model):
 
 	def utilizationN3DS(self):
 		runs=Run.objects.filter(pk=self.id)
-		return runs.utilizationN3DS(self.element.job.submitTime, self.endTime,100, "")
+		return runs.utilizationN3DS(self.element.job.submit_time, self.endTime,100, "")
 
 class ExecutionHost(models.Model):
 	host=models.ForeignKey(Host, related_name="executions")
@@ -891,9 +892,9 @@ class RunFinishInfo(models.Model):
 
 class JobSubmitInfo(models.Model):
 	job=models.OneToOneField(Job, related_name='jobSubmitInfo',help_text="The Job Associated with the Event")
-	submitTime=models.IntegerField()
-	def submitTimeDT(self):
-		return datetime.datetime.utcfromtimestamp(self.submitTime)
+	submit_time=models.IntegerField()
+	def submit_time_datetime(self):
+		return datetime.datetime.utcfromtimestamp(self.submit_time)
 	beginTime=models.IntegerField()
 	def beginTimeDT(self):
 		return datetime.datetime.utcfromtimestamp(self.beginTime)
@@ -910,7 +911,7 @@ class JobSubmitInfo(models.Model):
 	umask=models.IntegerField()
 	queue=models.ForeignKey(Queue, related_name='jobSubmitInfo')
 	resReq=models.TextField()
-	submitHost=models.ForeignKey(Host, related_name="jobSubmitInfo")
+	submit_host=models.ForeignKey(Host, related_name="jobSubmitInfo")
 	cwd=models.TextField()
 	chkpntDir=models.TextField()
 	inFile=models.TextField()

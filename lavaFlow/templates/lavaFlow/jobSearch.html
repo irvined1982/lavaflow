@@ -15,11 +15,11 @@
 		{% for job in jobs %}
 		<tr>
 			<td><a href='{{job.cluster.get_absolute_url}}'>{{ job.cluster.name }}</a></td>
-			<td><a href='{{ job.get_absolute_url }}'>{{ job.jobId }}</a></td>
+			<td><a href='{{ job.get_absolute_url }}'>{{ job.job_id }}</a></td>
 			<td><a href='{{job.user.get_absolute_url}}'>{{ job.user.userName }}</a></td>
-			<td>{{ job.pendTimeDelta }}</td>
-			<td>{{ job.wallTimeDelta }}</td>
-			<td>{{ job.cpuTimeDelta }}</td>
+			<td>{{ job.pend_timedelta }}</td>
+			<td>{{ job.wall_timedelta }}</td>
+			<td>{{ job.cpu_timedelta }}</td>
 		</tr>
 		{% empty %}
 		<tr>

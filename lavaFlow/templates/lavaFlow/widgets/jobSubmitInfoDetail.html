@@ -1,7 +1,7 @@
 <dl>
 	<dt title="The name of the submitter">User Name</dt><dd> {{ s.job.user.userName }}</dd>
 	<dt title="The number of processors requested for execution">Requested Cores</dt><dd> {{ s.numProcessors }}</dd>
-	<dt title="The job submission time">Submit Time</dt><dd> {{ s.submitTimeDT }}</dd>
+	<dt title="The job submission time">Submit Time</dt><dd> {{ s.submit_time_datetime }}</dd>
 	<dt title="The job should be started on or after this time.">Begin Time</dt><dd> {{ s.beginTimeDT }}</dd>
 	<dt title="If the job has not finished by this time, it will be killed.">Termination Time</dt><dd> {{ s.termTimeDT }}</dd>
 	<dt title="The signal value sent to the job 10 minutes before its run window closes. ">Signal Value</dt><dd> {{ s.sigValue }}</dd>
@@ -13,7 +13,7 @@
 	<dt title="The file creation mask for this job.">File Creation Umask</dt><dd> {{ s.umask }}</dd>
 	<dt title="The name of the queue to which this job was submitted. ">Queue</dt><dd> {{ s.queue.name }}</dd>
 	<dt title="The resource requirements of the job.">Requested Resources</dt><dd> {{ s.resReq }}</dd>
-	<dt title="The submission host name. ">Submission Host</dt><dd> {{ s.submitHost.name }}</dd>
+	<dt title="The submission host name. ">Submission Host</dt><dd> {{ s.submit_host.name }}</dd>
 	<dt title="The current working directory. ">Current Working Directory</dt><dd> (CWD) {{ s.cwd }}</dd>
 	<dt title="The checkpoint directory. ">Checkpoint Directory</dt><dd> {{ s.chkpntDir }}</dd>
 	<dt title="The input file name. ">Input File Name</dt><dd> {{ s.inFile }}</dd>

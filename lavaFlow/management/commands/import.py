@@ -82,20 +82,20 @@ def job_finish(c,row):
 
 	# find or create the submit host
 	try:
-		submitHost=hosts[job.submitHost]
+		submit_host=hosts[job.submit_host]
 	except:
-		(submitHost,created)=Host.objects.get_or_create(hostName=job.submitHost)
-		hosts[job.submitHost]=submitHost
+		(submit_host,created)=Host.objects.get_or_create(hostName=job.submit_host)
+		hosts[job.submit_host]=submit_host
 
 	# find or create the job, don't cache it.
 	jobData={
-		'jobId':job.jobId,
+		'job_id':job.job_id,
 		'user':user,
-		'submitHost':submitHost,
-		'submitTime':job.submitTime,
+		'submit_host':submit_host,
+		'submit_time':job.submit_time,
 		'cluster':c,
 	}
-	(j, created)=Job.objects.get_or_create(jobId=job.jobId, cluster=c, user=user,submitTime=job.submitTime, defaults=jobData)
+	(j, created)=Job.objects.get_or_create(job_id=job.job_id, cluster=c, user=user,submit_time=job.submit_time, defaults=jobData)
 
 	# Find or create the element in the project
 	elementData={
@@ -116,9 +116,9 @@ def job_finish(c,row):
 		'numProcessors':job.numProcessors,
 		'startTime':job.startTime,
 		'endTime':job.endTime,
-		'wallTime':job.wallTime,
-		'cpuTime':job.wallTime*job.numProcessors,
-		'pendTime':job.pendTime,
+		'wall_time':job.wall_time,
+		'cpu_time':job.wall_time*job.numProcessors,
+		'pend_time':job.pend_time,
 		'queue':q,
 	}
 
