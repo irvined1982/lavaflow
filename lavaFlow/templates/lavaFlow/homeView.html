@@ -17,6 +17,9 @@
 					 if (selectedMin<data.startDate ){
 						 selectedMin=data.startTime;
 					 }
+					 if (selectedMin<0){
+						 selectedMin=0;
+					 }
 				 }
 
 				 var startDate=new Date(selectedMin * 1000);

@@ -183,6 +183,12 @@ def getReportRange(date):
 		'endTime':Run.objects.aggregate(Max('endTime'))['endTime__max'],
 		'startTime':Job.objects.aggregate(Min('submit_time'))['submit_time__min'],
 	}
+	if data['endTime']==None:
+		data['endTime']=0
+
+	if data['startTime']==None:
+		data['startTime']=0
+
 	return HttpResponse(json.dumps(data), mimetype='application/json')
 
 def filterSet(set,fields,filterString):
