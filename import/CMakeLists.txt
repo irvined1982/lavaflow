@@ -1,0 +1,11 @@
+set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+cmake_minimum_required (VERSION 2.6)
+project(LavaFlowImport)
+find_package (Lava)
+include_directories(${LSF_INCLUDE_DIR})
+add_executable(import import.c)
+target_link_libraries(import ${LSBATCH_LIB})
+target_link_libraries(import ${LSF_LIB})
+TARGET_LINK_LIBRARiES(import m)
+TARGET_LINK_LIBRARiES(import nsl)
+
