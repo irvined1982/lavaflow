@@ -19,6 +19,8 @@
 			<td>{{ h.numRuns }}</td>
 			<td>{{ h.sumCpu }} </td>
 		</tr>
+		{%empty%}
+			<tr><td colspan=4>No hosts for this time period.</td></tr>
 		{% endfor %}
 	</tbody>
 </table>

@@ -25,6 +25,8 @@
 			<td>{{ row.wall_time }}</td>
 			<td>{{ row.pend_time }}</td>
 		</tr>
+		{% empty %}
+		<tr><td colspan=6>No Jobs for this time period.</td>{% for field in fields %}<td></td>{% endfor %}</tr>
 		{% endfor %}
 	</tbody>
 </table>

@@ -23,6 +23,8 @@
 			<td title="Average: {{ r.avgWallTime }}, Min: {{ r.minWallTime }}, Max: {{ r.maxWallTime }}" >{{ r.sumWallTime }}</td>
 			<td title="Average: {{ r.avgPendTime }}, Min: {{ r.minPendTime }}, Max: {{ r.maxPendTime }}" >{{ r.sumPendTime }}</td>
 		</tr>
+		{% empty %}
+		<tr><td colspan=6>No jobs for this time period.</td></tr>
 		{% endfor %}
 	</tbody>
 </table>

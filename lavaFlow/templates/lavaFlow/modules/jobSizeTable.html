@@ -25,6 +25,8 @@
 			<td title="Average: {{ r.avgPendTime }}, Min: {{ r.minPendTime }}, Max: {{ r.maxPendTime }}" >{{ r.sumPendTime }}</td>
 			<td>{{ r.pendPct }}%</td>
 		</tr>
+		{%empty%}
+		<tr><td colspan=7>No jobs for this time period.</td></tr>
 		{% endfor %}
 	</tbody>
 </table>
