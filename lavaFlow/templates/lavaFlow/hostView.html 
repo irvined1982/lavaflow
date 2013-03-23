@@ -1,0 +1,56 @@
+{% extends "lavaFlow/base.html" %}
+
+{% block main_body %}
+<h2>Job Submissions</h2>
+<table class="tablesorter">
+	<thead>
+		<tr>
+			<th>Cluster</th>
+			<th>Queue</th>
+			<th># Jobs</th>
+			<th># Elements</th>
+			<th># Runs</th>
+			<th>Wall Time</th>
+			<th>CPU Time</th>
+		</tr>
+	</thead>
+	<tbody>
+		{%for h in host.submitUsage %}		
+			<tr>
+				<td><a href='{{ h.cluster.get_absolute_url }}'>{{ h.cluster.name }}</a></td>
+				<td>{{ h.queue.name }}</td>
+				<td>{{ h.numJobs }}</td>
+				<td>{{ h.numElements}}</td>
+				<td>{{ h.numRuns}}</td>
+				<td>{{ h.wall_time }}</td>
+				<td>{{ h.cpu_time }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<h2>Execution Info</h2>
+<table class="tablesorter">
+	<thead>
+		<tr>
+			<th>Cluster</th>
+			<th>Queue</th>
+			<th>Exit</th>
+			<th>Exit Reason</th>
+			<th># Runs</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for h in host.hostUsage %}
+			<tr>
+				<td><a href='{{ h.cluster.get_absolute_url }}'>{{h.cluster.name}}</a></td>
+				<td>{{ h.queue.name }}</td>
+				<td>{{ h.exit.name }}</td>
+				<td>{{ h.exit.description }}</td>
+				<td>{{ h.numRuns }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}

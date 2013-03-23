@@ -61,12 +61,12 @@ var
 		]
 	};
 
-function mapMinput_file( file ) {
+function mapMinFile( file ) {
 	return "dist/" + file.replace( /\.js$/, ".min.js" ).replace( /ui\//, "minified/" );
 }
 
 uiFiles.concat( allI18nFiles ).forEach(function( file ) {
-	minify[ mapMinput_file( file ) ] = [ "<banner>", file ];
+	minify[ mapMinFile( file ) ] = [ "<banner>", file ];
 });
 
 cssFiles.forEach(function( file ) {
@@ -74,7 +74,7 @@ cssFiles.forEach(function( file ) {
 });
 
 uiFiles.forEach(function( file ) {
-	compareFiles[ file ] = [ file,  mapMinput_file( file ) ];
+	compareFiles[ file ] = [ file,  mapMinFile( file ) ];
 });
 
 // grunt plugins

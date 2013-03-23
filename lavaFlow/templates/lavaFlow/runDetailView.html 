@@ -1,7 +1,6 @@
 {% extends "lavaFlow/base.html" %}
 {% block main_body %}
 {% include "lavaFlow/widgets/jobHeader.html" with job=run.element.job %}
-{% include "lavaFlow/widgets/runDetails.html" with run=run %}
 
 	<h2>Pend and Run Times</h2>
 	<div id='utilizationChart'>
@@ -50,15 +49,15 @@
 	<ul>
 		<li>Status: {{ run.runFinishInfo.job_status.job_status }}</li>
 		<li>Exit Reason: {{ run.runFinishInfo.exit_reason.name }}</li>
+		<li>Exit Status: {{ run.runFinishInfo.exit_status_code }}</li>
 	</ul>
 
-<!--
+
 	<h2>System/User time:</h2>
 	<ul>
 		<li>User Time: {{ run.runFinishInfo.utime }}</li>
 		<li>System Time: {{ run.runFinishInfo.stime }}</li>
 	</ul>
--->
 	
 	<div id='contentionChart'>
 		<svg style='height:500px'> </svg>
@@ -80,9 +79,7 @@
 			return chart;
 		});
 	</script>
-
-<!--
-<h2>Resource Usage</h2>
+	<h2>Resource Usage</h2>
 	<div id='resourceChart'>
 		<svg style='height:500px'> </svg>
 	</div>
@@ -105,6 +102,5 @@
 			return chart;
 		});
 	</script>
--->
 
 {% endblock %}

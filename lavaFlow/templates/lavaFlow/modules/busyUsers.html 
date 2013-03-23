@@ -15,11 +15,11 @@
 		{% for u in users %}
 		<tr>
 			<td>	
-				<a href="#" rel="tooltip" data-toggle="tooltip" title="Only display jobs owned by user: {{ u.user.user_name}}." onClick='addFilter("filter","user_name","User Name","{{u.user.user_name}}","{{u.user.id}}");return false;'><l class="icon-filter"></l></a>
-				<a href="#" rel="tooltip" data-toggle="tooltip" title="Do not display jobs owned by user {{ u.user.user_name}}" onClick='addFilter("exclude","user_name","User Name","{{u.user.user_name}}","{{u.user.id}}");return false;' href><l class="icon-minus"></l></a>
-				<a href="#" rel="tooltip" data-toggle="tooltip" title="Remove all filters and excludes for jobs owned by user {{ u.user.id}}." onclick='removeAllFilters("user_name","{{u.user.id}}");return false;'><l class="icon-remove"></l></a>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Only display jobs owned by user: {{ u.user.userName}}." onClick='addFilter("filter","userName","User Name","{{u.user.userName}}","{{u.user.id}}");return false;'><l class="icon-filter"></l></a>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Do not display jobs owned by user {{ u.user.userName}}" onClick='addFilter("exclude","userName","User Name","{{u.user.userName}}","{{u.user.id}}");return false;' href><l class="icon-minus"></l></a>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Remove all filters and excludes for jobs owned by user {{ u.user.id}}." onclick='removeAllFilters("userName","{{u.user.id}}");return false;'><l class="icon-remove"></l></a>
 			</td>
-			<td>{{u.user.user_name}}</td>	
+			<td>{{u.user.userName}}</td>	
 					
 					
 			<td>{{ u.numJobs }}</td>

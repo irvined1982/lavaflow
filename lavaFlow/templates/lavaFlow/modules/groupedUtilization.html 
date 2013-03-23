@@ -1,0 +1,35 @@
+<table class="table table-striped" id='clusterTable'>
+	<thead>
+		<tr>
+			{% for field in fields %}
+			<th>{{ field }}</th>
+			{% endfor %}
+			<th># Jobs</th>
+			<th># Elements</th>
+			<th># Runs </th>
+			<th>Total CPU Time </th>
+			<th>Total Wall Time </th>
+			<th>Total Pend Time </th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for row in rows %}
+		<tr>
+			{% for field in row.fields %}
+			<td>{{ field }}</td>
+			{% endfor %}
+			<td>{{ row.totalJobs }}</td>
+			<td>{{ row.totalElements}}</td>
+			<td>{{ row.totalRuns }}</td>
+			<td>{{ row.CPUTime }}</td>
+			<td>{{ row.wall_time }}</td>
+			<td>{{ row.pend_time }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+<script type="text/javascript">
+	$(function () {
+		$("[rel='tooltip']").tooltip();
+	});
+</script>

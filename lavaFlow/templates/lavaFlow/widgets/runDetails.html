@@ -1,0 +1,31 @@
+<h2>Run Info</h2>
+<dl class="dl-horizontal">
+	<dt>Executed as</dt><dd>{{ run.runFinishInfo.user_name }}&nbsp;</dd>
+	<dt>Number of Procesors</dt><dd>{{ run.num_processors }}&nbsp;</dd>
+	<dt>Run Status</dt><dd>{{ run.runFinishInfo.job_status.job_status }}&nbsp;</dd>
+	<dt>Exit Reason</dt><dd>{{ run.runFinishInfo.exit_reason.description }}&nbsp;</dd>
+	<dt>Job Submitted</dt><dd>{{ run.runFinishInfo.run.job.submit_time_datetime }}&nbsp;</dd>
+	<dt>Run Started</dt><dd>{{ run.start_time_datetime }}&nbsp;</dd>
+	<dt>Run Ended</dt><dd>{{ run.end_time_datetime }}&nbsp;</dd>
+	<dt>Earliest Start Time</dt><dd>{{ run.runFinishInfo.begin_time_datetime }}&nbsp;</dd>
+	<dt>Termination Deadline</dt><dd>{{ run.runFinishInfo.term_time_datetime }}&nbsp;</dd>
+	<dt>Requested Resources</dt><dd>{{ run.runFinishInfo.requested_resources }}&nbsp;</dd>
+	<dt>Working Directory</dt><dd>{{ run.runFinishInfo.cwd }}&nbsp;</dd>
+	<dt>Input File</dt><dd>{{ run.runFinishInfo.input_file }}&nbsp;</dd>
+	<dt>Output File</dt><dd>{{ run.runFinishInfo.output_file }}&nbsp;</dd>
+	<dt>Error File</dt><dd>{{ run.runFinishInfo.error_file }}&nbsp;</dd>
+	<dt>Input File Spool</dt><dd>{{ run.runFinishInfo.input_file_spool }}&nbsp;</dd>
+	<dt>Command Spool</dt><dd>{{ run.runFinishInfo.command_spool }}&nbsp;</dd>
+	<dt>Job Script File</dt><dd>{{ run.runFinishInfo.job_file }}&nbsp;</dd>
+	<dt>Requested Hosts</dt><dd>{% for h in run.runFinishInfo.requested_hosts.objects.all %}{{ h.host_name }}{%empty%}None{% endfor %}&nbsp;</dd>
+	<dt>Host Factor</dt><dd>{{ run.runFinishInfo.host_factor }}&nbsp;</dd>
+	<dt>Job Name</dt><dd>{{ run.runFinishInfo.job_name }}&nbsp;</dd>
+	<dt>Command</dt><dd>{{ run.runFinishInfo.command }}&nbsp;</dd>
+	<dt>Dependency Conditions</dt><dd>{{ run.runFinishInfo.dependecy_conditions }}&nbsp;</dd>
+	<dt>Pre Execution Command</dt><dd>{{ run.runFinishInfo.pre_execution_command }}&nbsp;</dd>
+	<dt>Email User</dt><dd>{{ run.runFinishInfo.email_user }}&nbsp;</dd>
+	<dt>Project Name</dt><dd>{{ run.runFinishInfo.project_name }}&nbsp;</dd>
+	<dt>Login Shell</dt><dd>{{ run.runFinishInfo.login_shell }}&nbsp;</dd>
+	<dt>Max Memory Consumed</dt><dd>{{ run.runFinishInfo.max_residual_mem }}&nbsp;</dd>
+	<dt>Max Swap Consumed</dt><dd>{{ run.runFinishInfo.max_swap }}&nbsp;</dd>
+</dl>

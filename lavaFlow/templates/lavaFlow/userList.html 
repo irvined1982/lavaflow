@@ -10,7 +10,7 @@
 			<tbody>
 				{% for u in users.object_list %}
 				<tr>
-					<td><a href='{{u.get_absolute_url}}'>{{ u.user_name }}</a></td>
+					<td><a href='{{u.get_absolute_url}}'>{{ u.userName }}</a></td>
 				</tr>
 				{% endfor %}
 			</tbody>
