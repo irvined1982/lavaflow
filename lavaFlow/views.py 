@@ -29,6 +29,7 @@ import time
 import MySQLdb
 import tempfile
 import logging
+from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
@@ -41,7 +42,7 @@ from django.template import RequestContext
 from django.http import Http404
 from lavaFlow.models import *
 log=logging.getLogger(__name__)
-def renderElementDetail(element):
+def renderTaskDetail(element):
 	return render_to_response('lsf/elementDetailView.html',{'element':element,},context_instance=RequestContext(request))	
 
 def runDetailView(request,id):
@@ -102,6 +103,118 @@ def userView(request,id):
 def jobDetailView(request,id):
 	job=get_object_or_404(Job,pk=id)
 	return render_to_response('lavaFlow/jobDetailView.html',{'job':job,},context_instance=RequestContext(request))
+
+
+
+
+@csrf_exempt
+def jobFinishView(request,cluster):
+	if not request.POST:
+		raise Http404("No POST data")
+	try:
+		ob=json.loads(request.raw_post_data)
+	except:
+		raise
+	if ob['start_time']<1:
+		ob['wall_time']=0
+		ob['pend_time']=ob['end_time']-ob['submit_time']
+		ob['start_time']=ob['end_time']
+	else:
+		ob['wall_time']=ob['end_time']-ob['start_time']
+		ob['pend_time']=ob['start_time']-ob['submit_time']
+
+	(cluster, created)=Cluster.objects.get_or_create(name=cluster)
+	(user,created)=User.objects.get_or_create(user_name=ob['user_name'])
+	(submit_host,created)=Host.objects.get_or_create(host_name=ob['submit_host'])
+	jobData={
+			'job_id':ob['job_id'],
+			'user':user,
+			'submit_host':submit_host,
+			'submit_time':ob['submit_time'],
+			'cluster':cluster,
+	}
+	(job, created)=Job.objects.get_or_create(
+			job_id=ob['job_id'],
+			cluster=cluster,
+			user=user,
+			submit_time=ob['submit_time'],
+			defaults=jobData
+			)
+	elementData={
+			'task_id':ob['array_index'],
+			}
+	(element, created)=job.elements.get_or_create(task_id=ob['array_index'], defaults=elementData)
+	(queue, created)=Queue.objects.get_or_create(name=ob['queue'])
+	runData={
+			'element':element,
+			'job':job,
+			'num_processors':ob['num_processors'],
+			'start_time':ob['start_time'],
+			'end_time':ob['end_time'],
+			'wall_time':ob['wall_time'],
+			'cpu_time':ob['wall_time']*ob['num_processors'],
+			'pend_time':ob['pend_time'],
+			'queue':queue,
+			}
+	(run,created)=Run.objects.get_or_create(job=job, element=element, start_time=ob['start_time'], defaults=runData)
+	if created:
+		for project_name in ob['projects']:
+			(project, created)=Project.objects.get_or_create(name=project_name)
+			run.projects.add(project)
+		hosts={}
+		for host_name in ob['used_hosts']:
+			try:
+				hosts[host_name]+=1
+			except:
+				hosts[host_name]=1
+		for host_name in hosts.iterkeys():
+			(host,created)=Host.objects.get_or_create(host_name=host_name)
+			run.executions.create(host=host, run=run, num_processors=hosts[host_name])
+		rf=RunFinishInfo()
+		rf.run=run
+		(js, created)=JobStatus.objects.get_or_create(job_status=ob['job_status'])
+		rf.job_status=js
+		(ei,created)=ExitReason.objects.get_or_create(name=ob['exit_reason']['name'], defaults={'description':ob['exit_reason']['description'],'value':ob['exit_reason']['number']})
+		rf.exit_reason = ei
+		fields=[
+				'user_name',
+				'options',
+				'num_processors',
+				'begin_time',
+				'term_time',
+				'requested_resources',
+				'cwd',
+				'input_file',
+				'output_file',
+				'error_file',
+				'input_file_spool',
+				'command_spool',
+				'job_file',
+				'host_factor',
+				'job_name',
+				'command',
+				'dependency_conditions',
+				'pre_execution_command',
+				'email_user',
+				'max_num_processors',
+				'login_shell',
+				'max_residual_mem',
+				'max_swap',
+				]
+		for field in fields:
+			setattr(rf,field,ob[field])
+		rf.project_name='None'
+		if len(ob['projects'])>0:
+			rf.projecT_name=ob['projects'][0]
+		rf.save()
+		for host in ob['requested_hosts']:
+			(h,created)=Host.objects.get_or_create(host_name=host)
+			rf.requested_hosts.add(h)
+	raise Http404
+
+
+
+
 
 
 
@@ -269,7 +382,7 @@ def groupedUtilizationTableModule(request, start_time,end_time,groupString,filte
 	rows=rows.values(*groups).order_by(*groups)
 	rows=rows.annotate(
 			totalJobs=Count('element__job__id'),
-			totalElements=Count('element__id'),
+			totalTasks=Count('element__id'),
 			totalRuns=Count('id'),
 			totalCPUTime=Sum('cpu_time'),
 			totalWallTime=Sum('wall_time'),
@@ -293,7 +406,7 @@ def busyUsersModule(request, start_time, end_time, field, filterString=''):
 
 	users=filterRuns(Run.objects.filter(element__job__submit_time__lte=end_time, end_time__gte=start_time),filterString).values('element__job__user__id').annotate(
 			numJobs=Count('element__job__id'),
-			numElements=Count('element__id'),
+			numTasks=Count('element__id'),
 			numRuns=Count('id'),
 			sumPend=Sum('pend_time'),
 			sumWall=Sum('wall_time'),

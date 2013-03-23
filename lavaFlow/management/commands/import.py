@@ -84,7 +84,7 @@ def job_finish(c,row):
 	try:
 		submit_host=hosts[job.submit_host]
 	except:
-		(submit_host,created)=Host.objects.get_or_create(hostName=job.submit_host)
+		(submit_host,created)=Host.objects.get_or_create(host_name=job.submit_host)
 		hosts[job.submit_host]=submit_host
 
 	# find or create the job, don't cache it.
@@ -99,9 +99,9 @@ def job_finish(c,row):
 
 	# Find or create the element in the project
 	elementData={
-		'elementId':job.idx,
+		'task_id':job.idx,
 	}
-	(e, created)=j.elements.get_or_create(elementId=job.idx, defaults=elementData)
+	(e, created)=j.elements.get_or_create(task_id=job.idx, defaults=elementData)
 
 	# find or create the queue
 	try:
@@ -134,7 +134,7 @@ def job_finish(c,row):
 			try:
 				h=hosts[host]
 			except:
-				(h,created)=Host.objects.get_or_create(hostName=host)
+				(h,created)=Host.objects.get_or_create(host_name=host)
 				hosts[host]=h
 			r.executions.create(host=h, run=r, num_processors=cores)
 		rf=RunFinishInfo()
@@ -207,7 +207,7 @@ def job_finish(c,row):
 			try:
 				h=hosts[host]
 			except:
-				(h,created)=Host.objects.get_or_create(hostName=host)
+				(h,created)=Host.objects.get_or_create(host_name=host)
 				hosts[host]=h
 			rf.requested_hosts.add(h)
 

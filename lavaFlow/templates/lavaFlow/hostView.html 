@@ -8,7 +8,7 @@
 			<th>Cluster</th>
 			<th>Queue</th>
 			<th># Jobs</th>
-			<th># Elements</th>
+			<th># Tasks</th>
 			<th># Runs</th>
 			<th>Wall Time</th>
 			<th>CPU Time</th>
@@ -20,7 +20,7 @@
 				<td><a href='{{ h.cluster.get_absolute_url }}'>{{ h.cluster.name }}</a></td>
 				<td>{{ h.queue.name }}</td>
 				<td>{{ h.numJobs }}</td>
-				<td>{{ h.numElements}}</td>
+				<td>{{ h.numTasks}}</td>
 				<td>{{ h.numRuns}}</td>
 				<td>{{ h.wall_time }}</td>
 				<td>{{ h.cpu_time }}</td>

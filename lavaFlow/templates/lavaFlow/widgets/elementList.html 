@@ -2,7 +2,7 @@
 	<thead>
 	<tr>
 		<th>Job ID</th>
-		<th>Element ID</th>
+		<th>Task ID</th>
 		<th>Start Time</th>
 		<th>End Time</th>
 		<th>Pend Time</th>
@@ -18,7 +18,7 @@
 	   {% for run in element.runs.all %}
 		   <tr>
 			   <td><a href='{{ run.element.job.get_absolute_url }}'>{{ run.element.job.job_id }}</a></td>
-			   <td><a href='{{ run.get_absolute_url }}'>{{ element.elementId }}</a></td>
+			   <td><a href='{{ run.get_absolute_url }}'>{{ element.task_id }}</a></td>
 			   <td>{{ run.start_time_datetime }}</td>
 			   <td>{{ run.end_time_datetime }}</td>
 			   <td>{{ run.pend_timedelta }}</td>

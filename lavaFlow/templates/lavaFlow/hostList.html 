@@ -12,7 +12,7 @@
 			<tbody>
 				{% for h in hosts.object_list %}
 				<tr>
-					<td><a href='{{h.get_absolute_url}}'>{{ h.host_name }}</a></td>
+					<td><a href='{{h.get_absolute_url}}'>{{ h.hostName }}</a></td>
 					<td>{{ h.submittedJobs }}</td>
 					<td>{{ h.executedJobs }}</td>
 				</tr>

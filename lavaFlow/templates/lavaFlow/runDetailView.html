@@ -35,7 +35,7 @@
 		<tbody>
 			{% for x in run.executions.all %}
 				<tr>
-					<td>{{ x.host.hostName }}</td>
+					<td>{{ x.host.host_name }}</td>
 					<td>{{ x.num_processors }}</td>
 				</tr>
 			{% endfor %}

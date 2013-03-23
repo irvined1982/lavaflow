@@ -11,11 +11,11 @@
 		{% for h in hosts %}
 		<tr>
 			<td>	
-				<a href="#" rel="tooltip" data-toggle="tooltip" title="Only display jobs that executed on {{h.host.hostName}}" onClick='addFilter("filter","executionHost","Execution Host","{{h.host.hostName}}","{{h.host.id}}");return false;'><l class="icon-filter"></l></a>
-				<a href="#" rel="tooltip" data-toggle="tooltip" title="Do not display jobs that executed on {{h.host.hostName}}" onClick='addFilter("exclude","executionHost","Execution Host","{{h.host.hostName}}","{{h.host.id}}");return false;'><l class="icon-minus"></l></a>
-				<a href="#" rel="tooltip" data-toggle="tooltip" title="Remove all filters and excludes for jobs that executed on {{h.host.hostName}}." onclick='removeAllFilters("executionHost","{{h.host.id}}");return false;'><l class="icon-remove"></l></a>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Only display jobs that executed on {{h.host.host_name}}" onClick='addFilter("filter","executionHost","Execution Host","{{h.host.host_name}}","{{h.host.id}}");return false;'><l class="icon-filter"></l></a>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Do not display jobs that executed on {{h.host.host_name}}" onClick='addFilter("exclude","executionHost","Execution Host","{{h.host.host_name}}","{{h.host.id}}");return false;'><l class="icon-minus"></l></a>
+				<a href="#" rel="tooltip" data-toggle="tooltip" title="Remove all filters and excludes for jobs that executed on {{h.host.host_name}}." onclick='removeAllFilters("executionHost","{{h.host.id}}");return false;'><l class="icon-remove"></l></a>
 			</td>
-			<td><a href='{{h.host.get_absolute_url}}'>{{ h.host.hostName }}</a></td>
+			<td><a href='{{h.host.get_absolute_url}}'>{{ h.host.host_name }}</a></td>
 			<td>{{ h.numRuns }}</td>
 			<td>{{ h.sumCpu }} </td>
 		</tr>

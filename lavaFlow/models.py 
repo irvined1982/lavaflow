@@ -159,13 +159,13 @@ class RunQuerySet(models.query.QuerySet):
 
 
 class Host(models.Model):
-	hostName=models.CharField(max_length=100)
+	host_name=models.CharField(max_length=100)
 	def get_absolute_url(self):
 		return reverse('lavaFlow.views.hostView', args=[self.id,])
 	def __unicode__(self):
-		return u'%s' % self.hostName
+		return u'%s' % self.host_name
 	def __str__(self):
-		return self.hostName
+		return self.host_name
 	def hostUsage(self):
 		info=self.executions.values('run__element__job__cluster','run__queue','run__runFinishInfo__exit_reason').annotate(
 				numRuns=Count('run__num_processors'),
@@ -183,7 +183,7 @@ class Host(models.Model):
 	def submitUsage(self):
 		info=Run.objects.filter(element__job__submit_host=self).values('element__job__cluster','queue').annotate(
 				numJobs=Count('element__job'),
-				numElements=Count('element'),
+				numTasks=Count('element'),
 				numRuns=Count('num_processors'),
 				cpu_time=Sum('cpu_time'),
 				wall_time=Sum('wall_time'),
@@ -291,7 +291,7 @@ class Cluster(models.Model):
 	def userStats(self,field):
 		users=self.jobs.values('user').annotate(
 				numJobs=Count('job_id'),
-				numElements=Count('elements'),
+				numTasks=Count('elements'),
 				numRuns=Count('runs'),
 				sumPend=Sum('runs__pend_time'),
 				sumWall=Sum('runs__wall_time'),
@@ -377,8 +377,8 @@ class Cluster(models.Model):
 	def totalJobs(self):
 		return self.jobs.count()
 
-	def totalElements(self):
-		return Element.objects.filter(job__cluster=self).count()
+	def totalTasks(self):
+		return Task.objects.filter(job__cluster=self).count()
 	def totalRuns(self):
 		return Run.objects.filter(element__job__cluster=self).count()
 	def cpu_time(self):
@@ -401,7 +401,7 @@ class Project(models.Model):
 	def submitUsage(self):
 		info=self.runs.values('element__job__cluster','element__job__user','queue','num_processors').annotate(
 				numJobs=Count('element__job'),
-				numElements=Count('element'),
+				numTasks=Count('element'),
 				numRuns=Count('num_processors'),
 				cpu=Sum('cpu_time'),
 				wall=Sum('wall_time'),
@@ -431,7 +431,7 @@ class User(models.Model):
 	def submitUsage(self):
 		info=Run.objects.filter(element__job__user=self).values('element__job__cluster','queue','num_processors').annotate(
 				numJobs=Count('element__job'),
-				numElements=Count('element'),
+				numTasks=Count('element'),
 				numRuns=Count('num_processors'),
 				cpu=Sum('cpu_time'),
 				wall=Sum('wall_time'),
@@ -534,17 +534,17 @@ class Job(models.Model):
 	def first_run(self):
 		return self.runs.order_by('start_time')[0]
 	def utilizationN3DS(self):
-		return self.runs.utilizationN3DS(self.submit_time, self.last_finish_time(),100, "")
+		return Run.objects.filter(job=self).utilizationN3DS(self.submit_time, self.last_finish_time(),100, "")
 
-class Element(models.Model):
-	elementId=models.IntegerField()
+class Task(models.Model):
+	task_id=models.IntegerField()
 	job=models.ForeignKey(Job, related_name='elements')
 
 
 class Run(models.Model):
 	objects = QuerySetManager(RunQuerySet)
 	job=models.ForeignKey(Job,related_name='runs')
-	element=models.ForeignKey(Element, related_name='runs')
+	element=models.ForeignKey(Task, related_name='runs')
 	num_processors=models.IntegerField()
 	projects=models.ManyToManyField(Project, related_name='runs')
 	start_time=models.IntegerField()

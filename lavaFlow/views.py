@@ -42,7 +42,7 @@ from django.template import RequestContext
 from django.http import Http404
 from lavaFlow.models import *
 log=logging.getLogger(__name__)
-def renderElementDetail(element):
+def renderTaskDetail(element):
 	return render_to_response('lsf/elementDetailView.html',{'element':element,},context_instance=RequestContext(request))	
 
 def runDetailView(request,id):
@@ -125,7 +125,7 @@ def jobFinishView(request,cluster):
 
 	(cluster, created)=Cluster.objects.get_or_create(name=cluster)
 	(user,created)=User.objects.get_or_create(user_name=ob['user_name'])
-	(submit_host,created)=Host.objects.get_or_create(hostName=ob['submit_host'])
+	(submit_host,created)=Host.objects.get_or_create(host_name=ob['submit_host'])
 	jobData={
 			'job_id':ob['job_id'],
 			'user':user,
@@ -141,9 +141,9 @@ def jobFinishView(request,cluster):
 			defaults=jobData
 			)
 	elementData={
-			'elementId':ob['array_index'],
+			'task_id':ob['array_index'],
 			}
-	(element, created)=job.elements.get_or_create(elementId=ob['array_index'], defaults=elementData)
+	(element, created)=job.elements.get_or_create(task_id=ob['array_index'], defaults=elementData)
 	(queue, created)=Queue.objects.get_or_create(name=ob['queue'])
 	runData={
 			'element':element,
@@ -168,7 +168,7 @@ def jobFinishView(request,cluster):
 			except:
 				hosts[host_name]=1
 		for host_name in hosts.iterkeys():
-			(host,created)=Host.objects.get_or_create(hostName=host_name)
+			(host,created)=Host.objects.get_or_create(host_name=host_name)
 			run.executions.create(host=host, run=run, num_processors=hosts[host_name])
 		rf=RunFinishInfo()
 		rf.run=run
@@ -208,7 +208,7 @@ def jobFinishView(request,cluster):
 			rf.projecT_name=ob['projects'][0]
 		rf.save()
 		for host in ob['requested_hosts']:
-			(h,created)=Host.objects.get_or_create(hostName=host)
+			(h,created)=Host.objects.get_or_create(host_name=host)
 			rf.requested_hosts.add(h)
 	raise Http404
 
@@ -382,7 +382,7 @@ def groupedUtilizationTableModule(request, start_time,end_time,groupString,filte
 	rows=rows.values(*groups).order_by(*groups)
 	rows=rows.annotate(
 			totalJobs=Count('element__job__id'),
-			totalElements=Count('element__id'),
+			totalTasks=Count('element__id'),
 			totalRuns=Count('id'),
 			totalCPUTime=Sum('cpu_time'),
 			totalWallTime=Sum('wall_time'),
@@ -406,7 +406,7 @@ def busyUsersModule(request, start_time, end_time, field, filterString=''):
 
 	users=filterRuns(Run.objects.filter(element__job__submit_time__lte=end_time, end_time__gte=start_time),filterString).values('element__job__user__id').annotate(
 			numJobs=Count('element__job__id'),
-			numElements=Count('element__id'),
+			numTasks=Count('element__id'),
 			numRuns=Count('id'),
 			sumPend=Sum('pend_time'),
 			sumWall=Sum('wall_time'),

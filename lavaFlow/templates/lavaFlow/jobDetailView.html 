@@ -30,7 +30,7 @@
 
 
 
-   <h2>Tasks</h2>
+   <h2>Elements</h2>
 	{% include "lavaFlow/widgets/elementList.html" with elements=job.elements.all %}
 {% endblock %}
 
