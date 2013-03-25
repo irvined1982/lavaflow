@@ -209,34 +209,6 @@ class Host(models.Model):
 class Service(models.Model):
 	name=models.CharField(max_length=512)
 
-class Outage(models.Model):
-	service=models.ForeignKey(Service, related_name='outages')
-	start_time=models.IntegerField()
-	end_time=models.IntegerField()
-	duration=models.IntegerField()
-	host=models.ForeignKey(Host, related_name='outages')
-	def get_absolute_url(self):
-		raise NotImplementedError
-	def duration_delta(self):
-		return datetime.timedelta(seconds=self.duration)
-	def start_time_datetime(self):
-		return datetime.datetime.utcfromtimestamp(self.start_time)
-	def end_time_datetime(self):
-		return datetime.datetime.utcfromtimestamp(self.end_time)
-	def run_list(self):
-		return Run.objects.filter(start_time__gte=self.start_time, end_time__lte=self.end_time).filter(executions__host=self.host)
-	def num_impacted_runs(self):
-		return self.runList().count()
-
-class OutageLog(models.Model):
-	time=models.IntegerField()
-	message=models.TextField()
-	outage=models.ForeignKey(Outage, related_name="logEntries")
-	def time_datetime(self):
-		return datetime.datetime.utcfromtimestamp(self.time)
-
-
-# Create your models here.
 class ExitReason(models.Model):
 	name=models.CharField(max_length=100)
 	description=models.CharField(max_length=1024)

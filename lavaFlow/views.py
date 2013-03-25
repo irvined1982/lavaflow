@@ -42,17 +42,6 @@ from django.template import RequestContext
 from django.http import Http404
 from lavaFlow.models import *
 log=logging.getLogger(__name__)
-def renderTaskDetail(element):
-	return render_to_response('lsf/elementDetailView.html',{'element':element,},context_instance=RequestContext(request))	
-
-def runDetailView(request,id):
-	run=get_object_or_404(Run,pk=id)
-	run.last_resource_usage().resourceUsageSummaryN3DS()
-	return render_to_response('lavaFlow/runDetailView.html',{'run':run},context_instance=RequestContext(request))
-
-def outageView(request, id):
-	outage=get_object_or_404(Outage, pk=id)
-	return render_to_response('lavaFlow/outageView.html',{'outage':outage},context_instance=RequestContext(request))
 
 def clusterList(request):
 	paginator = Paginator(Cluster.objects.all(), 30)
@@ -105,10 +94,6 @@ def hostList(request):
 		hosts=paginator.page(paginator.num_pages)
 	return render_to_response("lavaFlow/hostList.html",{'hosts':hosts},context_instance=RequestContext(request))
 
-def hostView(request,id):
-	host=get_object_or_404(Host, pk=id)
-	return render_to_response('lavaFlow/hostView.html',{'host':host},context_instance=RequestContext(request))
-
 def userList(request):
 	paginator = Paginator(User.objects.all(), 30)
 	page = request.GET.get('page')
@@ -122,19 +107,29 @@ def userList(request):
 		users=paginator.page(paginator.num_pages)
 	return render_to_response("lavaFlow/userList.html",{'users':users},context_instance=RequestContext(request))
 
-def userView(request,id):
-	user=get_object_or_404(User,pk=id)
-	return render_to_response('lavaFlow/userView.html',{'user':user},context_instance=RequestContext(request))
-
 def jobDetailView(request,id):
 	job=get_object_or_404(Job,pk=id)
 	return render_to_response('lavaFlow/jobDetailView.html',{'job':job,},context_instance=RequestContext(request))
 
+def runDetailView(request,id):
+	run=get_object_or_404(Run,pk=id)
+	run.last_resource_usage().resourceUsageSummaryN3DS()
+	return render_to_response('lavaFlow/runDetailView.html',{'run':run},context_instance=RequestContext(request))
 
+def jobSearchView(request):
+	query = request.GET.get('jobid')
+	jobs=None
+	if query:
+		try:
+			query=int(query)
+			jobs=Job.objects.filter(job_id=query)
+		except ValueError:
+			pass
+	return render_to_response("lavaFlow/jobSearch.html",{'jobs':jobs},context_instance=RequestContext(request))
 
 
 @csrf_exempt
-def jobFinishView(request,cluster):
+def uploadData(request,cluster):
 	if not request.POST:
 		raise Http404("No POST data")
 	try:
@@ -143,6 +138,7 @@ def jobFinishView(request,cluster):
 		raise
 	for o in ob:
 		process_element(cluster,o)
+
 def process_element(cluster,ob):
 
 	if ob['start_time']<1:
@@ -691,13 +687,3 @@ def groupedUtilizationChartModule(request, start_time, end_time, groupString, fi
 	data=util.complexUtilization(start_time, end_time,500,groups)
 	return HttpResponse(data, mimetype='application/json')
 
-def jobSearchView(request):
-	query = request.GET.get('jobid')
-	jobs=None
-	if query:
-		try:
-			query=int(query)
-			jobs=Job.objects.filter(job_id=query)
-		except ValueError:
-			pass
-	return render_to_response("lavaFlow/jobSearch.html",{'jobs':jobs},context_instance=RequestContext(request))

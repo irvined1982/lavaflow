@@ -25,7 +25,7 @@ from lavaFlow.models import *
 
 urlpatterns = patterns('',
 	url(r'^$', 'lavaFlow.views.homeView'),
-	url(r'^(.+)/upload$','lavaFlow.views.jobFinishView'),
+	url(r'^(.+)/upload$','lavaFlow.views.uploadData'),
 	url(r'^(\d+)/(\d+)/$', 'lavaFlow.views.homeView'),
 	url(r'^(\d+)/(\d+)/(.*)/$', 'lavaFlow.views.homeView'),
 	
@@ -76,12 +76,4 @@ urlpatterns = patterns('',
 	url(r'^queueView/$', 'lavaFlow.views.queueList'),
 	url(r'^projectView/$', 'lavaFlow.views.projectList'),
 	url(r'^userView/$', 'lavaFlow.views.userList'),
-
-	url(r'^outageView/(?P<id>\d+)/$','lavaFlow.views.outageView'), 
-	url(r'^outageView/$', 
-		ListView.as_view( 
-			queryset=Outage.objects.all(), 
-			template_name='outageList.html',
-			)
-		),
 )
