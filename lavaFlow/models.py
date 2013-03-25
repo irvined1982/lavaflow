@@ -147,7 +147,7 @@ class RunQuerySet(models.query.QuerySet):
 			for group in groups:
 				if len(groupName)>0:
 					groupName+=" "
-				groupName+=run[group]
+				groupName+=str(run[group])
 				gdict[group]=run[group]
 			runs=self.filter(**gdict)
 			data=runs.utilization(reportStartTime, reportEndTime, maxBlocks,"")
@@ -177,8 +177,19 @@ class Host(models.Model):
 		return info
 	def submittedJobs(self):
 		return Job.objects.filter(submit_host=self).count()
-	def executedJobs(self):
-		return Job.objects.filter(runs__executions__host=self).distinct().count()
+	def executed_tasks(self):
+		return Run.objects.filter(executions__host=self).distinct().count()
+	def first_run(self):
+		return Run.objects.filter(executions__host=self).order_by('start_time')[0]
+	def last_run(self):
+		return Run.objects.filter(executions__host=self).order_by('-start_time')[0]
+	def completed_tasks(self):
+		return Run.objects.filter(executions__host=self,runFinishInfo__exit_reason__name="Done__0").distinct().count()
+
+	def failed_tasks(self):
+		return Run.objects.filter(executions__host=self).exclude(runFinishInfo__exit_reason__name="Done__0").distinct().count()
+	def failure_rate(self):
+		return round(float(self.failed_tasks())/float(self.completed_tasks()+self.failed_tasks()),2)
 
 	def submitUsage(self):
 		info=Run.objects.filter(element__job__submit_host=self).values('element__job__cluster','queue').annotate(
@@ -254,40 +265,28 @@ class Cluster(models.Model):
 	def __str__(self):
 		return self.name
 	def get_absolute_url(self):
-		end_time=self.lastJobExit()
-		firstTime=self.firstSubmitTime()
+		end_time=self.last_task_executed().end_time
+		firstTime=self.first_task_executed().start_time
 		start_time=end_time-(7*24*60*60)
 		if start_time<firstTime:
 			start_time=firstTime
 		return reverse('lavaFlow.views.homeView', args=[start_time,end_time,self.get_filter_string()])
 	def get_filter_string(self):
 		return 'filter/cluster/%s' % self.id
-	def firstSubmitTime(self):
-		time=cache.get('cluster_firstSubmitTime_%s' %self.id )
-		if time:
-			log.debug("firstSubmitTime: Read time from cache")
-			return time
-		else:
-			time=Job.objects.filter(cluster=self).aggregate(Min('submit_time'))['submit_time__min']
-			log.debug("firstSubmitTime: Writing time to cache")
-			cache.set('cluster_firstSubmitTime_%s' %self.id, time, 360)
-			return time
-	def lastJobExit(self):
-		time=cache.get('cluster_lastJobExit_%s' %self.id )
-		if time:
-			log.debug("lastJobExit: Read time from cache")
-			return time
-		else:
-			time=Run.objects.filter(element__job__cluster=self).aggregate(Max('end_time'))['end_time__max']
-			log.debug("lastJobExit: Writing time to cache")
-			cache.set('cluster_lastJobExit_%s' %self.id, time, 360)
-			return time
-			
-	def lastJobExitDT(self):
-		return datetime.datetime.utcfromtimestamp(self.lastJobExit())
-	def firstSubmitTimeDT(self):
-		return datetime.datetime.utcfromtimestamp(self.firstSubmitTime())
-
+	def last_job_submitted(self):
+		return Job.objects.filter(cluster=self).order_by('-submit_time')[0]
+	def first_task_executed(self):
+		return Run.objects.filter(job__cluster=self).order_by('start_time')[0]
+	def last_task_executed(self):
+		return Run.objects.filter(job__cluster=self).order_by('-end_time')[0]
+	def last_failed_task(self):
+		return Run.objects.filter(job__cluster=self,runFinishInfo__exit_reason__name="Done__0").order_by('-end_time')[0]
+	def avg_pend_time(self):
+		return self.pend_time()/self.total_tasks()
+	def avg_pend_timedelta(self):
+		return datetime.timedelta(seconds=self.avg_pend_time())
+	def avg_pend_pct(self):
+		return round(self.pend_time()/self.wall_time(), 2)
 	def userStats(self,field):
 		users=self.jobs.values('user').annotate(
 				numJobs=Count('job_id'),
@@ -376,7 +375,6 @@ class Cluster(models.Model):
 		return hosts
 	def totalJobs(self):
 		return self.jobs.count()
-
 	def totalTasks(self):
 		return Task.objects.filter(job__cluster=self).count()
 	def totalRuns(self):
@@ -393,34 +391,62 @@ class Cluster(models.Model):
 		return Run.objects.filter(element__job__cluster=self).aggregate(Sum('pend_time'))['pend_time__sum']
 	def pend_timedelta(self):
 		return datetime.timedelta(seconds=self.pend_time())
+	def avg_pend_time(self):
+		return self.pend_time()/self.totalRuns()
+	def avg_pend_timedelta(self):
+		return datetime.timedelta(seconds=self.avg_pend_time())
+	def avg_pend_pct(self):
+		return round(self.pend_time()/self.wall_time(), 2)
 
 class Project(models.Model):
 	name=models.CharField(max_length=100)
 	def get_absolute_url(self):
-		return '/lavaFlow/projectView/%s/' % self.id
-	def submitUsage(self):
-		info=self.runs.values('element__job__cluster','element__job__user','queue','num_processors').annotate(
-				numJobs=Count('element__job'),
-				numTasks=Count('element'),
-				numRuns=Count('num_processors'),
-				cpu=Sum('cpu_time'),
-				wall=Sum('wall_time'),
-				pend=Sum('pend_time'),
-				avgCpu=Avg('cpu_time'),
-				avgWall=Avg('wall_time'),
-				avgPend=Avg('pend_time'),
-				).order_by('element__job__cluster','element__job__user','queue','num_processors')
-		for i in info:
-			i['cluster']=Cluster.objects.get(pk=i['element__job__cluster'])
-			i['user']=User.objects.get(pk=i['element__job__user'])
-			i['queue']=Queue.objects.get(pk=i['queue'])
-			i['cpu_time']=datetime.timedelta(seconds=i['cpu'])
-			i['wall_time']=datetime.timedelta(seconds=i['wall'])
-			i['pend_time']=datetime.timedelta(seconds=i['pend'])
-			i['avgWall']=datetime.timedelta(seconds=i['avgWall'])
-			i['avgPend']=datetime.timedelta(seconds=i['avgPend'])
-			i['avgCpu']=datetime.timedelta(seconds=i['avgCpu'])
-		return info
+		end_time=self.last_task_executed().end_time
+		firstTime=self.first_task_executed().start_time
+		start_time=end_time-(7*24*60*60)
+		if start_time<firstTime:
+			start_time=firstTime
+		return reverse('lavaFlow.views.homeView', args=[start_time,end_time,self.get_filter_string()])
+	def get_filter_string(self):
+		return 'filter/project/%s' % self.id
+	def last_job_submitted(self):
+		return Job.objects.filter(runs__projects=self).order_by('-submit_time')[0]
+	def first_task_executed(self):
+		return Run.objects.filter(projects=self).order_by('start_time')[0]
+	def last_task_executed(self):
+		return Run.objects.filter(projects=self).order_by('-end_time')[0]
+	def last_failed_task(self):
+		return Run.objects.filter(projects=self,runFinishInfo__exit_reason__name="Done__0").order_by('-end_time')[0]
+	def avg_pend_time(self):
+		return self.pend_time()/self.total_tasks()
+	def avg_pend_timedelta(self):
+		return datetime.timedelta(seconds=self.avg_pend_time())
+	def avg_pend_pct(self):
+		return round(self.pend_time()/self.wall_time(), 2)
+	def totalJobs(self):
+		return Job.objects.filter(projects=self).distinct().count()
+	def totalTasks(self):
+		return Task.objects.filter(projects=self).distinct().count()
+	def totalRuns(self):
+		return Run.objects.filter(projects=self).count()
+	def cpu_time(self):
+		return Run.objects.filter(projects=self).aggregate(Sum('cpu_time'))['cpu_time__sum']
+	def cpu_timedelta(self):
+		return datetime.timedelta(seconds=self.cpu_time())
+	def wall_time(self):
+		return Run.objects.filter(projects=self).aggregate(Sum('wall_time'))['wall_time__sum']
+	def wall_timedelta(self):
+		return datetime.timedelta(seconds=self.wall_time())
+	def pend_time(self):
+		return Run.objects.filter(projects=self).aggregate(Sum('pend_time'))['pend_time__sum']
+	def pend_timedelta(self):
+		return datetime.timedelta(seconds=self.pend_time())
+	def avg_pend_time(self):
+		return self.pend_time()/self.totalRuns()
+	def avg_pend_timedelta(self):
+		return datetime.timedelta(seconds=self.avg_pend_time())
+	def avg_pend_pct(self):
+		return round(self.pend_time()/self.wall_time(), 2)
 
 class User(models.Model):
 	user_name=models.CharField(max_length=128)
@@ -428,8 +454,32 @@ class User(models.Model):
 		return u'%s' % self.user_name
 	def get_absolute_url(self):
 		return reverse('lavaFlow.views.userView', args=[self.id,])
+	def total_jobs(self):
+		return Job.objects.filter(user=self).count()
+	def total_tasks(self):
+		return Task.objects.filter(job__user=self).count()
+	def total_runs(self):
+		return Run.objects.filter(job__user=self).count()
+
+	def wall_time(self):
+		return Run.objects.filter(job__user=self).aggregate(Sum('wall_time'))['wall_time__sum']
+	def pend_time(self):
+		return Run.objects.filter(job__user=self).aggregate(Sum('pend_time'))['pend_time__sum']
+	def last_job_submitted(self):
+		return Job.objects.filter(user=self).order_by('-submit_time')[0]
+	def last_task_executed(self):
+		return Run.objects.filter(job__user=self).order_by('-end_time')[0]
+	def last_failed_task(self):
+		return Run.objects.filter(job__user=self,runFinishInfo__exit_reason__name="Done__0").order_by('-end_time')[0]
+	def avg_pend_time(self):
+		return self.pend_time()/self.total_tasks()
+	def avg_pend_timedelta(self):
+		return datetime.timedelta(seconds=self.avg_pend_time())
+	def avg_pend_pct(self):
+		return round(self.pend_time()/self.wall_time(), 2)
+
 	def submitUsage(self):
-		info=Run.objects.filter(element__job__user=self).values('element__job__cluster','queue','num_processors').annotate(
+		info=Run.objects.filter(job__user=self).values('job__cluster','queue','num_processors').annotate(
 				numJobs=Count('element__job'),
 				numTasks=Count('element'),
 				numRuns=Count('num_processors'),
@@ -463,7 +513,53 @@ class Queue(models.Model):
 		return u'%s' % self.name
 	def __str__(self):
 		return self.name
-
+	def get_absolute_url(self):
+		end_time=self.last_task_executed().end_time
+		firstTime=self.first_task_executed().start_time
+		start_time=end_time-(7*24*60*60)
+		if start_time<firstTime:
+			start_time=firstTime
+		return reverse('lavaFlow.views.homeView', args=[start_time,end_time,self.get_filter_string()])
+	def get_filter_string(self):
+		return 'filter/queue/%s' % self.id
+	def last_job_submitted(self):
+		return Job.objects.filter(runs__queue=self).order_by('-submit_time')[0]
+	def first_task_executed(self):
+		return Run.objects.filter(queue=self).order_by('start_time')[0]
+	def last_task_executed(self):
+		return Run.objects.filter(queue=self).order_by('-end_time')[0]
+	def last_failed_task(self):
+		return Run.objects.filter(queue=self,runFinishInfo__exit_reason__name="Done__0").order_by('-end_time')[0]
+	def avg_pend_time(self):
+		return self.pend_time()/self.total_tasks()
+	def avg_pend_timedelta(self):
+		return datetime.timedelta(seconds=self.avg_pend_time())
+	def avg_pend_pct(self):
+		return round(self.pend_time()/self.wall_time(), 2)
+	def totalJobs(self):
+		return Job.objects.filter(runs__queue=self).distinct().count()
+	def totalTasks(self):
+		return Task.objects.filter(runs__queue=self).distinct().count()
+	def totalRuns(self):
+		return Run.objects.filter(queue=self).count()
+	def cpu_time(self):
+		return Run.objects.filter(queue=self).aggregate(Sum('cpu_time'))['cpu_time__sum']
+	def cpu_timedelta(self):
+		return datetime.timedelta(seconds=self.cpu_time())
+	def wall_time(self):
+		return Run.objects.filter(queue=self).aggregate(Sum('wall_time'))['wall_time__sum']
+	def wall_timedelta(self):
+		return datetime.timedelta(seconds=self.wall_time())
+	def pend_time(self):
+		return Run.objects.filter(queue=self).aggregate(Sum('pend_time'))['pend_time__sum']
+	def pend_timedelta(self):
+		return datetime.timedelta(seconds=self.pend_time())
+	def avg_pend_time(self):
+		return self.pend_time()/self.totalRuns()
+	def avg_pend_timedelta(self):
+		return datetime.timedelta(seconds=self.avg_pend_time())
+	def avg_pend_pct(self):
+		return round(self.pend_time()/self.wall_time(), 2)
 
 
 
@@ -533,6 +629,8 @@ class Job(models.Model):
 
 	def first_run(self):
 		return self.runs.order_by('start_time')[0]
+	def last_run(self):
+		return self.runs.order_by('-start_time')[0]
 	def utilizationN3DS(self):
 		return Run.objects.filter(job=self).utilizationN3DS(self.submit_time, self.last_finish_time(),100, "")
 
@@ -553,6 +651,8 @@ class Run(models.Model):
 	wall_time=models.IntegerField()
 	pend_time=models.IntegerField()
 	queue=models.ForeignKey(Queue, related_name='runs')
+	def last_resource_usage(self):
+		return self.resource_usage.filter(is_summary=True).order_by("-timestamp")[0]
 	def otherRuns(self):
 		hosts=self.executions.values('host').distinct()
 		runs=Run.objects.filter(start_time__gte=self.start_time, start_time__lte=self.end_time).filter(end_time__gte=self.end_time).filter(executions__host__in=self.executions.values('host').distinct()).exclude(pk=self.id).distinct()
@@ -695,164 +795,31 @@ class RunFinishInfo(models.Model):
                                  help_text="Maximum virtual memory usage in KB of all processes in the job"
                                  )
 
+class ResourceUsage(models.Model):
+	run=models.ForeignKey(Run, related_name="resource_usage")
+	timestamp=models.IntegerField()
+	is_summary=models.BooleanField()
+	def resourceUsageSummaryN3DS(self):
+		values=[]
+		for f in self.metrics.all():
+			values.append({
+				"label":f.name,
+				"value":f.value,
+				})
 
-class Frob(models.Model):
-    utime=models.FloatField(
-                            verbose_name="User Time User",
-                            help_text="User time used",
-                            )
-    stime=models.FloatField(
-                            verbose_name="System Time Used",
-                            help_text="System time used",
-                            )
-
-    maxrss=models.FloatField(
-                             verbose_name="Max Shared Text Size",
-                             help_text="Maximum shared text size",
-                             )
-    ixrss=models.FloatField(
-                            verbose_name="Integral Shared Text Size",
-                            help_text="Integral of the shared text size over time (in KB seconds)",
-                            )
-    ismrss=models.FloatField(
-                             verbose_name="Integral Shmem Size",
-                             help_text="Integral of the shared memory size over time (valid only on Ultrix)",
-                             )
-    idrss=models.FloatField(
-                            verbose_name="Integral Data Size",
-                            help_text="Integral of the unshared data size over time",
-                            )
-    isrss=models.FloatField(
-                            verbose_name="Integral Stack Size",
-                            help_text="Integral of the unshared stack size over time",
-                            )
-    minflt=models.FloatField(
-                             verbose_name="Page Reclaims",
-                             help_text="Number of page reclaims",
-                             )
-    majflt=models.FloatField(
-                             verbose_name="Page Faults",
-                             help_text="Number of page faults",
-                             )
-    nswap=models.FloatField(
-                            verbose_name="Swapped",
-                            help_text="Number of times the process was swapped out",
-                            )
-    inblock=models.FloatField(
-                              verbose_name="Blocks Input",
-                              help_text="Number of block input operations",
-                              )
-    oublock=models.FloatField(
-                              verbose_name="Blocks Output",
-                              help_text="Number of block output operations",
-                              )
-    ioch=models.FloatField(
-                           verbose_name="Characters Read and Written",
-                           help_text="Number of characters read and written (valid only on HP-UX)",
-                           )
-    msgsnd=models.FloatField(
-                             verbose_name="Messages Sent",
-                             help_text="Number of System V IPC messages sent",)
-    msgrcv=models.FloatField(
-                             verbose_name="Messages Recieved",
-                             help_text="Number of messages received",
-                             )
-    nsignals=models.FloatField(
-                               verbose_name="Signals Received",
-                               help_text="Number of signals received",
-                               )
-    nvcsw=models.FloatField(
-                            verbose_name="Voluntary Context Switches",
-                            help_text="Number of voluntary context switches",
-                            )
-
-    nivcsw=models.FloatField(
-                             verbose_name="Involuntary Context Switches",
-                             help_text="Number of involuntary context switches",
-                             )
-    exutime=models.FloatField(
-                              verbose_name="Exact User Time",
-                              help_text="Exact user time used (valid only on ConvexOS)",
-                              )
-    def contentionChartN3DS(self):
-		data=[{
-			'key':"System and User time consumed",
-			'values':[
-				{
-					'label':'System Time',
-					'value':self.stime,
-				},
-				{
-					'label':'User Time',
-					'value':self.utime,
-				},
-				],
-			},]
-		return json.dumps(data)
-
-    def resourceUsageChartN3DS(self):
 		data=[{
 				'key':"Recorded Resource Usage",
-				'values':[
-					{
-						"label": 'Max RSS',
-						"value": self.maxrss,
-					},
-					{
-						"label": 'IX RSS'  ,
-						"value":  self.ixrss ,
-					},
-					{
-						"label":'ISM RSS'   ,
-						"value":self.ismrss   ,
-					},
-					{
-						"label":'ID RSS'   ,
-						"value":self.idrss   ,
-					},
-					{
-						"label": "ISRSS"  ,
-						"value": self.isrss  ,
-					},
-					{
-						"label": "MINFLT"  ,
-						"value": self.minflt  ,
-					},
-					{
-						"label": "MAJFLT",
-						"value": self.majflt,
-					},
-					{
-						"label": "NSWAP",
-						"value": self.nswap,
-					},
-					{
-						"label": "INBLOCK",
-						"value": self.inblock,
-					},
-					{
-						"label": "OUBLOCK",
-						"value": self.oublock,
-					},
-					{
-						"label": "IOCH",
-						"value": self.ioch,
-					},
-					{
-						"label": "MSGSND",
-						"value": self.msgsnd,
-					},
-					{
-						"label": "NSIGNALS",
-						"value": self.nsignals,
-					},
-					{
-						"label": "NVCSW",
-						"value": self.nvcsw,
-					},
-					],
+				'values':values,
 			}]
 		return json.dumps(data)
+
+
+class ResourceUsageMetric(models.Model):
+	resource_usage=models.ForeignKey(ResourceUsage,related_name="metrics")
+	name=models.CharField(max_length=50)
+	description=models.TextField()
+	value=models.FloatField()
+
 
 class JobSubmitInfo(models.Model):
 	job=models.OneToOneField(Job, related_name='jobSubmitInfo',help_text="The Job Associated with the Event")

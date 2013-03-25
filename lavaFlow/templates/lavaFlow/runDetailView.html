@@ -42,7 +42,7 @@
 		</tbody>
 	</table>
 	
-	<h2>Contending Runs</h2>
+	<h2>Contending Tasks</h2>
 	<p>The following runs where also active on the same hosts when the run exited</p>
 	{% include "lavaFlow/widgets/runList.html" with runs=run.otherRuns  %}
 
@@ -52,43 +52,13 @@
 		<li>Exit Reason: {{ run.runFinishInfo.exit_reason.name }}</li>
 	</ul>
 
-<!--
-	<h2>System/User time:</h2>
-	<ul>
-		<li>User Time: {{ run.runFinishInfo.utime }}</li>
-		<li>System Time: {{ run.runFinishInfo.stime }}</li>
-	</ul>
--->
-	
-	<div id='contentionChart'>
-		<svg style='height:500px'> </svg>
-	</div>
-	<script>
-		nv.addGraph(function() {
-		   	var chartData={{run.runFinishInfo.contentionChartN3DS|safe }};
-			var chart = nv.models.pieChart()
-				.x(function(d) { return d.label })
-				.y(function(d) { return d.value })
-				.showLabels(true);
-		
-			d3.select('#contentionChart svg')
-	 			.datum(chartData)
-		    	.transition().duration(500)
-    			.call(chart);
-
-			nv.utils.windowResize(chart.update);
-			return chart;
-		});
-	</script>
-
-<!--
-<h2>Resource Usage</h2>
+<h2>Reported Resource Usage</h2>
 	<div id='resourceChart'>
 		<svg style='height:500px'> </svg>
 	</div>
 	<script>
 		nv.addGraph(function() {
-		   	var chartData={{run.runFinishInfo.resourceUsageChartN3DS|safe }};
+		   	var chartData={{run.last_resource_usage.resourceUsageSummaryN3DS|safe }};
 			var chart = nv.models.discreteBarChart()
 				.x(function(d) { return d.label })
 				.y(function(d) { return d.value })
@@ -105,6 +75,5 @@
 			return chart;
 		});
 	</script>
--->
 
 {% endblock %}

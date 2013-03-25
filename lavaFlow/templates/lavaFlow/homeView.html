@@ -14,7 +14,7 @@
 	 
 					 selectedMax=data.end_time;
 					 selectedMin=data.end_time-60*60*24*7;
-					 if (selectedMin<data.startDate ){
+					 if (selectedMin<data.start_time ){
 						 selectedMin=data.start_time;
 					 }
 					 if (selectedMin<0){
@@ -159,9 +159,7 @@
 		
 		</script>
 		<div id="reportData"></div>
-		<h2>Cluster Overview</h2>
-		<div id="clusterOverview"></div>
-		<h2>Utilization Graph</h2>
+		<h2>Overall Utilization</h2>
 		<div id='utilizationChart'>
 			<svg style='height:500px'> </svg>
 		</div>
@@ -182,6 +180,30 @@
 
 				nv.utils.windowResize(utilChart.update);
 				return utilChart;
+			});
+		</script>
+		<h2>Utilization by Cluster</h2>
+		<div id='utilizationClusterChart'>
+			<svg style='height:500px'> </svg>
+		</div>
+		<div id="clusterOverview"></div>
+		<script>
+			var utilClusterChart;
+			nv.addGraph(function() {
+				utilClusterChart = nv.models.stackedAreaChart();
+				utilClusterChart.clipEdge(true);
+				utilClusterChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
+				utilClusterChart.xAxis.rotateLabels(-45);
+				utilClusterChart.margin({bottom: 120, left:100});
+				utilClusterChart.xAxis.axisLabel('Date');
+
+				d3.select('#utilizationClusterChart svg')
+				.datum([])
+				.transition().duration(500)
+				.call(utilClusterChart);
+
+				nv.utils.windowResize(utilClusterChart.update);
+				return utilClusterChart;
 			});
 		</script>
 		<h2>Utilization by Queue</h2>
@@ -254,6 +276,30 @@
 
 				nv.utils.windowResize(utilUserChart.update);
 				return utilUserChart;
+			});
+		</script>
+		<h2>Utilization by Job Size</h2>
+		<div id='utilizationSizeChart'>
+			<svg style='height:500px'> </svg>
+		</div>
+		<div id="utilizationSizeTable"></div>
+		<script>
+			var utilSizeChart;
+			nv.addGraph(function() {
+				utilSizeChart = nv.models.stackedAreaChart();
+				utilSizeChart.clipEdge(true);
+				utilSizeChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
+				utilSizeChart.xAxis.rotateLabels(-45);
+				utilSizeChart.margin({bottom: 120, left:100});
+				utilSizeChart.xAxis.axisLabel('Date');
+
+				d3.select('#utilizationSizeChart svg')
+				.datum([])
+				.transition().duration(500)
+				.call(utilChart);
+
+				nv.utils.windowResize(utilSizeChart.update);
+				return utilSizeChart;
 			});
 		</script>
 		<h2>Exit Status</h2>
@@ -348,6 +394,9 @@
 				 $.get("{% url lavaFlow.views.homeView %}modules/groupedUtilizationTable/"+selectedMin+"/"+selectedMax+"/group/job__user__user_name/group/"+filterString, function(data) {
 					 $('#utilizationUserTable').html(data);
 				 });
+				 $.get("{% url lavaFlow.views.homeView %}modules/groupedUtilizationTable/"+selectedMin+"/"+selectedMax+"/group/num_processors/group/"+filterString, function(data) {
+					 $('#utilizationSizeTable').html(data);
+				 });
 				 $.get("{% url lavaFlow.views.homeView %}modules/groupedUtilizationTable/"+selectedMin+"/"+selectedMax+"/group/projects__name/group/"+filterString, function(data) {
 					 $('#utilizationProjectTable').html(data);
 				 });
@@ -388,6 +437,12 @@
 							.transition().duration(500)
 							.call(utilChart);
 				});
+				 $.getJSON("{% url lavaFlow.views.homeView %}modules/groupedUtilization/"+selectedMin+"/"+selectedMax+"/group/job__cluster__name/group/"+filterString, function(data) {
+							d3.select('#utilizationClusterChart svg')
+							.datum(data)
+							.transition().duration(500)
+							.call(utilClusterChart);
+				});
 				 $.getJSON("{% url lavaFlow.views.homeView %}modules/groupedUtilization/"+selectedMin+"/"+selectedMax+"/group/queue__name/group/"+filterString, function(data) {
 							d3.select('#utilizationQueueChart svg')
 							.datum(data)
@@ -399,6 +454,12 @@
 							.datum(data)
 							.transition().duration(500)
 							.call(utilUserChart);
+				});
+				 $.getJSON("{% url lavaFlow.views.homeView %}modules/groupedUtilization/"+selectedMin+"/"+selectedMax+"/group/num_processors/group/"+filterString, function(data) {
+							d3.select('#utilizationSizeChart svg')
+							.datum(data)
+							.transition().duration(500)
+							.call(utilSizeChart);
 				});
 				 $.getJSON("{% url lavaFlow.views.homeView %}modules/groupedUtilization/"+selectedMin+"/"+selectedMax+"/group/projects__name/group/"+filterString, function(data) {
 							d3.select('#utilizationProjectChart svg')

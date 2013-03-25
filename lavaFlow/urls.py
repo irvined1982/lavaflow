@@ -71,12 +71,10 @@ urlpatterns = patterns('',
 	url(r'^jobDetail/(\d+)/$','lavaFlow.views.jobDetailView'), 
 	url(r'^runDetail/(?P<id>\d+)/$','lavaFlow.views.runDetailView'), 
 
-	url(r'^hostView/(\d+)/$','lavaFlow.views.hostView'),
 	url(r'^hostView/$', 'lavaFlow.views.hostList'),
-	
 	url(r'^clusterView/$', 'lavaFlow.views.clusterList'),
-
-	url(r'^userView/(\d+)/$','lavaFlow.views.userView'), 
+	url(r'^queueView/$', 'lavaFlow.views.queueList'),
+	url(r'^projectView/$', 'lavaFlow.views.projectList'),
 	url(r'^userView/$', 'lavaFlow.views.userList'),
 
 	url(r'^outageView/(?P<id>\d+)/$','lavaFlow.views.outageView'), 

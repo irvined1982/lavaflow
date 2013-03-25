@@ -5,12 +5,28 @@
 			<thead>
 				<tr>
 					<th>User Name</th>
+					<th>Total Jobs</th>
+					<th>Total Tasks</th>
+					<th>Total Runs</th>
+					<th>Last Job Submitted</th>
+					<th>Last Task Executed</th>
+					<th>Last Failed Task</th>
+					<th>Avg Pend Time</th>
+					<th>Pend as % Wall</th>
 				</tr>
 			</thead>
 			<tbody>
 				{% for u in users.object_list %}
 				<tr>
 					<td><a href='{{u.get_absolute_url}}'>{{ u.user_name }}</a></td>
+					<td>{{ u.total_jobs }}</td>
+					<td>{{ u.total_tasks }}</td>
+					<td>{{ u.total_runs }}</td>
+					<td><a href='{{u.last_job_submitted.get_absolute_url}}'>{{ u.last_job_submitted.submit_time_datetime }}</a></td>
+					<td><a href='{{ u.last_task_executed.get_absolute_url}}'>{{ u.last_task_executed.end_time_datetime }}</a></td>
+					<td><a href='{{ u.last_failed_task.get_absolute_url }}'>{{ u.last_failed_task.end_time_datetime }}</a></td>
+					<td>{{ u.avg_pend_timedelta }}</td>
+					<td>{{ u.avg_pend_pct }}%</td>
 				</tr>
 				{% endfor %}
 			</tbody>

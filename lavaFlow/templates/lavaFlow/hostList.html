@@ -6,7 +6,12 @@
 				<tr>
 					<th>Host Name</th>
 					<th>Submitted Jobs</th>
-					<th>Executed Jobs</th>
+					<th>Executed Tasks</th>
+					<th>First Task Executed</th>
+					<th>Last Task Exited</th>
+					<th>Completed Tasks</th>
+					<th>Failed Tasks</th>
+					<th>Failure Rate</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -14,7 +19,12 @@
 				<tr>
 					<td><a href='{{h.get_absolute_url}}'>{{ h.host_name }}</a></td>
 					<td>{{ h.submittedJobs }}</td>
-					<td>{{ h.executedJobs }}</td>
+					<td>{{ h.executed_tasks }}</td>
+					<td>{{ h.first_run.start_time_datetime }}</td>
+					<td>{{ h.last_run.end_time_datetime }}</td>
+					<td>{{ h.completed_tasks }}</td>
+					<td>{{ h.failed_tasks }}</td>
+					<td>{{ h.failure_rate }}%</td>
 				</tr>
 				{% endfor %}
 			</tbody>

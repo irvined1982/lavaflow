@@ -47,6 +47,7 @@ def renderTaskDetail(element):
 
 def runDetailView(request,id):
 	run=get_object_or_404(Run,pk=id)
+	run.last_resource_usage().resourceUsageSummaryN3DS()
 	return render_to_response('lavaFlow/runDetailView.html',{'run':run},context_instance=RequestContext(request))
 
 def outageView(request, id):
@@ -65,6 +66,31 @@ def clusterList(request):
 	except EmptyPage:
 		clusters=paginator.page(paginator.num_pages)
 	return render_to_response("lavaFlow/clusterList.html",{'clusters':clusters},context_instance=RequestContext(request))
+def projectList(request):
+	paginator = Paginator(Project.objects.all(), 30)
+	page = request.GET.get('page')
+	if not page:
+		page=1
+	try:
+		projects=paginator.page(page)
+	except PageNotAnInteger:
+		projects=paginator.page(1)
+	except EmptyPage:
+		projects=paginator.page(paginator.num_pages)
+	return render_to_response("lavaFlow/projectlist.html",{'projects':projects},context_instance=RequestContext(request))
+
+def queueList(request):
+	paginator = Paginator(Queue.objects.all(), 30)
+	page = request.GET.get('page')
+	if not page:
+		page=1
+	try:
+		queues=paginator.page(page)
+	except PageNotAnInteger:
+		queues=paginator.page(1)
+	except EmptyPage:
+		queues=paginator.page(paginator.num_pages)
+	return render_to_response("lavaFlow/queueList.html",{'queues':queues},context_instance=RequestContext(request))
 
 def hostList(request):
 	paginator = Paginator(Host.objects.all(), 30)
@@ -115,6 +141,10 @@ def jobFinishView(request,cluster):
 		ob=json.loads(request.raw_post_data)
 	except:
 		raise
+	for o in ob:
+		process_element(cluster,o)
+def process_element(cluster,ob):
+
 	if ob['start_time']<1:
 		ob['wall_time']=0
 		ob['pend_time']=ob['end_time']-ob['submit_time']
@@ -210,7 +240,19 @@ def jobFinishView(request,cluster):
 		for host in ob['requested_hosts']:
 			(h,created)=Host.objects.get_or_create(host_name=host)
 			rf.requested_hosts.add(h)
-	raise Http404
+		for res in ob['resource_usage']:
+			r=ResourceUsage()
+			r.run=run
+			r.timestamp=res['timestamp']
+			r.is_summary=res['is_summary']
+			r.save()
+			for metric in res['metrics']:
+				m=ResourceUsageMetric()
+				m.resource_usage=r
+				m.name=metric['name']
+				m.value=metric['value']
+				m.description=metric['description']
+				m.save()
 
 
 
@@ -254,6 +296,14 @@ FRIENDLY_NAMES={
 		'executionHost':{
 			'name':"Execution Host",
 			'value':Host.objects.get,
+			},
+		'queue':{
+			'name':"Queue",
+			'value':Queue.objects.get,
+			},
+		'project':{
+			'name':"Project",
+			'value':Project.objects.get,
 			},
 		}
 
@@ -338,6 +388,8 @@ def filterJobs(jobs,filterString):
 		'num_processors':'runs__num_processors',
 		'user_name':'user',
 		'executionHost':'runs__executions__host',
+		'queue':'runs__queue',
+		'project':'runs__project',
 		}
 	return filterSet(jobs, fields, filterString)
 def filterRuns(runs, filterString):
@@ -347,6 +399,8 @@ def filterRuns(runs, filterString):
 		'num_processors':'num_processors',
 		'user_name':'job__user',
 		'executionHost':'executions__host',
+		'queue':'queue',
+		'project':'projects',
 		}
 	return filterSet(runs,fields,filterString)
 
