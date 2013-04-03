@@ -66,7 +66,7 @@ def projectList(request):
 		projects=paginator.page(1)
 	except EmptyPage:
 		projects=paginator.page(paginator.num_pages)
-	return render_to_response("lavaFlow/projectlist.html",{'projects':projects},context_instance=RequestContext(request))
+	return render_to_response("lavaFlow/projectList.html",{'projects':projects},context_instance=RequestContext(request))
 
 def queueList(request):
 	paginator = Paginator(Queue.objects.all(), 30)
@@ -113,7 +113,6 @@ def jobDetailView(request,id):
 
 def runDetailView(request,id):
 	run=get_object_or_404(Run,pk=id)
-	run.last_resource_usage().resourceUsageSummaryN3DS()
 	return render_to_response('lavaFlow/runDetailView.html',{'run':run},context_instance=RequestContext(request))
 
 def jobSearchView(request):
@@ -130,25 +129,17 @@ def jobSearchView(request):
 
 @csrf_exempt
 def uploadData(request,cluster):
-	if not request.POST:
-		raise Http404("No POST data")
+	if not request.method=="PUT":
+		raise Http404("Only PUT requests supported")
 	try:
 		ob=json.loads(request.raw_post_data)
 	except:
 		raise
 	for o in ob:
 		process_element(cluster,o)
+	return HttpResponse("OK",content_type="text/plain")
 
 def process_element(cluster,ob):
-
-	if ob['start_time']<1:
-		ob['wall_time']=0
-		ob['pend_time']=ob['end_time']-ob['submit_time']
-		ob['start_time']=ob['end_time']
-	else:
-		ob['wall_time']=ob['end_time']-ob['start_time']
-		ob['pend_time']=ob['start_time']-ob['submit_time']
-
 	(cluster, created)=Cluster.objects.get_or_create(name=cluster)
 	(user,created)=User.objects.get_or_create(user_name=ob['user_name'])
 	(submit_host,created)=Host.objects.get_or_create(host_name=ob['submit_host'])
@@ -166,90 +157,154 @@ def process_element(cluster,ob):
 			submit_time=ob['submit_time'],
 			defaults=jobData
 			)
-	elementData={
-			'task_id':ob['array_index'],
-			}
-	(element, created)=job.elements.get_or_create(task_id=ob['array_index'], defaults=elementData)
-	(queue, created)=Queue.objects.get_or_create(name=ob['queue'])
-	runData={
-			'element':element,
-			'job':job,
-			'num_processors':ob['num_processors'],
-			'start_time':ob['start_time'],
-			'end_time':ob['end_time'],
-			'wall_time':ob['wall_time'],
-			'cpu_time':ob['wall_time']*ob['num_processors'],
-			'pend_time':ob['pend_time'],
-			'queue':queue,
-			}
-	(run,created)=Run.objects.get_or_create(job=job, element=element, start_time=ob['start_time'], defaults=runData)
-	if created:
-		for project_name in ob['projects']:
-			(project, created)=Project.objects.get_or_create(name=project_name)
-			run.projects.add(project)
-		hosts={}
-		for host_name in ob['used_hosts']:
-			try:
-				hosts[host_name]+=1
-			except:
-				hosts[host_name]=1
-		for host_name in hosts.iterkeys():
-			(host,created)=Host.objects.get_or_create(host_name=host_name)
-			run.executions.create(host=host, run=run, num_processors=hosts[host_name])
-		rf=RunFinishInfo()
-		rf.run=run
-		(js, created)=JobStatus.objects.get_or_create(job_status=ob['job_status'])
-		rf.job_status=js
-		(ei,created)=ExitReason.objects.get_or_create(name=ob['exit_reason']['name'], defaults={'description':ob['exit_reason']['description'],'value':ob['exit_reason']['number']})
-		rf.exit_reason = ei
+	if ob['type']=='job_new':
+		js=JobSubmitInfo()
+		js.job=job
 		fields=[
-				'user_name',
-				'options',
-				'num_processors',
-				'begin_time',
-				'term_time',
-				'requested_resources',
-				'cwd',
-				'input_file',
-				'output_file',
-				'error_file',
-				'input_file_spool',
-				'command_spool',
-				'job_file',
-				'host_factor',
-				'job_name',
-				'command',
-				'dependency_conditions',
-				'pre_execution_command',
-				'email_user',
-				'max_num_processors',
-				'login_shell',
-				'max_residual_mem',
-				'max_swap',
-				]
+			'user_id',
+			'options',
+			'options2',
+			'num_processors',
+			'begin_time',
+			'term_time',
+			'checkpoint_signal_value',
+			'checkpoint_period',
+			'restart_process_id',
+			'host_factor',
+			'umask',
+			'requested_resources',
+			'cwd',
+			'checkpoint_dir',
+			'input_file',
+			'output_file',
+			'error_file',
+			'input_file_spool',
+			'command_spool',
+			'job_spool_dir',
+			'home_directory',
+			'job_file',
+			'dependency_conditions',
+			'job_name',
+			'command',
+			'nxf',
+			'pre_execution_command',
+			'email_user',
+			'nios_port',
+			'max_num_processors',
+			'login_shell',
+			'array_index',
+			'user_priority',
+		]
 		for field in fields:
-			setattr(rf,field,ob[field])
-		rf.project_name='None'
-		if len(ob['projects'])>0:
-			rf.projecT_name=ob['projects'][0]
-		rf.save()
-		for host in ob['requested_hosts']:
-			(h,created)=Host.objects.get_or_create(host_name=host)
-			rf.requested_hosts.add(h)
-		for res in ob['resource_usage']:
-			r=ResourceUsage()
-			r.run=run
-			r.timestamp=res['timestamp']
-			r.is_summary=res['is_summary']
-			r.save()
-			for metric in res['metrics']:
-				m=ResourceUsageMetric()
-				m.resource_usage=r
-				m.name=metric['name']
-				m.value=metric['value']
-				m.description=metric['description']
-				m.save()
+			setattr(js,field,ob[field])
+		if len(ob['host_specification_hostname'])<1:
+			ob['host_specification_hostname']="Unknown"
+		if len(ob['scheduled_host_type'])<1:
+			ob['scheduled_host_type']="Unknown"
+		(queue, created)=Queue.objects.get_or_create(name=ob['queue'])
+		js.queue=queue
+		(host,created)=Host.objects.get_or_create(host_name=ob['host_specification_hostname'])
+		js.host_specification_hostname=host
+		(host,created)=Host.objects.get_or_create(host_name=ob['scheduled_host_type'])
+		js.scheduled_host_type=host
+		(project, created)=Project.objects.get_or_create(name=ob['project'])
+		js.project=project
+		try:
+			js.save()
+		except:
+			pass
 
+	elif ob['type']=='job_finish':
+		if ob['start_time']<1:
+			ob['wall_time']=0
+			ob['pend_time']=ob['end_time']-ob['submit_time']
+			ob['start_time']=ob['end_time']
+		else:
+			ob['wall_time']=ob['end_time']-ob['start_time']
+			ob['pend_time']=ob['start_time']-ob['submit_time']
+		elementData={
+				'task_id':ob['array_index'],
+				}
+		(element, created)=job.elements.get_or_create(task_id=ob['array_index'], defaults=elementData)
+		(queue, created)=Queue.objects.get_or_create(name=ob['queue'])
+		runData={
+				'element':element,
+				'job':job,
+				'num_processors':ob['num_processors'],
+				'start_time':ob['start_time'],
+				'end_time':ob['end_time'],
+				'wall_time':ob['wall_time'],
+				'cpu_time':ob['wall_time']*ob['num_processors'],
+				'pend_time':ob['pend_time'],
+				'queue':queue,
+				}
+		(run,created)=Run.objects.get_or_create(job=job, element=element, start_time=ob['start_time'], defaults=runData)
+		if created:
+			for project_name in ob['projects']:
+				(project, created)=Project.objects.get_or_create(name=project_name)
+				run.projects.add(project)
+			hosts={}
+			for host_name in ob['used_hosts']:
+				try:
+					hosts[host_name]+=1
+				except:
+					hosts[host_name]=1
+			for host_name in hosts.iterkeys():
+				(host,created)=Host.objects.get_or_create(host_name=host_name)
+				run.executions.create(host=host, run=run, num_processors=hosts[host_name])
+			rf=RunFinishInfo()
+			rf.run=run
+			(js, created)=JobStatus.objects.get_or_create(job_status=ob['job_status'])
+			rf.job_status=js
+			(ei,created)=ExitReason.objects.get_or_create(name=ob['exit_reason']['name'], defaults={'description':ob['exit_reason']['description'],'value':ob['exit_reason']['value']})
+			rf.exit_reason = ei
+			fields=[
+					'user_name',
+					'options',
+					'num_processors',
+					'begin_time',
+					'term_time',
+					'requested_resources',
+					'cwd',
+					'input_file',
+					'output_file',
+					'error_file',
+					'input_file_spool',
+					'command_spool',
+					'job_file',
+					'host_factor',
+					'job_name',
+					'command',
+					'dependency_conditions',
+					'pre_execution_command',
+					'email_user',
+					'max_num_processors',
+					'login_shell',
+					'max_residual_mem',
+					'max_swap',
+					]
+			for field in fields:
+				setattr(rf,field,ob[field])
+			rf.project_name='None'
+			if len(ob['projects'])>0:
+				rf.projecT_name=ob['projects'][0]
+			rf.save()
+			for host in ob['requested_hosts']:
+				(h,created)=Host.objects.get_or_create(host_name=host)
+				rf.requested_hosts.add(h)
+			for res in ob['resource_usage']:
+				r=ResourceUsage()
+				r.run=run
+				r.timestamp=res['timestamp']
+				r.is_summary=res['is_summary']
+				r.save()
+				for metric in res['metrics']:
+					m=ResourceUsageMetric()
+					m.resource_usage=r
+					m.name=metric['name']
+					m.value=metric['value']
+					m.description=metric['description']
+					m.save()
 
 
 

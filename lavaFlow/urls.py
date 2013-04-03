@@ -25,7 +25,7 @@ from lavaFlow.models import *
 
 urlpatterns = patterns('',
 	url(r'^$', 'lavaFlow.views.homeView'),
-	url(r'^(.+)/upload$','lavaFlow.views.uploadData'),
+	url(r'^cluster/(.+)/upload$','lavaFlow.views.uploadData'),
 	url(r'^(\d+)/(\d+)/$', 'lavaFlow.views.homeView'),
 	url(r'^(\d+)/(\d+)/(.*)/$', 'lavaFlow.views.homeView'),
 	

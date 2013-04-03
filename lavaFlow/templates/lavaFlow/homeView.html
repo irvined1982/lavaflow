@@ -159,10 +159,50 @@
 		
 		</script>
 		<div id="reportData"></div>
-		<h2>Overall Utilization</h2>
-		<div id='utilizationChart'>
-			<svg style='height:500px'> </svg>
+		<div class="tabbable">
+			<ul class="nav nav-tabs" id="utilTabs">
+				<li class="active"><a href="#utilCombined" data-toggle="tab">Overall</a></li>
+				<li><a href="#utilCluster" data-toggle="tab">By Cluster</a></li>
+				<li><a href="#utilQueue" data-toggle="tab">By Queue</a></li>
+				<li><a href="#utilProject" data-toggle="tab">By Project</a></li>
+				<li><a href="#utilUser" data-toggle="tab">By User</a></li>
+				<li><a href="#utilSize" data-toggle="tab">By Size</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="utilCombined">
+					<h2>Overall Utilization</h2>
+					<div id='utilizationChart'><svg style='height:500px;width:800px;'> </svg></div>
+				</div>
+				<div class="tab-pane" id="utilCluster">
+					<h2>Utilization by Cluster</h2>
+					<div id='utilizationClusterChart'><svg style='height:500px;width:800px;'> </svg></div>
+					<div id="clusterOverview"></div>
+				</div>
+				<div class="tab-pane" id="utilQueue">
+					<h2>Utilization by Queue</h2>
+					<div id='utilizationQueueChart'><svg style='height:500px;width:800px;'> </svg></div>
+					<div id="utilizationQueueTable"></div>
+				</div>
+				<div class="tab-pane" id="utilProject">
+					<h2>Utilization by Project</h2>
+					<div id='utilizationProjectChart'><svg style='height:500px;width:800px;'> </svg></div>
+					<div id="utilizationProjectTable"></div>
+				</div>
+				<div class="tab-pane" id="utilUser">
+					<h2>Utilization by User</h2>
+					<div id='utilizationUserChart'><svg style='height:500px;width:800px;'> </svg></div>
+					<div id="utilizationUserTable"></div>
+				</div>
+				<div class="tab-pane" id="utilSize">
+					<h2>Utilization by Job Size</h2>
+					<div id='utilizationSizeChart'><svg style='height:500px;width:800px;'></svg></div>
+					<div id="utilizationSizeTable"></div>
+				</div>
+			</div>
 		</div>
+
+
+
 		<script>
 			var utilChart;
 			nv.addGraph(function() {
@@ -172,6 +212,8 @@
 				utilChart.xAxis.rotateLabels(-45);
 				utilChart.margin({bottom: 120, left:100});
 				utilChart.xAxis.axisLabel('Date');
+				utilChart.showControls(false);
+
 
 				d3.select('#utilizationChart svg')
 				.datum([])
@@ -181,13 +223,6 @@
 				nv.utils.windowResize(utilChart.update);
 				return utilChart;
 			});
-		</script>
-		<h2>Utilization by Cluster</h2>
-		<div id='utilizationClusterChart'>
-			<svg style='height:500px'> </svg>
-		</div>
-		<div id="clusterOverview"></div>
-		<script>
 			var utilClusterChart;
 			nv.addGraph(function() {
 				utilClusterChart = nv.models.stackedAreaChart();
@@ -196,6 +231,7 @@
 				utilClusterChart.xAxis.rotateLabels(-45);
 				utilClusterChart.margin({bottom: 120, left:100});
 				utilClusterChart.xAxis.axisLabel('Date');
+				utilClusterChart.showControls(false);
 
 				d3.select('#utilizationClusterChart svg')
 				.datum([])
@@ -205,13 +241,6 @@
 				nv.utils.windowResize(utilClusterChart.update);
 				return utilClusterChart;
 			});
-		</script>
-		<h2>Utilization by Queue</h2>
-		<div id='utilizationQueueChart'>
-			<svg style='height:500px'> </svg>
-		</div>
-		<div id="utilizationQueueTable"></div>
-		<script>
 			var utilQueueChart;
 			nv.addGraph(function() {
 				utilQueueChart = nv.models.stackedAreaChart();
@@ -220,6 +249,7 @@
 				utilQueueChart.xAxis.rotateLabels(-45);
 				utilQueueChart.margin({bottom: 120, left:100});
 				utilQueueChart.xAxis.axisLabel('Date');
+				utilQueueChart.showControls(false);
 
 				d3.select('#utilizationQueueChart svg')
 				.datum([])
@@ -229,13 +259,6 @@
 				nv.utils.windowResize(utilQueueChart.update);
 				return utilQueueChart;
 			});
-		</script>
-		<h2>Utilization by Project</h2>
-		<div id='utilizationProjectChart'>
-			<svg style='height:500px'> </svg>
-		</div>
-		<div id="utilizationProjectTable"></div>
-		<script>
 			var utilProjChart;
 			nv.addGraph(function() {
 				utilProjChart = nv.models.stackedAreaChart();
@@ -244,6 +267,7 @@
 				utilProjChart.xAxis.rotateLabels(-45);
 				utilProjChart.margin({bottom: 120, left:100});
 				utilProjChart.xAxis.axisLabel('Date');
+				utilProjChart.showControls(false);
 
 				d3.select('#utilizationQueueChart svg')
 				.datum([])
@@ -253,13 +277,6 @@
 				nv.utils.windowResize(utilProjChart.update);
 				return utilProjChart;
 			});
-		</script>
-		<h2>Utilization by User</h2>
-		<div id='utilizationUserChart'>
-			<svg style='height:500px'> </svg>
-		</div>
-		<div id="utilizationUserTable"></div>
-		<script>
 			var utilUserChart;
 			nv.addGraph(function() {
 				utilUserChart = nv.models.stackedAreaChart();
@@ -268,6 +285,7 @@
 				utilUserChart.xAxis.rotateLabels(-45);
 				utilUserChart.margin({bottom: 120, left:100});
 				utilUserChart.xAxis.axisLabel('Date');
+				utilUserChart.showControls(false);
 
 				d3.select('#utilizationUserChart svg')
 				.datum([])
@@ -277,13 +295,6 @@
 				nv.utils.windowResize(utilUserChart.update);
 				return utilUserChart;
 			});
-		</script>
-		<h2>Utilization by Job Size</h2>
-		<div id='utilizationSizeChart'>
-			<svg style='height:500px'> </svg>
-		</div>
-		<div id="utilizationSizeTable"></div>
-		<script>
 			var utilSizeChart;
 			nv.addGraph(function() {
 				utilSizeChart = nv.models.stackedAreaChart();
@@ -292,6 +303,7 @@
 				utilSizeChart.xAxis.rotateLabels(-45);
 				utilSizeChart.margin({bottom: 120, left:100});
 				utilSizeChart.xAxis.axisLabel('Date');
+				utilSizeChart.showControls(false);
 
 				d3.select('#utilizationSizeChart svg')
 				.datum([])
@@ -314,6 +326,7 @@
 				exitChart = nv.models.multiBarChart();
 				exitChart.xAxis.axisLabel('Exit State');
 				exitChart.margin({bottom:120,left:100});
+				exitChart.showControls(false);
 				d3.select('#jobExitChart svg')
 				.datum([])
 				.transition().duration(500)
@@ -336,6 +349,7 @@
 				sizeChart = nv.models.multiBarChart();
 				sizeChart.xAxis.axisLabel('Number of Processors');
 				sizeChart.margin({bottom:120,left:100});
+				sizeChart.showControls(false);
 				d3.select('#jobSizeChart svg')
 				.datum([])
 				.transition().duration(500)
@@ -477,5 +491,8 @@
 
 			 }
 
+				jQuery(document).ready(function($) {
+					$(".tabs").tabs();
+				});
 		</script>
 {% endblock %}

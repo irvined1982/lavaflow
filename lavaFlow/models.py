@@ -23,6 +23,7 @@ import array
 import datetime
 import json
 import logging
+import time
 from django.db import models
 from django.db.models import Avg, Count, Sum, Min, Max
 from django.core.urlresolvers import reverse
@@ -161,7 +162,20 @@ class RunQuerySet(models.query.QuerySet):
 class Host(models.Model):
 	host_name=models.CharField(max_length=100)
 	def get_absolute_url(self):
-		return reverse('lavaFlow.views.hostView', args=[self.id,])
+		try:
+			end_time=self.last_task_executed().end_time
+		except:
+			end_time=int(time.time())
+		try:
+			firstTime=self.first_task_executed().start_time
+		except:
+			firstTime=int(time.time()-(7*24*60*60))
+		start_time=end_time-(7*24*60*60)
+		if start_time<firstTime:
+			start_time=firstTime
+		return reverse('lavaFlow.views.homeView', args=[start_time,end_time,self.get_filter_string()])
+	def get_filter_string(self):
+		return 'filter/executionHost/%s' % self.id
 	def __unicode__(self):
 		return u'%s' % self.host_name
 	def __str__(self):
@@ -180,17 +194,25 @@ class Host(models.Model):
 	def executed_tasks(self):
 		return Run.objects.filter(executions__host=self).distinct().count()
 	def first_run(self):
-		return Run.objects.filter(executions__host=self).order_by('start_time')[0]
+		try:
+			return Run.objects.filter(executions__host=self).order_by('start_time')[0]
+		except:
+			return None
 	def last_run(self):
-		return Run.objects.filter(executions__host=self).order_by('-start_time')[0]
+		try:
+			return Run.objects.filter(executions__host=self).order_by('-start_time')[0]
+		except:
+			return None
 	def completed_tasks(self):
 		return Run.objects.filter(executions__host=self,runFinishInfo__exit_reason__name="Done__0").distinct().count()
 
 	def failed_tasks(self):
 		return Run.objects.filter(executions__host=self).exclude(runFinishInfo__exit_reason__name="Done__0").distinct().count()
 	def failure_rate(self):
-		return round(float(self.failed_tasks())/float(self.completed_tasks()+self.failed_tasks()),2)
-
+		try:
+			return round(float(self.failed_tasks())/float(self.completed_tasks()+self.failed_tasks()),2)
+		except:
+			return 0
 	def submitUsage(self):
 		info=Run.objects.filter(element__job__submit_host=self).values('element__job__cluster','queue').annotate(
 				numJobs=Count('element__job'),
@@ -237,8 +259,14 @@ class Cluster(models.Model):
 	def __str__(self):
 		return self.name
 	def get_absolute_url(self):
-		end_time=self.last_task_executed().end_time
-		firstTime=self.first_task_executed().start_time
+		try:
+			end_time=self.last_task_executed().end_time
+		except:
+			end_time=int(time.time())
+		try:
+			firstTime=self.first_task_executed().start_time
+		except:
+			firstTime=int(time.time()-(7*24*60*60))
 		start_time=end_time-(7*24*60*60)
 		if start_time<firstTime:
 			start_time=firstTime
@@ -246,13 +274,25 @@ class Cluster(models.Model):
 	def get_filter_string(self):
 		return 'filter/cluster/%s' % self.id
 	def last_job_submitted(self):
-		return Job.objects.filter(cluster=self).order_by('-submit_time')[0]
+		try:
+			return Job.objects.filter(cluster=self).order_by('-submit_time')[0]
+		except: 
+			return None
 	def first_task_executed(self):
-		return Run.objects.filter(job__cluster=self).order_by('start_time')[0]
+		try:
+			return Run.objects.filter(job__cluster=self).order_by('start_time')[0]
+		except: 
+			return None
 	def last_task_executed(self):
-		return Run.objects.filter(job__cluster=self).order_by('-end_time')[0]
+		try:
+			return Run.objects.filter(job__cluster=self).order_by('-end_time')[0]
+		except: 
+			return None
 	def last_failed_task(self):
-		return Run.objects.filter(job__cluster=self,runFinishInfo__exit_reason__name="Done__0").order_by('-end_time')[0]
+		try:
+			return Run.objects.filter(job__cluster=self,runFinishInfo__exit_reason__name="Done__0").order_by('-end_time')[0]
+		except: 
+			return None
 	def avg_pend_time(self):
 		return self.pend_time()/self.total_tasks()
 	def avg_pend_timedelta(self):
@@ -373,8 +413,14 @@ class Cluster(models.Model):
 class Project(models.Model):
 	name=models.CharField(max_length=100)
 	def get_absolute_url(self):
-		end_time=self.last_task_executed().end_time
-		firstTime=self.first_task_executed().start_time
+		try:
+			end_time=self.last_task_executed().end_time
+		except:
+			end_time=int(time.time())
+		try:
+			firstTime=self.first_task_executed().start_time
+		except:
+			firstTime=int(time.time()-(7*24*60*60))
 		start_time=end_time-(7*24*60*60)
 		if start_time<firstTime:
 			start_time=firstTime
@@ -382,13 +428,25 @@ class Project(models.Model):
 	def get_filter_string(self):
 		return 'filter/project/%s' % self.id
 	def last_job_submitted(self):
-		return Job.objects.filter(runs__projects=self).order_by('-submit_time')[0]
+		try:
+			return Job.objects.filter(runs__projects=self).order_by('-submit_time')[0]
+		except:
+			return None
 	def first_task_executed(self):
-		return Run.objects.filter(projects=self).order_by('start_time')[0]
+		try:
+			return Run.objects.filter(projects=self).order_by('start_time')[0]
+		except:
+			return None
 	def last_task_executed(self):
-		return Run.objects.filter(projects=self).order_by('-end_time')[0]
+		try:
+			return Run.objects.filter(projects=self).order_by('-end_time')[0]
+		except:
+			return None
 	def last_failed_task(self):
-		return Run.objects.filter(projects=self,runFinishInfo__exit_reason__name="Done__0").order_by('-end_time')[0]
+		try:
+			return Run.objects.filter(projects=self,runFinishInfo__exit_reason__name="Done__0").order_by('-end_time')[0]
+		except:
+			return None
 	def avg_pend_time(self):
 		return self.pend_time()/self.total_tasks()
 	def avg_pend_timedelta(self):
@@ -396,9 +454,9 @@ class Project(models.Model):
 	def avg_pend_pct(self):
 		return round(self.pend_time()/self.wall_time(), 2)
 	def totalJobs(self):
-		return Job.objects.filter(projects=self).distinct().count()
+		return Job.objects.filter(runs__projects=self).distinct().count()
 	def totalTasks(self):
-		return Task.objects.filter(projects=self).distinct().count()
+		return Task.objects.filter(runs__projects=self).distinct().count()
 	def totalRuns(self):
 		return Run.objects.filter(projects=self).count()
 	def cpu_time(self):
@@ -425,7 +483,20 @@ class User(models.Model):
 	def __unicode__(self):
 		return u'%s' % self.user_name
 	def get_absolute_url(self):
-		return reverse('lavaFlow.views.userView', args=[self.id,])
+		try:
+			end_time=self.last_task_executed().end_time
+		except:
+			end_time=int(time.time())
+		try:
+			firstTime=self.first_task_executed().start_time
+		except:
+			firstTime=int(time.time()-(7*24*60*60))
+		start_time=end_time-(7*24*60*60)
+		if start_time<firstTime:
+			start_time=firstTime
+		return reverse('lavaFlow.views.homeView', args=[start_time,end_time,self.get_filter_string()])
+	def get_filter_string(self):
+		return 'filter/user_name/%s' % self.id
 	def total_jobs(self):
 		return Job.objects.filter(user=self).count()
 	def total_tasks(self):
@@ -438,11 +509,20 @@ class User(models.Model):
 	def pend_time(self):
 		return Run.objects.filter(job__user=self).aggregate(Sum('pend_time'))['pend_time__sum']
 	def last_job_submitted(self):
-		return Job.objects.filter(user=self).order_by('-submit_time')[0]
+		try:
+			return Job.objects.filter(user=self).order_by('-submit_time')[0]
+		except:
+			return None
 	def last_task_executed(self):
-		return Run.objects.filter(job__user=self).order_by('-end_time')[0]
+		try:
+			return Run.objects.filter(job__user=self).order_by('-end_time')[0]
+		except:
+			return None
 	def last_failed_task(self):
-		return Run.objects.filter(job__user=self,runFinishInfo__exit_reason__name="Done__0").order_by('-end_time')[0]
+		try:
+			return Run.objects.filter(job__user=self,runFinishInfo__exit_reason__name="Done__0").order_by('-end_time')[0]
+		except:
+			return None
 	def avg_pend_time(self):
 		return self.pend_time()/self.total_tasks()
 	def avg_pend_timedelta(self):
@@ -486,8 +566,14 @@ class Queue(models.Model):
 	def __str__(self):
 		return self.name
 	def get_absolute_url(self):
-		end_time=self.last_task_executed().end_time
-		firstTime=self.first_task_executed().start_time
+		try:
+			end_time=self.last_task_executed().end_time
+		except:
+			end_time=int(time.time())
+		try:
+			firstTime=self.first_task_executed().start_time
+		except:
+			firstTime=int(time.time()-(7*24*60*60))
 		start_time=end_time-(7*24*60*60)
 		if start_time<firstTime:
 			start_time=firstTime
@@ -495,13 +581,25 @@ class Queue(models.Model):
 	def get_filter_string(self):
 		return 'filter/queue/%s' % self.id
 	def last_job_submitted(self):
-		return Job.objects.filter(runs__queue=self).order_by('-submit_time')[0]
+		try:
+			return Job.objects.filter(runs__queue=self).order_by('-submit_time')[0]
+		except:
+			return None
 	def first_task_executed(self):
-		return Run.objects.filter(queue=self).order_by('start_time')[0]
+		try:
+			return Run.objects.filter(queue=self).order_by('start_time')[0]
+		except:
+			return None
 	def last_task_executed(self):
-		return Run.objects.filter(queue=self).order_by('-end_time')[0]
+		try:
+			return Run.objects.filter(queue=self).order_by('-end_time')[0]
+		except:
+			return None
 	def last_failed_task(self):
-		return Run.objects.filter(queue=self,runFinishInfo__exit_reason__name="Done__0").order_by('-end_time')[0]
+		try:
+			return Run.objects.filter(queue=self,runFinishInfo__exit_reason__name="Done__0").order_by('-end_time')[0]
+		except:
+			return None
 	def avg_pend_time(self):
 		return self.pend_time()/self.total_tasks()
 	def avg_pend_timedelta(self):
@@ -600,9 +698,15 @@ class Job(models.Model):
 		return datetime.datetime.utcfromtimestamp(self.last_finish_time())
 
 	def first_run(self):
-		return self.runs.order_by('start_time')[0]
+		try:
+			return self.runs.order_by('start_time')[0]
+		except IndexError:
+			return None
 	def last_run(self):
-		return self.runs.order_by('-start_time')[0]
+		try:
+			return self.runs.order_by('-start_time')[0]
+		except IndexError:
+			return None
 	def utilizationN3DS(self):
 		return Run.objects.filter(job=self).utilizationN3DS(self.submit_time, self.last_finish_time(),100, "")
 
@@ -624,7 +728,10 @@ class Run(models.Model):
 	pend_time=models.IntegerField()
 	queue=models.ForeignKey(Queue, related_name='runs')
 	def last_resource_usage(self):
-		return self.resource_usage.filter(is_summary=True).order_by("-timestamp")[0]
+		try:
+			return self.resource_usage.filter(is_summary=True).order_by("-timestamp")[0]
+		except IndexError:
+			return None
 	def otherRuns(self):
 		hosts=self.executions.values('host').distinct()
 		runs=Run.objects.filter(start_time__gte=self.start_time, start_time__lte=self.end_time).filter(end_time__gte=self.end_time).filter(executions__host__in=self.executions.values('host').distinct()).exclude(pk=self.id).distinct()
@@ -795,46 +902,51 @@ class ResourceUsageMetric(models.Model):
 
 class JobSubmitInfo(models.Model):
 	job=models.OneToOneField(Job, related_name='jobSubmitInfo',help_text="The Job Associated with the Event")
-	submit_time=models.IntegerField()
-	def submit_time_datetime(self):
-		return datetime.datetime.utcfromtimestamp(self.submit_time)
-	begin_time=models.IntegerField()
-	def begin_timeDT(self):
-		return datetime.datetime.utcfromtimestamp(self.begin_time)
-	term_time=models.IntegerField()
-	def term_timeDT(self):
-		return datetime.datetime.utcfromtimestamp(self.begin_time)
-
+	user_id=models.IntegerField()
+	options=models.IntegerField()
+	options2=models.IntegerField()
 	num_processors=models.IntegerField()
-	sigValue=models.IntegerField()
-	chkpntPeriod=models.IntegerField()
-	restartPid=models.IntegerField()
-	hostSpec=models.TextField()
+	begin_time=models.IntegerField()
+	term_time=models.IntegerField()
+	checkpoint_signal_value=models.IntegerField()
+	checkpoint_period=models.IntegerField()
+	restart_process_id=models.IntegerField()
+	host_specification_hostname=models.ForeignKey(Host,related_name="hostSpecs")
 	host_factor=models.FloatField()
 	umask=models.IntegerField()
 	queue=models.ForeignKey(Queue, related_name='jobSubmitInfo')
 	requested_resources=models.TextField()
-	submit_host=models.ForeignKey(Host, related_name="jobSubmitInfo")
 	cwd=models.TextField()
-	chkpntDir=models.TextField()
+	checkpoint_dir=models.TextField()
 	input_file=models.TextField()
-	outFile=models.TextField()
-	errFile=models.TextField()
+	output_file=models.TextField()
+	error_file=models.TextField()
 	input_file_spool=models.TextField()
 	command_spool=models.TextField()
-	jobSpoolDir=models.TextField()
-	subHomeDir=models.TextField()
+	job_spool_dir=models.TextField()
+	home_directory=models.TextField()
 	job_file=models.TextField()
-	requested_hosts=models.ManyToManyField(Host)
 	dependency_conditions=models.TextField()
-	timeEvent=models.TextField()
-	job_name=models.TextField()
+	job_name=models.CharField(max_length=1024)
 	command=models.TextField()
+	nxf=models.IntegerField()
 	pre_execution_command=models.TextField()
-	email_user=models.TextField()
+	email_user=models.CharField(
+                              max_length=50,
+                              verbose_name="Mail User",
+                              help_text="Name of the user to whom job related mail was sent"
+                              )
 	project=models.ForeignKey(Project)
-	schedHostType=models.TextField()
+	nios_port=models.IntegerField()
+	max_num_processors=models.IntegerField()
+	scheduled_host_type=models.ForeignKey(Host)
 	login_shell=models.TextField()
-	userGroup=models.TextField()
-	exceptList=models.TextField()
-	rsvId=models.TextField()
+	array_index=models.IntegerField()
+	user_priority=models.IntegerField()
+
+	def submit_time_datetime(self):
+		return datetime.datetime.utcfromtimestamp(self.submit_time)
+	def begin_time_datetime(self):
+		return datetime.datetime.utcfromtimestamp(self.begin_time)
+	def term_time_datetime(self):
+		return datetime.datetime.utcfromtimestamp(self.term_time)
