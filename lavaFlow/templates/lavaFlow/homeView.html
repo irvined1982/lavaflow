@@ -159,7 +159,7 @@
 		
 		</script>
 		<div id="reportData"></div>
-		<div class="tabbable">
+<!--		<div class="tabbable">
 			<ul class="nav nav-tabs" id="utilTabs">
 				<li class="active"><a href="#utilCombined" data-toggle="tab">Overall</a></li>
 				<li><a href="#utilCluster" data-toggle="tab">By Cluster</a></li>
@@ -169,37 +169,50 @@
 				<li><a href="#utilSize" data-toggle="tab">By Size</a></li>
 			</ul>
 			<div class="tab-content">
-				<div class="tab-pane active" id="utilCombined">
+					<div class="tab-pane active" id="utilCombined">
+						-->
 					<h2>Overall Utilization</h2>
-					<div id='utilizationChart'><svg style='height:500px;width:800px;'> </svg></div>
+					<div id='utilizationChart'><svg style='height:500px'> </svg></div>
+					<!--
 				</div>
 				<div class="tab-pane" id="utilCluster">
+					-->
 					<h2>Utilization by Cluster</h2>
-					<div id='utilizationClusterChart'><svg style='height:500px;width:800px;'> </svg></div>
+					<div id='utilizationClusterChart'><svg style='height:500px'> </svg></div>
 					<div id="clusterOverview"></div>
+					<!--
 				</div>
 				<div class="tab-pane" id="utilQueue">
+					-->
 					<h2>Utilization by Queue</h2>
-					<div id='utilizationQueueChart'><svg style='height:500px;width:800px;'> </svg></div>
+					<div id='utilizationQueueChart'><svg style='height:500px'> </svg></div>
 					<div id="utilizationQueueTable"></div>
+					<!--
 				</div>
 				<div class="tab-pane" id="utilProject">
+					-->
 					<h2>Utilization by Project</h2>
-					<div id='utilizationProjectChart'><svg style='height:500px;width:800px;'> </svg></div>
+					<div id='utilizationProjectChart'><svg style='height:500px'> </svg></div>
 					<div id="utilizationProjectTable"></div>
+					<!--
 				</div>
 				<div class="tab-pane" id="utilUser">
+					-->
 					<h2>Utilization by User</h2>
-					<div id='utilizationUserChart'><svg style='height:500px;width:800px;'> </svg></div>
+					<div id='utilizationUserChart'><svg style='height:500px'> </svg></div>
 					<div id="utilizationUserTable"></div>
+					<!--
 				</div>
 				<div class="tab-pane" id="utilSize">
+					-->
 					<h2>Utilization by Job Size</h2>
-					<div id='utilizationSizeChart'><svg style='height:500px;width:800px;'></svg></div>
+					<div id='utilizationSizeChart'><svg style='height:500px'></svg></div>
 					<div id="utilizationSizeTable"></div>
+					<!--
 				</div>
 			</div>
 		</div>
+					-->
 
 
 
@@ -223,6 +236,17 @@
 				nv.utils.windowResize(utilChart.update);
 				return utilChart;
 			});
+			$('a[data-toggle="tab"]').on('shown', function (e) {
+				utilChart.update();
+				utilClusterChart.update();
+				utilQueueChart.update();
+				utilProjChart.update();
+				utilUserChart.update();
+				utilSizeChart.update();
+				exitChart.update();
+				sizeChart.update();
+		    })
+
 			var utilClusterChart;
 			nv.addGraph(function() {
 				utilClusterChart = nv.models.stackedAreaChart();
