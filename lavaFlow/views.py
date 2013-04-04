@@ -454,7 +454,7 @@ def filterSet(set,fields,filterString):
 def filterJobs(jobs,filterString):
 	fields={
 		'cluster':'cluster',
-		'exit_status_code':'runs__runFinishInfo__exit_status_code',
+		'exit_status_code':'runs__runFinishInfo__exit_reason',
 		'num_processors':'runs__num_processors',
 		'user_name':'user',
 		'executionHost':'runs__executions__host',
@@ -465,7 +465,7 @@ def filterJobs(jobs,filterString):
 def filterRuns(runs, filterString):
 	fields={
 		'cluster':'job__cluster',
-		'exit_status_code':'runFinishInfo__exit_status_code',
+		'exit_status_code':'runFinishInfo__exit_reason',
 		'num_processors':'num_processors',
 		'user_name':'job__user',
 		'executionHost':'executions__host',
