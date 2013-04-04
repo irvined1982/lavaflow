@@ -43,6 +43,7 @@ from django.http import Http404
 from lavaFlow.models import *
 log=logging.getLogger(__name__)
 
+@cache_page(60 * 15)
 def clusterList(request):
 	paginator = Paginator(Cluster.objects.all(), 30)
 	page = request.GET.get('page')
@@ -55,6 +56,8 @@ def clusterList(request):
 	except EmptyPage:
 		clusters=paginator.page(paginator.num_pages)
 	return render_to_response("lavaFlow/clusterList.html",{'clusters':clusters},context_instance=RequestContext(request))
+
+@cache_page(60 * 15)
 def projectList(request):
 	paginator = Paginator(Project.objects.all(), 30)
 	page = request.GET.get('page')
@@ -68,6 +71,7 @@ def projectList(request):
 		projects=paginator.page(paginator.num_pages)
 	return render_to_response("lavaFlow/projectList.html",{'projects':projects},context_instance=RequestContext(request))
 
+@cache_page(60 * 15)
 def queueList(request):
 	paginator = Paginator(Queue.objects.all(), 30)
 	page = request.GET.get('page')
@@ -81,6 +85,8 @@ def queueList(request):
 		queues=paginator.page(paginator.num_pages)
 	return render_to_response("lavaFlow/queueList.html",{'queues':queues},context_instance=RequestContext(request))
 
+
+@cache_page(60 * 15)
 def hostList(request):
 	paginator = Paginator(Host.objects.all(), 30)
 	page = request.GET.get('page')
@@ -94,6 +100,8 @@ def hostList(request):
 		hosts=paginator.page(paginator.num_pages)
 	return render_to_response("lavaFlow/hostList.html",{'hosts':hosts},context_instance=RequestContext(request))
 
+
+@cache_page(60 * 15)
 def userList(request):
 	paginator = Paginator(User.objects.all(), 30)
 	page = request.GET.get('page')
@@ -107,14 +115,20 @@ def userList(request):
 		users=paginator.page(paginator.num_pages)
 	return render_to_response("lavaFlow/userList.html",{'users':users},context_instance=RequestContext(request))
 
+
+@cache_page(60 * 15)
 def jobDetailView(request,id):
 	job=get_object_or_404(Job,pk=id)
 	return render_to_response('lavaFlow/jobDetailView.html',{'job':job,},context_instance=RequestContext(request))
 
+
+@cache_page(60 * 15)
 def runDetailView(request,id):
 	run=get_object_or_404(Run,pk=id)
 	return render_to_response('lavaFlow/runDetailView.html',{'run':run},context_instance=RequestContext(request))
 
+
+@cache_page(60 * 15)
 def jobSearchView(request):
 	query = request.GET.get('jobid')
 	jobs=None
@@ -359,6 +373,8 @@ FRIENDLY_NAMES={
 		}
 
 
+
+@cache_page(60 * 15)
 def homeView(request,start_time=-1, end_time=-1, filterString=''):
 	log.debug(filterString)
 	return render_to_response("lavaFlow/homeView.html",{'filters':filterStringToFilterJson(filterString), 'start_time':start_time,'end_time':end_time,'filterString':filterString},context_instance=RequestContext(request))
@@ -392,6 +408,8 @@ def filterStringToFilterJson(filterString):
 ## Returns a JSON object with the timestamps from the 
 #  first job submitted and last job to exit
 #  Times are seconds since Epoch in UTC time.
+
+@cache_page(60 * 15)
 def getReportRange(date):
 	data={
 		'end_time':Run.objects.aggregate(Max('end_time'))['end_time__max'],
@@ -472,6 +490,8 @@ ALLOWED_GROUPS={
 				'friendlyName':"User",
 			}
 		}
+
+@cache_page(60 * 15)
 def groupedUtilizationTableModule(request, start_time,end_time,groupString,filterString=''):
 	groups=groupString.split("/")
 	friendlyNames=[]
@@ -504,6 +524,8 @@ def groupedUtilizationTableModule(request, start_time,end_time,groupString,filte
 		row['pend_time']=datetime.timedelta(seconds=row['totalPend_time'])
 	return render_to_response("lavaFlow/modules/groupedUtilization.html",{'fields':friendlyNames,'rows':rows,},context_instance=RequestContext(request))
 
+
+@cache_page(60 * 15)
 def busyUsersModule(request, start_time, end_time, field, filterString=''):
 	ALLOWED_FIELDS=['sumPend','sumWall','sumCpu','avgPend','avgWall','avgCpu','maxPend','maxWall','maxCpu','minPend','minWall','minCpu']
 	if field.lstrip('-') not in ALLOWED_FIELDS:
@@ -544,6 +566,8 @@ def busyUsersModule(request, start_time, end_time, field, filterString=''):
 		u['user']=User.objects.get(pk=u['element__job__user__id'])
 	return render_to_response("lavaFlow/modules/busyUsers.html",{'users':users},context_instance=RequestContext(request))
 
+
+@cache_page(60 * 15)
 def bestHostModule(request, start_time, end_time, filterString=''):
 	hosts=filterRuns(Run.objects.filter(element__job__submit_time__lte=end_time, end_time__gte=start_time, runFinishInfo__job_status__job_status="Done"),filterString).values('executions__host').annotate(
 			numRuns=Count('id'),
@@ -558,6 +582,8 @@ def bestHostModule(request, start_time, end_time, filterString=''):
 	return render_to_response("lavaFlow/modules/busyHosts.html",{'hosts':hosts},context_instance=RequestContext(request))
 
 
+
+@cache_page(60 * 15)
 def worstHostModule(request, start_time, end_time,filterString=''):
 	hosts=filterRuns(Run.objects.exclude(element__job__submit_time__lte=end_time, end_time__gte=start_time, runFinishInfo__job_status__job_status="Done"),filterString).exclude(executions__host__isnull=True).values('executions__host').annotate(
 			numRuns=Count('id'),
@@ -571,6 +597,8 @@ def worstHostModule(request, start_time, end_time,filterString=''):
 		h['sumCpu']=datetime.timedelta(seconds=h['sumCpu'])
 	return render_to_response("lavaFlow/modules/busyHosts.html",{'hosts':hosts},context_instance=RequestContext(request))
 
+
+@cache_page(60 * 15)
 def busySubmitModule(request, start_time, end_time,filterString=''):
 	hosts=filterRuns(Run.objects.filter(element__job__submit_time__lte=end_time, end_time__gte=start_time),filterString).values('element__job__submit_host').annotate(
 			numRuns=Count('id'),
@@ -585,6 +613,8 @@ def busySubmitModule(request, start_time, end_time,filterString=''):
 	return render_to_response("lavaFlow/modules/busyHosts.html",{'hosts':hosts},context_instance=RequestContext(request))
 
 
+
+@cache_page(60 * 15)
 def jobSizeChartModule(request, start_time, end_time, filterString=''):
 	rows=filterRuns(Run.objects.filter(element__job__submit_time__lte=end_time, end_time__gte=start_time),filterString).values('num_processors').annotate(
 			numRuns=Count('num_processors'),
@@ -620,6 +650,8 @@ def jobSizeChartModule(request, start_time, end_time, filterString=''):
 	return HttpResponse(json.dumps(values), mimetype='application/json')
 
 
+
+@cache_page(60 * 15)
 def jobSizeTableModule(request, start_time, end_time,filterString=''):
 	rows=filterRuns(Run.objects.filter(element__job__submit_time__lte=end_time, end_time__gte=start_time),filterString).values('num_processors').annotate(
 			numRuns=Count('num_processors'),
@@ -647,6 +679,8 @@ def jobSizeTableModule(request, start_time, end_time,filterString=''):
 			r[f]=datetime.timedelta(seconds=r[f])
 	return render_to_response("lavaFlow/modules/jobSizeTable.html",{'rows':rows,'start_time':start_time,'end_time':end_time,'filterString':filterString},context_instance=RequestContext(request))
 
+
+@cache_page(60 * 15)
 def jobExitTableModule(request, start_time, end_time,filterString=''):
 	info=filterRuns(Run.objects.filter(
 				element__job__submit_time__lte=end_time, 
@@ -674,6 +708,8 @@ def jobExitTableModule(request, start_time, end_time,filterString=''):
 		i['exit']=ExitReason.objects.get(pk=i['runFinishInfo__exit_reason'])
 	return render_to_response("lavaFlow/modules/jobExitTable.html",{'rows':info,'start_time':start_time,'end_time':end_time,'filterString':filterString},context_instance=RequestContext(request))
 
+
+@cache_page(60 * 15)
 def jobExitChartModule(request, start_time, end_time,filterString=''):
 	rows=filterRuns(Run.objects.filter(
 				element__job__submit_time__lte=end_time, 
@@ -704,6 +740,8 @@ def jobExitChartModule(request, start_time, end_time,filterString=''):
 		values.append(series)
 	return HttpResponse(json.dumps(values), mimetype='application/json')
 
+
+@cache_page(60 * 15)
 def jobListModule(request, start_time, end_time, filterString=''):
 	jobs=filterJobs(Job.objects.filter(
 			submit_time__lte=end_time, 
@@ -721,6 +759,8 @@ def jobListModule(request, start_time, end_time, filterString=''):
 		jobs= paginator.page(paginator.num_pages)
 	return render_to_response("lavaFlow/modules/jobList.html",{'jobs':jobs},context_instance=RequestContext(request))
 
+
+@cache_page(60 * 15)
 def utilizationModule(request, start_time, end_time,filterString=''):
 	util=filterRuns(Run.objects.filter(
 				element__job__submit_time__lte=end_time, 
@@ -729,6 +769,8 @@ def utilizationModule(request, start_time, end_time,filterString=''):
 	data=util.utilizationN3DS(start_time, end_time,500,"")
 	return HttpResponse(data, mimetype='application/json')
 
+
+@cache_page(60 * 15)
 def groupedUtilizationChartModule(request, start_time, end_time, groupString, filterString=''):
 	groups=groupString.split("/")
 	util=filterRuns(Run.objects.filter(
