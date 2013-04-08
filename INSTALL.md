@@ -23,6 +23,9 @@ commands
 ```bash
 python lavaflow-venv.py
 python lavaflow-bootstrap.py /tmp/lavaflow
+
+## --help option to both commands will give information on further options 
+## that are available.
 ```
 
 Assuming this is successful the ```/tmp/lavaflow``` directory will contain a 
