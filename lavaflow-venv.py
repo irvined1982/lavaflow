@@ -79,6 +79,9 @@ def after_install(options, home_dir):
                             cwd=os.path.abspath(lavaflow))
         except:
             logger.notify('git checkout failed')
+
+    ## TODO:
+    ## possibly add symlinks to local_settings.py or settings.py from a private repository...
     
     activate_this = os.path.join(home_dir, 'bin', 'activate_this.py')
     execfile(activate_this, dict(__file__=activate_this))
