@@ -17,8 +17,8 @@ EXTRA_TEXT = """
 import pwd
 import sys
 
-LAVAFLOW_DIST_LOCATION='https://github.com/kiwiroy/lavaflow.git'
-LAVAFLOW_DIST_BRANCH='feature/django-1.5'
+LAVAFLOW_DIST_LOCATION='https://github.com/irvined1982/lavaflow.git'
+LAVAFLOW_DIST_BRANCH='master'
 
 def extend_parser(parser):
     parser.add_option(
