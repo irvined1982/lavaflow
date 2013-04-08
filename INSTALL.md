@@ -46,8 +46,8 @@ export LAVAFLOW_DBUSER=<database-user>
 export LAVAFLOW_DBPASS=<database-pass>
 ```
 
-It will already contain the ```LAVAFLOW_ROOT``` variable - set in this case to 
-```/tmp/lavaflow/lavaflow```.
+It will already contain the ```LAVAFLOW_ROOT``` variable - set in this case 
+to ```/tmp/lavaflow/lavaflow```
 
 ### Database
 
