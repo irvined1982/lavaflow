@@ -42,11 +42,35 @@ size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp)
 			curl_easy_cleanup(curl);
 		}
 	}
+
+        //params find and replace cannot be NULL
+        void findAndReplace( std::string& source, const char* find, const char* replace )
+	{
+	  size_t findLen = strlen(find);
+	  size_t replaceLen = strlen(replace);
+	  size_t pos = 0;
+	  
+	  //search for the next occurrence of find within source
+	  while ((pos = source.find( find, pos)) != std::string::npos)
+	    {
+	      //replace the found string with the replacement
+	      source.replace( pos, findLen, replace );
+	      
+	      //the next line keeps you from searching your replace string, 
+	      //so your could replace "hello" with "hello world" 
+	      //and not have it blow chunks.
+	      pos += replaceLen; 
+	    }
+	}
+
 	int addJString(std::string &data, const char *name, const char *value, int comma){
-		data+="\"";
+	        std::string temp = value;
+		findAndReplace(temp, "\\", "\\\\");
+		findAndReplace(temp, "\"", "\\\"");
+	        data+="\"";
 		data+=name;
 		data+="\":\"";
-		data+=value;
+		data+=temp.c_str();
 		data+="\"";
 		if (comma){
 			data+=",";
