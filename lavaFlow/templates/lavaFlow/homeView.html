@@ -7,7 +7,7 @@
 		<script>
 			 var selectedMin={{ start_time }};
 			 var selectedMax={{ end_time }};
-			 $.getJSON("{% url lavaFlow.views.getReportRange %}", function(data) {
+			 $.getJSON("{% url "lavaFlow.views.getReportRange" %}", function(data) {
 				 var end_time=selectedMax;
 				 var start_time=selectedMin;
 				 if ( selectedMin < 0 || selectedMax < 0 ){
@@ -410,7 +410,7 @@
 				if (filterString.length>0){
 					filterString+="/";
 				}
-				 $.get("{% url lavaFlow.views.homeView %}modules/jobList/"+selectedMin+"/"+selectedMax+"/"+filterString+"?page="+page, function(data) {
+				 $.get("{% url "lavaFlow.views.homeView" %}modules/jobList/"+selectedMin+"/"+selectedMax+"/"+filterString+"?page="+page, function(data) {
 					 $('#jobList').html(data);
 				 });
 			}
@@ -423,89 +423,89 @@
 					filterString+="/";
 				}
 				 $("#reportData").text('Updating Report...');
-				 $.get("{% url lavaFlow.views.homeView %}modules/groupedUtilizationTable/"+selectedMin+"/"+selectedMax+"/group/job__cluster__name/group/"+filterString, function(data) {
+				 $.get("{% url "lavaFlow.views.homeView" %}modules/groupedUtilizationTable/"+selectedMin+"/"+selectedMax+"/group/job__cluster__name/group/"+filterString, function(data) {
 					 $('#clusterOverview').html(data);
 				 });
-				 $.get("{% url lavaFlow.views.homeView %}modules/groupedUtilizationTable/"+selectedMin+"/"+selectedMax+"/group/queue__name/group/"+filterString, function(data) {
+				 $.get("{% url "lavaFlow.views.homeView" %}modules/groupedUtilizationTable/"+selectedMin+"/"+selectedMax+"/group/queue__name/group/"+filterString, function(data) {
 					 $('#utilizationQueueTable').html(data);
 				 });
-				 $.get("{% url lavaFlow.views.homeView %}modules/groupedUtilizationTable/"+selectedMin+"/"+selectedMax+"/group/job__user__user_name/group/"+filterString, function(data) {
+				 $.get("{% url "lavaFlow.views.homeView" %}modules/groupedUtilizationTable/"+selectedMin+"/"+selectedMax+"/group/job__user__user_name/group/"+filterString, function(data) {
 					 $('#utilizationUserTable').html(data);
 				 });
-				 $.get("{% url lavaFlow.views.homeView %}modules/groupedUtilizationTable/"+selectedMin+"/"+selectedMax+"/group/num_processors/group/"+filterString, function(data) {
+				 $.get("{% url "lavaFlow.views.homeView" %}modules/groupedUtilizationTable/"+selectedMin+"/"+selectedMax+"/group/num_processors/group/"+filterString, function(data) {
 					 $('#utilizationSizeTable').html(data);
 				 });
-				 $.get("{% url lavaFlow.views.homeView %}modules/groupedUtilizationTable/"+selectedMin+"/"+selectedMax+"/group/projects__name/group/"+filterString, function(data) {
+				 $.get("{% url "lavaFlow.views.homeView" %}modules/groupedUtilizationTable/"+selectedMin+"/"+selectedMax+"/group/projects__name/group/"+filterString, function(data) {
 					 $('#utilizationProjectTable').html(data);
 				 });
-				 $.get("{% url lavaFlow.views.homeView %}modules/busyUsers/"+selectedMin+"/"+selectedMax+"/-sumCpu/"+filterString, function(data) {
+				 $.get("{% url "lavaFlow.views.homeView" %}modules/busyUsers/"+selectedMin+"/"+selectedMax+"/-sumCpu/"+filterString, function(data) {
 					 $('#heavyUsers').html(data);
 				 });
-				 $.get("{% url lavaFlow.views.homeView %}modules/busyUsers/"+selectedMin+"/"+selectedMax+"/-sumPend/"+filterString, function(data) {
+				 $.get("{% url "lavaFlow.views.homeView" %}modules/busyUsers/"+selectedMin+"/"+selectedMax+"/-sumPend/"+filterString, function(data) {
 					 $('#patientUsers').html(data);
 				 });
-				 $.get("{% url lavaFlow.views.homeView %}modules/bestHosts/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
+				 $.get("{% url "lavaFlow.views.homeView" %}modules/bestHosts/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
 					 $('#bestHosts').html(data);
 				 });
-				 $.get("{% url lavaFlow.views.homeView %}modules/worstHosts/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
+				 $.get("{% url "lavaFlow.views.homeView" %}modules/worstHosts/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
 					 $('#worstHosts').html(data);
 				 });
-				 $.get("{% url lavaFlow.views.homeView %}modules/busySubmit/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
+				 $.get("{% url "lavaFlow.views.homeView" %}modules/busySubmit/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
 					 $('#busySubmits').html(data);
 				 });
-				 $.get("{% url lavaFlow.views.homeView %}modules/jobSizeTable/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
+				 $.get("{% url "lavaFlow.views.homeView" %}modules/jobSizeTable/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
 					 $('#jobSizeTable').html(data);
 				 });
 
-				 $.get("{% url lavaFlow.views.homeView %}modules/jobExitTable/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
+				 $.get("{% url "lavaFlow.views.homeView" %}modules/jobExitTable/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
 					 $('#jobExitTable').html(data);
 				 });
-				 $.get("{% url lavaFlow.views.homeView %}modules/jobList/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
+				 $.get("{% url "lavaFlow.views.homeView" %}modules/jobList/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
 					 $('#jobList').html(data);
 				 });
-				 $.getJSON("{% url lavaFlow.views.homeView %}modules/jobExitChart/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
+				 $.getJSON("{% url "lavaFlow.views.homeView" %}modules/jobExitChart/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
 							d3.select('#jobExitChart svg')
 							.datum(data)
 							.transition().duration(500)
 							.call(exitChart);
 				});
-				 $.getJSON("{% url lavaFlow.views.homeView %}modules/utilization/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
+				 $.getJSON("{% url "lavaFlow.views.homeView" %}modules/utilization/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
 							d3.select('#utilizationChart svg')
 							.datum(data)
 							.transition().duration(500)
 							.call(utilChart);
 				});
-				 $.getJSON("{% url lavaFlow.views.homeView %}modules/groupedUtilization/"+selectedMin+"/"+selectedMax+"/group/job__cluster__name/group/"+filterString, function(data) {
+				 $.getJSON("{% url "lavaFlow.views.homeView" %}modules/groupedUtilization/"+selectedMin+"/"+selectedMax+"/group/job__cluster__name/group/"+filterString, function(data) {
 							d3.select('#utilizationClusterChart svg')
 							.datum(data)
 							.transition().duration(500)
 							.call(utilClusterChart);
 				});
-				 $.getJSON("{% url lavaFlow.views.homeView %}modules/groupedUtilization/"+selectedMin+"/"+selectedMax+"/group/queue__name/group/"+filterString, function(data) {
+				 $.getJSON("{% url "lavaFlow.views.homeView" %}modules/groupedUtilization/"+selectedMin+"/"+selectedMax+"/group/queue__name/group/"+filterString, function(data) {
 							d3.select('#utilizationQueueChart svg')
 							.datum(data)
 							.transition().duration(500)
 							.call(utilUserChart);
 				});
-				 $.getJSON("{% url lavaFlow.views.homeView %}modules/groupedUtilization/"+selectedMin+"/"+selectedMax+"/group/job__user__user_name/group/"+filterString, function(data) {
+				 $.getJSON("{% url "lavaFlow.views.homeView" %}modules/groupedUtilization/"+selectedMin+"/"+selectedMax+"/group/job__user__user_name/group/"+filterString, function(data) {
 							d3.select('#utilizationUserChart svg')
 							.datum(data)
 							.transition().duration(500)
 							.call(utilUserChart);
 				});
-				 $.getJSON("{% url lavaFlow.views.homeView %}modules/groupedUtilization/"+selectedMin+"/"+selectedMax+"/group/num_processors/group/"+filterString, function(data) {
+				 $.getJSON("{% url "lavaFlow.views.homeView" %}modules/groupedUtilization/"+selectedMin+"/"+selectedMax+"/group/num_processors/group/"+filterString, function(data) {
 							d3.select('#utilizationSizeChart svg')
 							.datum(data)
 							.transition().duration(500)
 							.call(utilSizeChart);
 				});
-				 $.getJSON("{% url lavaFlow.views.homeView %}modules/groupedUtilization/"+selectedMin+"/"+selectedMax+"/group/projects__name/group/"+filterString, function(data) {
+				 $.getJSON("{% url "lavaFlow.views.homeView" %}modules/groupedUtilization/"+selectedMin+"/"+selectedMax+"/group/projects__name/group/"+filterString, function(data) {
 							d3.select('#utilizationProjectChart svg')
 							.datum(data)
 							.transition().duration(500)
 							.call(utilUserChart);
 				});
-				 $.getJSON("{% url lavaFlow.views.homeView %}modules/jobSizeChart/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
+				 $.getJSON("{% url "lavaFlow.views.homeView" %}modules/jobSizeChart/"+selectedMin+"/"+selectedMax+"/"+filterString, function(data) {
 							d3.select('#jobSizeChart svg')
 							.datum(data)
 							.transition().duration(500)

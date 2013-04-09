@@ -18,7 +18,7 @@
 # $Rev: 158 $:
 # $Author: irvined $:
 # $Date: 2012-10-31 23:42:17 +0100 (Wed, 31 Oct 2012) $:
-from django.conf.urls.defaults import patterns, include, url
+from django.conf.urls import patterns, include, url
 from django.views.generic import ListView
 from django.views.generic import DetailView
 from lavaFlow.models import * 
