@@ -54,7 +54,10 @@ to ```/tmp/lavaflow/lavaflow```
 
 ### Database
 
-*To be written*
+```bash
+source lavaflow-env/bin/activate
+python lavaflow/manage.py syncdb
+```
 
 ## Boot
 
