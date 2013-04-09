@@ -54,6 +54,15 @@ to ```/tmp/lavaflow/lavaflow```
 
 ### Database
 
+Create a database using the technology you prefer. e.g. mysql
+
+
+```bash
+mysql -e 'CREATE DATABASE lavaflow;'
+```
+
+The database can be populated directly using the models from the codebase thus
+
 ```bash
 source lavaflow-env/bin/activate
 python lavaflow/manage.py syncdb
