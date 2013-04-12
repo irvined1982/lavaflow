@@ -73,9 +73,9 @@ def after_install(options, home_dir):
     if options.lavaflow_dist_branch:
         logger.notify('Updating & Switching to branch "' + options.lavaflow_dist_branch + '"')
         try:
-	    call_subprocess(['git', 'pull', 'origin', 'master' ],
-                            cwd=os.path.abspath(lavaflow))
             call_subprocess(['git', 'checkout', options.lavaflow_dist_branch ],
+                            cwd=os.path.abspath(lavaflow))
+	    call_subprocess(['git', 'pull', 'origin', options.lavaflow_dist_branch ],
                             cwd=os.path.abspath(lavaflow))
         except:
             logger.notify('git checkout failed')
