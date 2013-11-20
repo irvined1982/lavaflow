@@ -30,923 +30,248 @@ from django.core.urlresolvers import reverse
 from django.core.cache import cache
 log=logging.getLogger(__name__)
 
-
-class QuerySetManager(models.Manager):
-	use_for_related_fields = True
-	def __init__(self, qs_class=models.query.QuerySet):
-		self.queryset_class = qs_class
-		super(QuerySetManager, self).__init__()
-
-	def get_query_set(self):
-		return self.queryset_class(self.model)
-
-	def __getattr__(self, attr, *args):
-		try:
-			return getattr(self.__class__, attr, *args)
-		except AttributeError:
-			return getattr(self.get_query_set(), attr, *args) 
-
-
-class RunQuerySet(models.query.QuerySet):
-	def utilizationN3DS(self, reportStartTime, reportEndTime,maxBlocks,filterString):
-		return json.dumps(self.utilization(reportStartTime, reportEndTime,maxBlocks,filterString))
-	def utilization(self, reportStartTime, reportEndTime,maxBlocks,filterString):
-		log.debug("TEST")
-		blockSize=60 # 60 second block size which will then be downsampled as required.
-		reportStartTime=int(int(reportStartTime)/blockSize)*blockSize
-		reportEndTime=int(int(reportEndTime)/blockSize)*blockSize
-		
-		actualBlocks=((reportEndTime-reportStartTime)/blockSize)+1
-
-		running=array.array('l', [0]) * (actualBlocks)
-		pending=array.array('l', [0]) * (actualBlocks)
-
-		for run in self.filter(end_time__gte=reportStartTime, start_time__lte=reportEndTime).values('num_processors','element__job__submit_time','start_time','end_time'):
-			cores=run['num_processors']
-			startMinute=int(run['start_time']/blockSize)*blockSize
-			endMinute=int(run['end_time']/blockSize)*blockSize
-			subMinute=int(run['element__job__submit_time']/blockSize)*blockSize
-
-			if (subMinute<=reportStartTime):
-				pending[0]+=cores
-			elif (subMinute<=reportEndTime):
-				subBlock=int((subMinute-reportStartTime)/blockSize)
-				pending[subBlock]+=cores
-
-			if (startMinute<=reportStartTime):
-				pending[0]-=cores
-				running[0]+=cores
-			elif (startMinute<=reportEndTime):
-				startBlock=int((startMinute-reportStartTime)/blockSize)
-				running[startBlock]+=cores
-				pending[startBlock]-=cores
-
-			if (endMinute<=reportEndTime):
-				endBlock=int((endMinute-reportStartTime)/blockSize)
-				running[endBlock]-=cores
-		runningJobs=0
-		pendingJobs=0
-
-		for i in range(len(pending)):
-			runningJobs+=running[i]
-			running[i]=runningJobs
-			pendingJobs+=pending[i]
-			pending[i]=pendingJobs
-
-		block=reportStartTime
-		index=0
-
-		# must downsize, find a slice size that works.:
-		sliceSize=int(actualBlocks/maxBlocks)
-		if sliceSize<1:
-			sliceSize=1
-
-		currentSliceStart=0
-		rRunning=[]
-		rPending=[]
-		while (currentSliceStart<actualBlocks):
-			currentSliceEnd=currentSliceStart+sliceSize
-			if currentSliceEnd>=actualBlocks:
-				currentSliceEnd=actualBlocks-1
-				if currentSliceStart==currentSliceEnd:
-					break
-			sTime=(currentSliceStart*blockSize)+reportStartTime
-			p=pending[currentSliceStart:currentSliceEnd]
-			r=running[currentSliceStart:currentSliceEnd]
-
-			pval=sum(p)/len(p)
-			rval=sum(r)/len(r)
-			rPending.append({
-					'x':sTime,
-					'y':pval,
-				})
-			rRunning.append({
-					'x':sTime,
-					'y':rval,
-				})
-			currentSliceStart+=sliceSize
-		data=[
-				{
-					'key':'Slots In Use',
-					'values':rRunning,
-				},
-				{
-					'key':'Slots Requested',
-					'values':rPending,
-				},
-			]
-		return data
-	
-	def complexUtilization(self, reportStartTime, reportEndTime, maxBlocks, groups=[]):
-		if len(groups)<1:
-			raise ValueError
-
-		seriesList=[]
-		for run in self.filter(end_time__gte=reportStartTime, start_time__lte=reportEndTime).values(*groups).distinct(*groups):
-			gdict={}
-			groupName=""
-			for group in groups:
-				if len(groupName)>0:
-					groupName+=" "
-				groupName+=str(run[group])
-				gdict[group]=run[group]
-			runs=self.filter(**gdict)
-			data=runs.utilization(reportStartTime, reportEndTime, maxBlocks,"")
-			data[0]['key']=groupName+" Running"
-			data[1]['key']=groupName+" Pending"
-			seriesList.append(data[0])
-			seriesList.append(data[1])
-		return json.dumps(seriesList)
-
-
-class Host(models.Model):
-	host_name=models.CharField(max_length=100)
-	def get_absolute_url(self):
-		try:
-			end_time=self.last_task_executed().end_time
-		except:
-			end_time=int(time.time())
-		try:
-			firstTime=self.first_task_executed().start_time
-		except:
-			firstTime=int(time.time()-(7*24*60*60))
-		start_time=end_time-(7*24*60*60)
-		if start_time<firstTime:
-			start_time=firstTime
-		return reverse('lavaFlow.views.homeView', args=[start_time,end_time,self.get_filter_string()])
-	def get_filter_string(self):
-		return 'filter/executionHost/%s' % self.id
-	def __unicode__(self):
-		return u'%s' % self.host_name
-	def __str__(self):
-		return self.host_name
-	def hostUsage(self):
-		info=self.executions.values('run__element__job__cluster','run__queue','run__runFinishInfo__exit_reason').annotate(
-				numRuns=Count('run__num_processors'),
-				).order_by('-numRuns')
-		for i in info:
-			i['cluster']=Cluster.objects.get(pk=i['run__element__job__cluster'])
-			i['queue']=Queue.objects.get(pk=i['run__queue'])
-			i['exit']=ExitReason.objects.get(pk=i['run__runFinishInfo__exit_reason'])
-		return info
-	def submittedJobs(self):
-		return Job.objects.filter(submit_host=self).count()
-	def executed_tasks(self):
-		return Run.objects.filter(executions__host=self).distinct().count()
-	def first_run(self):
-		try:
-			return Run.objects.filter(executions__host=self).order_by('start_time')[0]
-		except:
-			return None
-	def last_run(self):
-		try:
-			return Run.objects.filter(executions__host=self).order_by('-start_time')[0]
-		except:
-			return None
-	def completed_tasks(self):
-		return Run.objects.filter(executions__host=self,runFinishInfo__exit_reason__name="Done__0").distinct().count()
-
-	def failed_tasks(self):
-		return Run.objects.filter(executions__host=self).exclude(runFinishInfo__exit_reason__name="Done__0").distinct().count()
-	def failure_rate(self):
-		try:
-			return round(float(self.failed_tasks())/float(self.completed_tasks()+self.failed_tasks()),2)
-		except:
-			return 0
-	def submitUsage(self):
-		info=Run.objects.filter(element__job__submit_host=self).values('element__job__cluster','queue').annotate(
-				numJobs=Count('element__job'),
-				numTasks=Count('element'),
-				numRuns=Count('num_processors'),
-				cpu_time=Sum('cpu_time'),
-				wall_time=Sum('wall_time'),
-				)
-		for i in info:
-			i['cluster']=Cluster.objects.get(pk=i['element__job__cluster'])
-			i['queue']=Queue.objects.get(pk=i['queue'])
-			i['cpu_time']=datetime.timedelta(seconds=i['cpu_time'])
-			i['wall_time']=datetime.timedelta(seconds=i['wall_time'])
-		return info
-
-class Service(models.Model):
-	name=models.CharField(max_length=512)
-
-class ExitReason(models.Model):
-	name=models.CharField(max_length=100)
-	description=models.CharField(max_length=1024)
-	value=models.IntegerField()
-	def __unicode__(self):
-		return u'%s' % self.name
-	def __str__(self):
-		return self.name
-		
-	def get_filter_string(self):
-		return 'filter/exit_status_code/%s' % self.id
-
-
-
-class JobStatus(models.Model):
-    job_status=models.CharField(max_length=100)
-
 class Cluster(models.Model):
 	name=models.CharField(
 			max_length=100,
 			unique=True,
+			db_index=True,
 			help_text='The name of the cluster',
 			)
+
 	def __unicode__(self):
 		return u'%s' % self.name
+
 	def __str__(self):
 		return self.name
-	def get_absolute_url(self):
-		try:
-			end_time=self.last_task_executed().end_time
-		except:
-			end_time=int(time.time())
-		try:
-			firstTime=self.first_task_executed().start_time
-		except:
-			firstTime=int(time.time()-(7*24*60*60))
-		start_time=end_time-(7*24*60*60)
-		if start_time<firstTime:
-			start_time=firstTime
-		return reverse('lavaFlow.views.homeView', args=[start_time,end_time,self.get_filter_string()])
-	def get_filter_string(self):
-		return 'filter/cluster/%s' % self.id
-	def last_job_submitted(self):
-		try:
-			return Job.objects.filter(cluster=self).order_by('-submit_time')[0]
-		except: 
-			return None
-	def first_task_executed(self):
-		try:
-			return Run.objects.filter(job__cluster=self).order_by('start_time')[0]
-		except: 
-			return None
-	def last_task_executed(self):
-		try:
-			return Run.objects.filter(job__cluster=self).order_by('-end_time')[0]
-		except: 
-			return None
-	def last_failed_task(self):
-		try:
-			return Run.objects.filter(job__cluster=self,runFinishInfo__exit_reason__name="Done__0").order_by('-end_time')[0]
-		except: 
-			return None
-	def avg_pend_time(self):
-		return self.pend_time()/self.total_tasks()
-	def avg_pend_timedelta(self):
-		return datetime.timedelta(seconds=self.avg_pend_time())
-	def avg_pend_pct(self):
-		return round(self.pend_time()/self.wall_time(), 2)
-	def userStats(self,field):
-		users=self.jobs.values('user').annotate(
-				numJobs=Count('job_id'),
-				numTasks=Count('elements'),
-				numRuns=Count('runs'),
-				sumPend=Sum('runs__pend_time'),
-				sumWall=Sum('runs__wall_time'),
-				sumCpu=Sum('runs__cpu_time'),
-				avgPend=Avg('runs__pend_time'),
-				avgWall=Avg('runs__wall_time'),
-				avgCpu=Avg('runs__cpu_time'),
-				maxPend=Max('runs__pend_time'),
-				maxWall=Max('runs__wall_time'),
-				maxCpu=Max('runs__cpu_time'),
-				minPend=Min('runs__pend_time'),
-				minWall=Min('runs__wall_time'),
-				minCpu=Min('runs__cpu_time'),
-				).order_by(field)[0:10]
-		for u in users:
-			for f in [
-				'sumPend',
-				'sumWall',
-				'sumCpu',
-				'avgPend',
-				'avgWall',
-				'avgCpu',
-				'maxPend',
-				'maxWall',
-				'maxCpu',
-				'minPend',
-				'minWall',
-				'minCpu']:
-				u[f]=datetime.timedelta(seconds=u[f])
-			u['user']=User.objects.get(pk=u['user'])
-		return users
-	def busyUsers(self):
-		return self.userStats('-sumCpu')
-	def patientUsers(self):
-		return self.userStats('-avgPend')
 
-	def hostStats(self,order):
-		hosts=self.jobs.values('runs__executions__host').annotate(
-				numRuns=Count('runs')
-				).order_by(order)[0:10]
-		for h in hosts:
-			try:
-				h['host']=Host.objects.get(pk=h['runs__executions__host'])
-			except:
-				h['host']='None'
-		return hosts
-	def busyHosts(self):
-		return self.hostStats('-numRuns')
-
-	def failedHosts(self):
-		hosts=self.jobs.exclude(runs__runFinishInfo__job_status__job_status="Done").values('runs__executions__host').annotate(
-				numRuns=Count('runs')
-				).order_by('-numRuns')[0:10]
-		for h in hosts:
-			try:
-				h['host']=Host.objects.get(pk=h['runs__executions__host'])
-			except:
-				h['host']='None'
-
-		return hosts
-		
-	def goodHosts(self):
-		hosts=self.jobs.filter(runs__runFinishInfo__job_status__job_status="Done").values('runs__executions__host').annotate(
-				numRuns=Count('runs')
-				).order_by('-numRuns')[0:10]
-		for h in hosts:
-			try:
-				h['host']=Host.objects.get(pk=h['runs__executions__host'])
-			except:
-				h['host']='None'
-		return hosts
-		
-	def busySubmitHosts(self):
-		hosts=self.jobs.values('submit_host').annotate(
-				numRuns=Count('job_id')
-				).order_by('-numRuns')[0:10]
-		for h in hosts:
-			try:
-				h['host']=Host.objects.get(pk=h['submit_host'])
-			except:
-				h['host']='None'
-		return hosts
-	def totalJobs(self):
-		return self.jobs.count()
-	def totalTasks(self):
-		return Task.objects.filter(job__cluster=self).count()
-	def totalRuns(self):
-		return Run.objects.filter(element__job__cluster=self).count()
-	def cpu_time(self):
-		return Run.objects.filter(element__job__cluster=self).aggregate(Sum('cpu_time'))['cpu_time__sum']
-	def cpu_timedelta(self):
-		return datetime.timedelta(seconds=self.cpu_time())
-	def wall_time(self):
-		return Run.objects.filter(element__job__cluster=self).aggregate(Sum('wall_time'))['wall_time__sum']
-	def wall_timedelta(self):
-		return datetime.timedelta(seconds=self.wall_time())
-	def pend_time(self):
-		return Run.objects.filter(element__job__cluster=self).aggregate(Sum('pend_time'))['pend_time__sum']
-	def pend_timedelta(self):
-		return datetime.timedelta(seconds=self.pend_time())
-	def avg_pend_time(self):
-		return self.pend_time()/self.totalRuns()
-	def avg_pend_timedelta(self):
-		return datetime.timedelta(seconds=self.avg_pend_time())
-	def avg_pend_pct(self):
-		return round(self.pend_time()/self.wall_time(), 2)
 
 class Project(models.Model):
-	name=models.CharField(max_length=100)
-	def get_absolute_url(self):
-		try:
-			end_time=self.last_task_executed().end_time
-		except:
-			end_time=int(time.time())
-		try:
-			firstTime=self.first_task_executed().start_time
-		except:
-			firstTime=int(time.time()-(7*24*60*60))
-		start_time=end_time-(7*24*60*60)
-		if start_time<firstTime:
-			start_time=firstTime
-		return reverse('lavaFlow.views.homeView', args=[start_time,end_time,self.get_filter_string()])
-	def get_filter_string(self):
-		return 'filter/project/%s' % self.id
-	def last_job_submitted(self):
-		try:
-			return Job.objects.filter(runs__projects=self).order_by('-submit_time')[0]
-		except:
-			return None
-	def first_task_executed(self):
-		try:
-			return Run.objects.filter(projects=self).order_by('start_time')[0]
-		except:
-			return None
-	def last_task_executed(self):
-		try:
-			return Run.objects.filter(projects=self).order_by('-end_time')[0]
-		except:
-			return None
-	def last_failed_task(self):
-		try:
-			return Run.objects.filter(projects=self,runFinishInfo__exit_reason__name="Done__0").order_by('-end_time')[0]
-		except:
-			return None
-	def avg_pend_time(self):
-		return self.pend_time()/self.total_tasks()
-	def avg_pend_timedelta(self):
-		return datetime.timedelta(seconds=self.avg_pend_time())
-	def avg_pend_pct(self):
-		return round(self.pend_time()/self.wall_time(), 2)
-	def totalJobs(self):
-		return Job.objects.filter(runs__projects=self).distinct().count()
-	def totalTasks(self):
-		return Task.objects.filter(runs__projects=self).distinct().count()
-	def totalRuns(self):
-		return Run.objects.filter(projects=self).count()
-	def cpu_time(self):
-		return Run.objects.filter(projects=self).aggregate(Sum('cpu_time'))['cpu_time__sum']
-	def cpu_timedelta(self):
-		return datetime.timedelta(seconds=self.cpu_time())
-	def wall_time(self):
-		return Run.objects.filter(projects=self).aggregate(Sum('wall_time'))['wall_time__sum']
-	def wall_timedelta(self):
-		return datetime.timedelta(seconds=self.wall_time())
-	def pend_time(self):
-		return Run.objects.filter(projects=self).aggregate(Sum('pend_time'))['pend_time__sum']
-	def pend_timedelta(self):
-		return datetime.timedelta(seconds=self.pend_time())
-	def avg_pend_time(self):
-		return self.pend_time()/self.totalRuns()
-	def avg_pend_timedelta(self):
-		return datetime.timedelta(seconds=self.avg_pend_time())
-	def avg_pend_pct(self):
-		return round(self.pend_time()/self.wall_time(), 2)
-
-class User(models.Model):
-	user_name=models.CharField(max_length=128)
+	name=models.CharField(max_length=100,unique=True,db_index=True)
 	def __unicode__(self):
-		return u'%s' % self.user_name
-	def get_absolute_url(self):
-		try:
-			end_time=self.last_task_executed().end_time
-		except:
-			end_time=int(time.time())
-		try:
-			firstTime=self.first_task_executed().start_time
-		except:
-			firstTime=int(time.time()-(7*24*60*60))
-		start_time=end_time-(7*24*60*60)
-		if start_time<firstTime:
-			start_time=firstTime
-		return reverse('lavaFlow.views.homeView', args=[start_time,end_time,self.get_filter_string()])
-	def get_filter_string(self):
-		return 'filter/user_name/%s' % self.id
-	def total_jobs(self):
-		return Job.objects.filter(user=self).count()
-	def total_tasks(self):
-		return Task.objects.filter(job__user=self).count()
-	def total_runs(self):
-		return Run.objects.filter(job__user=self).count()
+		return u'%s' % self.name
 
-	def wall_time(self):
-		return Run.objects.filter(job__user=self).aggregate(Sum('wall_time'))['wall_time__sum']
-	def pend_time(self):
-		return Run.objects.filter(job__user=self).aggregate(Sum('pend_time'))['pend_time__sum']
-	def last_job_submitted(self):
-		try:
-			return Job.objects.filter(user=self).order_by('-submit_time')[0]
-		except:
-			return None
-	def last_task_executed(self):
-		try:
-			return Run.objects.filter(job__user=self).order_by('-end_time')[0]
-		except:
-			return None
-	def last_failed_task(self):
-		try:
-			return Run.objects.filter(job__user=self,runFinishInfo__exit_reason__name="Done__0").order_by('-end_time')[0]
-		except:
-			return None
-	def avg_pend_time(self):
-		return self.pend_time()/self.total_tasks()
-	def avg_pend_timedelta(self):
-		return datetime.timedelta(seconds=self.avg_pend_time())
-	def avg_pend_pct(self):
-		return round(self.pend_time()/self.wall_time(), 2)
+	def __str__(self):
+		return self.name
 
-	def submitUsage(self):
-		info=Run.objects.filter(job__user=self).values('job__cluster','queue','num_processors').annotate(
-				numJobs=Count('element__job'),
-				numTasks=Count('element'),
-				numRuns=Count('num_processors'),
-				cpu=Sum('cpu_time'),
-				wall=Sum('wall_time'),
-				pend=Sum('pend_time'),
-				avgCpu=Avg('cpu_time'),
-				avgWall=Avg('wall_time'),
-				avgPend=Avg('pend_time'),
 
-				)
-		for i in info:
-			i['cluster']=Cluster.objects.get(pk=i['element__job__cluster'])
-			i['queue']=Queue.objects.get(pk=i['queue'])
-			i['cpu_time']=datetime.timedelta(seconds=i['cpu'])
-			i['wall_time']=datetime.timedelta(seconds=i['wall'])
-			i['pend_time']=datetime.timedelta(seconds=i['pend'])
-			i['avgWall']=datetime.timedelta(seconds=i['avgWall'])
-			i['avgPend']=datetime.timedelta(seconds=i['avgPend'])
-			i['avgCpu']=datetime.timedelta(seconds=i['avgCpu'])
-		return info
+class Host(models.Model):
+	name=models.CharField(max_length=100,db_index=True,unique=True)
 
-	def runs(self):
-		runs=Run.objects.filter(element__job__user=self)
-		return runs
+	def __unicode__(self):
+		return u'%s' % self.name
+
+	def __str__(self):
+		return self.name
 
 
 class Queue(models.Model):
+	cluster=models.ForeignKey(Cluster,db_index=True)
 	name=models.CharField(max_length=128)
+
 	def __unicode__(self):
 		return u'%s' % self.name
+
 	def __str__(self):
 		return self.name
-	def get_absolute_url(self):
-		try:
-			end_time=self.last_task_executed().end_time
-		except:
-			end_time=int(time.time())
-		try:
-			firstTime=self.first_task_executed().start_time
-		except:
-			firstTime=int(time.time()-(7*24*60*60))
-		start_time=end_time-(7*24*60*60)
-		if start_time<firstTime:
-			start_time=firstTime
-		return reverse('lavaFlow.views.homeView', args=[start_time,end_time,self.get_filter_string()])
-	def get_filter_string(self):
-		return 'filter/queue/%s' % self.id
-	def last_job_submitted(self):
-		try:
-			return Job.objects.filter(runs__queue=self).order_by('-submit_time')[0]
-		except:
-			return None
-	def first_task_executed(self):
-		try:
-			return Run.objects.filter(queue=self).order_by('start_time')[0]
-		except:
-			return None
-	def last_task_executed(self):
-		try:
-			return Run.objects.filter(queue=self).order_by('-end_time')[0]
-		except:
-			return None
-	def last_failed_task(self):
-		try:
-			return Run.objects.filter(queue=self,runFinishInfo__exit_reason__name="Done__0").order_by('-end_time')[0]
-		except:
-			return None
-	def avg_pend_time(self):
-		return self.pend_time()/self.total_tasks()
-	def avg_pend_timedelta(self):
-		return datetime.timedelta(seconds=self.avg_pend_time())
-	def avg_pend_pct(self):
-		return round(self.pend_time()/self.wall_time(), 2)
-	def totalJobs(self):
-		return Job.objects.filter(runs__queue=self).distinct().count()
-	def totalTasks(self):
-		return Task.objects.filter(runs__queue=self).distinct().count()
-	def totalRuns(self):
-		return Run.objects.filter(queue=self).count()
-	def cpu_time(self):
-		return Run.objects.filter(queue=self).aggregate(Sum('cpu_time'))['cpu_time__sum']
-	def cpu_timedelta(self):
-		return datetime.timedelta(seconds=self.cpu_time())
-	def wall_time(self):
-		return Run.objects.filter(queue=self).aggregate(Sum('wall_time'))['wall_time__sum']
-	def wall_timedelta(self):
-		return datetime.timedelta(seconds=self.wall_time())
-	def pend_time(self):
-		return Run.objects.filter(queue=self).aggregate(Sum('pend_time'))['pend_time__sum']
-	def pend_timedelta(self):
-		return datetime.timedelta(seconds=self.pend_time())
-	def avg_pend_time(self):
-		return self.pend_time()/self.totalRuns()
-	def avg_pend_timedelta(self):
-		return datetime.timedelta(seconds=self.avg_pend_time())
-	def avg_pend_pct(self):
-		return round(self.pend_time()/self.wall_time(), 2)
 
+	class Meta:
+		unique_together=('cluster','name')
+		index_together=[
+				('cluster','name'),
+		]
 
+class User(models.Model):
+	name=models.CharField(max_length=128,db_index=True,unique=True)
+	def __unicode__(self):
+		return u'%s' % self.user_name
+	def __str__(self):
+		return '%s' % self.user_name
 
-class JobQuerySet(models.query.QuerySet):
-	def uniqClusters(self):
-		return self.values('cluster__name').distinct().count()
-
-	def uniqUsers(self):
-		return self.values('user__user_name').distinct().count()
-
-	def wall_time(self):
-		return self.aggregate(Sum('runs__wall_time'))['runs__wall_time__sum']
-
-	def wall_timedelta(self):
-		return datetime.timedelta(seconds=self.wall_time())
-
-	def pend_time(self):
-		return self.aggregate(Sum('runs__pend_time'))['runs__pend_time__sum']
-
-	def pend_timedelta(self):
-		return datetime.timedelta(seconds=self.pend_time())
-
-	def cpu_time(self):
-		return self.aggregate(Sum('runs__cpu_time'))['runs__cpu_time__sum']
-
-	def cpu_timedelta(self):
-		return datetime.timedelta(seconds=self.cpu_time())
 
 class Job(models.Model):
-	objects=QuerySetManager(JobQuerySet)
+	cluster=models.ForeignKey(Cluster)
 	job_id=models.IntegerField()
-	cluster=models.ForeignKey(Cluster, related_name='jobs')
-	user=models.ForeignKey(User, related_name='jobs')
-	submit_host=models.ForeignKey(Host, related_name='submitted_jobs')
+	user=models.ForeignKey(User)
+	submit_host=models.ForeignKey(Host)
 	submit_time=models.IntegerField()
-	def get_absolute_url(self):
-		return reverse('lavaFlow.views.jobDetailView', args=[self.id,])
 
-	def wall_time(self):
-		return self.runs.aggregate(Sum('wall_time'))['wall_time__sum']
-	def wall_timedelta(self):
-		return datetime.timedelta(seconds=self.wall_time())
+	def __unicode__(self):
+		return u"%s" % self.job_id
 
-	def pend_time(self):
-		return self.runs.aggregate(Sum('pend_time'))['pend_time__sum']
-	def pend_timedelta(self):
-		return datetime.timedelta(seconds=self.pend_time())
+	def __str__(self):
+		return "%s" % self.job_id
 
-	def cpu_time(self):
-		return self.runs.aggregate(Sum('cpu_time'))['cpu_time__sum']
+	def submit_time_datetime_local(self):
+		return datetime.datetime.fromtimestamp(self.submit_time)
 
-	def cpu_timedelta(self):
-		return datetime.timedelta(seconds=self.cpu_time())
-
-	def submit_time_datetime(self):
+	def submit_time_datetime_utc(self):
 		return datetime.datetime.utcfromtimestamp(self.submit_time)
 
-	def first_start_time(self):
-		return self.runs.aggregate(Min('start_time'))['start_time__min']
-	def first_start_time_datetime(self):
-		return datetime.datetime.utcfromtimestamp(self.first_start_time())
+	class Meta:
+		unique_together=('cluster','job_id','submit_time')
 
-	def last_finish_time(self):
-		return self.runs.aggregate(Max('end_time'))['end_time__max']
-	def last_finish_time_datetime(self):
-		return datetime.datetime.utcfromtimestamp(self.last_finish_time())
+		index_together=[
+					['cluster','user'],
+					['cluster','job_id','submit_time',],
+					['cluster','user','submit_time'],
+				]
 
-	def first_run(self):
-		try:
-			return self.runs.order_by('start_time')[0]
-		except IndexError:
-			return None
-	def last_run(self):
-		try:
-			return self.runs.order_by('-start_time')[0]
-		except IndexError:
-			return None
-	def utilizationN3DS(self):
-		return Run.objects.filter(job=self).utilizationN3DS(self.submit_time, self.last_finish_time(),100, "")
-
-class Task(models.Model):
-	task_id=models.IntegerField()
-	job=models.ForeignKey(Job, related_name='elements')
-
-
-class Run(models.Model):
-	objects = QuerySetManager(RunQuerySet)
-	job=models.ForeignKey(Job,related_name='runs')
-	element=models.ForeignKey(Task, related_name='runs')
-	num_processors=models.IntegerField()
-	projects=models.ManyToManyField(Project, related_name='runs')
-	start_time=models.IntegerField()
-	end_time=models.IntegerField()
-	cpu_time=models.IntegerField()
-	wall_time=models.IntegerField()
-	pend_time=models.IntegerField()
-	queue=models.ForeignKey(Queue, related_name='runs')
-	def last_resource_usage(self):
-		try:
-			return self.resource_usage.filter(is_summary=True).order_by("-timestamp")[0]
-		except IndexError:
-			return None
-	def otherRuns(self):
-		hosts=self.executions.values('host').distinct()
-		runs=Run.objects.filter(start_time__gte=self.start_time, start_time__lte=self.end_time).filter(end_time__gte=self.end_time).filter(executions__host__in=self.executions.values('host').distinct()).exclude(pk=self.id).distinct()
-		return runs
-	def pend_timedelta(self):
-		return datetime.timedelta(seconds=self.pend_time)
-	def wall_timedelta(self):
-		return datetime.timedelta(seconds=self.wall_time)
-	def cpu_timedelta(self):
-		return datetime.timedelta(seconds=self.cpu_time)
-	def start_time_datetime(self):
-		return datetime.datetime.utcfromtimestamp(self.start_time)
-
-	def end_time_datetime(self):
-		return datetime.datetime.utcfromtimestamp(self.end_time)
-
-	def get_absolute_url(self):
-		return reverse("lavaFlow.views.runDetailView", args=[self.id,])
-
-	def utilizationN3DS(self):
-		runs=Run.objects.filter(pk=self.id)
-		return runs.utilizationN3DS(self.element.job.submit_time, self.end_time,100, "")
-
-class ExecutionHost(models.Model):
-	host=models.ForeignKey(Host, related_name="executions")
-	run=models.ForeignKey(Run, related_name="executions")
-	num_processors=models.IntegerField()
-
-class RunFinishInfo(models.Model):
-    run=models.OneToOneField(
-                             Run,
-                             related_name='runFinishInfo',
-                             help_text="The run associated with the accountin info"
-                             )
-    user_name=models.CharField(
-                              max_length=50,
-                              verbose_name="User Name", 
-                              help_text="User name of the submitter"
-                              )
-    options=models.IntegerField(
-                                verbose_name="Options 1",
-                                help_text="Bit flags for job processing"
-                                )
-    num_processors=models.IntegerField(
-                                      verbose_name="Processors Used",
-                                      help_text="Number of processors initially requested for execution"
-                                      )
-    job_status=models.ForeignKey(JobStatus)
-    begin_time=models.IntegerField(
-                                  verbose_name="Begin Time",
-                                  help_text="Job start time - the job should be started at or after this time"
-                                  )
-    def begin_time_datetime(self):
-        return datetime.datetime.utcfromtimestamp(self.begin_time)
-    term_time=models.IntegerField(
-                                 verbose_name="Termination Deadline",
-                                 help_text="Job termination deadline - the job should be terminated by this time"
-                                 )
-    def term_time_datetime(self):
-        return datetime.datetime.utcfromtimestamp(self.term_time)
-    requested_resources=models.TextField(
-                            verbose_name="Resource Request",
-                            help_text="Resource requirement specified by the user"
-                            )
-    cwd=models.TextField(
-                         verbose_name="Curent Working Directory",
-                         help_text="Current working directory (up to 4094 characters for UNIX or 255 characters for Windows)"
-                         )
-    input_file=models.TextField(
-                            verbose_name="Input File",
-                            help_text="Input file name (up to 4094 characters for UNIX or 255 characters for Windows)"
-                            )
-    output_file=models.TextField(
-                             verbose_name="Output File",
-                             help_text="output file name (up to 4094 characters for UNIX or 255 characters for Windows)"
-                             )
-    error_file=models.TextField(
-                             verbose_name="Error File",
-                             help_text="Error output file name (up to 4094 characters for UNIX or 255 characters for Windows)"
-                             )
-    input_file_spool=models.TextField(
-                                 verbose_name="Input File Spool",
-                                 help_text="Spool input file (up to 4094 characters for UNIX or 255 characters for Windows)"
-                                 )
-    command_spool=models.TextField(
-                                  verbose_name="Command Spool File",
-                                  help_text="Spool command file (up to 4094 characters for UNIX or 255 characters for Windows)"
-                                  )
-    job_file=models.TextField(
-                             verbose_name="Job File",
-                             help_text="Job script file name"
-                             )
-    requested_hosts=models.ManyToManyField(Host)
-    host_factor=models.FloatField(
-                                 verbose_name="Host Factor",
-                                 help_text="CPU factor of the first execution host"
-                                 )
-    job_name=models.TextField(
-                             verbose_name="Job Name",
-                             help_text="Job name (up to 4094 characters for UNIX or 255 characters for Windows)"
-                             )
-    command=models.TextField(
-                             verbose_name="Command",
-                             help_text="Complete batch job command specified by the user (up to 4094 characters for UNIX or 255 characters for Windows)"
-                             )
-    dependency_conditions=models.TextField(
-                                verbose_name="Dependancy Conditions",
-                                help_text="Job dependency condition specified by the user"
-                                )
-    pre_execution_command=models.TextField(
-                                verbose_name="Pre Execution Command",
-                                help_text="Pre-execution command specified by the user"
-                                )
-    email_user=models.CharField(
-                              max_length=50,
-                              verbose_name="Mail User",
-                              help_text="Name of the user to whom job related mail was sent"
-                              )
-    project_name=models.CharField(
-                                 max_length=128,
-                                 verbose_name="Project Name",
-                                 help_text="LSF project name"
-                                 )
-    exit_reason=models.ForeignKey(ExitReason)                                 
-    max_num_processors=models.IntegerField(
-                                         verbose_name="Max Processors",
-                                         help_text="Maximum number of processors specified for the job"
-                                         )
-    login_shell=models.CharField(
-                                max_length=50,
-                                verbose_name="Login Shell",
-                                help_text="Login shell used for the job"
-                                )
-    max_residual_mem=models.IntegerField(
-                                verbose_name="Max Residual Memory",
-                                help_text="Maximum resident memory usage in KB of all processes in the job"
-                                )
-    max_swap=models.IntegerField(
-                                 verbose_name="Max Swap Usage",
-                                 help_text="Maximum virtual memory usage in KB of all processes in the job"
-                                 )
-
-class ResourceUsage(models.Model):
-	run=models.ForeignKey(Run, related_name="resource_usage")
-	timestamp=models.IntegerField()
-	is_summary=models.BooleanField()
-	def resourceUsageSummaryN3DS(self):
-		values=[]
-		for f in self.metrics.all():
-			values.append({
-				"label":f.name,
-				"value":f.value,
-				})
-
-		data=[{
-				'key':"Recorded Resource Usage",
-				'values':values,
-			}]
-		return json.dumps(data)
-
-
-class ResourceUsageMetric(models.Model):
-	resource_usage=models.ForeignKey(ResourceUsage,related_name="metrics")
-	name=models.CharField(max_length=50)
-	description=models.TextField()
-	value=models.FloatField()
-
-
-class JobSubmitInfo(models.Model):
-	job=models.OneToOneField(Job, related_name='jobSubmitInfo',help_text="The Job Associated with the Event")
+class JobSubmitOpenLava(self):
+	job=models.OneToOneField(Job)
 	user_id=models.IntegerField()
-	options=models.IntegerField()
-	options2=models.IntegerField()
+	user=models.ForeignKey(User)
+	options=models.ManyToManyField(OpenLavaSubmitOption)
 	num_processors=models.IntegerField()
 	begin_time=models.IntegerField()
-	term_time=models.IntegerField()
-	checkpoint_signal_value=models.IntegerField()
+	termination_time=models.IntegerField()
+	signal_value=models.IntegerField()
 	checkpoint_period=models.IntegerField()
-	restart_process_id=models.IntegerField()
-	host_specification_hostname=models.ForeignKey(Host,related_name="hostSpecs")
+	restart_pid=models.IntegerField()
+	resource_limits=models.OneToOneField(OpenLavaResourceLimit)
+	host_specification=models.CharField(max_length=64)
 	host_factor=models.FloatField()
 	umask=models.IntegerField()
-	queue=models.ForeignKey(Queue, related_name='jobSubmitInfo')
-	requested_resources=models.TextField()
-	cwd=models.TextField()
-	checkpoint_dir=models.TextField()
-	input_file=models.TextField()
-	output_file=models.TextField()
-	error_file=models.TextField()
-	input_file_spool=models.TextField()
-	command_spool=models.TextField()
-	job_spool_dir=models.TextField()
-	home_directory=models.TextField()
-	job_file=models.TextField()
-	dependency_conditions=models.TextField()
-	job_name=models.CharField(max_length=1024)
-	command=models.TextField()
-	nxf=models.IntegerField()
+	queue=models.ForeignKey(Queue)
+	resource_request=models.TextField()
+	submission_host=models.ForeignKey(Host)
+	cwd=models.CharField(max_length=256)
+	checkpoint_directory=models.CharField(max_length=256)
+	input_file=models.CharField(max_length=256)
+	output_file=models.CharField(max_length=256)
+	error_file=models.CharField(max_length=256)
+	input_file_spool=models.CharField(max_length=256)
+	command_spool=models.CharField(max_length=256)
+	spool_directory=models.CharField(max_length=4096)
+	submission_home_dir=models.CharField(max_length=265)
+	job_file=models.CharField(max_length=265)
+	asked_hosts=models.ManyToManyField(Host)
+	dependency_condition=models.CharField(max_length=4096)
+	job_name=models.CharField(max_length=512)
+	command=models.CharField(max_length=512)
+	num_transfer_files=models.IntegerField()
+	transferred_files=models.ManyToManyField(OpenLavaTransferFile)
 	pre_execution_command=models.TextField()
-	email_user=models.CharField(
-                              max_length=50,
-                              verbose_name="Mail User",
-                              help_text="Name of the user to whom job related mail was sent"
-                              )
+	email_user=models.CharField(max_length=512)
 	project=models.ForeignKey(Project)
 	nios_port=models.IntegerField()
 	max_num_processors=models.IntegerField()
-	scheduled_host_type=models.ForeignKey(Host)
-	login_shell=models.TextField()
-	array_index=models.IntegerField()
+	schedule_host_type=models.CharField(max_length=1024)
+	login_shell=models.CharField(max_length=1024)
 	user_priority=models.IntegerField()
 
-	def submit_time_datetime(self):
-		return datetime.datetime.utcfromtimestamp(self.submit_time)
-	def begin_time_datetime(self):
-		return datetime.datetime.utcfromtimestamp(self.begin_time)
-	def term_time_datetime(self):
-		return datetime.datetime.utcfromtimestamp(self.term_time)
+class Task(models.Model):
+	cluster=models.ForeignKey(Cluster)
+	job=models.ForeignKey(Job)
+	user=models.ForeignKey(User)
+	task_id=models.IntegerField()
+
+	def __unicode__(self):
+		return u"%s" % self.task_id
+
+	def __str__(self):
+		return "%s" % self.task_id
+
+	class Meta:
+		index_together=[
+				('cluster','job'),
+				('cluster','user'),
+				('user'),
+				]
+
+class Attempt(models.Model):
+	cluster=models.ForeignKey(Cluster)
+	job=models.ForeignKey(Job)
+	task=models.Foreignkey(Task)
+	user=models.ForeignKey(User)
+	num_processors=models.IntegerField()
+	projects=models.ManyToManyField(Project)
+	execution_hosts=models.ManyToManyField(Host)
+	start_time=models.IntegerField()
+	def start_time_datetime(self):
+		return datetime.datetime.utcfromtimestamp(self.start_time)
+	end_time=models.IntegerField()
+	def end_time_datetime(self):
+		return datetime.datetime.utcfromtimestamp(self.end_time)
+	cpu_time=models.IntegerField()
+	def cpu_time_timedelta(self):
+		return datetime.timedelta(seconds=self.cpu_time)
+	wall_time=models.IntegerField()
+	def wall_time_timedelta(self):
+		return datetime.timedelta(seconds=self.wall_time)
+	pend_time=models.IntegerField()
+	def pend_time_timedelta(self):
+		return datetime.timedelta(seconds=self.pend_time)
+	queue=models.ForeignKey(Queue)
+	status=models.ForeignKey(JobExitStatus)
+	command=models.TextField()
+
+	class Meta:
+		unique_together=('cluster','job','task','start_time')
+		index_together=[
+				('cluster','job','task'),
+		]
+
+class OpenLavaState(models.Model):
+	code=models.CharField(max_length=50)
+	name=models.CharField(max_length=128)
+	description=models.TextField()
+	friendly_name=models.CharField(max_length=128,null=True)
+	class Meta:
+		abstract=True
+
+class OpenLavaSubmitOption(OpenLavaState):
+	pass
+
+class OpenLavaResourceUsage(models.Model):
+	user_time=models.FloatField()
+	system_time=models.FloatField()
+	max_rss=models.FloatField()
+	integral_rss=models.FloatField()
+	integral_shared_memory=models.FloatField()
+	integral_unshared_data=models.FloatField()
+	integral_unshared_stack=models.FloatField()
+	page_reclaims=models.FloatField()
+	page_faults=models.FloatField()
+	swaps=models.FloatField()
+	block_input_operations=models.FloatField()
+	block_output_operations=models.FloatField()
+	charecter_io=models.FloatField()
+	messages_sent=models.FloatField()
+	messages_recieved=models.FloatField()
+	signals_recieved=models.FloatField()
+	voluntary_context_switches=models.FloatField()
+	involuntary_context_switches=models.FloatField()
+	exact_user_time=models.FloatField()
+	exact_user_time_timedelta=models.FloatField()
+
+
+class OpenLavaExitInfo(models.Model):
+	attempt=models.ForeignKey(Attempt)
+	user_id=models.IntegerField()
+	user=models.ForeignKey(User)
+	options=models.ManyToManyField(OpenLavaSubmitOption)
+	begin_time=models.IntegerField()
+	termination_time=models.IntegerField()
+	resource_request=models.TextField()
+	cwd=models.CharField(max_length=256)
+	input_file=models.CharField(max_length=256)
+	output_file=models.CharField(max_length=256)
+	error_file=models.CharField(max_length=256)
+	input_file_spool=models.CharField(max_length=256)
+	command_spool=models.CharField(max_length=256)
+	job_file=models.CharField(max_length=265)
+	asked_hosts=models.ManyToManyField(Host)
+	host_factor=models.FloatField()
+	job_name=models.CharField(max_length=512)
+	resource_usage=models.OneToOneField(OpenLavaResourceUsage)
+	dependency_condition=models.CharField(max_length=4096)
+	pre_execution_command=models.TextField()
+	email_user=models.CharField(max_length=512)
+	project=models.ForeignKey(Project)
+	exit_status=models.IntegerField()
+	max_num_processors=models.IntegerField()
+	login_shell=models.CharField(max_length=1024)
+	array_index=models.IntegerField()
+	max_residual_mem=models.IntegerField()
+	max_swap=models.IntegerField()
+

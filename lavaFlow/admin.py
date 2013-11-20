@@ -22,9 +22,3 @@
 # Create your views here.
 from django.contrib import admin
 from lavaFlow.models import *
-admin.site.register(Host)
-admin.site.register(Project)
-admin.site.register(User)
-admin.site.register(Queue)
-admin.site.register(Run)
-admin.site.register(RunFinishInfo)
