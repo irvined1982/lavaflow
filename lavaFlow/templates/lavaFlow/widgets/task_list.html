@@ -1,0 +1,24 @@
+	  <table class="table table-striped table-condensed">
+		  <thead>
+			  <tr>
+				  <th>Cluster</th>
+				  <th>User Name</th>
+				  <th>Job Id</th>
+				  <th>Task ID</th>
+				  <th># Attempts</th>
+			  </tr>
+		</thead>
+		<tbody>
+  			{% for object in object_list %}
+			<tr>
+				<td>{{ object.cluster }}</dt>
+				<td>{{ object.user }}</td>
+				<td><a href="{{ object.job.get_absolute_url }}">{{ object.job.job_id }}</a></td>
+				<td><a href="{{ object.get_absolute_url }}">{{ object.task_id }}</a></td>
+				<td>{{ object.attempt_set.all.count }}</dt>
+			</tr>
+			{% empty %}
+			<tr><td colspan="5">No Tasks Yet.</td></tr>
+			{% endfor %}
+		</tbody>
+	</table>

@@ -1,0 +1,130 @@
+<dl class="dl-horizontal">
+	<dt>User ID</dt>
+		<dd>{{ job.jobsubmitopenlava.user_id }}</dd>
+	<dt>User</dt>
+		<dd>{{ job.jobsubmitopenlava.user }}</dd>
+	<dt>Options</dt>
+	<dd>{% for option in job.jobsubmitopenlava.options.all %}{{ option.name }}<br />{% endfor %}</dd>
+	<dt>Num Processors</dt>
+		<dd>{{ job.jobsubmitopenlava.num_processors }}</dd>
+	<dt>Begin Time</dt>
+		<dd>{{ job.jobsubmitopenlava.begin_time_datetime }}</dd>
+	<dt>Termination Deadline</dt>
+		<dd>{{ job.jobsubmitopenlava.term_time_datetime }}</dd>
+	<dt>Signal Value</dt>
+		<dd>{{ job.jobsubmitopenlava.signal_value }}</dd>
+	<dt>Checkpoint Period</dt>
+		<dd>{{ job.jobsubmitopenlava.checkpoint_period_timedelta }}</dd>
+	<dt>Restart Process ID</dt>
+		<dd>{{ job.jobsubmitopenlava.restart_pid }}</dd>
+	<dt>Host Specification</dt>
+		<dd>{{ job.jobsubmitopenlava.host_specification }}</dd>
+	<dt>Host Factor</dt>
+		<dd>{{ job.jobsubmitopenlava.host_factor }}</dd>
+	<dt>Umask</dt>
+		<dd>{{ job.jobsubmitopenlava.umask }}</dd>
+	<dt>Queue</dt>
+		<dd>{{ job.jobsubmitopenlava.queue }}</dd>
+	<dt>Resource Request</dt>
+		<dd>{{ job.jobsubmitopenlava.resource_request }}</dd>
+	<dt>Submission Host</dt>
+		<dd>{{ job.jobsubmitopenlava.submission_host }}</dd>
+	<dt>Current Working Directory</dt>
+		<dd>{{ job.jobsubmitopenlava.cwd }}</dd>
+	<dt>Checkpoint Directory</dt>
+		<dd>{{ job.jobsubmitopenlava.checkpoint_directory }}</dd>
+	<dt>Input File</dt>
+		<dd>{{ job.jobsubmitopenlava.input_file }}</dd>
+	<dt>Output File</dt>
+		<dd>{{ job.jobsubmitopenlava.output_file }}</dd>
+	<dt>Error File</dt>
+		<dd>{{ job.jobsubmitopenlava.error_file }}</dd>
+	<dt>Input File Spool</dt>
+		<dd>{{ job.jobsubmitopenlava.input_file_spool }}</dd>
+	<dt>Command Spool</dt>
+		<dd>{{ job.jobsubmitopenlava.command_spool }}</dd>
+	<dt>Spool Directory</dt>
+		<dd>{{ job.jobsubmitopenlava.spool_directory }}</dd>
+	<dt>Submission Home Directory</dt>
+		<dd>{{ job.jobsubmitopenlava.submission_home_dir }}</dd>
+	<dt>Job File</dt>
+		<dd>{{ job.jobsubmitopenlava.job_file }}</dd>
+	<dt>Requested Hosts</dt>
+	<dd>{% for host in job.jobsubmitopenlava.asked_hosts.all %}{{ host }}<br />{% endfor %}</dd>
+	<dt>Dependency Conditions</dt>
+		<dd>{{ job.jobsubmitopenlava.dependency_condition }}</dd>
+	<dt>Job Name</dt>
+		<dd>{{ job.jobsubmitopenlava.job_name }}</dd>
+	<dt>Command</dt>
+		<dd>{{ job.jobsubmitopenlava.command }}</dd>
+	<dt>Pre Execution Command</dt>
+		<dd>{{ job.jobsubmitopenlava.pre_execution_command }}</dd>
+	<dt>Email User</dt>
+		<dd>{{ job.jobsubmitopenlava.email_user }}</dd>
+	<dt>Project</dt>
+		<dd>{{ job.jobsubmitopenlava.project }}</dd>
+	<dt>NIOS Port</dt>
+		<dd>{{ job.jobsubmitopenlava.nios_port }}</dd>
+	<dt>Max Num Processors</dt>
+		<dd>{{ job.jobsubmitopenlava.max_num_processors }}</dd>
+	<dt>Schedule Host Type</dt>
+		<dd>{{ job.jobsubmitopenlava.schedule_host_type }}</dd>
+	<dt>Login Shell</dt>
+		<dd>{{ job.jobsubmitopenlava.login_shell }}</dd>
+	<dt>User Priority</dt>
+		<dd>{{ job.jobsubmitopenlava.user_priority }}</dd>
+</dl>
+<h2>Resource Limits</h2>
+<table class="table table-striped table-condensed">
+	<thead>
+		<tr>
+			<th>CPU</th>
+			<th>File Size</th>
+			<th>Data</th>
+			<th>Stack</th>
+			<th>Core</th>
+			<th>RSS</th>
+			<th>Run Time</th>
+			<th>Processes</th>
+			<th>Swap</th>
+			<th>Nofile</th>
+			<th>Open Files</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>{{ job.jobsubmitopenlava.resource_limits.cpu }}</td>
+			<td>{{ job.jobsubmitopenlava.resource_limits.file_size }}</td>
+			<td>{{ job.jobsubmitopenlava.resource_limits.data }}</td>
+			<td>{{ job.jobsubmitopenlava.resource_limits.stack }}</td>
+			<td>{{ job.jobsubmitopenlava.resource_limits.core }}</td>
+			<td>{{ job.jobsubmitopenlava.resource_limits.rss }}</td>
+			<td>{{ job.jobsubmitopenlava.resource_limits.run }}</td>
+			<td>{{ job.jobsubmitopenlava.resource_limits.process }}</td>
+			<td>{{ job.jobsubmitopenlava.resource_limits.swap }}</td>
+			<td>{{ job.jobsubmitopenlava.resource_limits.nofile }}</td>
+			<td>{{ job.jobsubmitopenlava.resource_limits.open_files }}</td>
+		</tr>
+	</tbody>
+</table>
+<h2>Transferred Files</h2>
+<table class="table table-striped table-condensed">
+	<thead>
+		<tr>
+			<th>Submission File</th>
+			<th>Execution File</th>
+			<th>Options</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for file in job.jobsubmitopenlava.transfer_files.all %}
+		<tr>
+			<td>{{ file.submission_file }}</td>
+			<td>{{ file.execution_file }}</td>
+			<td>{% for opt in file.options %}{{ opt.name }}<br>{% endfor %}</td>
+		</tr>
+		{% empty %}
+		<tr><td colspan=3>No Transfer Files</td></tr>
+		{% endfor %}
+	</tbody>
+</table>

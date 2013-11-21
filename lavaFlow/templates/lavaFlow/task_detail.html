@@ -1,0 +1,26 @@
+{% extends "lavaFlow/base.html" %}
+{% block content %}
+
+<h1>Task Information</h1>
+<dl class="dl-horizontal">
+	<dt>Task Id</dt>
+		<dd>{{ object.task_id }}</dd>
+	<dt>Job Id</dt>
+		<dd>{{ object.job.job_id }}</dd>
+	<dt>Cluster</dt>
+		<dd>{{ object.cluster }}</dd>
+	<dt>User</dt>
+		<dd>{{ object.user }}</dd>
+	<dt>Submit Host</td>
+		<dd>{{ object.job.submit_host }}</dd>
+	<dt>Submit Time</td>
+		<dd>{{ object.job.submit_time_datetime }}</dd>
+</dl>
+<h1>Attempts</h1>
+{% include "lavaFlow/widgets/attempt_list.html" with object_list=object.attempt_set.all %}
+
+<h1>Submission Information</h1>
+{% include "lavaFlow/widgets/job_submit_info.html" with job=object.job %}
+
+{% endblock %}
+{% block title %}Task: {{ object.task.task_id }} of Job: {{ object.job.job_id }}{% endblock %}

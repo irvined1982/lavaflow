@@ -2,12 +2,18 @@
 {% load staticfiles %}
 <html>
   <head>
-	  <title>{% block title %}{% endblock %}LavaFlow Reporting</title>
+	  <title>{% block title %}{% endblock %} - LavaFlow Reporting</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap -->
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css">
-	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+
+	<link rel="stylesheet" href="{% static "lavaFlow/bootstrap/css/bootstrap.min.css" %}">
+	<link rel="stylesheet" href="{% static "lavaFlow/bootstrap/css/bootstrap-theme.min.css" %}">
+	<link rel="stylesheet" href="{% static "lavaFlow/nvd3/nv.d3.css" %}" >
+
+	<script src="{% static "lavaFlow/jquery/jquery-2.0.3.js" %}"></script>
+	<script src="{% static "lavaFlow/nvd3/lib/d3.v3.js" %}"></script>
+	<script src="{% static "lavaFlow/nvd3/nv.d3.js" %}"></script>
+	<script src="{% static "lavaFlow/bootstrap/js/bootstrap.js" %}"></script>
+
   </head>
   <body>
 	  <nav class="navbar navbar-default" role="navigation">
@@ -22,7 +28,9 @@
 	  </div>
        <div class="collapse navbar-collapse">
 		   <ul class="nav navbar-nav">
-			   <li><a href="#">Job</a></li>
+			   <li><a href="{% url 'job_list' %}">Jobs</a></li>
+			   <li><a href="{% url 'task_list' %}">Tasks</a></li>
+			   <li><a href="{% url 'attempt_list' %}">Attempts</a></li>
 		   </ul>
 	   </div>
 	   </nav>

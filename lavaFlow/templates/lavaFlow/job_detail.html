@@ -1,0 +1,46 @@
+{% extends "lavaFlow/base.html" %}
+{% block content %}
+
+<h1>Job Information</h1>
+<dl class="dl-horizontal">
+	<dt>Job Id</dt>
+		<dd>{{ object.job_id }}</dd>
+	<dt>Cluster</dt>
+		<dd>{{ object.cluster }}</dd>
+	<dt>User</dt>
+		<dd>{{ object.user }}</dd>
+	<dt>Submit Host</td>
+		<dd>{{ object.submit_host }}</dd>
+	<dt>Submit Time</td>
+		<dd>{{ objectsubmit_time_datetime }}</dd>
+</dl>
+<h1>Tasks</h1>
+{% include "lavaFlow/widgets/attempt_list.html" with object_list=object.attempt_set.all %}
+
+<h1>Submission Information</h1>
+{% include "lavaFlow/widgets/job_submit_info.html" with job=job %}
+<div id="chart">
+    <svg></svg>
+  </div>
+
+  <script>        
+   	  d3.json('http://master:8000/lavaFlow/util/1380217200/1380218200/', function(data) {
+		  nv.addGraph(function() {
+			  var chart = nv.models.stackedAreaChart()
+			  .x(function(d) { return d.x })
+			  .y(function(d) { return d.y })
+			  .clipEdge(true);
+			  chart.xAxis.tickFormat(function(d) { return d3.time.format('%c')(new Date(d)) });
+			  chart.yAxis.tickFormat(d3.format(',.2f'));
+			  chart.xAxis.rotateLabels(-45);
+			  d3.select('#chart svg').datum(data).transition().duration(500).call(chart);
+			  nv.utils.windowResize(chart.update);
+			  return chart;
+		  });
+	  })
+  </script>
+
+
+{% endblock %}
+{% block title %}Job: {{ object.job_id }}{% endblock %}
+
