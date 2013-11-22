@@ -1,0 +1,21 @@
+{% extends "lavaFlow/base.html" %}
+{% block title %}Queue List{% endblock %}
+{% block content %}
+	<h1>Queues</h1>
+	{% include "lavaFlow/widgets/queue_list.html" %}
+	{% if is_paginated %}
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li><a href="{% url "queue_list" %}?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&laquo;</a></li>
+        {% endif %}
+
+        {% if page_obj.has_next %}
+        <li><a href="{% url "queue_list" %}?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&raquo;</a></li>
+        {% endif %}
+    </ul>
+    {% endif %}
+{% endblock %}

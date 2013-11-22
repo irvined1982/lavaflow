@@ -160,84 +160,133 @@ def openlava_import(request,cluster_name):
 	return HttpResponse("OK", content_type="text/plain")
 
 
-def utilization_data(request, starttime, endtime ):
-	serieses={}
-	attempts=Attempt.objects.filter(job__submit_time__lte=endtime, end_time__gte=starttime) # Only jobs that were submitted before the end time and ended after the start time
-	print "Count: %s" % attempts.count()
-	series_name=""
+def utilization_data(request, starttime, endtime, filter_string="", group_string=""):
+	# set the start and end times to the correct times in JS date format (Milliseconds)
+	starttime=int(starttime)
+	endtime=int(endtime)
 
-	starttime=int(starttime)*1000
-	endtime=int(endtime)*1000
+	# Build the additional filters
+	filter_args={}
+	if len(filter_string)>0:
+		for f in filter_string.split("/"):
+			(filter, dot, value)=f.partition(".")
+			filter_args[filter]=value
+	print filter_args
+
+	# Build the additional groups
+	group_args=[]
+	if len(group_string)>0:
+		group_args=group_string.split("/")
+
+	# Get the attempts that we are interested in
+	# Only jobs that were submitted before the end time and ended after the start time
+	attempts=Attempt.objects.filter(
+			job__submit_time__lte=endtime, 
+			end_time__gte=starttime) 
+
+	#from this point on all times are js time...
+	starttime=starttime * 1000
+	endtime=endtime * 1000
+
+	# Filter them again if additional filters are required.
+	if len(filter_args)>0:
+		attempts=attempts.filter(**filter_args)
+	
+	# Only get the values we actually want - this is then
+	# done in one request and is much faster
+	values=[
+			"job__submit_time",
+			"start_time",
+			"end_time",
+			"num_processors",
+			]
+	values.extend(group_args)
+	print values
+	attempts=attempts.values(*values)
+
+	serieses={}
 
 	for attempt in attempts:
+		# Build the series name from the grouping...
+		series_name=""
+		for n in group_args:
+			series_name= u"%s%s" % (series_name,   attempt[n])
+
+		# Get the name of the series for pending and running data
 		if len(series_name)>0:
-			real_series_name="%s Pending" % series_name
+			pend_series_name="%s Pending" % series_name
 		else:
-			real_series_name="Pending"
+			pend_series_name="Pending"
 
-		if not real_series_name in serieses:
-			serieses[real_series_name]={starttime:0,endtime:0}
-		series=serieses[real_series_name]
+		if len(series_name)>0:
+			run_series_name="%s Running" % series_name
+		else:
+			run_series_name="Running"
 
-		submit_time=attempt.job.submit_time*1000
+		# Check that both series exist.
+		if not pend_series_name in serieses:
+			serieses[pend_series_name]={starttime:0,endtime:0}
+		pend_series=serieses[pend_series_name]
+
+		if not run_series_name in serieses:
+			serieses[run_series_name]={starttime:0,endtime:0}
+		run_series=serieses[run_series_name]
+
+		# Get the values
+		submit_time = attempt['job__submit_time'] * 1000
+		start_time = attempt['start_time'] * 1000
+		end_time = attempt['end_time'] * 1000
+		num_processors = attempt['num_processors']
+
+
+		# Sanitize them so that they do not go out of bounds
 		if submit_time < starttime:
 			submit_time=starttime
-
-		start_time=attempt.start_time*1000
 		if start_time < starttime:
 			start_time=starttime
-
-		end_time=attempt.end_time*1000
 		if end_time > endtime:
 			end_time=endtime
 
-		num_processors=attempt.num_processors
+		if submit_time not in run_series:
+			run_series[submit_time]=0
+		if start_time not in run_series:
+			run_series[start_time]=0
+		if end_time not in run_series:
+			run_series[end_time]=0
 
-		if submit_time not in series:
-			series[submit_time]=0
-		if start_time not in series:
-			series[start_time]=0
-		if end_time not in series:
-			series[end_time]=0
+		# Make sure they have a container in the appropriate series.
+		if submit_time not in pend_series:
+			pend_series[submit_time]=0
+		if start_time not in pend_series:
+			pend_series[start_time]=0
+		if end_time not in pend_series:
+			pend_series[end_time]=0
 
-		series[submit_time] += num_processors
-		series[start_time] -= num_processors
+		# Adjust the value accordingly
+		pend_series[submit_time] += num_processors
+		pend_series[start_time] -= num_processors
 
-		if len(series_name)>0:
-			real_series_name="%s Running" % series_name
-		else:
-			real_series_name="Running"
-		
-		if not real_series_name in serieses:
-			serieses[real_series_name]={}
-			serieses[real_series_name]={starttime:0,endtime:0}
-		series=serieses[real_series_name]
 
-		if submit_time not in series:
-			series[submit_time]=0
-		if start_time not in series:
-			series[start_time]=0
-		if end_time not in series:
-			series[end_time]=0
-
-		series[start_time] += num_processors
-		series[end_time] -= num_processors
-		
+		run_series[start_time] += num_processors
+		run_series[end_time] -= num_processors
 	series_int=[]
-	for sname,s in serieses.iteritems():
-		total=0
-		nv_ser={
-				'key':sname,
+	for series_name, series in serieses.iteritems():
+		total_slots_at_time=0
+		d3_series={
+				'key':series_name,
 				'values':[]
 				}
-		for time in sorted(s.keys()): # Make the series contain a running total
-			if time < endtime and time>starttime:
-				nv_ser['values'].append({'x':time-1,'y':total})
 
-			total+=s[time]
-			nv_ser['values'].append({'x':time,'y':total})
-		series_int.append(nv_ser)
-		print len(nv_ser['values'])
+		# Make the series contain a running total
+		for time in sorted(series.keys()): 
+			# if it is a mid value, insert a value next to it
+			# lsf has a 1 second resolution, so put it a milisecond before
+			# this means graphs will look square, which is more accurate than peaks.
+			if time <= endtime and time > starttime:
+				d3_series['values'].append({'x':time-1,'y':total_slots_at_time})
+			total_slots_at_time+=series[time]
+			d3_series['values'].append({'x':time,'y':total_slots_at_time})
+		series_int.append(d3_series)
 	return HttpResponse(json.dumps(series_int), content_type="application/json")
 
 

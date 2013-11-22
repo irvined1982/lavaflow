@@ -80,6 +80,34 @@ class Host(models.Model):
 	def __str__(self):
 		return self.name
 
+	def total_submitted_jobs(self):
+		return Job.objects.filter(submit_host=self).count()
+
+	def total_tasks(self):
+		return self.attempt_set.distinct().count()
+
+	def total_successful_tasks(self):
+		return self.attempt_set.filter(status__name="JOB_STAT_DONE").distinct().count()
+
+	def total_failed_tasks(self):
+		return self.attempt_set.exclude(status__name="JOB_STAT_DONE").distinct().count()
+
+	def failure_rate(self):
+		return (float(self.total_failed_tasks())/float(self.total_tasks())*100)
+
+	def first_task(self):
+		try:
+			return self.attempt_set.order_by('start_time')[0]
+		except:
+			return None
+
+	def last_task(self):
+		try:
+			return self.attempt_set.order_by('-end_time')[0]
+		except:
+			return None
+
+
 
 class Queue(models.Model):
 	cluster=models.ForeignKey(Cluster,db_index=True)
@@ -90,6 +118,47 @@ class Queue(models.Model):
 
 	def __str__(self):
 		return self.name
+
+	def total_jobs(self):
+		return Job.objects.filter(attempt__queue=self).distinct().count()
+
+	def total_tasks(self):
+		return Task.objects.filter(attempt__queue=self).distinct().count()
+
+	def total_attempts(self):
+		return self.attempt_set.count()
+
+	def first_task(self):
+		try:
+			return self.attempt_set.order_by('start_time')[0]
+		except:
+			return None
+
+	def last_task(self):
+		try:
+			return self.attempt_set.order_by('-end_time')[0]
+		except:
+			return None
+
+	def last_failed_task(self):
+		try:
+			return self.attempt_set.exclude(status__name="JOB_STAT_DONE").order_by('-end_time')[0]
+		except:
+			return None
+
+	def average_pend_time(self):
+		return self.attempt_set.aggregate(Avg('pend_time'))['pend_time__avg']
+	def average_pend_time_timedelta(self):
+		return datetime.timedelta(seconds=self.average_pend_time())
+
+	def average_pend_time_percent(self):
+		return (float(self.average_pend_time())/float(self.average_wall_time()))*100
+
+	def average_wall_time(self):
+		return self.attempt_set.aggregate(Avg('wall_time'))['wall_time__avg']
+	def average_wall_time_timedelta(self):
+		return datetime.timedelta(seconds=self.average_wall_time())
+
 
 	class Meta:
 		unique_together=('cluster','name')
@@ -103,6 +172,45 @@ class User(models.Model):
 		return u'%s' % self.name
 	def __str__(self):
 		return '%s' % self.name
+	def total_jobs(self):
+		return self.job_set.count()
+
+	def total_tasks(self):
+		return self.task_set.count()
+
+	def total_attempts(self):
+		return self.attempt_set.count()
+
+	def first_task(self):
+		try:
+			return self.attempt_set.order_by('start_time')[0]
+		except:
+			return None
+
+	def last_task(self):
+		try:
+			return self.attempt_set.order_by('-end_time')[0]
+		except:
+			return None
+
+	def last_failed_task(self):
+		try:
+			return self.attempt_set.exclude(status__name="JOB_STAT_DONE").order_by('-end_time')[0]
+		except:
+			return None
+
+	def average_pend_time(self):
+		return self.attempt_set.aggregate(Avg('pend_time'))['pend_time__avg']
+	def average_pend_time_timedelta(self):
+		return datetime.timedelta(seconds=self.average_pend_time())
+
+	def average_pend_time_percent(self):
+		return (float(self.average_pend_time())/float(self.average_wall_time()))*100
+
+	def average_wall_time(self):
+		return self.attempt_set.aggregate(Avg('wall_time'))['wall_time__avg']
+	def average_wall_time_timedelta(self):
+		return datetime.timedelta(seconds=self.average_wall_time())
 
 
 class Job(models.Model):
@@ -126,6 +234,57 @@ class Job(models.Model):
 
 	def submit_time_datetime(self):
 		return datetime.datetime.utcfromtimestamp(self.submit_time)
+
+	def end_time(self):
+		try:
+			date=self.attempt_set.aggregate(Max('end_time'))['end_time__max']
+			if date<1:
+				date=int(time.time())
+		except:
+			date=int(time.time())
+		return date
+
+	def end_time_datetime(self):
+		return datetime.datetime.utcfromtimestamp(self.end_time())
+
+	def short_jobs(self):
+		return self.attempt_set.filter(wall_time__lte=1)
+
+	def exited_jobs(self):
+		return self.attempt_set.exclude(status__name="JOB_STAT_DONE")
+
+	def attempt_filter_string(self):
+		return "job.%s" % self.id
+
+	def total_pend_time(self):
+		return self.attempt_set.aggregate(Sum('pend_time'))['pend_time__sum']
+	
+	def total_pend_time_timedelta(self):
+		return datetime.timedelta(seconds=self.total_pend_time())
+
+	def total_cpu_time(self):
+		return self.attempt_set.aggregate(Sum('cpu_time'))['cpu_time__sum']
+	
+	def total_cpu_time_timedelta(self):
+		return datetime.timedelta(seconds=self.total_cpu_time())
+
+	def total_wall_time(self):
+		return self.attempt_set.aggregate(Sum('wall_time'))['wall_time__sum']
+	
+	def total_wall_time_timedelta(self):
+		return datetime.timedelta(seconds=self.total_wall_time())
+
+	def first_task(self):
+		try:
+			return self.attempt_set.order_by('start_time')[0]
+		except:
+			return None
+
+	def last_task(self):
+		try:
+			return self.attempt_set.order_by('-end_time')[0]
+		except:
+			return None
 
 	class Meta:
 		unique_together=('cluster','job_id','submit_time')
@@ -259,6 +418,12 @@ class Attempt(models.Model):
 			if attempt.id==self.id:
 				return counter
 			counter+=1
+
+	def get_execution_host_count(self):
+		return self.execution_hosts.all().values('name').annotate(Count('name'))
+
+	def get_contending_jobs(self):
+		return Attempt.objects.filter(end_time__gte=self.start_time, start_time__lte=self.end_time, execution_hosts__in=self.execution_hosts)
 
 	class Meta:
 		unique_together=('cluster','job','task','start_time')

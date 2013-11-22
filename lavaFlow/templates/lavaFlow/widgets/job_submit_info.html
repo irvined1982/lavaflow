@@ -1,3 +1,4 @@
+{% if job.submitopenlava %}
 <dl class="dl-horizontal">
 	<dt>User ID</dt>
 		<dd>{{ job.jobsubmitopenlava.user_id }}</dd>
@@ -128,3 +129,6 @@
 		{% endfor %}
 	</tbody>
 </table>
+{% else %}
+<div class="alert alert-info">Submit information is not available.  Most likely it hasn't been imported yet.</div>
+{% endif %}

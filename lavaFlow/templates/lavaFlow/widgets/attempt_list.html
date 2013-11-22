@@ -6,6 +6,7 @@
 				  <th>Job Id</th>
 				  <th>Task ID</th>
 				  <th>Attempt ID</th>
+				  <th>Num Procs</th>
 				  <th>Start Time</th>
 				  <th>End Time</th>
 				  <th>Status</th>
@@ -13,12 +14,13 @@
 		</thead>
 		<tbody>
   			{% for object in object_list %}
-			<tr>
+			<tr {% if object.status.name != "JOB_STAT_DONE" %}class="danger"{% endif %}>
 				<td>{{ object.cluster }}</dt>
 				<td>{{ object.user }}</td>
 				<td><a href="{{ object.job.get_absolute_url }}">{{ object.job.job_id }}</a></td>
 				<td><a href="{{ object.task.get_absolute_url }}">{{ object.task.task_id }}</a></td>
-				<td><a href="{{ object.get_absolute_url }}">{{ object.get_attempt_id }}</a></dt>
+				<td><a href="{{ object.get_absolute_url }}">{{ object.get_attempt_id }}</a></td>
+				<td>{{ object.num_processors }}</td>
 				<td>{{ object.start_time_datetime }}</td>
 				<td>{{ object.end_time_datetime }}</td>
 				<td>{{ object.status.name }}</td>

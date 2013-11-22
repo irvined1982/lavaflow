@@ -1,5 +1,8 @@
 {% extends "lavaFlow/base.html" %}
 {% block content %}
+{% if object.status.name != "JOB_STAT_DONE" %}
+<div class="alert alert-danger"><b>Warning:</b> This task exited with state: {{ object.status.name }}: {{ object.status.description }}</div>
+{% endif %}
 
 <h1>Attempt Information</h1>
 <dl class="dl-horizontal">
@@ -35,8 +38,9 @@
 <h1>Submission Information</h1>
 {% include "lavaFlow/widgets/job_submit_info.html" with job=object.job %}
 <h1>Job Finish Information</h1>
+{% if object.openlavaexitinfo %}
 <dl class="dl-horizontal">
-	<dt>User Id</dt><dd>{{ object.openlavaexitinfo. }}</dd>
+	<dt>User Id</dt><dd>{{ object.openlavaexitinfo.user_id }}</dd>
 	<dt>User</dt>
 		<dd>{{ object.openlavaexitinfo.user }}</dd>
 	<dt>Options</dt>
@@ -88,7 +92,115 @@
 	<dt>Max Swap</dt>
 		<dd>{{ object.openlavaexitinfo.max_swap }}</dd>
 </dl>
+{% else %}
+<div class="alert alert-warning">Extended job finish information has not been imported for this job.</div>
+{% endif %}
+
+<h1>Host Usage</h1>
+<table class="table table-striped table-condensed">
+	<thead>
+		<tr>
+			<th>Host Name</th>
+			<th>Num Cores</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for row in object.get_execution_host_count %}
+		<tr>
+			<td>{{ row.name }}</td><td>{{ row.name__count }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<h1>Contending Jobs</h1>
+{% if object.get_contending_jobs %}
+<table class="table table-striped table-condensed">
+	<thead>
+		<tr>
+			<th>Job ID</th>
+			<th>Task ID</th>
+			<th>User</th>
+			<th>Start Time</th>
+			<th>End Time</th>
+			<th>Pend Time</th>
+			<th>Wall Time</th>
+			<th>CPU Time</th>
+			<th>Hosts Spanned</th>
+			<th>Status</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for attempt in object.get_contending_jobs %}
+	<tr>
+		<td><a href="{{ attempt.job.get_absolute_url }}">{{ attempt.job.job_id }}</a></td>
+		<td><a href="{{ attempt.task.get_absolute_url }}">{{ attempt.task.task_id }}</a></td>
+		<td>{{ attempt.user }}</td>
+		<td>{{ attempt.start_time_datetime }}</td>
+		<td>{{ attempt.end_time_datetime }}</td>
+		<td>{{ attempt.pend_time_timedelta }}</td>
+		<td>{{ attempt.wall_time_timedelta }}</td>
+		<td>{{ attempt.cpu_time_timedelta }}</td>
+		<td>{% for host in attempt.execution_hosts %}{{ host }}<br >{% endfor %}</td>
+		<td>{{ attempt.status }}</td>
+	</tr>
+	{% empty %}
+	<td colspan="10">No contending Jobs</td>
+	{% endfor %}
+	</tbody>
+</table>
+{% else %}
+<div class="alert alert-success">No hosts used for this task were shared with other tasks</div>
+{% endif %}
+
+
 <h2>Resource Usage</h2>
+<div id='resourceChart'>
+		<svg style='height:500px'> </svg>
+	</div>
+	<script>
+		nv.addGraph(function() {
+			var chartData=[
+			{"values": [
+				{"value": {{ object.openlavaexitinfo.resource_usage.user_time }}, "label": "User Time"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.system_time }}, "label": "System Time"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.max_rss }}, "label": "Max RSS"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.integral_shared_memory }}, "label": "Int Sh Mem"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.integral_unshared_data }}, "label": "Int Unsh Data"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.integral_unshared_stack }}, "label": "Int Unsh Stack"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.page_reclaims }}, "label": "Page Reclaims"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.page_faults }}, "label": "Page Faults"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.swaps }}, "label": "Swaps"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.block_input_operations }}, "label": "Block Input Ops"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.block_output_operations }}, "label": "Block Output Ops"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.charecter_io }}, "label": "Chars Ops"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.messages_sent }}, "label": "Messages Sent"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.messages_recieved }}, "label": "Messages Rec"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.signals_recieved }}, "label": "Signals Rec"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.voluntary_context_switches }}, "label": "Vol Ctx Sw"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.involuntary_context_switches }}, "label": "Invol Ctx Sw"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.exact_user_time }}, "label": "Exact User Time"}
+				], 
+				"key": "Recorded Resource Usage"}];
+			var chart = nv.models.discreteBarChart()
+				.x(function(d) { return d.label })
+				.y(function(d) { return d.value })
+				.staggerLabels(true)
+				.tooltips(false)
+				.showValues(true);
+		
+			d3.select('#resourceChart svg')
+	 			.datum(chartData)
+		    	.transition().duration(500)
+    			.call(chart);
+
+			nv.utils.windowResize(chart.update);
+			return chart;
+		});
+	</script>
+
+
+
 <table class="table table-striped table-condensed">
 	<thead>
 		<tr>
@@ -125,7 +237,7 @@
 			<td>{{ object.openlavaexitinfo.resource_usage.swaps }}</td>
 			<td>{{ object.openlavaexitinfo.resource_usage.block_input_operations }}</td>
 			<td>{{ object.openlavaexitinfo.resource_usage.block_output_operations }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.charecter_op }}</td>
+			<td>{{ object.openlavaexitinfo.resource_usage.charecter_io }}</td>
 			<td>{{ object.openlavaexitinfo.resource_usage.messages_sent }}</td>
 			<td>{{ object.openlavaexitinfo.resource_usage.messages_recieved }}</td>
 			<td>{{ object.openlavaexitinfo.resource_usage.signals_recieved }}</td>

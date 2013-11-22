@@ -12,19 +12,35 @@
 	<dt>Submit Host</td>
 		<dd>{{ object.submit_host }}</dd>
 	<dt>Submit Time</td>
-		<dd>{{ objectsubmit_time_datetime }}</dd>
+		<dd>{{ object.submit_time_datetime }}</dd>
+	<dt>First Task Started</dt>
+		<dd><a href="{{ object.first_task.get_absolute_url }}">{{ object.first_task.start_time_datetime }}</a></dd>
+	<dt>Last Task Finished</dt>
+		<dd><a href="{{ object.last_task.get_absolute_url }}">{{ object.last_task.end_time_datetime }}</a></dd>
+	<dt>Total Pend Time</dt>
+		<dd>{{ object.total_pend_time_timedelta}}</dd>
+	<dt>Pend Time for First Task</dt>
+		<dd><a href="{{ object.first_task.get_absolute_url }}">{{ object.first_task.pend_time_timedelta }}</a></dd>
+	<dt>Total CPU Time</dt>
+		<dd>{{ object.total_cpu_time_timedelta }}</dd>
+	<dt>Total Wall Time</dt>
+		<dd>{{ object.total_wall_time_timedelta }}</dd>
+	
 </dl>
 <h1>Tasks</h1>
+{% if object.short_jobs %}
+<div class="alert alert-warning"><b>Warning:</b> Job contains tasks that ran for less than one second.</div>
+{% endif %}
+{% if object.exited_jobs %}
+<div class="alert alert-danger"><b>Warning:</b> Job contains tasks that did not exit as expected.</div>
+{% endif %}
 {% include "lavaFlow/widgets/attempt_list.html" with object_list=object.attempt_set.all %}
-
-<h1>Submission Information</h1>
-{% include "lavaFlow/widgets/job_submit_info.html" with job=job %}
-<div id="chart">
-    <svg></svg>
-  </div>
-
-  <script>        
-   	  d3.json('http://master:8000/lavaFlow/util/1380217200/1380218200/', function(data) {
+<h1>Job Throughput</h1>
+<div id="utilChart">
+    <svg style='height:500px'></svg>
+</div>
+<script>        
+	d3.json('{% url "util_view_filter" starttime=object.submit_time|add:"-60" endtime=object.end_time|add:"60" filter_string=object.attempt_filter_string %}', function(data) {
 		  nv.addGraph(function() {
 			  var chart = nv.models.stackedAreaChart()
 			  .x(function(d) { return d.x })
@@ -33,12 +49,15 @@
 			  chart.xAxis.tickFormat(function(d) { return d3.time.format('%c')(new Date(d)) });
 			  chart.yAxis.tickFormat(d3.format(',.2f'));
 			  chart.xAxis.rotateLabels(-45);
-			  d3.select('#chart svg').datum(data).transition().duration(500).call(chart);
+			  d3.select('#utilChart svg').datum(data).transition().duration(500).call(chart);
 			  nv.utils.windowResize(chart.update);
 			  return chart;
 		  });
 	  })
   </script>
+
+<h1>Submission Information</h1>
+{% include "lavaFlow/widgets/job_submit_info.html" with job=job %}
 
 
 {% endblock %}
