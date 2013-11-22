@@ -33,7 +33,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import cache_page
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render,render_to_response
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.db.models import Avg
@@ -45,7 +45,7 @@ from lavaFlow.models import *
 log=logging.getLogger(__name__)
 @csrf_exempt
 def openlava_import(request,cluster_name):
-	data=json.loads(request.raw_post_data)
+	data=json.loads(request.body)
 	if data['event_type']==1: # Job New Event
 		(cluster, created)=Cluster.objects.get_or_create(name=cluster_name)
 		(user, created)=User.objects.get_or_create(name=data['user_name'])
@@ -160,38 +160,79 @@ def openlava_import(request,cluster_name):
 	return HttpResponse("OK", content_type="text/plain")
 
 
-def utilization_data(request, starttime, endtime, filter_string="", group_string=""):
-	# set the start and end times to the correct times in JS date format (Milliseconds)
-	starttime=int(starttime)
-	endtime=int(endtime)
-
-	# Build the additional filters
-	filter_args={}
-	if len(filter_string)>0:
-		for f in filter_string.split("/"):
-			(filter, dot, value)=f.partition(".")
-			filter_args[filter]=value
-	print filter_args
-
-	# Build the additional groups
-	group_args=[]
-	if len(group_string)>0:
-		group_args=group_string.split("/")
-
-	# Get the attempts that we are interested in
-	# Only jobs that were submitted before the end time and ended after the start time
-	attempts=Attempt.objects.filter(
-			job__submit_time__lte=endtime, 
-			end_time__gte=starttime) 
-
-	#from this point on all times are js time...
-	starttime=starttime * 1000
-	endtime=endtime * 1000
-
-	# Filter them again if additional filters are required.
+def get_attempts(start_time_js, end_time_js, filter_string=""):
+	start_time=int(int(start_time_js)/1000)
+	end_time=int(int(end_time_js)/1000)
+	filter_args=filter_string_to_params(filter_string)
+	attempts=Attempt.objects.all()
+	if start_time:
+		attempts=attempts.filter(end_time__gte=start_time)
+	if end_time:
+		attempts=attempts.filter(job__submit_time__lte=end_time)
 	if len(filter_args)>0:
 		attempts=attempts.filter(**filter_args)
+
+	return attempts
+
+def utilization_table(request, start_time_js=0, end_time_js=0, filter_string="", group_string=""):
+	start_time_js=int(start_time_js)
+	end_time_js=int(end_time_js)
+	attempts=get_attempts(start_time_js, end_time_js, filter_string)
+	group_args=group_string_to_group_args(group_string)
+	if len(group_args)>0:
+		attempts=attempts.values(*group_args)
+	annotations=[]
+	aggs=['pend_time','wall_time','cpu_time']
+	for i in aggs:
+		annotations.append(Avg(i))
+		annotations.append(Min(i))
+		annotations.append(Max(i))
+		annotations.append(Sum(i))
+	rows=[]
+	header=[]
+	nice_names={
+			'num_processors':"Num Slots",
+			'cluster__name':"Cluster",
+			'status__name':"Exit Reason",
+			}
+	for a in group_args:
+		field={}
+		field['name']=a
+		if a in nice_names:
+			field['nice_name']=nice_names[a]
+		else:
+			field['nice_name']=a
+		header.append(field)
 	
+	for r in attempts.annotate(*annotations):
+		row={
+				'groups':[]
+			}
+		for field in group_args:
+			f={}
+			f['name']=field
+			if field in nice_names:
+				f['nice_name']=nice_names[field]
+			else:
+				f['nice_name']=field
+
+			f['value']=r[field]
+			row['groups'].append(f)
+
+		for a in aggs:
+			for i in ["avg","min","max","sum"]:
+				name="%s__%s" % (a,i)
+				row[name]=datetime.timedelta(seconds=int(r[name]))
+		rows.append(row)
+
+	return render(request, "lavaFlow/widgets/utilization_chart.html", {'header':header,'rows':rows})
+
+
+def utilization_data(request, start_time_js=0, end_time_js=0, filter_string="", group_string=""):
+	start_time_js=int(start_time_js)
+	end_time_js=int(end_time_js)
+	attempts=get_attempts(start_time_js, end_time_js, filter_string)
+
 	# Only get the values we actually want - this is then
 	# done in one request and is much faster
 	values=[
@@ -200,11 +241,12 @@ def utilization_data(request, starttime, endtime, filter_string="", group_string
 			"end_time",
 			"num_processors",
 			]
+	group_args=group_string_to_group_args(group_string)
 	values.extend(group_args)
-	print values
 	attempts=attempts.values(*values)
 
 	serieses={}
+	event_times=[]
 
 	for attempt in attempts:
 		# Build the series name from the grouping...
@@ -225,42 +267,37 @@ def utilization_data(request, starttime, endtime, filter_string="", group_string
 
 		# Check that both series exist.
 		if not pend_series_name in serieses:
-			serieses[pend_series_name]={starttime:0,endtime:0}
+			serieses[pend_series_name]={start_time_js:0,end_time_js:0}
 		pend_series=serieses[pend_series_name]
 
 		if not run_series_name in serieses:
-			serieses[run_series_name]={starttime:0,endtime:0}
+			serieses[run_series_name]={start_time_js:0,end_time_js:0}
 		run_series=serieses[run_series_name]
 
 		# Get the values
-		submit_time = attempt['job__submit_time'] * 1000
-		start_time = attempt['start_time'] * 1000
-		end_time = attempt['end_time'] * 1000
+		submit_time = int(attempt['job__submit_time']) * 1000
+		start_time = int(attempt['start_time']) * 1000
+		end_time = int(attempt['end_time']) * 1000
 		num_processors = attempt['num_processors']
 
 
 		# Sanitize them so that they do not go out of bounds
-		if submit_time < starttime:
-			submit_time=starttime
-		if start_time < starttime:
-			start_time=starttime
-		if end_time > endtime:
-			end_time=endtime
+		if submit_time < start_time_js:
+			submit_time=start_time_js
+		if start_time < start_time_js:
+			start_time=start_time_js
+		if end_time > end_time_js:
+			end_time=end_time_js
 
-		if submit_time not in run_series:
-			run_series[submit_time]=0
-		if start_time not in run_series:
-			run_series[start_time]=0
-		if end_time not in run_series:
-			run_series[end_time]=0
-
-		# Make sure they have a container in the appropriate series.
-		if submit_time not in pend_series:
-			pend_series[submit_time]=0
-		if start_time not in pend_series:
-			pend_series[start_time]=0
-		if end_time not in pend_series:
-			pend_series[end_time]=0
+		# All series shall have a time for each entry, this
+		# makes the chart smoother as there is a data point
+		# for each action in both pending and running jobs.
+		for time in [submit_time, start_time, end_time]:
+			for series in [run_series, pend_series]:
+				if time not in series:
+					series[time]=0
+			if time not in event_times:
+				event_times.append(time)
 
 		# Adjust the value accordingly
 		pend_series[submit_time] += num_processors
@@ -269,29 +306,159 @@ def utilization_data(request, starttime, endtime, filter_string="", group_string
 
 		run_series[start_time] += num_processors
 		run_series[end_time] -= num_processors
+
 	series_int=[]
+	max_length=800
+	# If there are more datapoints than can be processed
+	# Then downsample...
+	if len(event_times) > max_length:
+		interval=int((end_time_js-start_time_js)/max_length)
+		event_times=range( start_time_js, end_time_js, interval)
+
+	# Process each series
 	for series_name, series in serieses.iteritems():
-		total_slots_at_time=0
 		d3_series={
 				'key':series_name,
 				'values':[]
 				}
 
-		# Make the series contain a running total
-		for time in sorted(series.keys()): 
+		# Change the series from the integral to the actual
+		# total value.
+		values=[]
+		total_slots_at_time=0
+		for time in sorted(series.keys()):
+			value=series[time]
 			# if it is a mid value, insert a value next to it
 			# lsf has a 1 second resolution, so put it a milisecond before
 			# this means graphs will look square, which is more accurate than peaks.
-			if time <= endtime and time > starttime:
-				d3_series['values'].append({'x':time-1,'y':total_slots_at_time})
-			total_slots_at_time+=series[time]
-			d3_series['values'].append({'x':time,'y':total_slots_at_time})
+			if time <= end_time_js and time > start_time_js:
+				series[time-1]=total_slots_at_time
+			total_slots_at_time += value
+			series[time] = total_slots_at_time
+		times=sorted(series.keys())
+		for time in times:
+			values.append(series[time])
+		ip=interpolate.interp1d(times, values, kind='nearest',bounds_error=False,fill_value=0.0)
+
+		# Now populate with interpolated data.
+		for time in sorted(event_times):
+			d3_series['values'].append({'x':time,'y':int(ip(time))})
 		series_int.append(d3_series)
-	return HttpResponse(json.dumps(series_int), content_type="application/json")
+
+	return HttpResponse(json.dumps(series_int, indent=1), content_type="application/json")
 
 
+def utilization_view(request, start_time_js=None, end_time_js=None, filter_string="", group_string=""):
+	#
+	if start_time_js == None:
+		start_time_js=-1
+	if end_time_js == None:
+		end_time_js = -1
+
+	data={
+			'report_range_url':reverse('get_report_range', args=['']),
+			'build_filter_url':reverse('build_filter'),
+			'start_time':start_time_js,
+			'end_time':end_time_js,
+		}
+	return render(request, "lavaFlow/utilization_view.html",data)
+
+def util_total_attempts(request, start_time_js=None, end_time_js=None, filter_string="", group_string=""):
+	start_time_js=int(start_time_js)
+	end_time_js=int(end_time_js)
+	attempts=get_attempts(start_time_js, end_time_js, filter_string)
+	count=attempts.count()
+	data={
+			'count':count,
+		}
+	return HttpResponse(json.dumps(data), content_type="application/json")
 
 
+def util_report_range(request, filter_string=""):
+	ONE_DAY=24*60*60*60 # 1 day in seconds
+	filter_args=filter_string_to_params(filter_string)
+	attempts=Attempt.objects.all()
+	if len(filter_args)>0:
+		attempts=attempts.filter(**filter_args)
 
+	count=attempts.count()
+	end_time=attempts.order_by('-end_time')[0].end_time
+	start_time=0
+	suggested_end_time=end_time
+	suggested_start_time=end_time
+
+	if count > 0:
+		start_time=attempts.order_by('job__submit_time')[0].job.submit_time
+		end_time=attempts.order_by('-end_time')[0].end_time
+		suggested_end_time=end_time
+		suggested_start_time=end_time-ONE_DAY
+		if suggested_start_time<start_time:
+			suggested_start_time=start_time
+
+	data={
+			'count':count,
+			'end_time':end_time * 1000,
+			'start_time':start_time * 1000,
+			'suggested_end_time':suggested_end_time * 1000,
+			'suggested_start_time':suggested_start_time * 1000,
+	}
+
+	return HttpResponse(json.dumps(data), content_type="application/json")
+
+def group_string_to_group_args(group_string):
+	if group_string=="none":
+		return []
+	group_args=[]
+	if len(group_string)>0:
+		group_args=group_string.split("/")
+	return group_args
+
+def filter_string_to_params(filter_string):
+	# Build the additional filters
+	if filter_string=="none":
+		return {}
+	filter_args={}
+	if len(filter_string)>0:
+		for f in filter_string.split("/"):
+			(filter, dot, value)=f.partition(".")
+			if filter.endswith("__in"): # multi value...
+				if filter not  in filter_args:
+					filter_args[filter]=[]
+				filter_args[filter].append[value]
+			filter_args[filter]=value
+	return filter_args
+
+# data.filters{name:[values]
+
+@csrf_exempt
+def build_filter(request):
+	data=json.loads(request.body)
+
+	view=data['view']
+	start_time_js=data['start_time_js']
+	if start_time_js<0:
+		start_time_js=0
+	end_time_js=data['end_time_js']
+	if end_time_js<0:
+		end_time_js=0
+
+	values=[]
+	for name,value in data['filters'].iteritems():
+		if name.endswith('__in'): #list context
+			values.extend([ str(val) for val in value ])
+		else:
+			values.append(str(value))
+	filter_string="/".join(values)
+	if len(filter_string)<1:
+		filter_string="none"
+
+	group_string="/".join(data['groups'])
+	if len(group_string)<1:
+		group_string="none"
+
+	url=reverse(view, kwargs={'start_time_js':int(start_time_js), 'end_time_js':int(end_time_js), 'filter_string':str(filter_string), 'group_string':str(group_string)})
+	url=request.build_absolute_uri(url)
+
+	return HttpResponse(json.dumps({'url':url}), content_type="application/json")
 
 

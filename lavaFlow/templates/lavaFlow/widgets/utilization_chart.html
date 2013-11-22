@@ -1,0 +1,32 @@
+	  <table class="table table-striped table-condensed">
+		  <thead>
+			  <tr>
+				  {% for field in header %}
+				  <th>{{ field.nice_name }}</th>
+				  {% endfor %}
+				  <th>Sum Wall Time</th>
+				  <th>Avg Wall Time</th>
+				  <th>Sum CPU Time</th>
+				  <th>Avg CPU Time</th>
+				  <th>Sum Pend Time</th>
+				  <th>Avg Pend Time</th>
+			  </tr>
+		</thead>
+		<tbody>
+  			{% for row in rows %}
+			<tr>
+				{% for field in row.groups %}
+				<td>{{ field.value }}</td>
+				{% endfor %}
+				<td>{{ row.wall_time__sum }}</td>
+				<td title="Average: {{ row.wall_time__avg }}, Min: {{ row.wall_time__min }}, Max: {{ row.wall_time__max }}">{{ row.wall_time__avg }}</td>
+				<td>{{ row.cpu_time__sum }}</td>
+				<td title="Average: {{ row.cpu_time__avg }}, Min: {{ row.cpu_time__min }}, Max: {{ row.cpu_time__max }}">{{ row.cpu_time__avg }}</td>
+				<td>{{ row.wall_time__sum }}</td>
+				<td title="Average: {{ row.pend_time__avg }}, Min: {{ row.pend_time__min }}, Max: {{ row.pend_time__max }}">{{ row.pend_time__avg }}</td>
+			</tr>
+			{% empty %}
+			<td colspan={{ headers|length|add:6 }}>No Results</td>
+			{% endfor %}
+		</tbody>
+	</table>

@@ -8,11 +8,13 @@
 	<link rel="stylesheet" href="{% static "lavaFlow/bootstrap/css/bootstrap.min.css" %}">
 	<link rel="stylesheet" href="{% static "lavaFlow/bootstrap/css/bootstrap-theme.min.css" %}">
 	<link rel="stylesheet" href="{% static "lavaFlow/nvd3/nv.d3.css" %}" >
+	<link rel="stylesheet" href="{% static "lavaFlow/jquery-ui/themes/base/jquery-ui.css" %}" >
 
 	<script src="{% static "lavaFlow/jquery/jquery-2.0.3.js" %}"></script>
 	<script src="{% static "lavaFlow/nvd3/lib/d3.v3.js" %}"></script>
 	<script src="{% static "lavaFlow/nvd3/nv.d3.js" %}"></script>
 	<script src="{% static "lavaFlow/bootstrap/js/bootstrap.js" %}"></script>
+	<script src="{% static "lavaFlow/jquery-ui/ui/jquery-ui.js" %}"></script>
 
   </head>
   <body>
@@ -24,7 +26,7 @@
 			  <span class="icon-bar"></span>
 			  <span class="icon-bar"></span>
 		  </button>
-		  <a class="navbar-brand" href="#">Lava View</a>
+		  <a class="navbar-brand" href="{% url "utilization_view_default" %}">LavaFlow</a>
 	  </div>
        <div class="collapse navbar-collapse">
 		   <ul class="nav navbar-nav">
@@ -36,6 +38,7 @@
 			   <li><a href="{% url 'job_list' %}">Jobs</a></li>
 			   <li><a href="{% url 'task_list' %}">Tasks</a></li>
 			   <li><a href="{% url 'attempt_list' %}">Attempts</a></li>
+			   {% block actions %}{% endblock %}
 		   </ul>
 	   </div>
 	   </nav>
