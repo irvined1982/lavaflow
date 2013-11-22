@@ -1,7 +1,7 @@
 	  <table class="table table-striped table-condensed">
 		  <thead>
 			  <tr>
-				  <th>User Name</th>
+				  <th>Project Name</th>
 				  <th>Total Jobs</th>
 				  <th>Total Tasks</th>
 				  <th>Total Attempts</th>
@@ -28,7 +28,7 @@
 					<td {% if object.average_pend_time_percent > 50 %} class="danger"{% elif object.average_pend_time_percent > 25 %}class="warning"{% endif %}>{{ object.average_pend_time_percent|floatformat:"2" }}</td>
 			</tr>
 			{% empty %}
-			<tr><td colspan="10">No Users.</td></tr>
+			<tr><td colspan="10">No Projects.</td></tr>
 			{% endfor %}
 		</tbody>
 	</table>

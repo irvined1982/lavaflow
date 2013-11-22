@@ -3,6 +3,10 @@
 {% if object.status.name != "JOB_STAT_DONE" %}
 <div class="alert alert-danger"><b>Warning:</b> This task exited with state: {{ object.status.name }}: {{ object.status.description }}</div>
 {% endif %}
+{% if object.wall_time <= 1 %}
+<div class="alert alert-warning"><b>Warning:</b> This task ran for less than one second.</div>
+{% endif %}
+
 
 <h1>Attempt Information</h1>
 <dl class="dl-horizontal">

@@ -16,6 +16,12 @@
 	<dt>Submit Time</td>
 		<dd>{{ object.job.submit_time_datetime }}</dd>
 </dl>
+{% if object.short_jobs %}
+<div class="alert alert-warning"><b>Warning:</b> Task contains tasks that ran for less than one second.</div>
+{% endif %}
+{% if object.exited_jobs %}
+<div class="alert alert-danger"><b>Warning:</b> Task contains attempts that did not exit as expected.</div>
+{% endif %}
 <h1>Attempts</h1>
 {% include "lavaFlow/widgets/attempt_list.html" with object_list=object.attempt_set.all %}
 

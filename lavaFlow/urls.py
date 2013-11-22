@@ -24,10 +24,12 @@ from django.views.generic import DetailView
 from lavaFlow.models import * 
 
 urlpatterns = patterns('',
+		url(r'^clusters/$', ListView.as_view(model=Cluster, paginate_by=20), name="cluster_list" ),
+		url(r'^clusters/(.*?)/import/openlava$', 'lavaFlow.views.openlava_import', name='openlava_import'),
 		url(r'^hosts/$', ListView.as_view(model=Host, paginate_by=20), name="host_list" ),
 		url(r'^users/$', ListView.as_view(model=User, paginate_by=20), name="user_list" ),
 		url(r'^queues/$', ListView.as_view(model=Queue, paginate_by=20), name="queue_list" ),
-		url(r'^cluster/(.*?)/import/openlava$', 'lavaFlow.views.openlava_import', name='openlava_import'),
+		url(r'^projects/$', ListView.as_view(model=Project, paginate_by=20), name="project_list" ),
 		url(r'^attempts/$', ListView.as_view(model=Attempt, paginate_by=20), name="attempt_list" ),
 		url(r'^attempts/(?P<pk>\d+)$', DetailView.as_view(model=Attempt), name="attempt_detail"),
 		url(r'^tasks/$', ListView.as_view(model=Task, paginate_by=20), name="task_list" ),
