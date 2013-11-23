@@ -25,7 +25,7 @@ from lavaFlow.models import *
 
 urlpatterns = patterns('',
 		url(r'^$', 'lavaFlow.views.utilization_view', name="utilization_view_default" ),
-		url(r'^(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$', 'lavaFlow.views.utilization_view', name="utilization_view"),
+		url(r'^(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$', 'lavaFlow.views.utilization_view', name="utilization_view"),
 		url(r'^clusters/$', ListView.as_view(model=Cluster, paginate_by=20), name="cluster_list" ),
 		url(r'^clusters/(.*?)/import/openlava$', 'lavaFlow.views.openlava_import', name='openlava_import'),
 		url(r'^hosts/$', ListView.as_view(model=Host, paginate_by=20), name="host_list" ),
@@ -39,11 +39,11 @@ urlpatterns = patterns('',
 		url(r'^jobs/$', ListView.as_view(model=Job, paginate_by=20), name="job_list" ),
 		url(r'^jobs/(?P<pk>\d+)$', DetailView.as_view(model=Job), name="job_detail"),
 
-		url(r'^util_total_attempts/(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$', 'lavaFlow.views.util_total_attempts', name='util_total_attempts'),
+		url(r'^util_total_attempts/(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$', 'lavaFlow.views.util_total_attempts', name='util_total_attempts'),
 
-		url(r'^util/(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$', 'lavaFlow.views.utilization_data', name='util_chart_view'),
-		url(r'^utilization_table/(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$', 'lavaFlow.views.utilization_table', name='utilization_table'),
+		url(r'^util/(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$', 'lavaFlow.views.utilization_data', name='util_chart_view'),
+		url(r'^utilization_table/(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$', 'lavaFlow.views.utilization_table', name='utilization_table'),
 
-		url(r'^util_report_range/(?P<filter_string>\.*)$', 'lavaFlow.views.util_report_range', name="get_report_range"),
+		url(r'^util_report_range/(?P<filter_string>.*)/exclude/(?P<exclude_string>.*)$', 'lavaFlow.views.util_report_range', name="get_report_range"),
 		url(r'^util_build_filter$', 'lavaFlow.views.build_filter', name="build_filter"),
 		)

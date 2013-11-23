@@ -160,24 +160,26 @@ def openlava_import(request,cluster_name):
 	return HttpResponse("OK", content_type="text/plain")
 
 
-def get_attempts(start_time_js, end_time_js, filter_string=""):
+def get_attempts(start_time_js, end_time_js, exclude_string, filter_string):
 	start_time=int(int(start_time_js)/1000)
 	end_time=int(int(end_time_js)/1000)
 	filter_args=filter_string_to_params(filter_string)
+	exclude_args=filter_string_to_params(exclude_string)
 	attempts=Attempt.objects.all()
 	if start_time:
 		attempts=attempts.filter(end_time__gte=start_time)
 	if end_time:
 		attempts=attempts.filter(job__submit_time__lte=end_time)
-	if len(filter_args)>0:
-		attempts=attempts.filter(**filter_args)
-
+	for key,val in filter_args.items():
+		attempts=attempts.filter(**{key:val})
+	for key,val in exclude_args.items():
+		attempts=attempts.exclude(**{key:val})
 	return attempts
 
-def utilization_table(request, start_time_js=0, end_time_js=0, filter_string="", group_string=""):
+def utilization_table(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
 	start_time_js=int(start_time_js)
 	end_time_js=int(end_time_js)
-	attempts=get_attempts(start_time_js, end_time_js, filter_string)
+	attempts=get_attempts(start_time_js, end_time_js, exclude_string, filter_string)
 	group_args=group_string_to_group_args(group_string)
 	if len(group_args)>0:
 		attempts=attempts.values(*group_args)
@@ -228,10 +230,11 @@ def utilization_table(request, start_time_js=0, end_time_js=0, filter_string="",
 	return render(request, "lavaFlow/widgets/utilization_chart.html", {'header':header,'rows':rows})
 
 
-def utilization_data(request, start_time_js=0, end_time_js=0, filter_string="", group_string=""):
+def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",  filter_string="", group_string=""):
 	start_time_js=int(start_time_js)
 	end_time_js=int(end_time_js)
-	attempts=get_attempts(start_time_js, end_time_js, filter_string)
+	print exclude_string
+	attempts=get_attempts(start_time_js, end_time_js, exclude_string, filter_string)
 
 	# Only get the values we actually want - this is then
 	# done in one request and is much faster
@@ -348,7 +351,7 @@ def utilization_data(request, start_time_js=0, end_time_js=0, filter_string="", 
 	return HttpResponse(json.dumps(series_int, indent=1), content_type="application/json")
 
 
-def utilization_view(request, start_time_js=None, end_time_js=None, filter_string="", group_string=""):
+def utilization_view(request, start_time_js=None, end_time_js=None, exclude_string="none", filter_string="none", group_string=""):
 	#
 	if start_time_js == None:
 		start_time_js=-1
@@ -356,17 +359,19 @@ def utilization_view(request, start_time_js=None, end_time_js=None, filter_strin
 		end_time_js = -1
 
 	data={
-			'report_range_url':reverse('get_report_range', args=['']),
+			'filters':json.dumps(filter_string_to_params(filter_string)),
+			'excludes':json.dumps(filter_string_to_params(exclude_string)),
+			'report_range_url':reverse('get_report_range', kwargs={'filter_string':filter_string, 'exclude_string':exclude_string}),
 			'build_filter_url':reverse('build_filter'),
 			'start_time':start_time_js,
 			'end_time':end_time_js,
 		}
 	return render(request, "lavaFlow/utilization_view.html",data)
 
-def util_total_attempts(request, start_time_js=None, end_time_js=None, filter_string="", group_string=""):
+def util_total_attempts(request, start_time_js=None, end_time_js=None, exclude_string="", filter_string="", group_string=""):
 	start_time_js=int(start_time_js)
 	end_time_js=int(end_time_js)
-	attempts=get_attempts(start_time_js, end_time_js, filter_string)
+	attempts=get_attempts(start_time_js, end_time_js, exclude_string, filter_string)
 	count=attempts.count()
 	data={
 			'count':count,
@@ -374,15 +379,18 @@ def util_total_attempts(request, start_time_js=None, end_time_js=None, filter_st
 	return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-def util_report_range(request, filter_string=""):
+def util_report_range(request, exclude_string="", filter_string=""):
 	ONE_DAY=24*60*60*60 # 1 day in seconds
 	filter_args=filter_string_to_params(filter_string)
+	exclude_args=filter_string_to_params(exclude_string)
 	attempts=Attempt.objects.all()
-	if len(filter_args)>0:
-		attempts=attempts.filter(**filter_args)
+	for key,val in filter_args.items():
+		attempts=attempts.filter(**{key:val})
+	for key,val in exclude_args.items():
+		attempts=attempts.exclude(**{key:val})
 
 	count=attempts.count()
-	end_time=attempts.order_by('-end_time')[0].end_time
+	end_time=0
 	start_time=0
 	suggested_end_time=end_time
 	suggested_start_time=end_time
@@ -415,16 +423,16 @@ def group_string_to_group_args(group_string):
 
 def filter_string_to_params(filter_string):
 	# Build the additional filters
-	if filter_string=="none":
+	if len(filter_string)<1 or filter_string=="none":
 		return {}
 	filter_args={}
-	if len(filter_string)>0:
-		for f in filter_string.split("/"):
-			(filter, dot, value)=f.partition(".")
-			if filter.endswith("__in"): # multi value...
-				if filter not  in filter_args:
-					filter_args[filter]=[]
-				filter_args[filter].append[value]
+	for f in filter_string.split("/"):
+		(filter, dot, value)=f.partition(".")
+		if filter.endswith("__in"): # multi value...
+			if filter not  in filter_args:
+				filter_args[filter]=[]
+			filter_args[filter].append(value)
+		else:
 			filter_args[filter]=value
 	return filter_args
 
@@ -445,18 +453,31 @@ def build_filter(request):
 	values=[]
 	for name,value in data['filters'].iteritems():
 		if name.endswith('__in'): #list context
-			values.extend([ str(val) for val in value ])
+			values.extend([ "%s.%s" % (name,val) for val in value ])
 		else:
-			values.append(str(value))
-	filter_string="/".join(values)
+			values.append("%s.%s" % (name, value))
+	filter_string= "/".join(values)
 	if len(filter_string)<1:
 		filter_string="none"
+
+	values=[]
+	for name,value in data['excludes'].iteritems():
+		if name.endswith('__in'): #list context
+			values.extend([ "%s.%s" % (name,val) for val in value ])
+		else:
+			values.append("%s.%s" % (name, value))
+	exclude_string= "/".join(values)
+	if len(exclude_string)<1:
+		exclude_string="none"
 
 	group_string="/".join(data['groups'])
 	if len(group_string)<1:
 		group_string="none"
 
-	url=reverse(view, kwargs={'start_time_js':int(start_time_js), 'end_time_js':int(end_time_js), 'filter_string':str(filter_string), 'group_string':str(group_string)})
+	if view=='get_report_range':
+		url=reverse(view, kwargs={ 'exclude_string':str(exclude_string), 'filter_string':str(filter_string)})
+	else:
+		url=reverse(view, kwargs={'start_time_js':int(start_time_js), 'end_time_js':int(end_time_js), 'exclude_string':str(exclude_string), 'filter_string':str(filter_string), 'group_string':str(group_string)})
 	url=request.build_absolute_uri(url)
 
 	return HttpResponse(json.dumps({'url':url}), content_type="application/json")

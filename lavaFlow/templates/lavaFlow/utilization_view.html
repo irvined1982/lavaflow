@@ -3,7 +3,10 @@
 	<li>
 		<a id="permalinkURL" href='#'><span class="glyphicon glyphicon-link"></span></a>
 	</li>
-	<li id="counterText">Loading...	</li>
+	<li>
+	<a href="#"><span id="filterIcon" class="glyphicon glyphicon-filter"></a></span>
+	</li>
+
 {% endblock %}
 {% block title %}Utilization View{% endblock %}
 {% block content %}
@@ -15,51 +18,371 @@
 	var selectedMin={{ start_time }};
 	var selectedMax={{ end_time }};
 	var buildFilterUrl='{{ build_filter_url|safe }}';
-	var reportRangeUrl='{{ report_range_url|safe }}';
-	$.getJSON(reportRangeUrl, function(data) {
-		var end_time=selectedMax;
-		var start_time=selectedMin;
-		if ( selectedMin < 0 || selectedMax < 0 ){
-			selectedMax=data.suggested_end_time;
-			selectedMin=data.suggested_start_time;
-		}
-		var startDate=new Date(selectedMin);
-		var endDate=new Date(selectedMax);
-		$("#counterText").text(data.count);
-		if (data.count>0){
-			$("#rangeText").text('Report start: ' + startDate + ', report end: ' + endDate );
-			$( "#slider" ).slider({
-				range: true,
-				max: data.end_time,
-				min: data.start_time,
-				values: [selectedMin, selectedMax],
-				slide: function( event, ui ){
-					var startDate=new Date(ui.values[0]);
-					var endDate=new Date(ui.values[1]);
-					$("#rangeText").text('Report start: ' + startDate + ', report end: ' + endDate );
-				},
-				change: function(event, ui){
-					selectedMin=ui.values[0];
-					selectedMax=ui.values[1];
-					updateReport();
-				},
-			});
-			updateReport();
-		}
-		else{
-			$("#rangeText").text('No data was found for this filter.' );
+	var filters={{ filters|safe }};
+	var excludes={{ excludes|safe }};
+	var count=0;
+
+	$('#filterIcon').popover({
+		"animation":true,
+		"placement":"bottom",
+		"html":true,
+		"title":"Report Information",
+		"content":function (){
+			return buildPopoverText();
 		}
 	});
+	function buildPopoverText(){
+		var h;
+		h="<dl><dt># Entries</dt><dd>"+count+"</dd>";
+		for (var key in filters) {
+	  		if (filters.hasOwnProperty(key)) {
+				h += "<dt>Filter on " + key + "</dt><dl>";
+				if (endsWith(key,"__in")){
+					filters[key].forEach(function(entry){
+						h+="<a href='#' onClick=\"removeFilter('"+key+"','"+entry+"');$('#filterIcon').popover('toggle');$('#filterIcon').popover('toggle');return false;\"><span class=\"glyphicon glyphicon-remove\"></span></a>"+entry+" ";
+					});
+				}else{
+					h+="<a href='#' onClick=\"removeFilter('"+key+"','"+filters[key]+"');$('#filterIcon').popover('toggle');$('#filterIcon').popover('toggle');return false;\"><span class=\"glyphicon glyphicon-remove\"></span></a>"+filters[key]+" ";
+				}
+				h +="</dd>";
+			}
+		}
+		for (var key in excludes) {
+	  		if (excludes.hasOwnProperty(key)) {
+				h += "<dt>Exclude " + key + "</dt><dl>";
+				if (endsWith(key,"__in")){
+					excludes[key].forEach(function(entry){
+						h+="<a href='#' onClick=\"removeExclude('"+key+"','"+entry+"');$('#filterIcon').popover('toggle');$('#filterIcon').popover('toggle');return false;\"><span class=\"glyphicon glyphicon-remove\"></span></a>"+entry+" ";
+					});
+				}else{
+				h+="<a href='#' onClick=\"removeExclude('"+key+"','"+excludes[key]+"');$('#filterIcon').popover('toggle');$('#filterIcon').popover('toggle');return false;\"><span class=\"glyphicon glyphicon-remove\"></span></a>"+excludes[key]+" ";
+				}
+				h +="</dd>";
+			}
+		}
+		h+="</dl>";
+		return h;
+	}	
 
-	var filters={};
-	function updateReport(){
+	// Add the slider
+	$( "#slider" ).slider({
+		range: true,
+		disabled: true,
+		slide: function( event, ui ){
+			var startDate=new Date(ui.values[0]);
+			var endDate=new Date(ui.values[1]);
+			$("#rangeText").text('Report start: ' + startDate + ', report end: ' + endDate );
+		},
+		change: function(event, ui){
+			selectedMin=ui.values[0];
+			selectedMax=ui.values[1];
+			if (! $("#slider").slider("option", "disabled")){
+				updateReport();
+			}
+		},
+	});
+	
+	// Add the utilization charts
+	var utilChart;
+	nv.addGraph(function() {
+		utilChart = nv.models.stackedAreaChart();
+		utilChart.clipEdge(true);
+		utilChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d)) });
+		utilChart.xAxis.rotateLabels(-45);
+		utilChart.margin({bottom: 120, left:100});
+		utilChart.xAxis.axisLabel('Date');
+		utilChart.showControls(false);
+		d3.select('#utilizationChart svg')
+		.datum([])
+		.transition().duration(500)
+		.call(utilChart);
+		nv.utils.windowResize(utilChart.update);
+		return utilChart;
+	});
+
+	var utilClusterChart;
+		nv.addGraph(function() {
+		utilClusterChart = nv.models.stackedAreaChart();
+		utilClusterChart.clipEdge(true);
+		utilClusterChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
+		utilClusterChart.xAxis.rotateLabels(-45);
+		utilClusterChart.margin({bottom: 120, left:100});
+		utilClusterChart.xAxis.axisLabel('Date');
+		utilClusterChart.showControls(false);
+			d3.select('#utilizationClusterChart svg')
+		.datum([])
+		.transition().duration(500)
+		.call(utilClusterChart);
+		nv.utils.windowResize(utilClusterChart.update);
+		return utilClusterChart;
+	});
+
+	var utilQueueChart;
+	nv.addGraph(function() {
+		utilQueueChart = nv.models.stackedAreaChart();
+		utilQueueChart.clipEdge(true);
+		utilQueueChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
+		utilQueueChart.xAxis.rotateLabels(-45);
+		utilQueueChart.margin({bottom: 120, left:100});
+		utilQueueChart.xAxis.axisLabel('Date');
+		utilQueueChart.showControls(false);
+			d3.select('#utilizationQueueChart svg')
+		.datum([])
+		.transition().duration(500)
+		.call(utilQueueChart);
+
+		nv.utils.windowResize(utilQueueChart.update);
+		return utilQueueChart;
+	});
+	var utilProjectChart;
+	nv.addGraph(function() {
+		utilProjectChart = nv.models.stackedAreaChart();
+		utilProjectChart.clipEdge(true);
+		utilProjectChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
+		utilProjectChart.xAxis.rotateLabels(-45);
+		utilProjectChart.margin({bottom: 120, left:100});
+		utilProjectChart.xAxis.axisLabel('Date');
+		utilProjectChart.showControls(false);
+			d3.select('#utilizationQueueChart svg')
+		.datum([])
+		.transition().duration(500)
+		.call(utilProjectChart);
+			nv.utils.windowResize(utilProjectChart.update);
+		return utilProjectChart;
+	});
+
+	var utilUserChart;
+	nv.addGraph(function() {
+		utilUserChart = nv.models.stackedAreaChart();
+		utilUserChart.clipEdge(true);
+		utilUserChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
+		utilUserChart.xAxis.rotateLabels(-45);
+		utilUserChart.margin({bottom: 120, left:100});
+		utilUserChart.xAxis.axisLabel('Date');
+		utilUserChart.showControls(false);
+		d3.select('#utilizationUserChart svg')
+		.datum([])
+		.transition().duration(500)
+		.call(utilChart);
+		nv.utils.windowResize(utilUserChart.update);
+		return utilUserChart;
+	});
+
+	var utilSizeChart;
+	nv.addGraph(function() {
+		utilSizeChart = nv.models.stackedAreaChart();
+		utilSizeChart.clipEdge(true);
+		utilSizeChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
+		utilSizeChart.xAxis.rotateLabels(-45);
+		utilSizeChart.margin({bottom: 120, left:100});
+		utilSizeChart.xAxis.axisLabel('Date');
+		utilSizeChart.showControls(false);
+			d3.select('#utilizationSizeChart svg')
+		.datum([])
+		.transition().duration(500)
+		.call(utilSizeChart);
+			nv.utils.windowResize(utilSizeChart.update);
+		return utilSizeChart;
+	});
+
+
+
+
+
+
+
+	// Updates the RangeSlider widget, if there is data - loads data into charts.
+	function updateRangeSlider(){
+	$( "#slider" ).slider( "option", "disabled", true );
 		var filterData={
-			view:'utilization_view',
+			view:'get_report_range',
 			filters:filters,
+			excludes:excludes,
 			groups:[],
 			start_time_js:selectedMin,
 			end_time_js:selectedMax
 		};
+		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+			$.getJSON(data.url, function(data) {
+				if (data.count>0){
+					count=data.count;
+					// If using default values, populate them 
+					if ( selectedMin < data.start_time ){
+						selectedMin=data.suggested_start_time;
+					}
+					if ( selectedMax > data.end_time ){
+						selectedMax=data.suggested_end_time;
+					}
+					if (selectedMax-selectedMin < 1){
+						selectedMax=data.suggested_end_time;
+						selectedMin=data.suggested_start_time;
+					}
+
+					// Set the counter to the amount of data
+					$("#counterText").text(data.count);
+
+					// Set the report range
+					var startDate=new Date(selectedMin);
+					var endDate=new Date(selectedMax);
+					$("#rangeText").text('Report start: ' + startDate + ', report end: ' + endDate );
+
+					// Set the range
+					$( "#slider" ).slider( "option", "max", data.end_time );
+					$( "#slider" ).slider( "option", "min", data.start_time );
+
+					// Set the selection
+					$( "#slider" ).slider( "option", "values", [ selectedMin, selectedMax ]);
+					
+					// Enable the slider
+					$( "#slider" ).slider( "option", "disabled", false );
+
+					loadWidgets();
+				}
+				else{
+					// Disable the slider
+					$( "#slider" ).slider( "option", "disabled", true );
+					$("#rangeText").text('No data was found for this filter.' );
+				}
+			});
+		});
+	}
+
+
+
+	function initializeReport(){
+		updateRangeSlider();
+	}
+	function updateReport(){
+		// Disabale the slider
+		$( "#slider" ).slider( "option", "disabled", true );
+
+		clearWidgets();
+		updateRangeSlider();
+	}
+
+
+	function endsWith(str, suffix) {
+    	return str.indexOf(suffix, str.length - suffix.length) !== -1;
+	}
+
+	function addFilter(filterName, value){
+		if ( endsWith(filterName, "__in" )){
+			if ( !filters.hasOwnProperty(filterName) ){
+				filters[filterName]=[];
+			}
+			filters[filterName].push(value)
+		}else{
+			filters[filterName]=value
+		}
+		updateReport();
+	}
+	function removeFilter(filterName,value){
+		if (filters.hasOwnProperty(filterName)){
+			if (endsWith(filterName, "__in")){
+				var loc=filters[filterName].indexOf(value);
+				if (loc >-1){
+					filters[filterName].splice(loc);
+					if ( filters[filterName].length <1 ){
+						delete filters[filterName];
+					}
+					updateReport();
+				}
+			}
+			else{
+				delete filters[filterName];
+				updateReport();
+			}
+		}
+	}
+	function removeExclude(excludeName,value){
+		if (excludes.hasOwnProperty(excludeName)){
+			if (endsWith(excludeName, "__in")){
+				var loc=excludes[excludeName].indexOf(value);
+				if (loc >-1){
+					excludes[excludeName].splice(loc);
+					if ( excludes[excludeName].length <1 ){
+						delete excludes[excludeName];
+					}
+					updateReport();
+				}
+			}
+			else{
+				delete excludes[excludeName];
+				updateReport();
+			}
+		}
+	}
+
+	function addExclude(excludeName, value){
+		if ( endsWith(excludeName, "__in" )){
+			if ( !excludes.hasOwnProperty(excludeName) ){
+				excludes[excludeName]=[];
+			}
+			excludes[excludeName].push(value)
+		}else{
+			excludes[excludeName]=value
+		}
+		updateReport();
+	}
+
+
+	function clearWidgets(){
+		// Clears data from all widgets...
+		charts=[
+			{
+				id:"#utilizationChart svg",
+				container:utilChart
+			},
+			{
+				id:"#utilizationClusterChart svg",
+				container:utilClusterChart
+			},
+			{
+				id:"#utilizationQueueChart svg",
+				container:utilQueueChart
+			},
+			{
+				id:"#utilizationUserChart svg",
+				container:utilUserChart
+			},
+			{
+				id:"#utilizationSizeChart svg",
+				container:utilSizeChart
+			},
+			{
+				id:"#utilizationProjectChart svg",
+				container:utilProjectChart
+			}
+		];
+		charts.forEach(function(entry){
+			d3.select(entry.id)
+			.datum([])
+			.transition().duration(500)
+			.call(entry.container);
+		});
+		areas=[
+			'#clusterOverview',
+			'#utilizationQueueTable',
+			'#utilizationUserTable',
+			'#utilizationSizeTable',
+			'#utilizationProjectTable'
+			];
+		areas.forEach(function(entry){
+			$(entry).html('');
+		});
+	}
+
+	function loadWidgets(){
+		// Loads data into widgets
+		var filterData={
+			view:'utilization_view',
+			filters:filters,
+			excludes:excludes,
+			groups:[],
+			start_time_js:selectedMin,
+			end_time_js:selectedMax
+		};
+
 
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 			$("#permalinkURL").attr("href", data.url);
@@ -90,13 +413,14 @@
 				.call(utilClusterChart);
 			});
 		});
+
 		filterData.groups=['queue__name'];
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 			 $.getJSON(data.url, function(data) {
 				d3.select('#utilizationQueueChart svg')
 				.datum(data)
 				.transition().duration(500)
-				.call(utilUserChart);
+				.call(utilQueueChart);
 			});
 		});
 		filterData.groups=['user__name'];
@@ -123,7 +447,7 @@
 				d3.select('#utilizationProjectChart svg')
 				.datum(data)
 				.transition().duration(500)
-				.call(utilUserChart);
+				.call(utilProjectChart);
 			});
 		});
 		
@@ -161,105 +485,7 @@
 		});
 	}
 
-	var utilChart;
-	nv.addGraph(function() {
-		utilChart = nv.models.stackedAreaChart();
-		utilChart.clipEdge(true);
-		utilChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d)) });
-		utilChart.xAxis.rotateLabels(-45);
-		utilChart.margin({bottom: 120, left:100});
-		utilChart.xAxis.axisLabel('Date');
-		utilChart.showControls(false);
-		d3.select('#utilizationChart svg')
-		.datum([])
-		.transition().duration(500)
-		.call(utilChart);
-		nv.utils.windowResize(utilChart.update);
-		return utilChart;
-	});
-
-	var utilClusterChart;
-		nv.addGraph(function() {
-		utilClusterChart = nv.models.stackedAreaChart();
-		utilClusterChart.clipEdge(true);
-		utilClusterChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
-		utilClusterChart.xAxis.rotateLabels(-45);
-		utilClusterChart.margin({bottom: 120, left:100});
-		utilClusterChart.xAxis.axisLabel('Date');
-		utilClusterChart.showControls(false);
-			d3.select('#utilizationClusterChart svg')
-		.datum([])
-		.transition().duration(500)
-		.call(utilClusterChart);
-			nv.utils.windowResize(utilClusterChart.update);
-		return utilClusterChart;
-	});
-	var utilQueueChart;
-	nv.addGraph(function() {
-		utilQueueChart = nv.models.stackedAreaChart();
-		utilQueueChart.clipEdge(true);
-		utilQueueChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
-		utilQueueChart.xAxis.rotateLabels(-45);
-		utilQueueChart.margin({bottom: 120, left:100});
-		utilQueueChart.xAxis.axisLabel('Date');
-		utilQueueChart.showControls(false);
-			d3.select('#utilizationQueueChart svg')
-		.datum([])
-		.transition().duration(500)
-		.call(utilQueueChart);
-
-		nv.utils.windowResize(utilQueueChart.update);
-		return utilQueueChart;
-	});
-	var utilProjChart;
-	nv.addGraph(function() {
-		utilProjChart = nv.models.stackedAreaChart();
-		utilProjChart.clipEdge(true);
-		utilProjChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
-		utilProjChart.xAxis.rotateLabels(-45);
-		utilProjChart.margin({bottom: 120, left:100});
-		utilProjChart.xAxis.axisLabel('Date');
-		utilProjChart.showControls(false);
-			d3.select('#utilizationQueueChart svg')
-		.datum([])
-		.transition().duration(500)
-		.call(utilProjChart);
-			nv.utils.windowResize(utilProjChart.update);
-		return utilProjChart;
-	});
-	var utilUserChart;
-	nv.addGraph(function() {
-		utilUserChart = nv.models.stackedAreaChart();
-		utilUserChart.clipEdge(true);
-		utilUserChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
-		utilUserChart.xAxis.rotateLabels(-45);
-		utilUserChart.margin({bottom: 120, left:100});
-		utilUserChart.xAxis.axisLabel('Date');
-		utilUserChart.showControls(false);
-		d3.select('#utilizationUserChart svg')
-		.datum([])
-		.transition().duration(500)
-		.call(utilChart);
-		nv.utils.windowResize(utilUserChart.update);
-		return utilUserChart;
-	});
-
-	var utilSizeChart;
-	nv.addGraph(function() {
-		utilSizeChart = nv.models.stackedAreaChart();
-		utilSizeChart.clipEdge(true);
-		utilSizeChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
-		utilSizeChart.xAxis.rotateLabels(-45);
-		utilSizeChart.margin({bottom: 120, left:100});
-		utilSizeChart.xAxis.axisLabel('Date');
-		utilSizeChart.showControls(false);
-			d3.select('#utilizationSizeChart svg')
-		.datum([])
-		.transition().duration(500)
-		.call(utilChart);
-			nv.utils.windowResize(utilSizeChart.update);
-		return utilSizeChart;
-	});
+	initializeReport();
 </script>
 <h1>Overall Utilization</h1>
 <div id='utilizationChart'><svg style='height:500px'> </svg></div>
