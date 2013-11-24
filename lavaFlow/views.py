@@ -49,7 +49,7 @@ def openlava_import(request,cluster_name):
 	if data['event_type']==1: # Job New Event
 		(cluster, created)=Cluster.objects.get_or_create(name=cluster_name)
 		(user, created)=User.objects.get_or_create(name=data['user_name'])
-		(submit_host, created)=Host.objects.get_or_create(name=data['submission_host'])
+		(submit_host, created)=Host.objects.get_or_create(name=data['submit_host'])
 		(job, created)=Job.objects.get_or_create(cluster=cluster, job_id=data['job_id'], user=user, submit_host=submit_host, submit_time=data['submit_time'])
 		(queue, created)=Queue.objects.get_or_create(name=data['queue'], cluster=cluster)
 
@@ -63,13 +63,14 @@ def openlava_import(request,cluster_name):
 			js.user=user
 			#resource limits
 			js.queue=queue
-			js.submission_host=submit_host
+			js.submit_host=submit_host
 			limit=OpenLavaResourceLimit()
+			print data['resource_limits']
 			for k,v in data['resource_limits'].items():
 				setattr(limit,k,v)
 			limit.save()
 			js.resource_limits=limit
-			for item in ['user_id','num_processors','begin_time','termination_time','signal_value','checkpoint_period','restart_pid','host_specification','host_factor','umask','resource_request','cwd','checkpoint_directory','input_file','output_file','error_file','input_spool','command_spool','spool_directory','submission_home_dir','job_file','dependency_condition','job_name','command','num_transfer_files','pre_execution_command','email_user','nios_port','max_num_processors','schedule_host_type','login_shell','user_priority']:
+			for item in ['user_id','num_processors','begin_time','termination_time','signal_value','checkpoint_period','restart_pid','host_specification','host_factor','umask','resource_request','cwd','checkpoint_dir','input_file','output_file','error_file','input_file_spool','command_spool','job_spool_dir','submit_home_dir','job_file','dependency_condition','job_name','command','num_transfer_files','pre_execution_cmd','email_user','nios_port','max_num_processors','schedule_host_type','login_shell','user_priority']:
 				setattr(js,item,data[item])
 			js.save()
 			for option in data['options']:
@@ -89,7 +90,7 @@ def openlava_import(request,cluster_name):
 		# Job Finish Event
 		(cluster, created)=Cluster.objects.get_or_create(name=cluster_name)
 		(user, created)=User.objects.get_or_create(name=data['user_name'])
-		(submit_host, created)=Host.objects.get_or_create(name=data['submission_host'])
+		(submit_host, created)=Host.objects.get_or_create(name=data['submit_host'])
 		(job, created)=Job.objects.get_or_create(cluster=cluster, job_id=data['job_id'], user=user, submit_host=submit_host, submit_time=data['submit_time'])
 		(task, created)=Task.objects.get_or_create(cluster=cluster, job=job, user=user,task_id=data['array_index'])
 		num_processors=data['num_processors']
@@ -145,7 +146,7 @@ def openlava_import(request,cluster_name):
 					setattr(resource_usage,i,v)
 				resource_usage.save()
 	
-				for i in ['user_id','begin_time','termination_time','resource_request','cwd','input_file','output_file','error_file','input_spool','command_spool','job_file','host_factor','job_name','dependency_condition','pre_execution_command','email_user','exit_status','max_num_processors','login_shell','array_index','max_residual_mem','max_swap']:
+				for i in ['user_id','begin_time','termination_time','resource_request','cwd','input_file','output_file','error_file','input_file_spool','command_spool','job_file','host_factor','job_name','dependency_condition','pre_execution_cmd','email_user','exit_status','max_num_processors','login_shell','array_index','max_residual_mem','max_swap']:
 					setattr(ol,i,data[i])
 	
 				ol.project=project

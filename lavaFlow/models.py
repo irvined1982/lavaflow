@@ -47,6 +47,7 @@ class JobStatus(OpenLavaState):
 	pass
 
 
+
 class Cluster(models.Model):
 	name=models.CharField(
 			max_length=100,
@@ -101,6 +102,10 @@ class Cluster(models.Model):
 	def average_wall_time_timedelta(self):
 		return datetime.timedelta(seconds=self.average_wall_time())
 
+class ClusterLog(models.Model):
+	cluster=models.ForeignKey(Cluster)
+	time=models.IntegerField()
+	message=models.TextField()
 
 class Project(models.Model):
 	name=models.CharField(max_length=100,unique=True,db_index=True)
@@ -188,6 +193,8 @@ class Host(models.Model):
 		except:
 			return None
 
+class HostLog(ClusterLog):
+	host=models.ForeignKey(Host)
 
 
 class Queue(models.Model):
@@ -246,6 +253,8 @@ class Queue(models.Model):
 		index_together=[
 				('cluster','name'),
 		]
+class QueueLog(ClusterLog):
+	queue=models.ForeignKey(Queue)
 
 class User(models.Model):
 	name=models.CharField(max_length=128,db_index=True,unique=True)
@@ -292,6 +301,9 @@ class User(models.Model):
 		return self.attempt_set.aggregate(Avg('wall_time'))['wall_time__avg']
 	def average_wall_time_timedelta(self):
 		return datetime.timedelta(seconds=self.average_wall_time())
+class UserLog(ClusterLog):
+	user=models.ForeignKey(User)
+
 
 
 class Job(models.Model):
@@ -300,6 +312,12 @@ class Job(models.Model):
 	user=models.ForeignKey(User)
 	submit_host=models.ForeignKey(Host)
 	submit_time=models.IntegerField()
+
+	def util_chart_url(self):
+		start_time_js=(self.submit_time-60)*1000
+		end_time_js=( self.end_time() + 60 ) * 1000
+		filter_string="job.%s" % self.id
+		return reverse("util_chart_view", kwargs={'start_time_js':start_time_js, 'end_time_js':end_time_js, 'filter_string':filter_string, 'exclude_string':"none", 'group_string':"none"})
 
 	def get_absolute_url(self):
 		return reverse('job_detail',args=[self.id])
@@ -375,6 +393,9 @@ class Job(models.Model):
 					['cluster','job_id','submit_time',],
 					['cluster','user','submit_time'],
 				]
+class JobLog(ClusterLog):
+	job=models.ForeignKey(Job)
+
 
 class OpenLavaTransferFile(models.Model):
 	submission_file_name=models.CharField(max_length=4096)
@@ -417,16 +438,16 @@ class JobSubmitOpenLava(models.Model):
 	umask=models.IntegerField()
 	queue=models.ForeignKey(Queue)
 	resource_request=models.TextField()
-	submission_host=models.ForeignKey(Host, related_name="submitted_openlava_jobs")
+	submit_host=models.ForeignKey(Host, related_name="submitted_openlava_jobs")
 	cwd=models.CharField(max_length=256)
-	checkpoint_directory=models.CharField(max_length=256)
+	checkpoint_dir=models.CharField(max_length=256)
 	input_file=models.CharField(max_length=256)
 	output_file=models.CharField(max_length=256)
 	error_file=models.CharField(max_length=256)
 	input_file_spool=models.CharField(max_length=256)
 	command_spool=models.CharField(max_length=256)
-	spool_directory=models.CharField(max_length=4096)
-	submission_home_dir=models.CharField(max_length=265)
+	job_spool_dir=models.CharField(max_length=4096)
+	submit_home_dir=models.CharField(max_length=265)
 	job_file=models.CharField(max_length=265)
 	asked_hosts=models.ManyToManyField(Host, related_name="requested_by_openlava_jobs")
 	dependency_condition=models.CharField(max_length=4096)
@@ -471,6 +492,9 @@ class Task(models.Model):
 				['cluster','user'],
 				['user'],
 				]
+
+class TaskLog(JobLog):
+	task=models.ForeignKey(Task)
 
 class Attempt(models.Model):
 	cluster=models.ForeignKey(Cluster)
@@ -524,23 +548,22 @@ class OpenLavaResourceUsage(models.Model):
 	user_time=models.FloatField()
 	system_time=models.FloatField()
 	max_rss=models.FloatField()
-	integral_rss=models.FloatField()
+	integral_shared_text=models.FloatField()
 	integral_shared_memory=models.FloatField()
 	integral_unshared_data=models.FloatField()
 	integral_unshared_stack=models.FloatField()
 	page_reclaims=models.FloatField()
 	page_faults=models.FloatField()
 	swaps=models.FloatField()
-	block_input_operations=models.FloatField()
-	block_output_operations=models.FloatField()
-	charecter_io=models.FloatField()
+	input_block_ops=models.FloatField()
+	output_block_ops=models.FloatField()
+	charecter_io_ops=models.FloatField()
 	messages_sent=models.FloatField()
-	messages_recieved=models.FloatField()
-	signals_recieved=models.FloatField()
+	messages_received=models.FloatField()
+	num_signals=models.FloatField()
 	voluntary_context_switches=models.FloatField()
 	involuntary_context_switches=models.FloatField()
 	exact_user_time=models.FloatField()
-
 
 class OpenLavaExitInfo(models.Model):
 	attempt=models.OneToOneField(Attempt)

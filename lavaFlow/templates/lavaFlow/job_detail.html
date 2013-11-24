@@ -40,7 +40,8 @@
     <svg style='height:500px'></svg>
 </div>
 <script>        
-	d3.json('{% url "util_view_filter" starttime=object.submit_time|add:"-60" endtime=object.end_time|add:"60" filter_string=object.attempt_filter_string %}', function(data) {
+	
+	d3.json('{{ object.util_chart_url }}', function(data){
 		  nv.addGraph(function() {
 			  var chart = nv.models.stackedAreaChart()
 			  .x(function(d) { return d.x })
