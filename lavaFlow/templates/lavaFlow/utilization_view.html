@@ -195,7 +195,7 @@
 	function updateRangeSlider(){
 	$( "#slider" ).slider( "option", "disabled", true );
 		var filterData={
-			view:'get_report_range',
+			view:'lf_get_report_range',
 			filters:filters,
 			excludes:excludes,
 			groups:[],
@@ -375,7 +375,7 @@
 	function loadWidgets(){
 		// Loads data into widgets
 		var filterData={
-			view:'utilization_view',
+			view:'lf_utilization_view',
 			filters:filters,
 			excludes:excludes,
 			groups:[],
@@ -388,12 +388,12 @@
 			$("#permalinkURL").attr("href", data.url);
 		});
 		
-		filterData.view='util_total_attempts';
+		filterData.view='lf_util_total_attempts';
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 			$("#counterText").text(data.count);
 		});
 
-		filterData.view='util_chart_view';
+		filterData.view='lf_util_chart_view';
 		filterData.groups=[];
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 			$.getJSON(data.url, function(data) {
@@ -451,7 +451,7 @@
 			});
 		});
 		
-		filterData.view='utilization_table'
+		filterData.view='lf_utilization_table'
 		filterData.groups=['cluster__name'];
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 			$.get(data.url, function(data) {

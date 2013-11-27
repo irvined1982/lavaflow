@@ -90,7 +90,13 @@ class Cluster(models.Model):
 			return None
 
 	def average_pend_time(self):
-		return self.attempt_set.aggregate(Avg('pend_time'))['pend_time__avg']
+		name="%s cluster average_pend_time" % self.id
+		pend=cache.get(name)
+		if not pend:
+			pend=self.attempt_set.aggregate(Avg('pend_time'))['pend_time__avg']
+			cache.set(name, pend, 60*60*2)
+		return pend
+
 	def average_pend_time_timedelta(self):
 		return datetime.timedelta(seconds=self.average_pend_time())
 
@@ -98,7 +104,12 @@ class Cluster(models.Model):
 		return (float(self.average_pend_time())/float(self.average_wall_time()))*100
 
 	def average_wall_time(self):
-		return self.attempt_set.aggregate(Avg('wall_time'))['wall_time__avg']
+		name="%s cluster average_wall_time" % self.id
+		wall=cache.get(name)
+		if not wall:
+			wall=self.attempt_set.aggregate(Avg('wall_time'))['wall_time__avg']
+			cache.set(name,wall,60*60*2)
+		return wall
 	def average_wall_time_timedelta(self):
 		return datetime.timedelta(seconds=self.average_wall_time())
 
@@ -143,7 +154,12 @@ class Project(models.Model):
 			return None
 
 	def average_pend_time(self):
-		return self.attempt_set.aggregate(Avg('pend_time'))['pend_time__avg']
+		name="%s project average_pend_time" % self.id
+		pend=cache.get(name)
+		if not pend:
+			pend=self.attempt_set.aggregate(Avg('pend_time'))['pend_time__avg']
+			cache.set(name, pend, 60*60*2)
+		return pend
 	def average_pend_time_timedelta(self):
 		return datetime.timedelta(seconds=self.average_pend_time())
 
@@ -151,7 +167,12 @@ class Project(models.Model):
 		return (float(self.average_pend_time())/float(self.average_wall_time()))*100
 
 	def average_wall_time(self):
-		return self.attempt_set.aggregate(Avg('wall_time'))['wall_time__avg']
+		name="%s project average_wall_time" % self.id
+		wall=cache.get(name)
+		if not wall:
+			wall=self.attempt_set.aggregate(Avg('wall_time'))['wall_time__avg']
+			cache.set(name,wall,60*60*2)
+		return wall
 	def average_wall_time_timedelta(self):
 		return datetime.timedelta(seconds=self.average_wall_time())
 
@@ -235,7 +256,12 @@ class Queue(models.Model):
 			return None
 
 	def average_pend_time(self):
-		return self.attempt_set.aggregate(Avg('pend_time'))['pend_time__avg']
+		name="%s queue average_pend_time" % self.id
+		pend=cache.get(name)
+		if not pend:
+			pend=self.attempt_set.aggregate(Avg('pend_time'))['pend_time__avg']
+			cache.set(name, pend, 60*60*2)
+		return pend
 	def average_pend_time_timedelta(self):
 		return datetime.timedelta(seconds=self.average_pend_time())
 
@@ -243,7 +269,12 @@ class Queue(models.Model):
 		return (float(self.average_pend_time())/float(self.average_wall_time()))*100
 
 	def average_wall_time(self):
-		return self.attempt_set.aggregate(Avg('wall_time'))['wall_time__avg']
+		name="%s queue average_wall_time" % self.id
+		wall=cache.get(name)
+		if not wall:
+			wall=self.attempt_set.aggregate(Avg('wall_time'))['wall_time__avg']
+			cache.set(name,wall,60*60*2)
+		return wall
 	def average_wall_time_timedelta(self):
 		return datetime.timedelta(seconds=self.average_wall_time())
 
@@ -290,7 +321,12 @@ class User(models.Model):
 			return None
 
 	def average_pend_time(self):
-		return self.attempt_set.aggregate(Avg('pend_time'))['pend_time__avg']
+		name="%s user average_pend_time" % self.id
+		pend=cache.get(name)
+		if not pend:
+			pend=self.attempt_set.aggregate(Avg('pend_time'))['pend_time__avg']
+			cache.set(name, pend, 60*60*2)
+		return pend
 	def average_pend_time_timedelta(self):
 		return datetime.timedelta(seconds=self.average_pend_time())
 
@@ -298,7 +334,12 @@ class User(models.Model):
 		return (float(self.average_pend_time())/float(self.average_wall_time()))*100
 
 	def average_wall_time(self):
-		return self.attempt_set.aggregate(Avg('wall_time'))['wall_time__avg']
+		name="%s user average_wall_time" % self.id
+		wall=cache.get(name)
+		if not wall:
+			wall=self.attempt_set.aggregate(Avg('wall_time'))['wall_time__avg']
+			cache.set(name,wall,60*60*2)
+		return wall
 	def average_wall_time_timedelta(self):
 		return datetime.timedelta(seconds=self.average_wall_time())
 class UserLog(ClusterLog):

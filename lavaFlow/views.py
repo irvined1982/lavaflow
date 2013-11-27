@@ -488,7 +488,7 @@ def build_filter(request):
 	if len(group_string)<1:
 		group_string="none"
 
-	if view=='get_report_range':
+	if view=='lf_get_report_range':
 		url=reverse(view, kwargs={ 'exclude_string':str(exclude_string), 'filter_string':str(filter_string)})
 	else:
 		url=reverse(view, kwargs={'start_time_js':int(start_time_js), 'end_time_js':int(end_time_js), 'exclude_string':str(exclude_string), 'filter_string':str(filter_string), 'group_string':str(group_string)})
