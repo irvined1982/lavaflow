@@ -10,6 +10,9 @@
 				  <th>Start Time</th>
 				  <th>End Time</th>
 				  <th>Status</th>
+				  <th>Pend Time</th>
+				  <th>Wall Time</th>
+				  <th>CPU Time</th>
 			  </tr>
 		</thead>
 		<tbody>
@@ -24,6 +27,9 @@
 				<td>{{ object.start_time_datetime }}</td>
 				<td>{{ object.end_time_datetime }}</td>
 				<td>{{ object.status.name }}</td>
+				<td>{{ object.pend_time_timedelta }}</td>
+				<td>{{ object.wall_time_timedelta }}</td>
+				<td>{{ object.cpu_time_timedelta }}</td>
 			</tr>
 			{% empty %}
 			<tr><td colspan="7">No Attempts Yet.</td></tr>

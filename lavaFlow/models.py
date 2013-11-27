@@ -486,6 +486,9 @@ class Task(models.Model):
 		return self.attempt_set.exclude(status__name="JOB_STAT_DONE")
 
 
+
+
+
 	class Meta:
 		index_together=[
 				['cluster','job'],
@@ -536,6 +539,20 @@ class Attempt(models.Model):
 
 	def get_contending_jobs(self):
 		return Attempt.objects.filter(end_time__gte=self.start_time, start_time__lte=self.end_time, execution_hosts__in=self.execution_hosts)
+
+	def cluster_avg_pend_time(self):
+		return Attempt.filter(num_processors=self.num_processors, cluster=self.cluster).aggregate(Avg('pend_time'))['pend_time__avg']
+	def cluster_avg_pend_time_timedelta(self):
+		return datetime.timedelta(self.cluster_avg_pend_time)
+	def queue_avg_pend_time(self):
+		return Attempt.filter(num_processors=self.num_processors, queue=self.queue, cluster=self.cluster).aggregate(Avg('pend_time'))['pend_time__avg']
+	def queue_avg_pend_time_timedelta(self):
+		return datetime.timedelta(self.cluster_avg_pend_time)
+	def project_avg_pend_time(self):
+		return Attempt.filter(num_processors=self.num_processors, project__in=self.projects.all(), cluster=self.cluster).aggregate(Avg('pend_time'))['pend_time__avg']
+	def project_avg_pend_time_timedelta(self):
+		return datetime.timedelta(self.cluster_avg_pend_time)
+
 
 	class Meta:
 		unique_together=('cluster','job','task','start_time')

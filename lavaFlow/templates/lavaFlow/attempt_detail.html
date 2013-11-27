@@ -6,6 +6,17 @@
 {% if object.wall_time <= 1 %}
 <div class="alert alert-warning"><b>Warning:</b> This task ran for less than one second.</div>
 {% endif %}
+{% if object.pend_time > object.cluster_avg_pend_time %}
+<div class="alert alert-warning"><b>Warning:</b> Pend time of {{ object.pend_time_datetime }} is significantly higher than the average pend time for tasks of this size on cluster: {{ object.cluster.name }}.  The average pend time for tasks using {{ object.num_processors }} on cluster: {{ object.cluster.name }} is: {{ object.cluster_avg_pend_time_timedelta }}.</div>
+{% endif %}
+
+{% if object.pend_time > object.queue_avg_pend_time %}
+<div class="alert alert-warning"><b>Warning:</b> Pend time of {{ object.pend_time_datetime }} is significantly higher than the average pend time for tasks of this size on queue: {{ object.queue.name }}.  The average pend time for tasks using {{ object.num_processors }} in queue: {{ object.queue.name }} is: {{ object.queue_avg_pend_time_timedelta }}.</div>
+{% endif %}
+
+{% if object.pend_time > object.project_avg_pend_time %}
+<div class="alert alert-warning"><b>Warning:</b> Pend time of {{ object.pend_time_datetime }} is significantly higher than the average pend time for tasks of this size submitted to the same projects.  The average pend time for tasks using {{ object.num_processors }} in the same projects is: {{ object.project_avg_pend_time_timedelta }}.</div>
+{% endif %}
 
 
 <h1>Attempt Information</h1>
@@ -22,12 +33,12 @@
 		<dd>{{ object.num_processors }}</dd>
 	<dt>Projects</dt>
 	<dd>{% for project in object.projects.all %}{{ project }}<br>{% endfor %}</dd>
-	<dt>Execution Hosts</dt>
-	<dd>{% for host in object.execution_hosts.all %}{{ host }}<br>{% endfor %}</dd>
 	<dt>Start Time</dt>
 		<dd>{{ object.start_time_datetime }}</dd>
 	<dt>End Time</dt>
 		<dd>{{ object.end_time_datetime }}</dd>
+	<dt>Pend Time</dt>
+		<dd>{{ object.pend_time_timedelta }}</dd>
 	<dt>Cpu Time</dt>
 		<dd>{{ object.cpu_time_timedelta }}</dd>
 	<dt>Wall Time</dt>
@@ -101,6 +112,7 @@
 {% endif %}
 
 <h1>Host Usage</h1>
+{% if object.execution_hosts.all.count > 0 %}
 <table class="table table-striped table-condensed">
 	<thead>
 		<tr>
@@ -116,6 +128,9 @@
 		{% endfor %}
 	</tbody>
 </table>
+{% else %}
+<div class="alert alert-warning">No execution host information available for this task.</div>
+{% endif %}
 
 <h1>Contending Jobs</h1>
 {% if object.get_contending_jobs %}
@@ -159,6 +174,7 @@
 
 
 <h2>Resource Usage</h2>
+{% if object.wall_time > 0 %}
 <div id='resourceChart'>
 		<svg style='height:500px'> </svg>
 	</div>
@@ -170,17 +186,18 @@
 				{"value": {{ object.openlavaexitinfo.resource_usage.system_time }}, "label": "System Time"}, 
 				{"value": {{ object.openlavaexitinfo.resource_usage.max_rss }}, "label": "Max RSS"}, 
 				{"value": {{ object.openlavaexitinfo.resource_usage.integral_shared_memory }}, "label": "Int Sh Mem"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.integral_shared_text }}, "label": "Int Sh Text"}, 
 				{"value": {{ object.openlavaexitinfo.resource_usage.integral_unshared_data }}, "label": "Int Unsh Data"}, 
 				{"value": {{ object.openlavaexitinfo.resource_usage.integral_unshared_stack }}, "label": "Int Unsh Stack"}, 
 				{"value": {{ object.openlavaexitinfo.resource_usage.page_reclaims }}, "label": "Page Reclaims"}, 
 				{"value": {{ object.openlavaexitinfo.resource_usage.page_faults }}, "label": "Page Faults"}, 
 				{"value": {{ object.openlavaexitinfo.resource_usage.swaps }}, "label": "Swaps"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.block_input_operations }}, "label": "Block Input Ops"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.block_output_operations }}, "label": "Block Output Ops"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.charecter_io }}, "label": "Chars Ops"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.input_block_ops }}, "label": "Block Input Ops"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.output_block_ops }}, "label": "Block Output Ops"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.charecter_io_ops }}, "label": "Chars Ops"}, 
 				{"value": {{ object.openlavaexitinfo.resource_usage.messages_sent }}, "label": "Messages Sent"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.messages_recieved }}, "label": "Messages Rec"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.signals_recieved }}, "label": "Signals Rec"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.messages_received }}, "label": "Messages Rec"}, 
+				{"value": {{ object.openlavaexitinfo.resource_usage.num_signals }}, "label": "Signals Rec"}, 
 				{"value": {{ object.openlavaexitinfo.resource_usage.voluntary_context_switches }}, "label": "Vol Ctx Sw"}, 
 				{"value": {{ object.openlavaexitinfo.resource_usage.involuntary_context_switches }}, "label": "Invol Ctx Sw"}, 
 				{"value": {{ object.openlavaexitinfo.resource_usage.exact_user_time }}, "label": "Exact User Time"}
@@ -212,6 +229,7 @@
 			<th>System Time</th>
 			<th>Max RSS</th>
 			<th>Integral Shared Mem</th>
+			<th>Integral Shared Text</th>
 			<th>Integral Unshared Data</th>
 			<th>Integral Unshared Stack</th>
 			<th>Page Reclaims</th>
@@ -234,23 +252,27 @@
 			<td>{{ object.openlavaexitinfo.resource_usage.system_time }}</td>
 			<td>{{ object.openlavaexitinfo.resource_usage.max_rss }}</td>
 			<td>{{ object.openlavaexitinfo.resource_usage.integral_shared_memory }}</td>
+			<td>{{ object.openlavaexitinfo.resource_usage.integral_shared_text }}</td>
 			<td>{{ object.openlavaexitinfo.resource_usage.integral_unshared_data }}</td>
 			<td>{{ object.openlavaexitinfo.resource_usage.integral_unshared_stack }}</td>
 			<td>{{ object.openlavaexitinfo.resource_usage.page_reclaims }}</td>
 			<td>{{ object.openlavaexitinfo.resource_usage.page_faults }}</td>
 			<td>{{ object.openlavaexitinfo.resource_usage.swaps }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.block_input_operations }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.block_output_operations }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.charecter_io }}</td>
+			<td>{{ object.openlavaexitinfo.resource_usage.input_block_ops }}</td>
+			<td>{{ object.openlavaexitinfo.resource_usage.output_block_ops }}</td>
+			<td>{{ object.openlavaexitinfo.resource_usage.charecter_io_ops }}</td>
 			<td>{{ object.openlavaexitinfo.resource_usage.messages_sent }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.messages_recieved }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.signals_recieved }}</td>
+			<td>{{ object.openlavaexitinfo.resource_usage.messages_received }}</td>
+			<td>{{ object.openlavaexitinfo.resource_usage.num_signals }}</td>
 			<td>{{ object.openlavaexitinfo.resource_usage.voluntary_context_switches }}</td>
 			<td>{{ object.openlavaexitinfo.resource_usage.involuntary_context_switches }}</td>
 			<td>{{ object.openlavaexitinfo.resource_usage.exact_user_time }}</td>
 		</tr>
 	</tbody>
 </table>
+{% else %}
+<div class="alert alert-warning">No resource usage information could be gathered for this job.</div>
+{% endif %}
 
 
 {% endblock %}

@@ -16,6 +16,7 @@
 	<dt>Submit Time</td>
 		<dd>{{ object.job.submit_time_datetime }}</dd>
 </dl>
+
 {% if object.short_jobs %}
 <div class="alert alert-warning"><b>Warning:</b> Task contains tasks that ran for less than one second.</div>
 {% endif %}

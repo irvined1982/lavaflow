@@ -65,7 +65,6 @@ def openlava_import(request,cluster_name):
 			js.queue=queue
 			js.submit_host=submit_host
 			limit=OpenLavaResourceLimit()
-			print data['resource_limits']
 			for k,v in data['resource_limits'].items():
 				setattr(limit,k,v)
 			limit.save()
@@ -177,6 +176,7 @@ def get_attempts(start_time_js, end_time_js, exclude_string, filter_string):
 		attempts=attempts.exclude(**{key:val})
 	return attempts
 
+@cache_page(60 * 60 * 2)
 def utilization_table(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
 	start_time_js=int(start_time_js)
 	end_time_js=int(end_time_js)
@@ -231,10 +231,10 @@ def utilization_table(request, start_time_js=0, end_time_js=0, exclude_string=""
 	return render(request, "lavaFlow/widgets/utilization_chart.html", {'header':header,'rows':rows})
 
 
+@cache_page(60 * 60 * 2)
 def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",  filter_string="", group_string=""):
 	start_time_js=int(start_time_js)
 	end_time_js=int(end_time_js)
-	print exclude_string
 	attempts=get_attempts(start_time_js, end_time_js, exclude_string, filter_string)
 
 	# Only get the values we actually want - this is then
@@ -312,38 +312,50 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
 		run_series[end_time] -= num_processors
 
 	series_int=[]
-	max_length=800
+
+	# Process each series
+	series_data={}
+	for series_name, series in serieses.iteritems():
+		# Change the series from the integral to the actual
+		# total value.
+		for time in sorted(series.keys()):
+			# if it is a mid value, insert a value next to it
+			# lsf has a 1 second resolution, so put it a milisecond before
+			# this means graphs will look square, which is more accurate than peaks.
+			if time-1 <= end_time_js and time-1 >= start_time_js:
+				if time-1 not in series:
+					series[time-1]=0
+					if time-1 not in event_times:
+						event_times.append(time-1)
+			if time+1 <= end_time_js and time+1 >= start_time_js:
+				if time+1 not in series:
+					series[time+1]=0
+					if time+1 not in event_times:
+						event_times.append(time+1)
+
+		values=[]
+		total_slots_at_time=0
+		times=[]
+		for time in sorted(series.keys()):
+			value=series[time]
+			total_slots_at_time += value
+			values.append(total_slots_at_time)
+			times.append(time)
+		ip=interpolate.interp1d(times, values, kind='nearest',bounds_error=False,fill_value=0.0)
+		series_data[series_name]=ip
+
 	# If there are more datapoints than can be processed
 	# Then downsample...
+	max_length=500
 	if len(event_times) > max_length:
 		interval=int((end_time_js-start_time_js)/max_length)
 		event_times=range( start_time_js, end_time_js, interval)
 
-	# Process each series
-	for series_name, series in serieses.iteritems():
+	for series_name, ip in series_data.iteritems():
 		d3_series={
 				'key':series_name,
 				'values':[]
 				}
-
-		# Change the series from the integral to the actual
-		# total value.
-		values=[]
-		total_slots_at_time=0
-		for time in sorted(series.keys()):
-			value=series[time]
-			# if it is a mid value, insert a value next to it
-			# lsf has a 1 second resolution, so put it a milisecond before
-			# this means graphs will look square, which is more accurate than peaks.
-			if time <= end_time_js and time > start_time_js:
-				series[time-1]=total_slots_at_time
-			total_slots_at_time += value
-			series[time] = total_slots_at_time
-		times=sorted(series.keys())
-		for time in times:
-			values.append(series[time])
-		ip=interpolate.interp1d(times, values, kind='nearest',bounds_error=False,fill_value=0.0)
-
 		# Now populate with interpolated data.
 		for time in sorted(event_times):
 			d3_series['values'].append({'x':time,'y':int(ip(time))})
@@ -352,6 +364,7 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
 	return HttpResponse(json.dumps(series_int, indent=1), content_type="application/json")
 
 
+@cache_page(60 * 60 * 2)
 def utilization_view(request, start_time_js=None, end_time_js=None, exclude_string="none", filter_string="none", group_string=""):
 	#
 	if start_time_js == None:
