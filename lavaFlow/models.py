@@ -317,10 +317,10 @@ class Job(models.Model):
 		start_time_js=(self.submit_time-60)*1000
 		end_time_js=( self.end_time() + 60 ) * 1000
 		filter_string="job.%s" % self.id
-		return reverse("util_chart_view", kwargs={'start_time_js':start_time_js, 'end_time_js':end_time_js, 'filter_string':filter_string, 'exclude_string':"none", 'group_string':"none"})
+		return reverse("lf_util_chart_view", kwargs={'start_time_js':start_time_js, 'end_time_js':end_time_js, 'filter_string':filter_string, 'exclude_string':"none", 'group_string':"none"})
 
 	def get_absolute_url(self):
-		return reverse('job_detail',args=[self.id])
+		return reverse('lf_job_detail',args=[self.id])
 
 	def __unicode__(self):
 		return u"%s" % self.job_id
@@ -471,7 +471,7 @@ class Task(models.Model):
 	task_id=models.IntegerField()
 
 	def get_absolute_url(self):
-		return reverse('task_detail',args=[self.id])
+		return reverse('lf_task_detail',args=[self.id])
 
 	def __unicode__(self):
 		return u"%s" % self.task_id
@@ -526,7 +526,7 @@ class Attempt(models.Model):
 	status=models.ForeignKey(JobStatus)
 	command=models.TextField()
 	def get_absolute_url(self):
-		return reverse('attempt_detail',args=[self.id])
+		return reverse('lf_attempt_detail',args=[self.id])
 	def get_attempt_id(self):
 		counter=1
 		for attempt in self.task.attempt_set.all().order_by('start_time'):

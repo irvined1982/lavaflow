@@ -375,8 +375,8 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
 	data={
 			'filters':json.dumps(filter_string_to_params(filter_string)),
 			'excludes':json.dumps(filter_string_to_params(exclude_string)),
-			'report_range_url':reverse('get_report_range', kwargs={'filter_string':filter_string, 'exclude_string':exclude_string}),
-			'build_filter_url':reverse('build_filter'),
+			'report_range_url':reverse('lf_get_report_range', kwargs={'filter_string':filter_string, 'exclude_string':exclude_string}),
+			'build_filter_url':reverse('lf_build_filter'),
 			'start_time':start_time_js,
 			'end_time':end_time_js,
 		}

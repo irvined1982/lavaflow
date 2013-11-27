@@ -6,13 +6,13 @@
 	{% if is_paginated %}
     <ul class="pagination">
         {% if page_obj.has_previous %}
-        <li><a href="{% url "task_list" %}?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+        <li><a href="{% url "lf_task_list" %}?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
         {% else %}
         <li class="disabled"><a href="#">&laquo;</a></li>
         {% endif %}
 
         {% if page_obj.has_next %}
-        <li><a href="{% url "task_list" %}?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+        <li><a href="{% url "lf_task_list" %}?page={{ page_obj.next_page_number }}">&raquo;</a></li>
         {% else %}
         <li class="disabled"><a href="#">&raquo;</a></li>
         {% endif %}

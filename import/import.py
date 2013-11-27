@@ -26,8 +26,13 @@ el=EventLog(file_name=args.log_file)
 cluster_name=OpenLava.get_cluster_name()
 url=args.url.rstrip("/")
 url+="/clusters/%s/import/openlava" % cluster_name
+row_num=0
 for row in el:
+	if row_num % 100 == 0:
+		print "Imported %d rows." % row_num
+	row_num += 1
 	data=OpenLava.dumps(row)
 	request = urllib2.Request(url, data, {'Content-Type': 'application/json'})
 	f = urllib2.urlopen(request)
 	f.close()
+
