@@ -14,6 +14,7 @@ setup(
 		url="http://ay60dxg.com/projects/lavaflow/",
 		author="David Irvine",
 		author_email="irvined@gmail.com",
+		scripts=['import/lava-import-gridengine.py','import/lava-import-openlava.py'],
 		classifiers=[
 			'Environment :: Web Environment',
 			'Framework :: Django',
