@@ -91,7 +91,7 @@ class Cluster(models.Model):
 			return None
 
 	def average_pend_time(self):
-		name="%s cluster average_pend_time" % self.id
+		name="%s_cluster_average_pend_time" % self.id
 		pend=cache.get(name)
 		if not pend:
 			pend=self.attempt_set.aggregate(Avg('pend_time'))['pend_time__avg']
@@ -105,7 +105,7 @@ class Cluster(models.Model):
 		return (float(self.average_pend_time())/float(self.average_wall_time()))*100
 
 	def average_wall_time(self):
-		name="%s cluster average_wall_time" % self.id
+		name="%s_cluster_average_wall_time" % self.id
 		wall=cache.get(name)
 		if not wall:
 			wall=self.attempt_set.aggregate(Avg('wall_time'))['wall_time__avg']
@@ -155,7 +155,7 @@ class Project(models.Model):
 			return None
 
 	def average_pend_time(self):
-		name="%s project average_pend_time" % self.id
+		name="%s_project_average_pend_time" % self.id
 		pend=cache.get(name)
 		if not pend:
 			pend=self.attempt_set.aggregate(Avg('pend_time'))['pend_time__avg']
@@ -168,7 +168,7 @@ class Project(models.Model):
 		return (float(self.average_pend_time())/float(self.average_wall_time()))*100
 
 	def average_wall_time(self):
-		name="%s project average_wall_time" % self.id
+		name="%s_project_average_wall_time" % self.id
 		wall=cache.get(name)
 		if not wall:
 			wall=self.attempt_set.aggregate(Avg('wall_time'))['wall_time__avg']
@@ -257,7 +257,7 @@ class Queue(models.Model):
 			return None
 
 	def average_pend_time(self):
-		name="%s queue average_pend_time" % self.id
+		name="%s_queue_average_pend_time" % self.id
 		pend=cache.get(name)
 		if not pend:
 			pend=self.attempt_set.aggregate(Avg('pend_time'))['pend_time__avg']
@@ -270,7 +270,7 @@ class Queue(models.Model):
 		return (float(self.average_pend_time())/float(self.average_wall_time()))*100
 
 	def average_wall_time(self):
-		name="%s queue average_wall_time" % self.id
+		name="%s_queue_average_wall_time" % self.id
 		wall=cache.get(name)
 		if not wall:
 			wall=self.attempt_set.aggregate(Avg('wall_time'))['wall_time__avg']
@@ -322,7 +322,7 @@ class User(models.Model):
 			return None
 
 	def average_pend_time(self):
-		name="%s user average_pend_time" % self.id
+		name="%s_user_average_pend_time" % self.id
 		pend=cache.get(name)
 		if not pend:
 			pend=self.attempt_set.aggregate(Avg('pend_time'))['pend_time__avg']
@@ -335,7 +335,7 @@ class User(models.Model):
 		return (float(self.average_pend_time())/float(self.average_wall_time()))*100
 
 	def average_wall_time(self):
-		name="%s user average_wall_time" % self.id
+		name="%s_user_average_wall_time" % self.id
 		wall=cache.get(name)
 		if not wall:
 			wall=self.attempt_set.aggregate(Avg('wall_time'))['wall_time__avg']
