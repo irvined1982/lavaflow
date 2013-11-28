@@ -44,6 +44,266 @@ from django.http import Http404
 from lavaFlow.models import *
 log=logging.getLogger(__name__)
 @csrf_exempt
+def gridengine_import(request,cluster_name):
+	data=json.loads(request.body)
+	(cluster, created)=Cluster.objects.get_or_create(name=cluster_name)
+	(user, created)=User.objects.get_or_create(name=data['owner'])
+	(submit_host, created)=Host.objects.get_or_create(name="Unspecified")
+	(job, created)=Job.objects.get_or_create(cluster=cluster, job_id=data['job_number'], user=user, submit_host=submit_host, submit_time=data['submission_time'])
+	(queue, created)=Queue.objects.get_or_create(name=data['qname'], cluster=cluster)
+	(task, created)=Task.objects.get_or_create(cluster=cluster, job=job, user=user,task_id=data['task_number'])
+	num_processors=data['slots']
+	start_time=data['start_time']
+	end_time=data['end_time']
+	wall_time=end_time-start_time
+	cpu_time=num_processors*wall_time
+	pend_time=start_time-data['submission_time']
+	states={
+			0:{
+				'code':0,
+				'name':"No Failure",
+				'description':"Ran and Exited normally",
+				'exited_cleanly':True,
+				},
+			1:{
+				'code':1,
+				'name':"Assumedly before job",
+				'description':'failed early in execd',
+				'exited_cleanly':False,
+			},
+			3:{
+				'code':3,
+				'name':'Before writing config',
+				'description':'failed before execd set up local spool',
+				'exited_cleanly':False,
+				},
+			4:{
+				'code':4,
+				'name':'Before writing PID',
+				'description':'shepherd failed to record its pid',
+				'exited_cleanly':False,
+				},
+			6:{
+				'code':6,
+				'name':'Setting processor set',
+				'description':'failed setting up processor set',
+				'exited_cleanly':False,
+				},
+			7:{
+				'code':7,
+				'name':'Before prolog',
+				'description':'failed before prolog',
+				'exited_cleanly':False,
+				},
+			8:{
+				'code':8,
+				'name':'In prolog',
+				'description':'failed in prolog',
+				'exited_cleanly':False,
+				},
+			9:{
+				'code':9,
+				'name':'Before pestart',
+				'description':'failed before starting PE',
+				'exited_cleanly':False,
+				},
+			10:{
+				'code':10,
+				'name':'in pestart',
+				'description':'failed in PE starter',
+				'exited_cleanly':False,
+				},
+			11:{
+				'code':11,
+				'name':'Before job',
+				'description':'failed in shepherd before starting job',
+				'exited_cleanly':False,
+				},
+			12:{
+				'code':12,
+				'name':'Before PE Stop',
+				'description':'ran, but failed before calling PE stop procedure',
+				'exited_cleanly':True,
+				},
+			13:{
+				'code':13,
+				'name':'In PE Stop',
+				'description':'ran, but PE stop procedure failed',
+				'exited_cleanly':True,
+				},
+			14:{
+				'code':14,
+				'name':'Before Epilog',
+				'description':'ran, but failed in epilog script',
+				'exited_cleanly':True,
+				},
+			16:{
+				'code':16,
+				'name':'Releasing processor set',
+				'description':'ran, but processor set could not be released',
+				'exited_cleanly':True,
+				},
+			17:{
+				'code':17,
+				'name':'Through signal',
+				'description':'job killed by signal (possibly qdel)',
+				'exited_cleanly':True,
+				},
+			18:{
+				'code':18,
+				'name':'Shepherd returned error',
+				'description':'Shephard Died',
+				'exited_cleanly':False,
+				},
+			19:{
+				'code':19,
+				'name':'Before writing exit_status',
+				'description':'shepherd didnt write reports corectly',
+				'exited_cleanly':False,
+				},
+			20:{
+				'code':20,
+				'name':'Found unexpected error file',
+				'description':'shepherd encountered a problem',
+				'exited_cleanly':True,
+				},
+			21:{
+				'code':21,
+				'name':'In recognizing job',
+				'description':'qmaster asked about an unknown job (Not in accounting)',
+				'exited_cleanly':False,
+				},
+			24:{
+				'code':24,
+				'name':'Migrating (checkpointing jobs)',
+				'description':'ran, will be migrated',
+				'exited_cleanly':True,
+				},
+			25:{
+				'code':25,
+				'name':'Rescheduling',
+				'description':'ran, will be rescheduled',
+				'exited_cleanly':True,
+				},
+			26:{
+				'code':26,
+				'name':'Opening output file',
+				'description':'failed opening stderr/stdout file',
+				'exited_cleanly':False,
+				},
+			27:{
+				'code':27,
+				'name':'Searching requested shell',
+				'description':'failed finding specified shell',
+				'exited_cleanly':False,
+				},
+			28:{
+				'code':28,
+				'name':'Changing to working directory',
+				'description':'failed changing to start directory',
+				'exited_cleanly':False,
+				},
+			29:{
+				'code':29,
+				'name':'AFS setup',
+				'description':'failed setting up AFS security',
+				'exited_cleanly':False,
+				},
+			30:{
+				'code':30,
+				'name':'Application error returned',
+				'description':'ran and exited 100 - maybe re-scheduled',
+				'exited_cleanly':True,
+				},
+			31:{
+				'code':31,
+				'name':'Accessing sgepasswd file',
+				'description':'failed because sgepasswd not readable (MS Windows)',
+				'exited_cleanly':False,
+				},
+			32:{
+				'code':32,
+				'name':'entry is missing in password file',
+				'description':'failed because user not in sgepasswd (MS Windows)',
+				'exited_cleanly':False,
+				},
+			33:{
+				'code':33,
+				'name':'Wrong password',
+				'description':'failed because of wrong password against sgepasswd (MS Windows)',
+				'exited_cleanly':False,
+				},
+			34:{
+				'code':34,
+				'name':'Communicating with Grid Engine Helper Service',
+				'description':'failed because of failure of helper service (MS Windows)',
+				'exited_cleanly':False,
+				},
+			35:{
+				'code':35,
+				'name':'Before job in Grid Engine Helper Service',
+				'description':'failed because of failure running helper service (MS Windows)',
+				'exited_cleanly':False,
+				},
+			36:{
+				'code':36,
+				'name':'Checking configured daemons',
+				'description':'failed because of configured remote startup daemon',
+				'exited_cleanly':False,
+				},
+			37:{
+				'code':37,
+				'name':'qmaster enforced h_rt, h_cpu, or h_vmem limit',
+				'description':'ran, but killed due to exceeding run time limit',
+				'exited_cleanly':True,
+				},
+			38:{
+				'code':38,
+				'name':'Adding supplementary group',
+				'description':'failed adding supplementary gid to job',
+				'exited_cleanly':False,
+				},
+			100:{
+				'code':100,
+				'name':'Assumedly after job',
+				'description':'ran, but killed by a signal (perhaps due to exceeding resources), task died, shepherd died (e.g. node crash), etc.',
+				'exited_cleanly':True,
+				},
+			}
+	state=states[data['failed']]
+	(status, created)=JobStatus.objects.get_or_create(**state)
+	(attempt, created)=Attempt.objects.get_or_create(
+			cluster=cluster,
+			job=job,
+			task=task,
+			start_time=start_time,
+			defaults={
+				'user':user,
+				'num_processors':num_processors,
+				'end_time':end_time,
+				'cpu_time':cpu_time,
+				'wall_time':wall_time,
+				'pend_time':pend_time,
+				'queue':queue,
+				'status':status,
+				'command':"Unspecified",
+			},
+			)
+	if created:
+		(execution_host, created)=Host.objects.get_or_create(name=data['hostname'])
+		attempt.execution_hosts.add(execution_host)
+		if data['project']:
+			(project, created)=Project.objects.get_or_create(name=data['project'])
+			attempt.projects.add(project)
+		if data['department']:
+			(dept, created)=Project.objects.get_or_create(name=data['department'])
+			attempt.projects.add(dept)
+	return HttpResponse("OK", content_type="text/plain")
+
+
+
+
+@csrf_exempt
 def openlava_import(request,cluster_name):
 	data=json.loads(request.body)
 	if data['event_type']==1: # Job New Event
@@ -104,10 +364,14 @@ def openlava_import(request,cluster_name):
 			pend_time=start_time-data['submit_time']
 
 		(queue, created)=Queue.objects.get_or_create(name=data['queue'], cluster=cluster)
+		clean=False
+		if data['job_status']['name']=="JOB_STAT_DONE":
+			clean=True
 		(status, created)=JobStatus.objects.get_or_create(
 				code=data['job_status']['status'],
 				name=data['job_status']['name'],
-				description=data['job_status']['description']
+				description=data['job_status']['description'],
+				exited_cleanly=clean,
 				)
 		(attempt, created)=Attempt.objects.get_or_create(
 				cluster=cluster,

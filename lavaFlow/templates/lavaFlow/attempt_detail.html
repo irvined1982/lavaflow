@@ -1,6 +1,6 @@
 {% extends "lavaFlow/base.html" %}
 {% block content %}
-{% if object.status.name != "JOB_STAT_DONE" %}
+{% if object.status.exited_cleanly == False %}
 <div class="alert alert-danger"><b>Warning:</b> This task exited with state: {{ object.status.name }}: {{ object.status.description }}</div>
 {% endif %}
 {% if object.wall_time <= 1 %}
@@ -174,7 +174,7 @@
 
 
 <h2>Resource Usage</h2>
-{% if object.wall_time > 0 %}
+{% if object.wall_time > 0 and object.openlavaexitinfo.resource_usage %}
 <div id='resourceChart'>
 		<svg style='height:500px'> </svg>
 	</div>

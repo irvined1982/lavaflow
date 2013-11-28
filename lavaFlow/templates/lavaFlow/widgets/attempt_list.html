@@ -17,7 +17,7 @@
 		</thead>
 		<tbody>
   			{% for object in object_list %}
-			<tr {% if object.status.name != "JOB_STAT_DONE" %}class="danger"{% endif %}>
+			<tr {% if object.status.exited_cleanly == False %}class="danger"{% endif %}>
 				<td>{{ object.cluster }}</dt>
 				<td>{{ object.user }}</td>
 				<td><a href="{{ object.job.get_absolute_url }}">{{ object.job.job_id }}</a></td>

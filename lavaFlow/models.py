@@ -44,6 +44,7 @@ class OpenLavaSubmitOption(OpenLavaState):
 class OpenLavaTransferFileOption(OpenLavaState):
 	pass
 class JobStatus(OpenLavaState):
+	exited_cleanly=models.BooleanField()
 	pass
 
 
@@ -85,7 +86,7 @@ class Cluster(models.Model):
 
 	def last_failed_task(self):
 		try:
-			return self.attempt_set.exclude(status__name="JOB_STAT_DONE").order_by('-end_time')[0]
+			return self.attempt_set.exclude(status__exited_cleanly=True).order_by('-end_time')[0]
 		except:
 			return None
 
@@ -149,7 +150,7 @@ class Project(models.Model):
 
 	def last_failed_task(self):
 		try:
-			return self.attempt_set.exclude(status__name="JOB_STAT_DONE").order_by('-end_time')[0]
+			return self.attempt_set.exclude(status__exited_cleanly=True).order_by('-end_time')[0]
 		except:
 			return None
 
@@ -194,10 +195,10 @@ class Host(models.Model):
 		return self.attempt_set.distinct().count()
 
 	def total_successful_tasks(self):
-		return self.attempt_set.filter(status__name="JOB_STAT_DONE").distinct().count()
+		return self.attempt_set.filter(status__exited_cleanly=True).distinct().count()
 
 	def total_failed_tasks(self):
-		return self.attempt_set.exclude(status__name="JOB_STAT_DONE").distinct().count()
+		return self.attempt_set.exclude(status__exited_cleanly=True).distinct().count()
 
 	def failure_rate(self):
 		return (float(self.total_failed_tasks())/float(self.total_tasks())*100)
@@ -251,7 +252,7 @@ class Queue(models.Model):
 
 	def last_failed_task(self):
 		try:
-			return self.attempt_set.exclude(status__name="JOB_STAT_DONE").order_by('-end_time')[0]
+			return self.attempt_set.exclude(status__exited_cleanly=True).order_by('-end_time')[0]
 		except:
 			return None
 
@@ -316,7 +317,7 @@ class User(models.Model):
 
 	def last_failed_task(self):
 		try:
-			return self.attempt_set.exclude(status__name="JOB_STAT_DONE").order_by('-end_time')[0]
+			return self.attempt_set.exclude(status__exited_cleanly=True).order_by('-end_time')[0]
 		except:
 			return None
 
@@ -391,7 +392,7 @@ class Job(models.Model):
 		return self.attempt_set.filter(wall_time__lte=1)
 
 	def exited_jobs(self):
-		return self.attempt_set.exclude(status__name="JOB_STAT_DONE")
+		return self.attempt_set.exclude(status__exited_cleanly=True)
 
 	def attempt_filter_string(self):
 		return "job.%s" % self.id
@@ -524,7 +525,7 @@ class Task(models.Model):
 		return self.attempt_set.filter(wall_time__lte=1)
 
 	def exited_jobs(self):
-		return self.attempt_set.exclude(status__name="JOB_STAT_DONE")
+		return self.attempt_set.exclude(status__exited_cleanly=True)
 
 
 
