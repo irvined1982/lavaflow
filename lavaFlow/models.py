@@ -603,7 +603,8 @@ class Attempt(models.Model):
 				('cluster','job','task', 'start_time',),
 		]
 
-class OpenLavaResourceUsage(models.Model):
+class AttemptResourceUsage(models.Model):
+	attempt=models.OneToOneField(Attempt)
 	user_time=models.FloatField()
 	system_time=models.FloatField()
 	max_rss=models.FloatField()
@@ -646,7 +647,6 @@ class OpenLavaExitInfo(models.Model):
 	asked_hosts=models.ManyToManyField(Host)
 	host_factor=models.FloatField()
 	job_name=models.CharField(max_length=512)
-	resource_usage=models.OneToOneField(OpenLavaResourceUsage)
 	dependency_condition=models.CharField(max_length=4096)
 	pre_execution_command=models.TextField()
 	email_user=models.CharField(max_length=512)

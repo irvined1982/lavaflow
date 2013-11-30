@@ -57,7 +57,10 @@ def gridengine_import(request,cluster_name):
 	end_time=data['end_time']
 	wall_time=end_time-start_time
 	cpu_time=num_processors*wall_time
-	pend_time=start_time-data['submission_time']
+	submit_time=data['submission_time']
+	pend_time=start_time-submit_time
+
+
 	states={
 			0:{
 				'code':0,
@@ -298,6 +301,28 @@ def gridengine_import(request,cluster_name):
 		if data['department']:
 			(dept, created)=Project.objects.get_or_create(name=data['department'])
 			attempt.projects.add(dept)
+		r=AttemptResourceUsage()
+		r.attempt=attempt
+		r.user_time=data['ru_utime']
+		r.system_time=data['ru_stime']
+		r.max_rss=data['ru_maxrss']
+		r.integral_shared_text=-1
+		r.integral_shared_memory=data['ru_ixrss']
+		r.integral_unshared_data=data['ru_idrss']
+		r.integral_unshared_stack=data['ru_isrss']
+		r.page_reclaims=data['ru_minflt']
+		r.page_faults=data['ru_majflt']
+		r.swaps=data['ru_nswap']
+		r.input_block_ops=data['ru_inblock']
+		r.output_block_ops=data['ru_oublock']
+		r.charecter_io_ops=-1
+		r.messages_sent=data['ru_msgsnd']
+		r.messages_received=data['ru_msgrcv']
+		r.num_signals=data['ru_nsignals']
+		r.voluntary_context_switches=data['ru_nvcsw']
+		r.involuntary_context_switches=data['ru_nivcsw']
+		r.exact_user_time=-1
+		r.save()
 	return HttpResponse("OK", content_type="text/plain")
 
 
@@ -397,6 +422,14 @@ def openlava_import(request,cluster_name):
 			(project, created)=Project.objects.get_or_create(name=data['project_name'])
 			attempt.projects.add(project)
 			try:
+				attempt.attemptresourceusage
+			except:
+				resource_usage=AttemptResourceUsage()
+				for i,v in data['resource_usage'].items():
+					setattr(resource_usage,i,v)
+				resource_usage.attempt=attempt
+				resource_usage.save()
+			try:
 				attempt.openlavaexitinfo
 			except:
 				
@@ -404,10 +437,6 @@ def openlava_import(request,cluster_name):
 				ol.attempt=attempt
 	
 				(project, created)=Project.objects.get_or_create(name=data['project_name'])
-				resource_usage=OpenLavaResourceUsage()
-				for i,v in data['resource_usage'].items():
-					setattr(resource_usage,i,v)
-				resource_usage.save()
 	
 				for i in ['user_id','begin_time','termination_time','resource_request','cwd','input_file','output_file','error_file','input_file_spool','command_spool','job_file','host_factor','job_name','dependency_condition','pre_execution_cmd','email_user','exit_status','max_num_processors','login_shell','array_index','max_residual_mem','max_swap']:
 					setattr(ol,i,data[i])

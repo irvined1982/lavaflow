@@ -174,7 +174,7 @@
 
 
 <h2>Resource Usage</h2>
-{% if object.wall_time > 0 and object.openlavaexitinfo.resource_usage %}
+{% if object.wall_time > 0 and object.attemptresourceusage %}
 <div id='resourceChart'>
 		<svg style='height:500px'> </svg>
 	</div>
@@ -182,25 +182,25 @@
 		nv.addGraph(function() {
 			var chartData=[
 			{"values": [
-				{"value": {{ object.openlavaexitinfo.resource_usage.user_time }}, "label": "User Time"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.system_time }}, "label": "System Time"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.max_rss }}, "label": "Max RSS"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.integral_shared_memory }}, "label": "Int Sh Mem"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.integral_shared_text }}, "label": "Int Sh Text"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.integral_unshared_data }}, "label": "Int Unsh Data"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.integral_unshared_stack }}, "label": "Int Unsh Stack"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.page_reclaims }}, "label": "Page Reclaims"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.page_faults }}, "label": "Page Faults"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.swaps }}, "label": "Swaps"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.input_block_ops }}, "label": "Block Input Ops"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.output_block_ops }}, "label": "Block Output Ops"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.charecter_io_ops }}, "label": "Chars Ops"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.messages_sent }}, "label": "Messages Sent"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.messages_received }}, "label": "Messages Rec"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.num_signals }}, "label": "Signals Rec"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.voluntary_context_switches }}, "label": "Vol Ctx Sw"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.involuntary_context_switches }}, "label": "Invol Ctx Sw"}, 
-				{"value": {{ object.openlavaexitinfo.resource_usage.exact_user_time }}, "label": "Exact User Time"}
+				{"value": {{ object.attemptresourceusage.user_time }}, "label": "User Time"}, 
+				{"value": {{ object.attemptresourceusage.system_time }}, "label": "System Time"}, 
+				{"value": {{ object.attemptresourceusage.max_rss }}, "label": "Max RSS"}, 
+				{"value": {{ object.attemptresourceusage.integral_shared_memory }}, "label": "Int Sh Mem"}, 
+				{"value": {{ object.attemptresourceusage.integral_shared_text }}, "label": "Int Sh Text"}, 
+				{"value": {{ object.attemptresourceusage.integral_unshared_data }}, "label": "Int Unsh Data"}, 
+				{"value": {{ object.attemptresourceusage.integral_unshared_stack }}, "label": "Int Unsh Stack"}, 
+				{"value": {{ object.attemptresourceusage.page_reclaims }}, "label": "Page Reclaims"}, 
+				{"value": {{ object.attemptresourceusage.page_faults }}, "label": "Page Faults"}, 
+				{"value": {{ object.attemptresourceusage.swaps }}, "label": "Swaps"}, 
+				{"value": {{ object.attemptresourceusage.input_block_ops }}, "label": "Block Input Ops"}, 
+				{"value": {{ object.attemptresourceusage.output_block_ops }}, "label": "Block Output Ops"}, 
+				{"value": {{ object.attemptresourceusage.charecter_io_ops }}, "label": "Chars Ops"}, 
+				{"value": {{ object.attemptresourceusage.messages_sent }}, "label": "Messages Sent"}, 
+				{"value": {{ object.attemptresourceusage.messages_received }}, "label": "Messages Rec"}, 
+				{"value": {{ object.attemptresourceusage.num_signals }}, "label": "Signals Rec"}, 
+				{"value": {{ object.attemptresourceusage.voluntary_context_switches }}, "label": "Vol Ctx Sw"}, 
+				{"value": {{ object.attemptresourceusage.involuntary_context_switches }}, "label": "Invol Ctx Sw"}, 
+				{"value": {{ object.attemptresourceusage.exact_user_time }}, "label": "Exact User Time"}
 				], 
 				"key": "Recorded Resource Usage"}];
 			var chart = nv.models.discreteBarChart()
@@ -248,25 +248,25 @@
 	</thead>
 	<tbody>
 		<tr>
-			<td>{{ object.openlavaexitinfo.resource_usage.user_time }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.system_time }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.max_rss }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.integral_shared_memory }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.integral_shared_text }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.integral_unshared_data }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.integral_unshared_stack }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.page_reclaims }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.page_faults }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.swaps }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.input_block_ops }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.output_block_ops }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.charecter_io_ops }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.messages_sent }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.messages_received }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.num_signals }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.voluntary_context_switches }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.involuntary_context_switches }}</td>
-			<td>{{ object.openlavaexitinfo.resource_usage.exact_user_time }}</td>
+			<td>{{ object.attemptresourceusage.user_time }}</td>
+			<td>{{ object.attemptresourceusage.system_time }}</td>
+			<td>{{ object.attemptresourceusage.max_rss }}</td>
+			<td>{{ object.attemptresourceusage.integral_shared_memory }}</td>
+			<td>{{ object.attemptresourceusage.integral_shared_text }}</td>
+			<td>{{ object.attemptresourceusage.integral_unshared_data }}</td>
+			<td>{{ object.attemptresourceusage.integral_unshared_stack }}</td>
+			<td>{{ object.attemptresourceusage.page_reclaims }}</td>
+			<td>{{ object.attemptresourceusage.page_faults }}</td>
+			<td>{{ object.attemptresourceusage.swaps }}</td>
+			<td>{{ object.attemptresourceusage.input_block_ops }}</td>
+			<td>{{ object.attemptresourceusage.output_block_ops }}</td>
+			<td>{{ object.attemptresourceusage.charecter_io_ops }}</td>
+			<td>{{ object.attemptresourceusage.messages_sent }}</td>
+			<td>{{ object.attemptresourceusage.messages_received }}</td>
+			<td>{{ object.attemptresourceusage.num_signals }}</td>
+			<td>{{ object.attemptresourceusage.voluntary_context_switches }}</td>
+			<td>{{ object.attemptresourceusage.involuntary_context_switches }}</td>
+			<td>{{ object.attemptresourceusage.exact_user_time }}</td>
 		</tr>
 	</tbody>
 </table>
