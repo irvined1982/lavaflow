@@ -603,6 +603,22 @@ class Attempt(models.Model):
 				('cluster','job','task', 'start_time',),
 		]
 
+class GridEngineAttemptInfo(models.Model):
+	attempt=models.OneToOneField(Attempt)
+	project=models.ForeignKey(Project,null=True, related_name="gridengine_projects")
+	department=models.ForeignKey(Project, null=True, related_name="gridengine_departments")
+	cpu_time=models.FloatField()
+	integral_mem_usage=models.FloatField()
+	io_usage=models.FloatField()
+	catagory=models.CharField(max_length=1024)
+	io_wait=models.FloatField()
+	pe_task_id=models.IntegerField(null=True)
+	max_vmem=models.FloatField()
+	advanced_reservation_id=models.IntegerField()
+	advanced_reservation_submit_time=models.IntegerField()
+	def advanced_reservation_submit_time_datetime(self):
+		return datetime.datetime.utcfromtimestamp(self.advanced_reservation_submit_time)
+
 class AttemptResourceUsage(models.Model):
 	attempt=models.OneToOneField(Attempt)
 	user_time=models.FloatField()

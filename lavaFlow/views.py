@@ -295,6 +295,8 @@ def gridengine_import(request,cluster_name):
 	if created:
 		(execution_host, created)=Host.objects.get_or_create(name=data['hostname'])
 		attempt.execution_hosts.add(execution_host)
+		dept=None
+		project=None
 		if data['project']:
 			(project, created)=Project.objects.get_or_create(name=data['project'])
 			attempt.projects.add(project)
@@ -323,6 +325,22 @@ def gridengine_import(request,cluster_name):
 		r.involuntary_context_switches=data['ru_nivcsw']
 		r.exact_user_time=-1
 		r.save()
+		a=GridEngineAttemptInfo()
+		a.attempt=attempt
+		a.project=project
+		a.department=dept
+		a.cpu_time=data['cpu']
+		a.integral_mem_usage=data['mem']
+		a.io_usage=data['io']
+		a.catagory=""
+		if data['catagory']:
+			a.catagory=data['catagory']
+		a.io_wait=data['iow']
+		a.pe_task_id=data['pe_taskid']
+		a.max_vmem=data['maxvmem']
+		a.advanced_reservation_id=data['arid']
+		a.advanced_reservation_submit_time=data['ar_submission_time']
+		a.save()
 	return HttpResponse("OK", content_type="text/plain")
 
 

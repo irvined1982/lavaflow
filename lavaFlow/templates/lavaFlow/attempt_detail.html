@@ -107,6 +107,20 @@
 	<dt>Max Swap</dt>
 		<dd>{{ object.openlavaexitinfo.max_swap }}</dd>
 </dl>
+{% elif object.gridengineattemptinfo %} 
+	<dl class="dl-horizontal">
+		<dt>Project</dt><dd>{{ object.gridengineattemptinfo.project.name|default:"Not Specified" }}</dd>
+		<dt>Department</dt><dd>{{ object.gridengineattemptinfo.department.name|default:"Not Specified" }}</dd>
+		<dt>Logged CPU Time</dt><dd>{{ object.gridengineattemptinfo.cpu_time }}</dd>
+		<dt>Integral Mem Usage</dt><dd>{{ object.gridengineattemptinfo.integral_mem_usage }}</dd>
+		<dt>IO Usage</dt><dd>{{ object.gridengineattemptinfo.io_usage }}</dd>
+		<dt>IO Wait</dt><dd>{{ object.gridengineattemptinfo.io_wait }}</dd>
+		<dt>Max Virtual Memory</dt><dd>{{ object.gridengineattemptinfo.max_vmem }}</dd>
+		<dt>Catagory</dt><dd>{{ object.gridengineattemptinfo.catagory|default:"Not Specified" }}</dd>
+		<dt>PE Task ID</dt><dd>{{ object.gridengineattemptinfo.pe_task_id|default:"Not Specified" }}</dd>
+		<dt>Advanced Reservation ID</dt><dd>{{ object.gridengineattemptinfo.advanced_reservation_id|default:"Not Specified" }}</dd>
+		<dt>Advanced Reservation Submit Time</dt><dd>{{ object.gridengineattemptinfo.advanced_reservation_submit_time_datetime|default:"Not Specified" }}</dd>
+	</dl>
 {% else %}
 <div class="alert alert-warning">Extended job finish information has not been imported for this job.</div>
 {% endif %}
