@@ -18,8 +18,8 @@
 		<tbody>
   			{% for object in object_list %}
 			<tr {% if object.status.exited_cleanly == False %}class="danger"{% endif %}>
-				<td>{{ object.cluster }}</dt>
-				<td>{{ object.user }}</td>
+				<td><a href='{{ object.cluster.get_absolute_url }}'>{{ object.cluster }}</a></td>
+				<td><a href='{{ object.user.get_absolute_url }}'>{{ object.user }}</a></td>
 				<td><a href="{{ object.job.get_absolute_url }}">{{ object.job.job_id }}</a></td>
 				<td><a href="{{ object.task.get_absolute_url }}">{{ object.task.task_id }}</a></td>
 				<td><a href="{{ object.get_absolute_url }}">{{ object.get_attempt_id }}</a></td>

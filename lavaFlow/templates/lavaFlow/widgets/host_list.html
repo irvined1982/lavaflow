@@ -14,7 +14,7 @@
 		<tbody>
   			{% for object in object_list %}
 			<tr {% if object.failure_rate > 0.1 %} class="warning"{% endif %}{% if object.failure_rate > 1 %} class="danger"{% endif %}>
-				<td>{{ object.name }}</dt>
+				<td><a href='{{ object.get_absolute_url }}'>{{ object.name }}</a></dt>
 				<td>{{ object.total_submitted_jobs }}</td>
 				<td><a href="{{ object.first_task.get_absolute_url }}">{{ object.first_task.start_time_datetime }}</a></dt>
 				<td><a href="{{ object.last_task.get_absolute_url }}">{{ object.last_task.end_time_datetime }}</a></dt>

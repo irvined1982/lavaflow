@@ -26,13 +26,13 @@
 	<dt>Job Id</dt>
 		<dd>{{ object.job.job_id }}</dd>
 	<dt>Cluster</dt>
-		<dd>{{ object.cluster }}</dd>
+	<dd><a href='{{ object.cluster.get_absolute_url }}'>{{ object.cluster }}</a></dd>
 	<dt>User</dt>
-		<dd>{{ object.user }}</dd>
+	<dd><a href='{{ object.user.get_absolute_url }}'>{{ object.user }}</a></dd>
 	<dt>Num Processors</dt>
 		<dd>{{ object.num_processors }}</dd>
 	<dt>Projects</dt>
-	<dd>{% for project in object.projects.all %}{{ project }}<br>{% endfor %}</dd>
+	<dd>{% for project in object.projects.all %}<a href='{{ project.get_absolute_url }}'>{{ project }}</a><br>{% endfor %}</dd>
 	<dt>Start Time</dt>
 		<dd>{{ object.start_time_datetime }}</dd>
 	<dt>End Time</dt>
@@ -44,7 +44,7 @@
 	<dt>Wall Time</dt>
 		<dd>{{ object.wall_time_timedelta }}</dd>
 	<dt>Queue</dt>
-		<dd>{{ object.queue }}</dd>
+	<dd><a href='{{ object.queue.get_absolute_url }}'>{{ object.queue }}</a></dd>
 	<dt>Exit Status</dt>
 		<dd>{{ object.status.name }}</dd>
 	<dt>Command</dt>
@@ -83,7 +83,7 @@
 	<dt>Job File</dt>
 		<dd>{{ object.openlavaexitinfo.job_file }}</dd>
 	<dt>Requested Hosts</dt>
-	<dd>{% for host in object.openlavaexitinfo.asked_hosts.all %}{{ host }}<br>{% endfor %}</dd>
+	<dd>{% for host in object.openlavaexitinfo.asked_hosts.all %}<a href='{{ host.get_absolute_url }}'>{{ host }}</a><br>{% endfor %}</dd>
 	<dt>Host Factor</dt>
 		<dd>{{ object.openlavaexitinfo.host_factor }}</dd>
 	<dt>Job Name</dt>
@@ -137,7 +137,7 @@
 	<tbody>
 		{% for row in object.get_execution_host_count %}
 		<tr>
-			<td>{{ row.name }}</td><td>{{ row.name__count }}</td>
+			<td><a href='{{ row.host.get_absolute_url }}'>{{ row.host }}</a></td><td>{{ row.count }}</td>
 		</tr>
 		{% endfor %}
 	</tbody>
@@ -174,7 +174,7 @@
 		<td>{{ attempt.pend_time_timedelta }}</td>
 		<td>{{ attempt.wall_time_timedelta }}</td>
 		<td>{{ attempt.cpu_time_timedelta }}</td>
-		<td>{% for host in attempt.execution_hosts %}{{ host }}<br >{% endfor %}</td>
+		<td>{% for host in attempt.execution_hosts %}<a href='{{ host.get_absolute_url }}'>{{ host }}</a><br >{% endfor %}</td>
 		<td>{{ attempt.status }}</td>
 	</tr>
 	{% empty %}

@@ -11,8 +11,8 @@
 		<tbody>
   			{% for object in object_list %}
 			<tr>
-				<td>{{ object.cluster }}</dt>
-				<td>{{ object.user }}</td>
+				<td><a href='{{ object.cluster.get_absolute_url }}'>{{ object.cluster }}</a></td>
+				<td><a href='{{ object.get_absolute_url }}'>{{ object.user }}</a></td>
 				<td><a href="{{ object.get_absolute_url }}">{{ object.job_id }}</a></td>
 				<td>{{ object.task_set.all.count }}</dt>
 				<td>{{ object.attempt_set.all.count }}</dt>

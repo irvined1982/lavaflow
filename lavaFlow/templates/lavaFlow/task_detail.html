@@ -8,9 +8,9 @@
 	<dt>Job Id</dt>
 		<dd>{{ object.job.job_id }}</dd>
 	<dt>Cluster</dt>
-		<dd>{{ object.cluster }}</dd>
+	<dd><a href='{{ object.cluster.get_absolute_url }}'>{{ object.cluster }}</a></dd>
 	<dt>User</dt>
-		<dd>{{ object.user }}</dd>
+	<dd><a href='{{ object.user.get_absolute_url }}'>{{ object.user }}</a></dd>
 	<dt>Submit Host</td>
 		<dd>{{ object.job.submit_host }}</dd>
 	<dt>Submit Time</td>

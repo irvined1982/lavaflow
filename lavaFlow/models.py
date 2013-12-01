@@ -57,6 +57,16 @@ class Cluster(models.Model):
 			help_text='The name of the cluster',
 			)
 
+	def get_absolute_url(self):
+		args={
+				'start_time_js':0,
+				'end_time_js':0,
+				'exclude_string':"none",
+				'filter_string':"cluster__id__in.%s" % self.id,
+				'group_string':"none",
+				}
+		return reverse("lf_utilization_view", kwargs=args)
+
 	def __unicode__(self):
 		return u'%s' % self.name
 
@@ -121,6 +131,14 @@ class ClusterLog(models.Model):
 
 class Project(models.Model):
 	name=models.CharField(max_length=100,unique=True,db_index=True)
+	def get_absolute_url(self):
+		args={
+				'start_time_js':0,
+				'end_time_js':0,
+				'exclude_string':"none",
+				'filter_string':"project__id__in.%s" % self.id,
+				'group_string':"none",
+				}
 	def __unicode__(self):
 		return u'%s' % self.name
 
@@ -201,7 +219,10 @@ class Host(models.Model):
 		return self.attempt_set.exclude(status__exited_cleanly=True).distinct().count()
 
 	def failure_rate(self):
-		return (float(self.total_failed_tasks())/float(self.total_tasks())*100)
+		try:
+			return (float(self.total_failed_tasks())/float(self.total_tasks())*100)
+		except ZeroDivisionError:
+			return 0.0
 
 	def first_task(self):
 		try:
@@ -214,6 +235,15 @@ class Host(models.Model):
 			return self.attempt_set.order_by('-end_time')[0]
 		except:
 			return None
+	def get_absolute_url(self):
+		args={
+				'start_time_js':0,
+				'end_time_js':0,
+				'exclude_string':"none",
+				'filter_string':"execution_hosts__id__in.%s" % self.id,
+				'group_string':"none",
+				}
+		return reverse("lf_utilization_view", kwargs=args)
 
 class HostLog(ClusterLog):
 	host=models.ForeignKey(Host)
@@ -223,6 +253,14 @@ class Queue(models.Model):
 	cluster=models.ForeignKey(Cluster,db_index=True)
 	name=models.CharField(max_length=128)
 
+	def get_absolute_url(self):
+		args={
+				'start_time_js':0,
+				'end_time_js':0,
+				'exclude_string':"none",
+				'filter_string':"queue__id__in.%s" % self.id,
+				'group_string':"none",
+				}
 	def __unicode__(self):
 		return u'%s' % self.name
 
@@ -343,6 +381,16 @@ class User(models.Model):
 		return wall
 	def average_wall_time_timedelta(self):
 		return datetime.timedelta(seconds=self.average_wall_time())
+
+	def get_absolute_url(self):
+		args={
+				'start_time_js':0,
+				'end_time_js':0,
+				'exclude_string':"none",
+				'filter_string':"user__id__in.%s" % self.id,
+				'group_string':"none",
+				}
+		return reverse("lf_utilization_view", kwargs=args)
 class UserLog(ClusterLog):
 	user=models.ForeignKey(User)
 
@@ -577,7 +625,11 @@ class Attempt(models.Model):
 			counter+=1
 
 	def get_execution_host_count(self):
-		return self.execution_hosts.all().values('name').annotate(Count('name'))
+		hosts=[]
+		for h in self.execution_hosts.all().values('pk').annotate(Count('name')):
+			host=Host.objects.get(pk=h['pk'])
+			hosts.append({'host':host,'count':h['name__count']})
+		return hosts
 
 	def get_contending_jobs(self):
 		return Attempt.objects.filter(end_time__gte=self.start_time, start_time__lte=self.end_time, execution_hosts__in=self.execution_hosts)
