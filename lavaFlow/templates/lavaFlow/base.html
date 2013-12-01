@@ -40,6 +40,11 @@
 			   <li><a href="{% url 'lf_attempt_list' %}">Attempts</a></li>
 			   {% block actions %}{% endblock %}
 		   </ul>
+	   <form action="{% url "lf_job_list" %}" method="get" class="navbar-form navbar-right" role="search">
+		   <div class="form-group">
+			   <input type="text" class="form-control" name="jobId" id="searchBox" placeholder="Search Job IDs">
+		   </div>
+	   </form>
 	   </div>
 	   </nav>
 	<div class="container">

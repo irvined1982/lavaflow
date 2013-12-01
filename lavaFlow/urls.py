@@ -22,6 +22,7 @@ from django.conf.urls.defaults import patterns, include, url
 from django.views.generic import ListView
 from django.views.generic import DetailView
 from lavaFlow.models import * 
+from lavaFlow.views import JobView
 
 urlpatterns = patterns('',
 		url(r'^$', 'lavaFlow.views.utilization_view', name="lf_utilization_view_default" ),
@@ -37,7 +38,7 @@ urlpatterns = patterns('',
 		url(r'^attempts/(?P<pk>\d+)$', DetailView.as_view(model=Attempt), name="lf_attempt_detail"),
 		url(r'^tasks/$', ListView.as_view(model=Task, paginate_by=20), name="lf_task_list" ),
 		url(r'^tasks/(?P<pk>\d+)$', DetailView.as_view(model=Task), name="lf_task_detail"),
-		url(r'^jobs/$', ListView.as_view(model=Job, paginate_by=20), name="lf_job_list" ),
+		url(r'^jobs/$', JobView.as_view(), name="lf_job_list" ),
 		url(r'^jobs/(?P<pk>\d+)$', DetailView.as_view(model=Job), name="lf_job_detail"),
 
 		url(r'^util_total_attempts/(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$', 'lavaFlow.views.util_total_attempts', name='lf_util_total_attempts'),

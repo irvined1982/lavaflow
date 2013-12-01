@@ -41,8 +41,11 @@ from django.db.models import Count
 from django.db.models import Sum
 from django.template import RequestContext
 from django.http import Http404
+from django.views.generic import ListView
 from lavaFlow.models import *
 log=logging.getLogger(__name__)
+
+
 @csrf_exempt
 def gridengine_import(request,cluster_name):
 	data=json.loads(request.body)
@@ -807,4 +810,17 @@ def build_filter(request):
 
 	return HttpResponse(json.dumps({'url':url}), content_type="application/json")
 
+class JobView(ListView):
+	model = Job
+	paginate_by = 20
+	def get_queryset(self):
+		print "hello"
+		try:
+			id = int(self.request.GET.get("jobId",None))
+		except:
+			id=None
 
+		if id:
+			return Job.objects.filter(job_id=id)
+		else:
+			return Job.objects.filter()
