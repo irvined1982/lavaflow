@@ -187,6 +187,27 @@
 
 
 
+	var jobExitChartBar;
+	nv.addGraph(function() {
+		jobExitChartBar = nv.models.multiBarChart();
+		d3.select('#jobExitChartBar svg')
+			.datum([])
+			.transition().duration(500)
+			.call(jobExitChartBar);
+		nv.utils.windowResize(jobExitChartBar.update);
+		return jobExitChartBar;
+	});
+
+	var jobSizeChartBar;
+	nv.addGraph(function() {
+		jobSizeChartBar = nv.models.multiBarChart();
+		d3.select('#jobSizeChartBar svg')
+			.datum([])
+			.transition().duration(500)
+			.call(jobSizeChartBar);
+		nv.utils.windowResize(jobSizeChartBar.update);
+		return jobSizeChartBar;
+	});
 
 
 
@@ -352,6 +373,14 @@
 			{
 				id:"#utilizationProjectChart svg",
 				container:utilProjectChart
+			},
+			{
+				id:"#jobSizeChartBar svg",
+				container:jobSizeChartBar
+			},
+			{
+				id:"#jobExitChartBar svg",
+				container:jobExitChartBar
 			}
 		];
 		charts.forEach(function(entry){
@@ -450,6 +479,30 @@
 				.call(utilProjectChart);
 			});
 		});
+
+		filterData.view='lf_util_bar_exit';
+		filterData.groups=['status__name'];
+		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+			 $.getJSON(data.url, function(data) {
+				d3.select('#jobExitChartBar svg')
+				.datum(data)
+				.transition().duration(500)
+				.call(jobExitChartBar);
+			});
+
+		});
+		
+		filterData.view='lf_util_bar_size';
+		filterData.groups=['num_processors'];
+		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+			 $.getJSON(data.url, function(data) {
+				d3.select('#jobSizeChartBar svg')
+				.datum(data)
+				.transition().duration(500)
+				.call(jobSizeChartBar);
+			});
+
+		});
 		
 		filterData.view='lf_utilization_table'
 		filterData.groups=['cluster__name'];
@@ -510,5 +563,9 @@
 <div id='utilizationSizeChart'><svg style='height:500px'></svg></div>
 <div id="utilizationSizeTable"></div>
 
+<h3>Job Size</h3>
+<div id='jobSizeChartBar'><svg style='height:500px'></svg></div>
+<h3>Exit State</h3>
+<div id='jobExitChartBar'><svg style='height:500px'></svg></div>
 
 {% endblock %}

@@ -545,6 +545,73 @@ def utilization_table(request, start_time_js=0, end_time_js=0, exclude_string=""
 	return render(request, "lavaFlow/widgets/utilization_chart.html", {'header':header,'rows':rows})
 
 
+
+def utilization_bar_size(request, start_time_js=0, end_time_js=0, exclude_string="",  filter_string="", group_string=""):
+	start_time_js=int(start_time_js)
+	end_time_js=int(end_time_js)
+	attempts=get_attempts(start_time_js, end_time_js, exclude_string, filter_string)
+	data=[]
+	for row in Attempt.objects.values('num_processors').annotate(Sum('pend_time'), Sum('wall_time'), Sum('cpu_time'), Count('num_processors') ).order_by('num_processors'):
+		data.append({
+			'key':"%s Processors" % row['num_processors'],
+			'values':[
+				{
+					'x':"Sum CPU",
+					'y':row['cpu_time__sum'],
+					},
+				{
+					'x':"Sum Wall",
+					'y':row['wall_time__sum'],
+					},
+				{
+					'x':"Sum Pend",
+					'y':row['pend_time__sum'],
+					},
+				{
+					'x':"Total Tasks",
+					'y':row['num_processors__count'],
+					},
+				]
+			})
+
+	return HttpResponse(json.dumps(data, indent=3, sort_keys=True), content_type="application/json")
+
+
+def utilization_bar_exit(request, start_time_js=0, end_time_js=0, exclude_string="",  filter_string="", group_string=""):
+	start_time_js=int(start_time_js)
+	end_time_js=int(end_time_js)
+	attempts=get_attempts(start_time_js, end_time_js, exclude_string, filter_string)
+	data=[]
+	for row in Attempt.objects.values('status__exited_cleanly', 'status__name').annotate(Sum('pend_time'), Sum('wall_time'), Sum('cpu_time'), Count('num_processors') ).order_by('num_processors'):
+		if row['status__exited_cleanly'] == True:
+			clean="Success"
+		else:
+			clean="Failed"
+		data.append({
+			'key':"%s (%s)" % ( row['status__name'], clean	),
+			'values':[
+				{
+					'x':"Sum CPU",
+					'y':row['cpu_time__sum'],
+					},
+				{
+					'x':"Sum Wall",
+					'y':row['wall_time__sum'],
+					},
+				{
+					'x':"Sum Pend",
+					'y':row['pend_time__sum'],
+					},
+				{
+					'x':"Total Tasks",
+					'y':row['num_processors__count'],
+					},
+				]
+			})
+
+	return HttpResponse(json.dumps(data, indent=3, sort_keys=True), content_type="application/json")
+
+
 @cache_page(60 * 60 * 2)
 def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",  filter_string="", group_string=""):
 	start_time_js=int(start_time_js)
@@ -814,7 +881,6 @@ class JobView(ListView):
 	model = Job
 	paginate_by = 20
 	def get_queryset(self):
-		print "hello"
 		try:
 			id = int(self.request.GET.get("jobId",None))
 		except:
