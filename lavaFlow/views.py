@@ -553,7 +553,7 @@ def utilization_bar_size(request, start_time_js=0, end_time_js=0, exclude_string
 	end_time_js=int(end_time_js)
 	attempts=get_attempts(start_time_js, end_time_js, exclude_string, filter_string)
 	data=[]
-	for row in Attempt.objects.values('num_processors').annotate(Sum('pend_time'), Sum('wall_time'), Sum('cpu_time'), Count('num_processors') ).order_by('num_processors'):
+	for row in attempts.values('num_processors').annotate(Sum('pend_time'), Sum('wall_time'), Sum('cpu_time'), Count('num_processors') ).order_by('num_processors'):
 		data.append({
 			'key':"%s Processors" % row['num_processors'],
 			'values':[
@@ -584,7 +584,7 @@ def utilization_bar_exit(request, start_time_js=0, end_time_js=0, exclude_string
 	end_time_js=int(end_time_js)
 	attempts=get_attempts(start_time_js, end_time_js, exclude_string, filter_string)
 	data=[]
-	for row in Attempt.objects.values('status__exited_cleanly', 'status__name').annotate(Sum('pend_time'), Sum('wall_time'), Sum('cpu_time'), Count('num_processors') ).order_by('num_processors'):
+	for row in attempts.values('status__exited_cleanly', 'status__name').annotate(Sum('pend_time'), Sum('wall_time'), Sum('cpu_time'), Count('num_processors') ).order_by('num_processors'):
 		if row['status__exited_cleanly'] == True:
 			clean="Success"
 		else:
