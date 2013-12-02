@@ -3,7 +3,7 @@
 	<dt>User ID</dt>
 		<dd>{{ job.jobsubmitopenlava.user_id }}</dd>
 	<dt>User</dt>
-		<dd>{{ job.jobsubmitopenlava.user }}</dd>
+		<dd>{{ job.jobsubmitopenlava.user_name }}</dd>
 	<dt>Options</dt>
 	<dd>{% for option in job.jobsubmitopenlava.options.all %}{{ option.name }}<br />{% endfor %}</dd>
 	<dt>Num Processors</dt>

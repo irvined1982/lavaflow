@@ -366,7 +366,7 @@ def openlava_import(request,cluster_name):
 			js.job=job
 			(project, created)=Project.objects.get_or_create(name=data['project_name'])
 			js.project=project
-			js.user=user
+			js.user_name=user.name
 			#resource limits
 			js.queue=queue
 			js.submit_host=submit_host
@@ -464,6 +464,7 @@ def openlava_import(request,cluster_name):
 	
 				ol.project=project
 				ol.resource_usage=resource_usage
+				ol.user=user
 				ol.save()
 				for option in data['options']:
 					(o,created)=OpenLavaSubmitOption.objects.get_or_create(code=option['status'],name=option['name'],description=option['description'])

@@ -36,6 +36,9 @@ class OpenLavaState(models.Model):
 	friendly_name=models.CharField(max_length=128,null=True)
 	class Meta:
 		abstract=True
+		index_together=[
+				('code','name',),
+		]
 
 class OpenLavaSubmitOption(OpenLavaState):
 	pass
@@ -45,7 +48,10 @@ class OpenLavaTransferFileOption(OpenLavaState):
 	pass
 class JobStatus(OpenLavaState):
 	exited_cleanly=models.BooleanField()
-	pass
+	class Meta:
+		index_together=[
+				('code','name','exited_cleanly')
+		]
 
 
 
@@ -482,6 +488,8 @@ class Job(models.Model):
 					['cluster','user'],
 					['cluster','job_id','submit_time',],
 					['cluster','user','submit_time'],
+					['submit_time'],
+					['cluster','submit_time']
 				]
 class JobLog(ClusterLog):
 	job=models.ForeignKey(Job)
@@ -508,7 +516,7 @@ class OpenLavaResourceLimit(models.Model):
 class JobSubmitOpenLava(models.Model):
 	job=models.OneToOneField(Job)
 	user_id=models.IntegerField()
-	user=models.ForeignKey(User, db_column="user_rem_id")
+	user_name=models.CharField(max_length=128)
 	options=models.ManyToManyField(OpenLavaSubmitOption)
 	num_processors=models.IntegerField()
 	begin_time=models.IntegerField()
@@ -575,15 +583,12 @@ class Task(models.Model):
 	def exited_jobs(self):
 		return self.attempt_set.exclude(status__exited_cleanly=True)
 
-
-
-
-
 	class Meta:
 		index_together=[
 				['cluster','job'],
 				['cluster','user'],
 				['user'],
+				['task_id'],
 				]
 
 class TaskLog(JobLog):
@@ -651,8 +656,13 @@ class Attempt(models.Model):
 	class Meta:
 		unique_together=('cluster','job','task','start_time')
 		index_together=[
-				('cluster','job','task'),
-				('cluster','job','task', 'start_time',),
+				['cluster','job','task'],
+				['cluster','job','task', 'start_time',],
+				['end_time'],
+				['cluster','end_time','job'],
+				['user', 'end_time','job'],
+				['job','end_time'],
+				['end_time','job'],
 		]
 
 class GridEngineAttemptInfo(models.Model):

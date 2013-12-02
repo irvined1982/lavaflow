@@ -33,6 +33,9 @@ for row in el:
 	row_num += 1
 	data=OpenLava.dumps(row)
 	request = urllib2.Request(url, data, {'Content-Type': 'application/json'})
-	f = urllib2.urlopen(request)
-	f.close()
+	try:
+		f = urllib2.urlopen(request)
+		f.close()
+	except:
+		pass
 
