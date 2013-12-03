@@ -477,14 +477,14 @@ def openlava_import(request,cluster_name):
 
 
 def get_attempts(start_time_js, end_time_js, exclude_string, filter_string):
-	start_time=int(int(start_time_js)/1000)
-	end_time=int(int(end_time_js)/1000)
 	filter_args=filter_string_to_params(filter_string)
 	exclude_args=filter_string_to_params(exclude_string)
 	attempts=Attempt.objects.all()
-	if start_time:
+	if start_time_js:
+		start_time=int(int(start_time_js)/1000)
 		attempts=attempts.filter(end_time__gte=start_time)
-	if end_time:
+	if end_time_js:
+		end_time=int(int(end_time_js)/1000)
 		attempts=attempts.filter(job__submit_time__lte=end_time)
 	for key,val in filter_args.items():
 		attempts=attempts.filter(**{key:val})
@@ -614,137 +614,80 @@ def utilization_bar_exit(request, start_time_js=0, end_time_js=0, exclude_string
 	return HttpResponse(json.dumps(data, indent=3, sort_keys=True), content_type="application/json")
 
 
-@cache_page(60 * 60 * 2)
+#@cache_page(60 * 60 * 2)
 def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",  filter_string="", group_string=""):
+	attempts=get_attempts(None,None, exclude_string, filter_string)
+	group_args=group_string_to_group_args(group_string)
+	attempts=attempts.values(*group_args)
+
 	start_time_js=int(start_time_js)
 	end_time_js=int(end_time_js)
-	attempts=get_attempts(start_time_js, end_time_js, exclude_string, filter_string)
 
-	# Only get the values we actually want - this is then
-	# done in one request and is much faster
-	values=[
-			"job__submit_time",
-			"start_time",
-			"end_time",
-			"num_processors",
-			]
-	group_args=group_string_to_group_args(group_string)
-	values.extend(group_args)
-	attempts=attempts.values(*values)
+	start_time_ep=int(start_time_js/1000)
+	end_time_ep=int(end_time_js/1000)
 
+	slice_size=int((end_time_ep-start_time_ep)/2000)
+	if slice_size<1:
+		slice_size=1
+	times=[]
 	serieses={}
-	event_times=[]
 
-	for attempt in attempts:
-		# Build the series name from the grouping...
-		series_name=""
-		for n in group_args:
-			series_name= u"%s%s" % (series_name,   attempt[n])
+	for bucket_time_ep in range(start_time_ep, end_time_ep, slice_size):
+		bucket_time_js=bucket_time_ep*1000
+		times.append(bucket_time_js)
+		for t in ['pend','run']:
+			if t=="pend":
+				entries=attempts.filter(start_time__gt=bucket_time_ep, job__submit_time__lte=bucket_time_ep)
+				name="Pending"
+			else:
+				entries=attempts.filter(start_time__lte=bucket_time_ep, end_time__gt=bucket_time_ep)
+				name="Running"
 
-		# Get the name of the series for pending and running data
-		if len(series_name)>0:
-			pend_series_name="%s Pending" % series_name
-		else:
-			pend_series_name="Pending"
+			if len(group_args)>0:
+				entries=entries.annotate(Sum('num_processors'))
+				for entry in entries:
+					series_name=""
+					for n in group_args:
+						series_name= u"%s%s" % (series_name,   entry[n])
+						series_name="%s %s" % (series_name, name)
+					value=entry['num_processors__sum']
+					if value == 0:
+						value=None
 
-		if len(series_name)>0:
-			run_series_name="%s Running" % series_name
-		else:
-			run_series_name="Running"
-
-		# Check that both series exist.
-		if not pend_series_name in serieses:
-			serieses[pend_series_name]={start_time_js:0,end_time_js:0}
-		pend_series=serieses[pend_series_name]
-
-		if not run_series_name in serieses:
-			serieses[run_series_name]={start_time_js:0,end_time_js:0}
-		run_series=serieses[run_series_name]
-
-		# Get the values
-		submit_time = int(attempt['job__submit_time']) * 1000
-		start_time = int(attempt['start_time']) * 1000
-		end_time = int(attempt['end_time']) * 1000
-		num_processors = attempt['num_processors']
-
-
-		# Sanitize them so that they do not go out of bounds
-		if submit_time < start_time_js:
-			submit_time=start_time_js
-		if start_time < start_time_js:
-			start_time=start_time_js
-		if end_time > end_time_js:
-			end_time=end_time_js
-
-		# All series shall have a time for each entry, this
-		# makes the chart smoother as there is a data point
-		# for each action in both pending and running jobs.
-		for time in [submit_time, start_time, end_time]:
-			for series in [run_series, pend_series]:
-				if time not in series:
-					series[time]=0
-			if time not in event_times:
-				event_times.append(time)
-
-		# Adjust the value accordingly
-		pend_series[submit_time] += num_processors
-		pend_series[start_time] -= num_processors
-
-
-		run_series[start_time] += num_processors
-		run_series[end_time] -= num_processors
-
-	series_int=[]
-
-	# Process each series
-	series_data={}
-	for series_name, series in serieses.iteritems():
-		# Change the series from the integral to the actual
-		# total value.
-		for time in sorted(series.keys()):
-			# if it is a mid value, insert a value next to it
-			# lsf has a 1 second resolution, so put it a milisecond before
-			# this means graphs will look square, which is more accurate than peaks.
-			if time-1 <= end_time_js and time-1 >= start_time_js:
-				if time-1 not in series:
-					series[time-1]=0
-					if time-1 not in event_times:
-						event_times.append(time-1)
-			if time+1 <= end_time_js and time+1 >= start_time_js:
-				if time+1 not in series:
-					series[time+1]=0
-					if time+1 not in event_times:
-						event_times.append(time+1)
-
-		values=[]
-		total_slots_at_time=0
-		times=[]
-		for time in sorted(series.keys()):
-			value=series[time]
-			total_slots_at_time += value
-			values.append(total_slots_at_time)
-			times.append(time)
-		ip=interpolate.interp1d(times, values, kind='nearest',bounds_error=False,fill_value=0.0)
-		series_data[series_name]=ip
-
-	# If there are more datapoints than can be processed
-	# Then downsample...
-	max_length=500
-	if len(event_times) > max_length:
-		interval=int((end_time_js-start_time_js)/max_length)
-		event_times=range( start_time_js, end_time_js, interval)
-
-	for series_name, ip in series_data.iteritems():
-		d3_series={
-				'key':series_name,
-				'values':[]
-				}
-		# Now populate with interpolated data.
-		for time in sorted(event_times):
-			d3_series['values'].append({'x':time,'y':int(ip(time))})
-		series_int.append(d3_series)
-
-	return HttpResponse(json.dumps(series_int, indent=1), content_type="application/json")
+					if not series_name in serieses:
+						serieses[series_name]={
+								'key':series_name,
+								'values':{}
+								}
+					serieses[series_name]['values'][bucket_time_js]={
+							'x':bucket_time_js, 
+							'y':value,
+							}
+			else:
+				series_name="%s" % name
+				entries=entries.aggregate(Sum('num_processors'))
+				if not series_name in serieses:
+					serieses[series_name]={
+							'key':series_name,
+							'values':{}
+							}
+				serieses[series_name]['values'][bucket_time_js]={
+						'x':bucket_time_js,
+						'y':entries['num_processors__sum']
+						}
+	for series in serieses.values():
+		v=[]
+		for time in times:
+			values=series['values']
+			if time in values:
+				v.append(values[time])
+			else:
+				v.append({
+						'x':time,
+						'y':None,
+						})
+		series['values']=v
+	return HttpResponse(json.dumps(serieses.values(), indent=1), content_type="application/json")
 
 
 @cache_page(60 * 60 * 2)

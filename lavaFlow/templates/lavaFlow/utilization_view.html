@@ -104,7 +104,7 @@
 		nv.addGraph(function() {
 		utilClusterChart = nv.models.stackedAreaChart();
 		utilClusterChart.clipEdge(true);
-		utilClusterChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
+		utilClusterChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d)) });
 		utilClusterChart.xAxis.rotateLabels(-45);
 		utilClusterChart.margin({bottom: 120, left:100});
 		utilClusterChart.xAxis.axisLabel('Date');
@@ -121,7 +121,7 @@
 	nv.addGraph(function() {
 		utilQueueChart = nv.models.stackedAreaChart();
 		utilQueueChart.clipEdge(true);
-		utilQueueChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
+		utilQueueChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d)) });
 		utilQueueChart.xAxis.rotateLabels(-45);
 		utilQueueChart.margin({bottom: 120, left:100});
 		utilQueueChart.xAxis.axisLabel('Date');
@@ -138,7 +138,7 @@
 	nv.addGraph(function() {
 		utilProjectChart = nv.models.stackedAreaChart();
 		utilProjectChart.clipEdge(true);
-		utilProjectChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
+		utilProjectChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d)) });
 		utilProjectChart.xAxis.rotateLabels(-45);
 		utilProjectChart.margin({bottom: 120, left:100});
 		utilProjectChart.xAxis.axisLabel('Date');
@@ -155,7 +155,7 @@
 	nv.addGraph(function() {
 		utilUserChart = nv.models.stackedAreaChart();
 		utilUserChart.clipEdge(true);
-		utilUserChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
+		utilUserChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d)) });
 		utilUserChart.xAxis.rotateLabels(-45);
 		utilUserChart.margin({bottom: 120, left:100});
 		utilUserChart.xAxis.axisLabel('Date');
@@ -172,7 +172,7 @@
 	nv.addGraph(function() {
 		utilSizeChart = nv.models.stackedAreaChart();
 		utilSizeChart.clipEdge(true);
-		utilSizeChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d*1000)) });
+		utilSizeChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d)) });
 		utilSizeChart.xAxis.rotateLabels(-45);
 		utilSizeChart.margin({bottom: 120, left:100});
 		utilSizeChart.xAxis.axisLabel('Date');
