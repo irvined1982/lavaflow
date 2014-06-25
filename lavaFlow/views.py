@@ -371,163 +371,293 @@ def openlava_import(request, cluster_name):
     (cluster, created) = Cluster.objects.get_or_create(name=cluster_name)
 
     # Process each entry in the array of entries
-    for entry in data['payload']:
-        import_openlava(cluster, entry)
+    for event in data['payload']:
+        if event['type'] == 1: # EVENT_JOB_NEW
+            openlava_import_job_new(cluster, event)
+        elif event['type'] == 10: # EVENT_JOB_FINISH
+            openlava_import_job_finish(cluster, event)
+
 
     return HttpResponse("OK", content_type="text/plain")
 
-def openlava_import_job_new(cluster, entry):
+
+
+def openlava_import_job_new(cluster, event):
     """
     Imports a single openlava event.
     :param cluster: Cluster object
     :param entry: Dict containing event details
     :return: None
     """
+    event = event['eventLog']['jobNewLog']
+
+    (user, created) = User.objects.get_or_create(name=event['userName'])
+    (submit_host, created) = Host.objects.get_or_create(name=event['fromHost'])
+    (job, created) = Job.objects.get_or_create(
+        cluster=cluster,
+        job_id=event['jobId'],
+        user=user,
+        submit_host=submit_host,
+        submit_time=event['submitTime'])
+    (queue, created) = Queue.objects.get_or_create(name=event['queue'], cluster=cluster)
+    try:
+        job.jobsubmitopenlava
+    except ObjectDoesNotExist:
+        js = JobSubmitOpenLava()
+        js.job = job
+        (project, created) = Project.objects.get_or_create(name=event['projectName'])
+        js.project = project
+        js.user_name = user.name
+        js.queue = queue
+        js.submit_host = submit_host
+
+        limit = OpenLavaResourceLimit()
+        limit.cpu = event['rLimits'][0]
+        limit.file_size = event['rLimits'][1]
+        limit.data = event['rLimits'][2]
+        limit.stack = event['rLimits'][3]
+        limit.core = event['rLimits'][4]
+        limit.rss = event['rLimits'][5]
+        limit.run = event['rLimits'][9]
+        limit.process = event['rLimits'][10]
+        limit.swap = event['rLimits'][8]
+        limit.nofile = event['rLimits'][6]
+        limit.open_files = event['rLimits'][7]
+        limit.save()
+
+        js.resource_limits = limit
+        js.user_id = event['userId']
+        js.num_processors = event['numProcessors']
+        js.begin_time = event['beginTime']
+        js.termination_time = event['termTime']
+        js.signal_value = event['sigValue']
+        js.checkpoint_period = event['chkpntPeriod']
+        js.restart_pid = event['restartPid']
+        js.host_specification = event['hostSpec']
+        js.host_factor = event['hostFactor']
+        js.umask = event['umask']
+        js.resource_request = event['resReq']
+        js.cwd = event['cwd']
+        js.checkpoint_dir = event['chkpntDir']
+        js.input_file = event['inFile']
+        js.output_file = event['outFile']
+        js.error_file = event['errFile']
+        js.input_file_spool = event['inFileSpool']
+        js.command_spool = event['commandSpool']
+        js.job_spool_dir = event['jobSpoolDir']
+        js.submit_home_dir = event['subHomeDir']
+        js.job_file = event['jobFile']
+        js.dependency_condition = event['dependCond']
+        js.job_name = event['jobName']
+        js.command = event['command']
+        js.num_transfer_files = event['nxf']
+        js.pre_execution_cmd = event['preExecCmd']
+        js.email_user = event['mailUser']
+        js.nios_port = event['niosPort']
+        js.max_num_processors = event['maxNumProcessors']
+        js.schedule_host_type = event['schedHostType']
+        js.login_shell = event['loginShell']
+
+        for host in event['askedHosts']:
+            (h, created) = Host.objects.get_or_create(name=host)
+            js.asked_hosts.add(h)
+        for fl in event['xf']:
+            f = OpenLavaTransferFile()
+            f.submission_file_name = fl['subFn']
+            f.execution_file_name = fl['execFn']
+            f.save()
+            js.transfer_files.add(f)
+        for option in event['options']:
+            for state in OpenLavaSubmitOption.get_status_list(option):
+                (o, created) = OpenLavaSubmitOption.objects.get_or_create(**state)
+                js.options.add(o)
+        js.save()
+
+
+def openlava_import_job_finish(cluster, event):
+    log=event['eventLog']['jobFinishLog']
+
+    (user, created) = User.objects.get_or_create(name=log['userName'])
+    (submit_host, created) = Host.objects.get_or_create(name=log['fromHost'])
+    (job, created) = Job.objects.get_or_create(
+        cluster=cluster,
+        job_id=log['jobId'],
+        user=user,
+        submit_host=submit_host,
+        submit_time=log['submitTime'])
+
+    (task, created) = Task.objects.get_or_create(cluster=cluster, job=job, user=user,task_id=log['idx'])
+    num_processors = log['numProcessors']
+    start_time = log['startTime']
+    if start_time == 0:  # Job was killed before starting
+        start_time = event['eventTime']
+
+    end_time = event['eventTime']
+
+    wall_time = end_time - start_time
+    cpu_time = wall_time * num_processors
+    pend_time = event['eventTime'] - log['submitTime']
+
+    if start_time > 0:  # 0 == job didn't start
+        pend_time = start_time - log['submitTime']
+
+    (queue, created) = Queue.objects.get_or_create(name=log['queue'], cluster=cluster)
+
+
+    job_states={
+        0x00: {
+            'friendly': "Null",
+            'name': 'JOB_STAT_NULL',
+            'description': 'State null.',
+        },
+        0x01: {
+            'friendly': "Pending",
+            'name': 'JOB_STAT_PEND',
+            'description': 'The job is pending, i.e., it has not been dispatched yet.',
+        },
+        0x02: {
+            'friendly': "Held",
+            'name': "JOB_STAT_PSUSP",
+            'description': "The pending job was suspended by its owner or the LSF system administrator.",
+        },
+        0x04: {
+            'friendly': "Running",
+            'name': "JOB_STAT_RUN",
+            'description': "The job is running.",
+        },
+        0x08: {
+            'friendly': "Suspended by system",
+            'name': "JOB_STAT_SSUSP",
+            'description': "The running job was suspended by the system because an execution host was overloaded or the queue run window closed.",
+        },
+        0x10: {
+            'friendly': "Suspended by user",
+            'name': "JOB_STAT_USUSP",
+            'description': "The running job was suspended by its owner or the LSF system administrator.",
+        },
+        0x20: {
+            'friendly': "Exited",
+            'name': "JOB_STAT_EXIT",
+            'description': "The job has terminated with a non-zero status - it may have been aborted due to an error in its execution, or killed by its owner or by the LSF system administrator.",
+        },
+        0x40: {
+            'friendly': "Completed",
+            'name': "JOB_STAT_DONE",
+            'description': "The job has terminated with status 0.",
+        },
+        0x80: {
+            'friendly': "Process Completed",
+            'name': "JOB_STAT_PDONE",
+            'description': "Post job process done successfully.",
+        },
+        0x100: {
+            'friendly': "Process Error",
+            'name': "JOB_STAT_PERR",
+            'description': "Post job process has error.",
+        },
+        0x200: {
+            'friendly': "Waiting for execution",
+            'name': "JOB_STAT_WAIT",
+            'description': "Chunk job waiting its turn to exec.",
+        },
+        0x10000: {
+            'friendly': "Unknown",
+            'name': "JOB_STAT_UNKWN",
+            'description': "The slave batch daemon (sbatchd) on the host on which the job is processed has lost contact with the master batch daemon (mbatchd).",
+        },
+    }
+
+    job_state=job_states[ log['jStatus'] ]
+    clean = False
+    if state['name']== "JOB_STAT_DONE":
+        clean = True
+    (status, created) = JobStatus.objects.get_or_create(
+        code=log['jStatus'],
+        name=job_state['friendly'],
+        description=job_state['description'],
+        exited_cleanly=clean,
+    )
+
+    (attempt, created) = Attempt.objects.get_or_create(
+        cluster=cluster,
+        job=job,
+        task=task,
+        start_time=start_time,
+        defaults={
+        'user': user,
+        'num_processors': num_processors,
+        'end_time': end_time,
+        'cpu_time': cpu_time,
+        'wall_time': wall_time,
+        'pend_time': pend_time,
+        'queue': queue,
+        'status': status,
+        'command': log['command'],
+        },
+    )
+
+    if created:
+        for host in log['execution_hosts']:
+            (execution_host, created) = Host.objects.get_or_create(name=host)
+            attempt.execution_hosts.add(execution_host)
+
+        (project, created) = Project.objects.get_or_create(name=log['projectName'])
+        attempt.projects.add(project)
+
+        try:
+            attempt.attemptresourceusage
+        except ObjectDoesNotExist:
+            resource_usage = AttemptResourceUsage()
+            for i, v in log['lsfRusage'].items():
+                setattr(resource_usage, i, v)
+            resource_usage.attempt = attempt
+            resource_usage.save()
+
+        try:
+            attempt.openlavaexitinfo
+        except ObjectDoesNotExist:
+            ol = OpenLavaExitInfo()
+            ol.attempt = attempt
+            ol.resource_usage = resource_usage
+            ol.user = user
+            (project, created) = Project.objects.get_or_create(name=log['projectName'])
+            ol.project=project
+            ol.user_id = log['userId']
+            ol.begin_time  = log['beginTime']
+            ol.termination_time  = log['termTime']
+            ol.resource_request = log['resReq']
+            ol.cwd = log['cwd']
+            ol.input_file = log['inFile']
+            ol.output_file = log['outFile']
+            ol.error_file = log['errFile']
+            ol.input_file_spool = log['inFileSpool']
+            ol.command_spool = log['commandSpool']
+            ol.job_file = log['jobFile']
+            ol.host_factor = log['hostFactor']
+            ol.job_name = log['jobName']
+            ol.dependency_condition = log['dependCond']
+            ol.pre_execution_cmd = log['preExecCmd']
+            ol.email_user = log['mailUser']
+            ol.exit_status = log['exitStatus']
+            ol.max_num_processors = log['maxNumProcessors']
+            ol.login_shell = log['loginShell']
+            ol.array_index = log['idx']
+            ol.max_residual_mem = log['maxRMem']
+            ol.max_swap = log['maxRSwap']
+            ol.save()
+            for option in log['options']:
+                for state in OpenLavaSubmitOption.get_status_list(option):
+                    (o, created) = OpenLavaSubmitOption.objects.get_or_create(**state)
+                    ol.options.add(o)
+
+            for host in log['askedHosts']:
+                (h, created) = Host.objects.get_or_create(name=host)
+                ol.asked_hosts.add(h)
+            ol.save()
 
 
 
-@csrf_exempt
-def openlava_import(request, cluster_name):
-    rows = json.loads(request.body)
-    for data in rows:
-        if data['event_type'] == 1:  # Job New Event
-            (cluster, created) = Cluster.objects.get_or_create(name=cluster_name)
-            (user, created) = User.objects.get_or_create(name=data['user_name'])
-            (submit_host, created) = Host.objects.get_or_create(name=data['submit_host'])
-            (job, created) = Job.objects.get_or_create(cluster=cluster, job_id=data['job_id'], user=user,
-                                                       submit_host=submit_host, submit_time=data['submit_time'])
-            (queue, created) = Queue.objects.get_or_create(name=data['queue'], cluster=cluster)
 
-            try:
-                job.jobsubmitopenlava
-            except:
-                js = JobSubmitOpenLava()
-                js.job = job
-                (project, created) = Project.objects.get_or_create(name=data['project_name'])
-                js.project = project
-                js.user_name = user.name
-                # resource limits
-                js.queue = queue
-                js.submit_host = submit_host
-                limit = OpenLavaResourceLimit()
-                for k, v in data['resource_limits'].items():
-                    setattr(limit, k, v)
-                limit.save()
-                js.resource_limits = limit
-                for item in ['user_id', 'num_processors', 'begin_time', 'termination_time', 'signal_value',
-                             'checkpoint_period', 'restart_pid', 'host_specification', 'host_factor', 'umask',
-                             'resource_request', 'cwd', 'checkpoint_dir', 'input_file', 'output_file', 'error_file',
-                             'input_file_spool', 'command_spool', 'job_spool_dir', 'submit_home_dir', 'job_file',
-                             'dependency_condition', 'job_name', 'command', 'num_transfer_files', 'pre_execution_cmd',
-                             'email_user', 'nios_port', 'max_num_processors', 'schedule_host_type', 'login_shell',
-                             'user_priority']:
-                    setattr(js, item, data[item])
-                js.save()
-                for option in data['options']:
-                    (o, created) = OpenLavaSubmitOption.objects.get_or_create(code=option['status'],
-                                                                              name=option['name'],
-                                                                              description=option['description'])
-                    js.options.add(o)
-                for host in data['asked_hosts']:
-                    (h, created) = Host.objects.get_or_create(name=host)
-                    js.asked_hosts.add(h)
-                for fl in data['transfer_files']:
-                    f = OpenLavaTransferFile()
-                    f.submission_file_name = fl['submission_file_name']
-                    f.execution_file_name = fl['execution_file_name']
-                    f.save()
-                    js.transfer_files.add(f)
-
-        if data['event_type'] == 10:
-            # Job Finish Event
-            (cluster, created) = Cluster.objects.get_or_create(name=cluster_name)
-            (user, created) = User.objects.get_or_create(name=data['user_name'])
-            (submit_host, created) = Host.objects.get_or_create(name=data['submit_host'])
-            (job, created) = Job.objects.get_or_create(cluster=cluster, job_id=data['job_id'], user=user,
-                                                       submit_host=submit_host, submit_time=data['submit_time'])
-            (task, created) = Task.objects.get_or_create(cluster=cluster, job=job, user=user,
-                                                         task_id=data['array_index'])
-            num_processors = data['num_processors']
-            start_time = data['start_time']
-            if start_time == 0:  # Job was killed before starting
-                start_time = data['time']
-            end_time = data['end_time']
-            wall_time = end_time - start_time
-            cpu_time = wall_time * num_processors
-            pend_time = data['time'] - data['submit_time']
-            if start_time > 0:  # 0 == job didn't start
-                pend_time = start_time - data['submit_time']
-
-            (queue, created) = Queue.objects.get_or_create(name=data['queue'], cluster=cluster)
-            clean = False
-            if data['job_status']['name'] == "JOB_STAT_DONE":
-                clean = True
-            (status, created) = JobStatus.objects.get_or_create(
-                code=data['job_status']['status'],
-                name=data['job_status']['name'],
-                description=data['job_status']['description'],
-                exited_cleanly=clean,
-            )
-            (attempt, created) = Attempt.objects.get_or_create(
-                cluster=cluster,
-                job=job,
-                task=task,
-                start_time=start_time,
-                defaults={
-                'user': user,
-                'num_processors': num_processors,
-                'end_time': end_time,
-                'cpu_time': cpu_time,
-                'wall_time': wall_time,
-                'pend_time': pend_time,
-                'queue': queue,
-                'status': status,
-                'command': data['command'],
-                },
-            )
-            if created:
-                for host in data['execution_hosts']:
-                    (execution_host, created) = Host.objects.get_or_create(name=host)
-                    attempt.execution_hosts.add(execution_host)
-                (project, created) = Project.objects.get_or_create(name=data['project_name'])
-                attempt.projects.add(project)
-                try:
-                    attempt.attemptresourceusage
-                except:
-                    resource_usage = AttemptResourceUsage()
-                    for i, v in data['resource_usage'].items():
-                        setattr(resource_usage, i, v)
-                    resource_usage.attempt = attempt
-                    resource_usage.save()
-                try:
-                    attempt.openlavaexitinfo
-                except:
-
-                    ol = OpenLavaExitInfo()
-                    ol.attempt = attempt
-
-                    (project, created) = Project.objects.get_or_create(name=data['project_name'])
-
-                    for i in ['user_id', 'begin_time', 'termination_time', 'resource_request', 'cwd', 'input_file',
-                              'output_file', 'error_file', 'input_file_spool', 'command_spool', 'job_file',
-                              'host_factor', 'job_name', 'dependency_condition', 'pre_execution_cmd', 'email_user',
-                              'exit_status', 'max_num_processors', 'login_shell', 'array_index', 'max_residual_mem',
-                              'max_swap']:
-                        setattr(ol, i, data[i])
-
-                    ol.project = project
-                    ol.resource_usage = resource_usage
-                    ol.user = user
-                    ol.save()
-                    for option in data['options']:
-                        (o, created) = OpenLavaSubmitOption.objects.get_or_create(code=option['status'],
-                                                                                  name=option['name'],
-                                                                                  description=option['description'])
-                        ol.options.add(o)
-                    for host in data['asked_hosts']:
-                        (h, created) = Host.objects.get_or_create(name=host)
-                        ol.asked_hosts.add(h)
-    return HttpResponse("OK", content_type="text/plain")
 
 
 def get_attempts(start_time_js, end_time_js, exclude_string, filter_string):

@@ -45,6 +45,14 @@ class OpenLavaState(models.Model):
     description = models.TextField()
     friendly_name = models.CharField(max_length=128, null=True)
 
+    @classmethod
+    def get_status_list(cls, mask):
+        statuses = []
+        for key in cls.states.keys():
+            if (key & mask) == key:
+                statuses.append(cls.states[key)
+        return statuses
+
     class Meta:
         abstract = True
         index_together = [
@@ -52,12 +60,155 @@ class OpenLavaState(models.Model):
         ]
 
 
-class OpenLavaSubmitOption(OpenLavaState):
-    pass
-
 
 class OpenLavaSubmitOption(OpenLavaState):
-    pass
+        states = {
+        0x01: {
+            'code':0x01,
+            'name': 'SUB_JOB_NAME',
+            'description': "Submitted with a job name",
+        },
+        0x02: {
+            'code': 0x02,
+            'name': 'SUB_QUEUE',
+            'description': "Job submitted with queue",
+        },
+        0x04: {
+            'code': 0x04,
+            'name': 'SUB_HOST',
+            'description': "SUB_HOST",
+        },
+        0x08: {
+            'code': 0x08,
+            'name': 'SUB_IN_FILE',
+            'description': "Job Submitted with input file",
+        },
+        0x10: {
+            'code': 0x10,
+            'name': 'SUB_OUT_FILE',
+            'description': "Job submitted with output file",
+        },
+        0x20: {
+            'code': 0x20,
+            'name': 'SUB_ERR_FILE',
+            'description': "Job submitted with error file",
+        },
+        0x40: {
+            'code': 0x40,
+            'name': 'SUB_EXCLUSIVE',
+            'description': "Job submitted to run exclusively",
+        },
+        0x80: {
+            'code': 0x80,
+            'name': 'SUB_NOTIFY_END',
+            'description': "SUB_NOTIFY_END",
+        },
+        0x100: {
+            'code': 0x100,
+            'name': 'SUB_NOTIFY_BEGIN',
+            'description': "SUB_NOTIFY_BEGIN",
+        },
+        0x200: {
+            'code': 0x200,
+            'name': 'SUB_USER_GROUP',
+            'description': "SUB_USER_GROUP",
+        },
+        0x400: {
+            'code': 0x400,
+            'name': 'SUB_CHKPNT_PERIOD',
+            'description': "Job submitted with checkpoint period",
+        },
+        0x800: {
+            'code': 0x800,
+            'name': 'SUB_CHKPNT_DIR',
+            'description': "Job submitted with checkpoint directory",
+        },
+        0x1000: {
+            'code': 0x1000,
+            'name': 'SUB_RESTART_FORCE',
+            'description': "SUB_RESTART_FORCE",
+        },
+        0x2000: {
+            'code': 0x2000,
+            'name': 'SUB_RESTART',
+            'description': "SUB_RESTART",
+        },
+        0x4000: {
+            'code': 0x4000,
+            'name': 'SUB_RERUNNABLE',
+            'description': "Job submitted as rerunnable",
+        },
+        0x8000: {
+            'code': 0x8000,
+            'name': 'SUB_WINDOW_SIG',
+            'description': "SUB_WINDOW_SIG",
+        },
+        0x10000: {
+            'code': 0x10000,
+            'name': 'SUB_HOST_SPEC',
+            'description': "Job submitted with host spec",
+        },
+        0x20000: {
+            'code': 0x20000,
+            'name': 'SUB_DEPEND_COND',
+            'description': "Job submitted with depend conditions",
+        },
+        0x40000: {
+            'code': 0x40000,
+            'name': 'SUB_RES_REQ',
+            'description': "Job submitted with resource request",
+        },
+        0x80000: {
+            'code': 0x80000,
+            'name': 'SUB_OTHER_FILES',
+            'description': "SUB_OTHER_FILES",
+        },
+        0x100000: {
+            'code': 0x100000,
+            'name': 'SUB_PRE_EXEC',
+            'description': "Job submitted with pre exec script",
+        },
+        0x200000: {
+            'code': 0x200000,
+            'name': 'SUB_LOGIN_SHELL',
+            'description': "Job submitted with login shell",
+        },
+        0x400000: {
+            'code': 0x400000,
+            'name': 'SUB_MAIL_USER',
+            'description': "Job submitted to email user",
+        },
+        0x800000: {
+            'code': 0x800000,
+            'name': 'SUB_MODIFY',
+            'description': "SUB_MODIFY",
+        },
+        0x1000000: {
+            'code': 0x1000000,
+            'name': 'SUB_MODIFY_ONCE',
+            'description': "SUB_MODIFY_ONCE",
+        },
+        0x2000000: {
+            'code': 0x2000000,
+            'name': 'SUB_PROJECT_NAME',
+            'description': "Job submitted to project",
+        },
+        0x4000000: {
+            'code': 0x4000000,
+            'name': 'SUB_INTERACTIVE',
+            'description': "Job submitted as interactive",
+        },
+        0x8000000: {
+            'code': 0x8000000,
+            'name': 'SUB_PTY',
+            'description': "SUB_PTY",
+        },
+        0x10000000: {
+            'code': 0x10000000,
+            'name': 'SUB_PTY_SHELL',
+            'description': "SUB_PTY_SHELL",
+        },
+    }
 
 
 class OpenLavaTransferFileOption(OpenLavaState):

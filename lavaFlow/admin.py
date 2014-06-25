@@ -22,5 +22,5 @@
 # Create your views here.
 from django.contrib import admin
 from lavaFlow.models import *
-for i in [OpenLavaSubmitOption, OpenLavaTransferFileOption, JobStatus, Cluster, Project, Host, Queue, Job, OpenLavaTransferFile, OpenLavaResourceLimit, JobSubmitOpenLava, Task, Attempt, AttemptResourceUsage, OpenLavaExitInfo]:
+for i in [ImportKey, OpenLavaSubmitOption, OpenLavaTransferFileOption, JobStatus, Cluster, Project, Host, Queue, Job, OpenLavaTransferFile, OpenLavaResourceLimit, JobSubmitOpenLava, Task, Attempt, AttemptResourceUsage, OpenLavaExitInfo]:
 	admin.site.register(i)
