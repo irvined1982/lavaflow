@@ -18,7 +18,7 @@
 import urllib2
 import json
 import argparse
-from openlava import lsblib
+from openlava import lsblib,lslib
 
 parser = argparse.ArgumentParser(description='Import OpenLava Log Files into LavaFlow')
 parser.add_argument('log_file', metavar='LOGFILE', type=str, help="Path to Logfile")
@@ -35,7 +35,7 @@ fh = open(args.log_file)
 if args.cluster_name:
     cluster_name = args.cluster_name
 else:
-    cluster_name = OpenLava.get_cluster_name()
+    cluster_name = lslib.ls_getclustername()
 
 # Get the URL to submit to
 url = args.url.rstrip("/")
@@ -54,8 +54,8 @@ def upload(rows):
 class OOLDumper(json.JSONEncoder):
     def default(self, obj):
         try:
-            return obj.__to_dict()
-        except AttributeError:
+            return getattr(obj, "__to_dict")()
+        except ValueError:
             return json.JSONEncoder.default(self, obj)
 
 
@@ -66,14 +66,15 @@ while(True):
     rec = lsblib.lsb_geteventrec(fh, row_num)
     if rec == None:
         if lsblib.get_lsberrno() == lsblib.LSBE_EOF:
-        break
+            break
     if lsblib.get_lsberrno() == lsblib.LSBE_EVENT_FORMAT:
         print "Bad Row: %s in %s" % (row_num, args.log_file)
         continue
 
-    rows.append(json.loads(OOLDumper.dumps(rec)))
+    rows.append(json.loads(json.dumps(rec, cls=OOLDumper)))
     # ^^converts to dictionary which does a full copy of the data
 
+    row_num += 1
     if row_num % 200 == 0:
         upload(rows)
         rows = []
