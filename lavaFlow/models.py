@@ -36,7 +36,7 @@ class ImportKey(models.Model):
     """
     Any client that attempts to import data must present a valid key. Keys are managed by the admin.
     """
-    client_key = models.CharField(max_length=1024, primary_key=True)
+    client_key = models.CharField(max_length=255, primary_key=True)
 
 
 class OpenLavaState(models.Model):
