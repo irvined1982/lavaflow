@@ -24,7 +24,7 @@ import datetime
 import json
 import logging
 
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.views.decorators.cache import cache_page
 from django.shortcuts import render
 from django.db.models import Avg, Count, Sum
