@@ -64,6 +64,7 @@ try:
     token=data['cookie']
 except IOError as e:
     sys.stderr.write("Error: Unable to get CSRF Token: %s. Exiting\n" % str(e))
+    sys.exit(1)
 
 
 def upload(rows):
