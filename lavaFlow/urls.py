@@ -26,7 +26,7 @@ from lavaFlow.views import JobView
 
 urlpatterns = patterns('',
                        url(r'^$', 'lavaFlow.views.utilization_view', name="lf_utilization_view_default"),
-                       url(r'^get_token$', 'openlavaweb.views.get_csrf_token', name="get_token"),
+                       url(r'^get_token$', 'lavaFlow.views.get_csrf_token', name="get_token"),
                        url(
                            r'^(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$',
                            'lavaFlow.views.utilization_view', name="lf_utilization_view"),

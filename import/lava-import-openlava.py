@@ -28,7 +28,7 @@ parser = argparse.ArgumentParser(description='Import OpenLava Log Files into Lav
 parser.add_argument('log_file', metavar='LOGFILE', type=str, help="Path to Logfile")
 parser.add_argument('url', metavar='URL', type=str, help="URL to LavaFlow server")
 parser.add_argument('key', metavar='KEY', type=str, help="Authentication key")
-parser.add_argument("--tail_log", type=bool, action="store_true", default=False,
+parser.add_argument("--tail_log", action="store_true", default=False,
                     help="When enabled, will not exit when the end of the input file is reached.  \
                     Instead, it will wait for new data, or if the file is rotated, reopen the file \
                     and continue reading.")
