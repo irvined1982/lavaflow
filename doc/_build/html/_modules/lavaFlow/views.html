@@ -70,7 +70,8 @@
       aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Web Server Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../import.html">Openlava Import</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../lavaFlow.html">API Doc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../views.html">Views</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../models.html">Models</a></li>
 </ul>
 </ul>
 </li>
@@ -222,7 +223,7 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
 <span class="nd">@ensure_csrf_cookie</span>
-<div class="viewcode-block" id="get_csrf_token"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.get_csrf_token">[docs]</a><span class="k">def</span> <span class="nf">get_csrf_token</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<div class="viewcode-block" id="get_csrf_token"><a class="viewcode-back" href="../../views.html#lavaFlow.views.get_csrf_token">[docs]</a><span class="k">def</span> <span class="nf">get_csrf_token</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns the CSRF token to the client as part of a json document.</span>
 <span class="sd">    :param request: Request object</span>
@@ -231,7 +232,7 @@
     <span class="k">return</span> <span class="n">create_js_success</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;cookie&#39;</span><span class="p">:</span> <span class="n">get_token</span><span class="p">(</span><span class="n">request</span><span class="p">)},</span> <span class="n">message</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="create_js_success"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.create_js_success">[docs]</a><span class="k">def</span> <span class="nf">create_js_success</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="create_js_success"><a class="viewcode-back" href="../../views.html#lavaFlow.views.create_js_success">[docs]</a><span class="k">def</span> <span class="nf">create_js_success</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Takes a json serializable object, and an optional message, and creates a standard json response document.</span>
 <span class="sd">    :param data: json serializable object</span>
@@ -247,7 +248,7 @@
 
 </div>
 <span class="nd">@csrf_exempt</span>
-<div class="viewcode-block" id="gridengine_import"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.gridengine_import">[docs]</a><span class="k">def</span> <span class="nf">gridengine_import</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">cluster_name</span><span class="p">):</span>
+<div class="viewcode-block" id="gridengine_import"><a class="viewcode-back" href="../../views.html#lavaFlow.views.gridengine_import">[docs]</a><span class="k">def</span> <span class="nf">gridengine_import</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">cluster_name</span><span class="p">):</span>
 
     <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
     <span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Cluster</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">cluster_name</span><span class="p">)</span>
@@ -549,7 +550,7 @@
 
 </div>
 <span class="nd">@csrf_exempt</span>
-<div class="viewcode-block" id="openlava_import"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.openlava_import">[docs]</a><span class="k">def</span> <span class="nf">openlava_import</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">cluster_name</span><span class="p">):</span>
+<div class="viewcode-block" id="openlava_import"><a class="viewcode-back" href="../../views.html#lavaFlow.views.openlava_import">[docs]</a><span class="k">def</span> <span class="nf">openlava_import</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">cluster_name</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Imports one or more openlava log entries, log entries are uploaded as JSON data in the request body.</span>
 <span class="sd">    :param request: Request object</span>
@@ -585,7 +586,7 @@
     <span class="k">return</span> <span class="n">create_js_success</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s">&quot;Import Successful&quot;</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="openlava_import_job_new"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.openlava_import_job_new">[docs]</a><span class="k">def</span> <span class="nf">openlava_import_job_new</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="openlava_import_job_new"><a class="viewcode-back" href="../../views.html#lavaFlow.views.openlava_import_job_new">[docs]</a><span class="k">def</span> <span class="nf">openlava_import_job_new</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Imports a single openlava job_new event event.</span>
 <span class="sd">    :param cluster: Cluster object</span>
@@ -678,7 +679,7 @@
 
 
 </div>
-<div class="viewcode-block" id="openlava_import_job_finish"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.openlava_import_job_finish">[docs]</a><span class="k">def</span> <span class="nf">openlava_import_job_finish</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="openlava_import_job_finish"><a class="viewcode-back" href="../../views.html#lavaFlow.views.openlava_import_job_finish">[docs]</a><span class="k">def</span> <span class="nf">openlava_import_job_finish</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Imports a single openlava job finish event.</span>
 <span class="sd">    :param cluster: Cluster object</span>
@@ -823,7 +824,7 @@
             <span class="n">ol</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
 </div>
-<div class="viewcode-block" id="get_attempts"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.get_attempts">[docs]</a><span class="k">def</span> <span class="nf">get_attempts</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">,</span> <span class="n">end_time_js</span><span class="p">,</span> <span class="n">exclude_string</span><span class="p">,</span> <span class="n">filter_string</span><span class="p">):</span>
+<div class="viewcode-block" id="get_attempts"><a class="viewcode-back" href="../../views.html#lavaFlow.views.get_attempts">[docs]</a><span class="k">def</span> <span class="nf">get_attempts</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">,</span> <span class="n">end_time_js</span><span class="p">,</span> <span class="n">exclude_string</span><span class="p">,</span> <span class="n">filter_string</span><span class="p">):</span>
     <span class="n">filter_args</span> <span class="o">=</span> <span class="n">filter_string_to_params</span><span class="p">(</span><span class="n">filter_string</span><span class="p">)</span>
     <span class="n">exclude_args</span> <span class="o">=</span> <span class="n">filter_string_to_params</span><span class="p">(</span><span class="n">exclude_string</span><span class="p">)</span>
     <span class="n">attempts</span> <span class="o">=</span> <span class="n">Attempt</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
@@ -841,7 +842,7 @@
 
 </div>
 <span class="nd">@cache_page</span><span class="p">(</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
-<div class="viewcode-block" id="utilization_table"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.utilization_table">[docs]</a><span class="k">def</span> <span class="nf">utilization_table</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">start_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">group_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="utilization_table"><a class="viewcode-back" href="../../views.html#lavaFlow.views.utilization_table">[docs]</a><span class="k">def</span> <span class="nf">utilization_table</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">start_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">group_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
     <span class="n">start_time_js</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">)</span>
     <span class="n">end_time_js</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">end_time_js</span><span class="p">)</span>
     <span class="n">attempts</span> <span class="o">=</span> <span class="n">get_attempts</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">,</span> <span class="n">end_time_js</span><span class="p">,</span> <span class="n">exclude_string</span><span class="p">,</span> <span class="n">filter_string</span><span class="p">)</span>
@@ -895,7 +896,7 @@
     <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&quot;lavaFlow/widgets/utilization_chart.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;header&#39;</span><span class="p">:</span> <span class="n">header</span><span class="p">,</span> <span class="s">&#39;rows&#39;</span><span class="p">:</span> <span class="n">rows</span><span class="p">})</span>
 
 </div>
-<div class="viewcode-block" id="utilization_bar_size"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.utilization_bar_size">[docs]</a><span class="k">def</span> <span class="nf">utilization_bar_size</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">start_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">group_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="utilization_bar_size"><a class="viewcode-back" href="../../views.html#lavaFlow.views.utilization_bar_size">[docs]</a><span class="k">def</span> <span class="nf">utilization_bar_size</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">start_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">group_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
     <span class="n">start_time_js</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">)</span>
     <span class="n">end_time_js</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">end_time_js</span><span class="p">)</span>
     <span class="n">attempts</span> <span class="o">=</span> <span class="n">get_attempts</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">,</span> <span class="n">end_time_js</span><span class="p">,</span> <span class="n">exclude_string</span><span class="p">,</span> <span class="n">filter_string</span><span class="p">)</span>
@@ -927,7 +928,7 @@
     <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s">&quot;application/json&quot;</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="utilization_bar_exit"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.utilization_bar_exit">[docs]</a><span class="k">def</span> <span class="nf">utilization_bar_exit</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">start_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">group_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="utilization_bar_exit"><a class="viewcode-back" href="../../views.html#lavaFlow.views.utilization_bar_exit">[docs]</a><span class="k">def</span> <span class="nf">utilization_bar_exit</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">start_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">group_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
     <span class="n">start_time_js</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">)</span>
     <span class="n">end_time_js</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">end_time_js</span><span class="p">)</span>
     <span class="n">attempts</span> <span class="o">=</span> <span class="n">get_attempts</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">,</span> <span class="n">end_time_js</span><span class="p">,</span> <span class="n">exclude_string</span><span class="p">,</span> <span class="n">filter_string</span><span class="p">)</span>
@@ -966,7 +967,7 @@
 
 
 <span class="c"># @cache_page(60 * 60 * 2)</span></div>
-<div class="viewcode-block" id="utilization_data"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.utilization_data">[docs]</a><span class="k">def</span> <span class="nf">utilization_data</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">start_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">group_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="utilization_data"><a class="viewcode-back" href="../../views.html#lavaFlow.views.utilization_data">[docs]</a><span class="k">def</span> <span class="nf">utilization_data</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">start_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">group_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
     <span class="n">attempts</span> <span class="o">=</span> <span class="n">get_attempts</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">exclude_string</span><span class="p">,</span> <span class="n">filter_string</span><span class="p">)</span>
     <span class="n">group_args</span> <span class="o">=</span> <span class="n">group_string_to_group_args</span><span class="p">(</span><span class="n">group_string</span><span class="p">)</span>
     <span class="n">attempts</span> <span class="o">=</span> <span class="n">attempts</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="o">*</span><span class="n">group_args</span><span class="p">)</span>
@@ -1042,7 +1043,7 @@
 
 </div>
 <span class="nd">@cache_page</span><span class="p">(</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
-<div class="viewcode-block" id="utilization_view"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.utilization_view">[docs]</a><span class="k">def</span> <span class="nf">utilization_view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">start_time_js</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">end_time_js</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;none&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;none&quot;</span><span class="p">,</span>
+<div class="viewcode-block" id="utilization_view"><a class="viewcode-back" href="../../views.html#lavaFlow.views.utilization_view">[docs]</a><span class="k">def</span> <span class="nf">utilization_view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">start_time_js</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">end_time_js</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;none&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;none&quot;</span><span class="p">,</span>
                      <span class="n">group_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
     <span class="c">#</span>
     <span class="k">if</span> <span class="n">start_time_js</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
@@ -1062,7 +1063,7 @@
     <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&quot;lavaFlow/utilization_view.html&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="util_total_attempts"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.util_total_attempts">[docs]</a><span class="k">def</span> <span class="nf">util_total_attempts</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">start_time_js</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">end_time_js</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span>
+<div class="viewcode-block" id="util_total_attempts"><a class="viewcode-back" href="../../views.html#lavaFlow.views.util_total_attempts">[docs]</a><span class="k">def</span> <span class="nf">util_total_attempts</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">start_time_js</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">end_time_js</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span>
                         <span class="n">group_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
     <span class="n">start_time_js</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">)</span>
     <span class="n">end_time_js</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">end_time_js</span><span class="p">)</span>
@@ -1074,7 +1075,7 @@
     <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s">&quot;application/json&quot;</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="util_report_range"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.util_report_range">[docs]</a><span class="k">def</span> <span class="nf">util_report_range</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="util_report_range"><a class="viewcode-back" href="../../views.html#lavaFlow.views.util_report_range">[docs]</a><span class="k">def</span> <span class="nf">util_report_range</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
     <span class="n">ONE_DAY</span> <span class="o">=</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span>  <span class="c"># 1 day in seconds</span>
     <span class="n">filter_args</span> <span class="o">=</span> <span class="n">filter_string_to_params</span><span class="p">(</span><span class="n">filter_string</span><span class="p">)</span>
     <span class="n">exclude_args</span> <span class="o">=</span> <span class="n">filter_string_to_params</span><span class="p">(</span><span class="n">exclude_string</span><span class="p">)</span>
@@ -1109,7 +1110,7 @@
     <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s">&quot;application/json&quot;</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="group_string_to_group_args"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.group_string_to_group_args">[docs]</a><span class="k">def</span> <span class="nf">group_string_to_group_args</span><span class="p">(</span><span class="n">group_string</span><span class="p">):</span>
+<div class="viewcode-block" id="group_string_to_group_args"><a class="viewcode-back" href="../../views.html#lavaFlow.views.group_string_to_group_args">[docs]</a><span class="k">def</span> <span class="nf">group_string_to_group_args</span><span class="p">(</span><span class="n">group_string</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">group_string</span> <span class="o">==</span> <span class="s">&quot;none&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[]</span>
     <span class="n">group_args</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1118,7 +1119,7 @@
     <span class="k">return</span> <span class="n">group_args</span>
 
 </div>
-<div class="viewcode-block" id="filter_string_to_params"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.filter_string_to_params">[docs]</a><span class="k">def</span> <span class="nf">filter_string_to_params</span><span class="p">(</span><span class="n">filter_string</span><span class="p">):</span>
+<div class="viewcode-block" id="filter_string_to_params"><a class="viewcode-back" href="../../views.html#lavaFlow.views.filter_string_to_params">[docs]</a><span class="k">def</span> <span class="nf">filter_string_to_params</span><span class="p">(</span><span class="n">filter_string</span><span class="p">):</span>
     <span class="c"># Build the additional filters</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filter_string</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">filter_string</span> <span class="o">==</span> <span class="s">&quot;none&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{}</span>
@@ -1137,7 +1138,7 @@
 <span class="c"># data.filters{name:[values]</span>
 </div>
 <span class="nd">@csrf_exempt</span>
-<div class="viewcode-block" id="build_filter"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.build_filter">[docs]</a><span class="k">def</span> <span class="nf">build_filter</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<div class="viewcode-block" id="build_filter"><a class="viewcode-back" href="../../views.html#lavaFlow.views.build_filter">[docs]</a><span class="k">def</span> <span class="nf">build_filter</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
 
     <span class="n">view</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;view&#39;</span><span class="p">]</span>
@@ -1183,11 +1184,11 @@
     <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s">&#39;url&#39;</span><span class="p">:</span> <span class="n">url</span><span class="p">}),</span> <span class="n">content_type</span><span class="o">=</span><span class="s">&quot;application/json&quot;</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="JobView"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.JobView">[docs]</a><span class="k">class</span> <span class="nc">JobView</span><span class="p">(</span><span class="n">ListView</span><span class="p">):</span>
+<div class="viewcode-block" id="JobView"><a class="viewcode-back" href="../../views.html#lavaFlow.views.JobView">[docs]</a><span class="k">class</span> <span class="nc">JobView</span><span class="p">(</span><span class="n">ListView</span><span class="p">):</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">Job</span>
     <span class="n">paginate_by</span> <span class="o">=</span> <span class="mi">20</span>
 
-<div class="viewcode-block" id="JobView.get_queryset"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.JobView.get_queryset">[docs]</a>    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="JobView.get_queryset"><a class="viewcode-back" href="../../views.html#lavaFlow.views.JobView.get_queryset">[docs]</a>    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="nb">id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;jobId&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>
         <span class="k">except</span><span class="p">:</span>

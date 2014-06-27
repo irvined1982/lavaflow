@@ -13,7 +13,8 @@ Contents:
 
    install
    import
-   lavaFlow
+   views
+   models
 
 
 Indices and tables

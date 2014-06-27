@@ -70,7 +70,8 @@
       aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Web Server Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../import.html">Openlava Import</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../lavaFlow.html">API Doc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../views.html">Views</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../models.html">Models</a></li>
 </ul>
 </ul>
 </li>
@@ -152,28 +153,28 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="ImportKey"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.ImportKey">[docs]</a><span class="k">class</span> <span class="nc">ImportKey</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="ImportKey"><a class="viewcode-back" href="../../models.html#lavaFlow.models.ImportKey">[docs]</a><span class="k">class</span> <span class="nc">ImportKey</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Any client that attempts to import data must present a valid key. Keys are managed by the admin.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">client_key</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="OpenLavaState"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.OpenLavaState">[docs]</a><span class="k">class</span> <span class="nc">OpenLavaState</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenLavaState"><a class="viewcode-back" href="../../models.html#lavaFlow.models.OpenLavaState">[docs]</a><span class="k">class</span> <span class="nc">OpenLavaState</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">code</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
     <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
     <span class="n">friendly_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="OpenLavaState.get_status_list"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.OpenLavaState.get_status_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_status_list</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">mask</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenLavaState.get_status_list"><a class="viewcode-back" href="../../models.html#lavaFlow.models.OpenLavaState.get_status_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_status_list</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">mask</span><span class="p">):</span>
         <span class="n">statuses</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">states</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">key</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">)</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
                 <span class="n">statuses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">statuses</span>
 </div>
-<div class="viewcode-block" id="OpenLavaState.Meta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.OpenLavaState.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="OpenLavaState.Meta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.OpenLavaState.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">abstract</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="n">index_together</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">(</span><span class="s">&#39;code&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">,),</span>
@@ -181,7 +182,7 @@
 
 
 </div></div>
-<div class="viewcode-block" id="OpenLavaSubmitOption"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.OpenLavaSubmitOption">[docs]</a><span class="k">class</span> <span class="nc">OpenLavaSubmitOption</span><span class="p">(</span><span class="n">OpenLavaState</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenLavaSubmitOption"><a class="viewcode-back" href="../../models.html#lavaFlow.models.OpenLavaSubmitOption">[docs]</a><span class="k">class</span> <span class="nc">OpenLavaSubmitOption</span><span class="p">(</span><span class="n">OpenLavaState</span><span class="p">):</span>
         <span class="n">states</span> <span class="o">=</span> <span class="p">{</span>
         <span class="mh">0x01</span><span class="p">:</span> <span class="p">{</span>
             <span class="s">&#39;code&#39;</span><span class="p">:</span><span class="mh">0x01</span><span class="p">,</span>
@@ -331,11 +332,11 @@
     <span class="p">}</span>
 
 </div>
-<div class="viewcode-block" id="OpenLavaTransferFileOption"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.OpenLavaTransferFileOption">[docs]</a><span class="k">class</span> <span class="nc">OpenLavaTransferFileOption</span><span class="p">(</span><span class="n">OpenLavaState</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenLavaTransferFileOption"><a class="viewcode-back" href="../../models.html#lavaFlow.models.OpenLavaTransferFileOption">[docs]</a><span class="k">class</span> <span class="nc">OpenLavaTransferFileOption</span><span class="p">(</span><span class="n">OpenLavaState</span><span class="p">):</span>
     <span class="k">pass</span>
 
 </div>
-<div class="viewcode-block" id="JobStatus"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.JobStatus">[docs]</a><span class="k">class</span> <span class="nc">JobStatus</span><span class="p">(</span><span class="n">OpenLavaState</span><span class="p">):</span>
+<div class="viewcode-block" id="JobStatus"><a class="viewcode-back" href="../../models.html#lavaFlow.models.JobStatus">[docs]</a><span class="k">class</span> <span class="nc">JobStatus</span><span class="p">(</span><span class="n">OpenLavaState</span><span class="p">):</span>
     <span class="n">exited_cleanly</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">()</span>
 
 <div class="viewcode-block" id="JobStatus.Meta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.JobStatus.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
@@ -344,7 +345,7 @@
         <span class="p">]</span>
 
 </div></div>
-<div class="viewcode-block" id="Cluster"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Cluster">[docs]</a><span class="k">class</span> <span class="nc">Cluster</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster">[docs]</a><span class="k">class</span> <span class="nc">Cluster</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
         <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
         <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
@@ -352,7 +353,7 @@
         <span class="n">help_text</span><span class="o">=</span><span class="s">&#39;The name of the cluster&#39;</span><span class="p">,</span>
     <span class="p">)</span>
 
-<div class="viewcode-block" id="Cluster.get_absolute_url"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Cluster.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.get_absolute_url"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">args</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&#39;start_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
         <span class="s">&#39;end_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -362,40 +363,40 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&quot;lf_utilization_view&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Cluster.__unicode__"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Cluster.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.__unicode__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">u&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </div>
-<div class="viewcode-block" id="Cluster.__str__"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Cluster.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.__str__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </div>
-<div class="viewcode-block" id="Cluster.total_jobs"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Cluster.total_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">total_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.total_jobs"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.total_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">total_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">attempt__cluster</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Cluster.total_tasks"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Cluster.total_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.total_tasks"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.total_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Task</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">attempt__cluster</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Cluster.total_attempts"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Cluster.total_attempts">[docs]</a>    <span class="k">def</span> <span class="nf">total_attempts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.total_attempts"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.total_attempts">[docs]</a>    <span class="k">def</span> <span class="nf">total_attempts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Cluster.first_task"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Cluster.first_task">[docs]</a>    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.first_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.first_task">[docs]</a>    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;start_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Cluster.last_task"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Cluster.last_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.last_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.last_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Cluster.last_failed_task"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Cluster.last_failed_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_failed_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.last_failed_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.last_failed_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_failed_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">status__exited_cleanly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Cluster.average_pend_time"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Cluster.average_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.average_pend_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.average_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_cluster_average_pend_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
         <span class="n">pend</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">pend</span><span class="p">:</span>
@@ -403,13 +404,13 @@
             <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pend</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">pend</span>
 </div>
-<div class="viewcode-block" id="Cluster.average_pend_time_timedelta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Cluster.average_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.average_pend_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.average_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span>
 </div>
-<div class="viewcode-block" id="Cluster.average_pend_time_percent"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Cluster.average_pend_time_percent">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.average_pend_time_percent"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.average_pend_time_percent">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">()))</span> <span class="o">*</span> <span class="mi">100</span>
 </div>
-<div class="viewcode-block" id="Cluster.average_wall_time"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Cluster.average_wall_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.average_wall_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.average_wall_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_cluster_average_wall_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
         <span class="n">wall</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">wall</span><span class="p">:</span>
@@ -417,20 +418,20 @@
             <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">wall</span>
 </div>
-<div class="viewcode-block" id="Cluster.average_wall_time_timedelta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Cluster.average_wall_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.average_wall_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.average_wall_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">())</span>
 
 </div></div>
-<div class="viewcode-block" id="ClusterLog"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.ClusterLog">[docs]</a><span class="k">class</span> <span class="nc">ClusterLog</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="ClusterLog"><a class="viewcode-back" href="../../models.html#lavaFlow.models.ClusterLog">[docs]</a><span class="k">class</span> <span class="nc">ClusterLog</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">cluster</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Cluster</span><span class="p">)</span>
     <span class="n">time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">message</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
 </div>
-<div class="viewcode-block" id="Project"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Project">[docs]</a><span class="k">class</span> <span class="nc">Project</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="Project"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project">[docs]</a><span class="k">class</span> <span class="nc">Project</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Project.get_absolute_url"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Project.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.get_absolute_url"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">args</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&#39;start_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
         <span class="s">&#39;end_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -439,40 +440,40 @@
         <span class="s">&#39;group_string&#39;</span><span class="p">:</span> <span class="s">&quot;none&quot;</span><span class="p">,</span>
         <span class="p">}</span>
 </div>
-<div class="viewcode-block" id="Project.__unicode__"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Project.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.__unicode__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">u&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </div>
-<div class="viewcode-block" id="Project.__str__"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Project.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.__str__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </div>
-<div class="viewcode-block" id="Project.total_jobs"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Project.total_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">total_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.total_jobs"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.total_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">total_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">attempt__projects</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Project.total_tasks"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Project.total_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.total_tasks"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.total_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Task</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">attempt__projects</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Project.total_attempts"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Project.total_attempts">[docs]</a>    <span class="k">def</span> <span class="nf">total_attempts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.total_attempts"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.total_attempts">[docs]</a>    <span class="k">def</span> <span class="nf">total_attempts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Project.first_task"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Project.first_task">[docs]</a>    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.first_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.first_task">[docs]</a>    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;start_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Project.last_task"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Project.last_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.last_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.last_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Project.last_failed_task"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Project.last_failed_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_failed_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.last_failed_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.last_failed_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_failed_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">status__exited_cleanly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Project.average_pend_time"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Project.average_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.average_pend_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.average_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_project_average_pend_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
         <span class="n">pend</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">pend</span><span class="p">:</span>
@@ -480,13 +481,13 @@
             <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pend</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">pend</span>
 </div>
-<div class="viewcode-block" id="Project.average_pend_time_timedelta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Project.average_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.average_pend_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.average_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span>
 </div>
-<div class="viewcode-block" id="Project.average_pend_time_percent"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Project.average_pend_time_percent">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.average_pend_time_percent"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.average_pend_time_percent">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">()))</span> <span class="o">*</span> <span class="mi">100</span>
 </div>
-<div class="viewcode-block" id="Project.average_wall_time"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Project.average_wall_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.average_wall_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.average_wall_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_project_average_wall_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
         <span class="n">wall</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">wall</span><span class="p">:</span>
@@ -494,50 +495,50 @@
             <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">wall</span>
 </div>
-<div class="viewcode-block" id="Project.average_wall_time_timedelta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Project.average_wall_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.average_wall_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.average_wall_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">())</span>
 
 </div></div>
-<div class="viewcode-block" id="Host"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Host">[docs]</a><span class="k">class</span> <span class="nc">Host</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="Host"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Host">[docs]</a><span class="k">class</span> <span class="nc">Host</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Host.__unicode__"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Host.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Host.__unicode__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Host.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">u&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </div>
-<div class="viewcode-block" id="Host.__str__"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Host.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Host.__str__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Host.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </div>
-<div class="viewcode-block" id="Host.total_submitted_jobs"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Host.total_submitted_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">total_submitted_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Host.total_submitted_jobs"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Host.total_submitted_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">total_submitted_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">submit_host</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Host.total_tasks"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Host.total_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Host.total_tasks"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Host.total_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Host.total_successful_tasks"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Host.total_successful_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">total_successful_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Host.total_successful_tasks"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Host.total_successful_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">total_successful_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">status__exited_cleanly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Host.total_failed_tasks"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Host.total_failed_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">total_failed_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Host.total_failed_tasks"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Host.total_failed_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">total_failed_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">status__exited_cleanly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Host.failure_rate"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Host.failure_rate">[docs]</a>    <span class="k">def</span> <span class="nf">failure_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Host.failure_rate"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Host.failure_rate">[docs]</a>    <span class="k">def</span> <span class="nf">failure_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total_failed_tasks</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total_tasks</span><span class="p">())</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">0.0</span>
 </div>
-<div class="viewcode-block" id="Host.first_task"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Host.first_task">[docs]</a>    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Host.first_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Host.first_task">[docs]</a>    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;start_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Host.last_task"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Host.last_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Host.last_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Host.last_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Host.get_absolute_url"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Host.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Host.get_absolute_url"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Host.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">args</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&#39;start_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
         <span class="s">&#39;end_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -548,15 +549,15 @@
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&quot;lf_utilization_view&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
 
 </div></div>
-<div class="viewcode-block" id="HostLog"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.HostLog">[docs]</a><span class="k">class</span> <span class="nc">HostLog</span><span class="p">(</span><span class="n">ClusterLog</span><span class="p">):</span>
+<div class="viewcode-block" id="HostLog"><a class="viewcode-back" href="../../models.html#lavaFlow.models.HostLog">[docs]</a><span class="k">class</span> <span class="nc">HostLog</span><span class="p">(</span><span class="n">ClusterLog</span><span class="p">):</span>
     <span class="n">host</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Host</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="Queue"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Queue">[docs]</a><span class="k">class</span> <span class="nc">Queue</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="Queue"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Queue">[docs]</a><span class="k">class</span> <span class="nc">Queue</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">cluster</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Cluster</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Queue.get_absolute_url"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Queue.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Queue.get_absolute_url"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Queue.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">args</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&#39;start_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
         <span class="s">&#39;end_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -565,40 +566,40 @@
         <span class="s">&#39;group_string&#39;</span><span class="p">:</span> <span class="s">&quot;none&quot;</span><span class="p">,</span>
         <span class="p">}</span>
 </div>
-<div class="viewcode-block" id="Queue.__unicode__"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Queue.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Queue.__unicode__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Queue.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">u&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </div>
-<div class="viewcode-block" id="Queue.__str__"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Queue.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Queue.__str__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Queue.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </div>
-<div class="viewcode-block" id="Queue.total_jobs"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Queue.total_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">total_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Queue.total_jobs"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Queue.total_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">total_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">attempt__queue</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Queue.total_tasks"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Queue.total_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Queue.total_tasks"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Queue.total_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Task</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">attempt__queue</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Queue.total_attempts"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Queue.total_attempts">[docs]</a>    <span class="k">def</span> <span class="nf">total_attempts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Queue.total_attempts"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Queue.total_attempts">[docs]</a>    <span class="k">def</span> <span class="nf">total_attempts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Queue.first_task"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Queue.first_task">[docs]</a>    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Queue.first_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Queue.first_task">[docs]</a>    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;start_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Queue.last_task"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Queue.last_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Queue.last_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Queue.last_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Queue.last_failed_task"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Queue.last_failed_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_failed_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Queue.last_failed_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Queue.last_failed_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_failed_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">status__exited_cleanly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Queue.average_pend_time"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Queue.average_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Queue.average_pend_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Queue.average_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_queue_average_pend_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
         <span class="n">pend</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">pend</span><span class="p">:</span>
@@ -606,13 +607,13 @@
             <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pend</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">pend</span>
 </div>
-<div class="viewcode-block" id="Queue.average_pend_time_timedelta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Queue.average_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Queue.average_pend_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Queue.average_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span>
 </div>
-<div class="viewcode-block" id="Queue.average_pend_time_percent"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Queue.average_pend_time_percent">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Queue.average_pend_time_percent"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Queue.average_pend_time_percent">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">()))</span> <span class="o">*</span> <span class="mi">100</span>
 </div>
-<div class="viewcode-block" id="Queue.average_wall_time"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Queue.average_wall_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Queue.average_wall_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Queue.average_wall_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_queue_average_wall_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
         <span class="n">wall</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">wall</span><span class="p">:</span>
@@ -620,7 +621,7 @@
             <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">wall</span>
 </div>
-<div class="viewcode-block" id="Queue.average_wall_time_timedelta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Queue.average_wall_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Queue.average_wall_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Queue.average_wall_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">())</span>
 
 </div>
@@ -631,47 +632,47 @@
         <span class="p">]</span>
 
 </div>
-<div class="viewcode-block" id="QueueLog"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.QueueLog">[docs]</a><span class="k">class</span> <span class="nc">QueueLog</span><span class="p">(</span><span class="n">ClusterLog</span><span class="p">):</span>
+<div class="viewcode-block" id="QueueLog"><a class="viewcode-back" href="../../models.html#lavaFlow.models.QueueLog">[docs]</a><span class="k">class</span> <span class="nc">QueueLog</span><span class="p">(</span><span class="n">ClusterLog</span><span class="p">):</span>
     <span class="n">queue</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Queue</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="User"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.User">[docs]</a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="User"><a class="viewcode-back" href="../../models.html#lavaFlow.models.User">[docs]</a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-<div class="viewcode-block" id="User.__unicode__"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.User.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="User.__unicode__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.User.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">u&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </div>
-<div class="viewcode-block" id="User.__str__"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.User.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="User.__str__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.User.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </div>
-<div class="viewcode-block" id="User.total_jobs"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.User.total_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">total_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="User.total_jobs"><a class="viewcode-back" href="../../models.html#lavaFlow.models.User.total_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">total_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_set</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="User.total_tasks"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.User.total_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="User.total_tasks"><a class="viewcode-back" href="../../models.html#lavaFlow.models.User.total_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_set</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="User.total_attempts"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.User.total_attempts">[docs]</a>    <span class="k">def</span> <span class="nf">total_attempts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="User.total_attempts"><a class="viewcode-back" href="../../models.html#lavaFlow.models.User.total_attempts">[docs]</a>    <span class="k">def</span> <span class="nf">total_attempts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="User.first_task"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.User.first_task">[docs]</a>    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="User.first_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.User.first_task">[docs]</a>    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;start_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="User.last_task"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.User.last_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="User.last_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.User.last_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="User.last_failed_task"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.User.last_failed_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_failed_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="User.last_failed_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.User.last_failed_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_failed_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">status__exited_cleanly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="User.average_pend_time"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.User.average_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="User.average_pend_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.User.average_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_user_average_pend_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
         <span class="n">pend</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">pend</span><span class="p">:</span>
@@ -679,13 +680,13 @@
             <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pend</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">pend</span>
 </div>
-<div class="viewcode-block" id="User.average_pend_time_timedelta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.User.average_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="User.average_pend_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.User.average_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span>
 </div>
-<div class="viewcode-block" id="User.average_pend_time_percent"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.User.average_pend_time_percent">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="User.average_pend_time_percent"><a class="viewcode-back" href="../../models.html#lavaFlow.models.User.average_pend_time_percent">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">()))</span> <span class="o">*</span> <span class="mi">100</span>
 </div>
-<div class="viewcode-block" id="User.average_wall_time"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.User.average_wall_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="User.average_wall_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.User.average_wall_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_user_average_wall_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
         <span class="n">wall</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">wall</span><span class="p">:</span>
@@ -693,10 +694,10 @@
             <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">wall</span>
 </div>
-<div class="viewcode-block" id="User.average_wall_time_timedelta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.User.average_wall_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="User.average_wall_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.User.average_wall_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">())</span>
 </div>
-<div class="viewcode-block" id="User.get_absolute_url"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.User.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="User.get_absolute_url"><a class="viewcode-back" href="../../models.html#lavaFlow.models.User.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">args</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&#39;start_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
         <span class="s">&#39;end_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -707,18 +708,18 @@
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&quot;lf_utilization_view&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
 
 </div></div>
-<div class="viewcode-block" id="UserLog"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.UserLog">[docs]</a><span class="k">class</span> <span class="nc">UserLog</span><span class="p">(</span><span class="n">ClusterLog</span><span class="p">):</span>
+<div class="viewcode-block" id="UserLog"><a class="viewcode-back" href="../../models.html#lavaFlow.models.UserLog">[docs]</a><span class="k">class</span> <span class="nc">UserLog</span><span class="p">(</span><span class="n">ClusterLog</span><span class="p">):</span>
     <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="Job"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Job">[docs]</a><span class="k">class</span> <span class="nc">Job</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="Job"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job">[docs]</a><span class="k">class</span> <span class="nc">Job</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">cluster</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Cluster</span><span class="p">)</span>
     <span class="n">job_id</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
     <span class="n">submit_host</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Host</span><span class="p">)</span>
     <span class="n">submit_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Job.util_chart_url"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Job.util_chart_url">[docs]</a>    <span class="k">def</span> <span class="nf">util_chart_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Job.util_chart_url"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.util_chart_url">[docs]</a>    <span class="k">def</span> <span class="nf">util_chart_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">start_time_js</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_time</span> <span class="o">-</span> <span class="mi">60</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
         <span class="n">end_time_js</span> <span class="o">=</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_time</span><span class="p">()</span> <span class="o">+</span> <span class="mi">60</span> <span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
         <span class="n">filter_string</span> <span class="o">=</span> <span class="s">&quot;job.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
@@ -726,22 +727,22 @@
                                                      <span class="s">&#39;filter_string&#39;</span><span class="p">:</span> <span class="n">filter_string</span><span class="p">,</span> <span class="s">&#39;exclude_string&#39;</span><span class="p">:</span> <span class="s">&quot;none&quot;</span><span class="p">,</span>
                                                      <span class="s">&#39;group_string&#39;</span><span class="p">:</span> <span class="s">&quot;none&quot;</span><span class="p">})</span>
 </div>
-<div class="viewcode-block" id="Job.get_absolute_url"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Job.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Job.get_absolute_url"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&#39;lf_job_detail&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">])</span>
 </div>
-<div class="viewcode-block" id="Job.__unicode__"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Job.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Job.__unicode__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">u&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span>
 </div>
-<div class="viewcode-block" id="Job.__str__"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Job.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Job.__str__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span>
 </div>
     <span class="k">def</span> <span class="nf">submit_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_time</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Job.submit_time_datetime"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Job.submit_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">submit_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Job.submit_time_datetime"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.submit_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">submit_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_time</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Job.end_time"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Job.end_time">[docs]</a>    <span class="k">def</span> <span class="nf">end_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Job.end_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.end_time">[docs]</a>    <span class="k">def</span> <span class="nf">end_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Max</span><span class="p">(</span><span class="s">&#39;end_time&#39;</span><span class="p">))[</span><span class="s">&#39;end_time__max&#39;</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">date</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -750,43 +751,43 @@
             <span class="n">date</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">date</span>
 </div>
-<div class="viewcode-block" id="Job.end_time_datetime"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Job.end_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">end_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Job.end_time_datetime"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.end_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">end_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end_time</span><span class="p">())</span>
 </div>
-<div class="viewcode-block" id="Job.short_jobs"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Job.short_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">short_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Job.short_jobs"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.short_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">short_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">wall_time__lte</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Job.exited_jobs"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Job.exited_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">exited_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Job.exited_jobs"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.exited_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">exited_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">status__exited_cleanly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Job.attempt_filter_string"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Job.attempt_filter_string">[docs]</a>    <span class="k">def</span> <span class="nf">attempt_filter_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Job.attempt_filter_string"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.attempt_filter_string">[docs]</a>    <span class="k">def</span> <span class="nf">attempt_filter_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&quot;job.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
 </div>
-<div class="viewcode-block" id="Job.total_pend_time"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Job.total_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">total_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Job.total_pend_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.total_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">total_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Sum</span><span class="p">(</span><span class="s">&#39;pend_time&#39;</span><span class="p">))[</span><span class="s">&#39;pend_time__sum&#39;</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="Job.total_pend_time_timedelta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Job.total_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">total_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Job.total_pend_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.total_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">total_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">total_pend_time</span><span class="p">())</span>
 </div>
-<div class="viewcode-block" id="Job.total_cpu_time"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Job.total_cpu_time">[docs]</a>    <span class="k">def</span> <span class="nf">total_cpu_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Job.total_cpu_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.total_cpu_time">[docs]</a>    <span class="k">def</span> <span class="nf">total_cpu_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Sum</span><span class="p">(</span><span class="s">&#39;cpu_time&#39;</span><span class="p">))[</span><span class="s">&#39;cpu_time__sum&#39;</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="Job.total_cpu_time_timedelta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Job.total_cpu_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">total_cpu_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Job.total_cpu_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.total_cpu_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">total_cpu_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">total_cpu_time</span><span class="p">())</span>
 </div>
-<div class="viewcode-block" id="Job.total_wall_time"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Job.total_wall_time">[docs]</a>    <span class="k">def</span> <span class="nf">total_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Job.total_wall_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.total_wall_time">[docs]</a>    <span class="k">def</span> <span class="nf">total_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Sum</span><span class="p">(</span><span class="s">&#39;wall_time&#39;</span><span class="p">))[</span><span class="s">&#39;wall_time__sum&#39;</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="Job.total_wall_time_timedelta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Job.total_wall_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">total_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Job.total_wall_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.total_wall_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">total_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">total_wall_time</span><span class="p">())</span>
 </div>
-<div class="viewcode-block" id="Job.first_task"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Job.first_task">[docs]</a>    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Job.first_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.first_task">[docs]</a>    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;start_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Job.last_task"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Job.last_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Job.last_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.last_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
@@ -804,17 +805,17 @@
         <span class="p">]</span>
 
 </div>
-<div class="viewcode-block" id="JobLog"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.JobLog">[docs]</a><span class="k">class</span> <span class="nc">JobLog</span><span class="p">(</span><span class="n">ClusterLog</span><span class="p">):</span>
+<div class="viewcode-block" id="JobLog"><a class="viewcode-back" href="../../models.html#lavaFlow.models.JobLog">[docs]</a><span class="k">class</span> <span class="nc">JobLog</span><span class="p">(</span><span class="n">ClusterLog</span><span class="p">):</span>
     <span class="n">job</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Job</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="OpenLavaTransferFile"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.OpenLavaTransferFile">[docs]</a><span class="k">class</span> <span class="nc">OpenLavaTransferFile</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenLavaTransferFile"><a class="viewcode-back" href="../../models.html#lavaFlow.models.OpenLavaTransferFile">[docs]</a><span class="k">class</span> <span class="nc">OpenLavaTransferFile</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">submission_file_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">4096</span><span class="p">)</span>
     <span class="n">execution_file_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">4096</span><span class="p">)</span>
     <span class="n">options</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">OpenLavaTransferFileOption</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="OpenLavaResourceLimit"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.OpenLavaResourceLimit">[docs]</a><span class="k">class</span> <span class="nc">OpenLavaResourceLimit</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenLavaResourceLimit"><a class="viewcode-back" href="../../models.html#lavaFlow.models.OpenLavaResourceLimit">[docs]</a><span class="k">class</span> <span class="nc">OpenLavaResourceLimit</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">cpu</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">file_size</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
@@ -828,7 +829,7 @@
     <span class="n">open_files</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 
 </div>
-<div class="viewcode-block" id="JobSubmitOpenLava"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.JobSubmitOpenLava">[docs]</a><span class="k">class</span> <span class="nc">JobSubmitOpenLava</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="JobSubmitOpenLava"><a class="viewcode-back" href="../../models.html#lavaFlow.models.JobSubmitOpenLava">[docs]</a><span class="k">class</span> <span class="nc">JobSubmitOpenLava</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">job</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">Job</span><span class="p">)</span>
     <span class="n">user_id</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">user_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
@@ -836,18 +837,18 @@
     <span class="n">num_processors</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">begin_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 
-<div class="viewcode-block" id="JobSubmitOpenLava.begin_time_datetime"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.JobSubmitOpenLava.begin_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">begin_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="JobSubmitOpenLava.begin_time_datetime"><a class="viewcode-back" href="../../models.html#lavaFlow.models.JobSubmitOpenLava.begin_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">begin_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">begin_time</span><span class="p">)</span>
 </div>
     <span class="n">termination_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 
-<div class="viewcode-block" id="JobSubmitOpenLava.termination_time_datetime"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.JobSubmitOpenLava.termination_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">termination_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="JobSubmitOpenLava.termination_time_datetime"><a class="viewcode-back" href="../../models.html#lavaFlow.models.JobSubmitOpenLava.termination_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">termination_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">termination_time</span><span class="p">)</span>
 </div>
     <span class="n">signal_value</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">checkpoint_period</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 
-<div class="viewcode-block" id="JobSubmitOpenLava.checkpoint_period_timedelta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.JobSubmitOpenLava.checkpoint_period_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">checkpoint_period_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="JobSubmitOpenLava.checkpoint_period_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.JobSubmitOpenLava.checkpoint_period_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">checkpoint_period_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">checkpoint_period</span><span class="p">)</span>
 </div>
     <span class="n">restart_pid</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
@@ -884,25 +885,25 @@
     <span class="n">user_priority</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 
 </div>
-<div class="viewcode-block" id="Task"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Task">[docs]</a><span class="k">class</span> <span class="nc">Task</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="Task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Task">[docs]</a><span class="k">class</span> <span class="nc">Task</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">cluster</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Cluster</span><span class="p">)</span>
     <span class="n">job</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Job</span><span class="p">)</span>
     <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
     <span class="n">task_id</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Task.get_absolute_url"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Task.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Task.get_absolute_url"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Task.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&#39;lf_task_detail&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">])</span>
 </div>
-<div class="viewcode-block" id="Task.__unicode__"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Task.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Task.__unicode__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Task.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">u&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_id</span>
 </div>
-<div class="viewcode-block" id="Task.__str__"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Task.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Task.__str__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Task.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_id</span>
 </div>
-<div class="viewcode-block" id="Task.short_jobs"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Task.short_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">short_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Task.short_jobs"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Task.short_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">short_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">wall_time__lte</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Task.exited_jobs"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Task.exited_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">exited_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Task.exited_jobs"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Task.exited_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">exited_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">status__exited_cleanly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </div>
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
@@ -914,11 +915,11 @@
         <span class="p">]</span>
 
 </div>
-<div class="viewcode-block" id="TaskLog"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.TaskLog">[docs]</a><span class="k">class</span> <span class="nc">TaskLog</span><span class="p">(</span><span class="n">JobLog</span><span class="p">):</span>
+<div class="viewcode-block" id="TaskLog"><a class="viewcode-back" href="../../models.html#lavaFlow.models.TaskLog">[docs]</a><span class="k">class</span> <span class="nc">TaskLog</span><span class="p">(</span><span class="n">JobLog</span><span class="p">):</span>
     <span class="n">task</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Task</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="Attempt"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Attempt">[docs]</a><span class="k">class</span> <span class="nc">Attempt</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="Attempt"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt">[docs]</a><span class="k">class</span> <span class="nc">Attempt</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">cluster</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Cluster</span><span class="p">)</span>
     <span class="n">job</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Job</span><span class="p">)</span>
     <span class="n">task</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Task</span><span class="p">)</span>
@@ -928,73 +929,73 @@
     <span class="n">execution_hosts</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Host</span><span class="p">)</span>
     <span class="n">start_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Attempt.start_time_datetime"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Attempt.start_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">start_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Attempt.start_time_datetime"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt.start_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">start_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span>
 </div>
     <span class="n">end_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Attempt.end_time_datetime"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Attempt.end_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">end_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Attempt.end_time_datetime"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt.end_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">end_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end_time</span><span class="p">)</span>
 </div>
     <span class="n">cpu_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Attempt.cpu_time_timedelta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Attempt.cpu_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">cpu_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Attempt.cpu_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt.cpu_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">cpu_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cpu_time</span><span class="p">)</span>
 </div>
     <span class="n">wall_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Attempt.wall_time_timedelta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Attempt.wall_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Attempt.wall_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt.wall_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wall_time</span><span class="p">)</span>
 </div>
     <span class="n">pend_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Attempt.pend_time_timedelta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Attempt.pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Attempt.pend_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt.pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pend_time</span><span class="p">)</span>
 </div>
     <span class="n">queue</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Queue</span><span class="p">)</span>
     <span class="n">status</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">JobStatus</span><span class="p">)</span>
     <span class="n">command</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Attempt.get_absolute_url"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Attempt.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Attempt.get_absolute_url"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&#39;lf_attempt_detail&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">])</span>
 </div>
-<div class="viewcode-block" id="Attempt.get_attempt_id"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Attempt.get_attempt_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_attempt_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Attempt.get_attempt_id"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt.get_attempt_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_attempt_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">counter</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;start_time&#39;</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">attempt</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">counter</span>
             <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
 </div>
-<div class="viewcode-block" id="Attempt.get_execution_host_count"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Attempt.get_execution_host_count">[docs]</a>    <span class="k">def</span> <span class="nf">get_execution_host_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Attempt.get_execution_host_count"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt.get_execution_host_count">[docs]</a>    <span class="k">def</span> <span class="nf">get_execution_host_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">hosts</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">execution_hosts</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s">&#39;pk&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">Count</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">)):</span>
             <span class="n">host</span> <span class="o">=</span> <span class="n">Host</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">h</span><span class="p">[</span><span class="s">&#39;pk&#39;</span><span class="p">])</span>
             <span class="n">hosts</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s">&#39;host&#39;</span><span class="p">:</span> <span class="n">host</span><span class="p">,</span> <span class="s">&#39;count&#39;</span><span class="p">:</span> <span class="n">h</span><span class="p">[</span><span class="s">&#39;name__count&#39;</span><span class="p">]})</span>
         <span class="k">return</span> <span class="n">hosts</span>
 </div>
-<div class="viewcode-block" id="Attempt.get_contending_jobs"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Attempt.get_contending_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">get_contending_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Attempt.get_contending_jobs"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt.get_contending_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">get_contending_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Attempt</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">end_time__gte</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span> <span class="n">start_time__lte</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">end_time</span><span class="p">,</span>
                                       <span class="n">execution_hosts__in</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">execution_hosts</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Attempt.cluster_avg_pend_time"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Attempt.cluster_avg_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">cluster_avg_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Attempt.cluster_avg_pend_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt.cluster_avg_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">cluster_avg_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Attempt</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">num_processors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_processors</span><span class="p">,</span> <span class="n">cluster</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster</span><span class="p">)</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Avg</span><span class="p">(</span><span class="s">&#39;pend_time&#39;</span><span class="p">))[</span>
             <span class="s">&#39;pend_time__avg&#39;</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="Attempt.cluster_avg_pend_time_timedelta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Attempt.cluster_avg_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">cluster_avg_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Attempt.cluster_avg_pend_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt.cluster_avg_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">cluster_avg_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_avg_pend_time</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Attempt.queue_avg_pend_time"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Attempt.queue_avg_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">queue_avg_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Attempt.queue_avg_pend_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt.queue_avg_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">queue_avg_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Attempt</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">num_processors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_processors</span><span class="p">,</span> <span class="n">queue</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="p">,</span> <span class="n">cluster</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster</span><span class="p">)</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span>
             <span class="n">Avg</span><span class="p">(</span><span class="s">&#39;pend_time&#39;</span><span class="p">))[</span><span class="s">&#39;pend_time__avg&#39;</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="Attempt.queue_avg_pend_time_timedelta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Attempt.queue_avg_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">queue_avg_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Attempt.queue_avg_pend_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt.queue_avg_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">queue_avg_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_avg_pend_time</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Attempt.project_avg_pend_time"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Attempt.project_avg_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">project_avg_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Attempt.project_avg_pend_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt.project_avg_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">project_avg_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Attempt</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">num_processors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_processors</span><span class="p">,</span> <span class="n">project__in</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span>
                               <span class="n">cluster</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster</span><span class="p">)</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Avg</span><span class="p">(</span><span class="s">&#39;pend_time&#39;</span><span class="p">))[</span><span class="s">&#39;pend_time__avg&#39;</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="Attempt.project_avg_pend_time_timedelta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Attempt.project_avg_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">project_avg_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Attempt.project_avg_pend_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt.project_avg_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">project_avg_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_avg_pend_time</span><span class="p">)</span>
 
 </div>
@@ -1011,7 +1012,7 @@
         <span class="p">]</span>
 
 </div>
-<div class="viewcode-block" id="GridEngineAttemptInfo"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.GridEngineAttemptInfo">[docs]</a><span class="k">class</span> <span class="nc">GridEngineAttemptInfo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="GridEngineAttemptInfo"><a class="viewcode-back" href="../../models.html#lavaFlow.models.GridEngineAttemptInfo">[docs]</a><span class="k">class</span> <span class="nc">GridEngineAttemptInfo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">attempt</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">Attempt</span><span class="p">)</span>
     <span class="n">project</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Project</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&quot;gridengine_projects&quot;</span><span class="p">)</span>
     <span class="n">department</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Project</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&quot;gridengine_departments&quot;</span><span class="p">)</span>
@@ -1025,11 +1026,11 @@
     <span class="n">advanced_reservation_id</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">advanced_reservation_submit_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 
-<div class="viewcode-block" id="GridEngineAttemptInfo.advanced_reservation_submit_time_datetime"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.GridEngineAttemptInfo.advanced_reservation_submit_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">advanced_reservation_submit_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GridEngineAttemptInfo.advanced_reservation_submit_time_datetime"><a class="viewcode-back" href="../../models.html#lavaFlow.models.GridEngineAttemptInfo.advanced_reservation_submit_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">advanced_reservation_submit_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">advanced_reservation_submit_time</span><span class="p">)</span>
 
 </div></div>
-<div class="viewcode-block" id="AttemptResourceUsage"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.AttemptResourceUsage">[docs]</a><span class="k">class</span> <span class="nc">AttemptResourceUsage</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="AttemptResourceUsage"><a class="viewcode-back" href="../../models.html#lavaFlow.models.AttemptResourceUsage">[docs]</a><span class="k">class</span> <span class="nc">AttemptResourceUsage</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">attempt</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">Attempt</span><span class="p">)</span>
     <span class="n">user_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
     <span class="n">system_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
@@ -1052,19 +1053,19 @@
     <span class="n">exact_user_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
 
 </div>
-<div class="viewcode-block" id="OpenLavaExitInfo"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.OpenLavaExitInfo">[docs]</a><span class="k">class</span> <span class="nc">OpenLavaExitInfo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenLavaExitInfo"><a class="viewcode-back" href="../../models.html#lavaFlow.models.OpenLavaExitInfo">[docs]</a><span class="k">class</span> <span class="nc">OpenLavaExitInfo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">attempt</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">Attempt</span><span class="p">)</span>
     <span class="n">user_id</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&quot;user_numeric_id&quot;</span><span class="p">)</span>
     <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
     <span class="n">options</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">OpenLavaSubmitOption</span><span class="p">)</span>
     <span class="n">begin_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 
-<div class="viewcode-block" id="OpenLavaExitInfo.begin_time_datetime"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.OpenLavaExitInfo.begin_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">begin_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenLavaExitInfo.begin_time_datetime"><a class="viewcode-back" href="../../models.html#lavaFlow.models.OpenLavaExitInfo.begin_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">begin_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">begin_time</span><span class="p">)</span>
 </div>
     <span class="n">termination_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 
-<div class="viewcode-block" id="OpenLavaExitInfo.termination_time_datetime"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.OpenLavaExitInfo.termination_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">termination_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenLavaExitInfo.termination_time_datetime"><a class="viewcode-back" href="../../models.html#lavaFlow.models.OpenLavaExitInfo.termination_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">termination_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">termination_time</span><span class="p">)</span>
 </div>
     <span class="n">resource_request</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
