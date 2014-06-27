@@ -7,7 +7,16 @@ API Doc
 =======
 
 .. automodule:: lavaFlow.views
-   :members:
+    :members:
+    :undoc-members:
+    :private-members:
+    :special-members:
+    :inherited-members:
+
 .. automodule:: lavaFlow.models
     :members:
+    :undoc-members:
+    :private-members:
+    :special-members:
+    :inherited-members:
 
