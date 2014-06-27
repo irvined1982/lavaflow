@@ -23,7 +23,7 @@ import argparse
 import time
 from openlava import lsblib, lslib
 import logging
-
+logging.basicConfig(level=logging.DEBUG)
 parser = argparse.ArgumentParser(description='Import OpenLava Log Files into LavaFlow')
 parser.add_argument('log_file', metavar='LOGFILE', type=str, help="Path to Logfile")
 parser.add_argument('url', metavar='URL', type=str, help="URL to LavaFlow server")
@@ -34,6 +34,8 @@ parser.add_argument("--tail_log", action="store_true", default=False,
                     and continue reading.")
 parser.add_argument('--cluster_name', metavar="NAME", type=str,
                     help="Optional cluster name to use, default is to get lsf cluster name", default=None)
+parser.add_argument('--chunk_size', metavar="CHUNK_SIZE", type=int, default=200, help="Number of records to group together before sending to server")
+
 args = parser.parse_args()
 
 # Open the event log file
@@ -146,7 +148,7 @@ while True:
     # ^^converts to dictionary which does a full copy of the data
 
     row_num += 1
-    if row_num % 200 == 0:
+    if row_num % args.chunk_size == 0:
         upload(rows)
         rows = []
 
