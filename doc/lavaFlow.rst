@@ -7,5 +7,7 @@ API Doc
 =======
 
 .. automodule:: lavaFlow.views
+   :members:
 .. automodule:: lavaFlow.models
+    :members:
 

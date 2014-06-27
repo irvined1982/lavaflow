@@ -52,7 +52,195 @@
             
   <div class="section" id="module-lavaFlow.views">
 <span id="api-doc"></span><h1>API Doc<a class="headerlink" href="#module-lavaFlow.views" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-lavaFlow.models"></span></div>
+<dl class="function">
+<dt id="lavaFlow.views.create_js_success">
+<tt class="descclassname">lavaFlow.views.</tt><tt class="descname">create_js_success</tt><big>(</big><em>data=None</em>, <em>message=''</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#create_js_success"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.create_js_success" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a json serializable object, and an optional message, and creates a standard json response document.
+:param data: json serializable object
+:param message: Optional message to include with response
+:return: HttpResponse object</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lavaFlow.views.get_csrf_token">
+<tt class="descclassname">lavaFlow.views.</tt><tt class="descname">get_csrf_token</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#get_csrf_token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.get_csrf_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the CSRF token to the client as part of a json document.
+:param request: Request object
+:return: HttpResponse with cookie containing JSON data.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lavaFlow.views.openlava_import">
+<tt class="descclassname">lavaFlow.views.</tt><tt class="descname">openlava_import</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#openlava_import"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.openlava_import" title="Permalink to this definition">¶</a></dt>
+<dd><p>Imports one or more openlava log entries, log entries are uploaded as JSON data in the request body.
+:param request: Request object
+:param cluster_name: name of cluster (Specified in URL)
+:return: JSON Status</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lavaFlow.views.openlava_import_job_finish">
+<tt class="descclassname">lavaFlow.views.</tt><tt class="descname">openlava_import_job_finish</tt><big>(</big><em>cluster</em>, <em>event</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#openlava_import_job_finish"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.openlava_import_job_finish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Imports a single openlava job finish event.
+:param cluster: Cluster object
+:param event: event to import
+:return: None</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lavaFlow.views.openlava_import_job_new">
+<tt class="descclassname">lavaFlow.views.</tt><tt class="descname">openlava_import_job_new</tt><big>(</big><em>cluster</em>, <em>event</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#openlava_import_job_new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.openlava_import_job_new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Imports a single openlava job_new event event.
+:param cluster: Cluster object
+:param event: Dict containing event details
+:return: None</p>
+</dd></dl>
+
+<span class="target" id="module-lavaFlow.models"></span><dl class="class">
+<dt id="lavaFlow.models.Attempt">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Attempt</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Attempt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Attempt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempt(id, cluster_id, job_id, task_id, user_id, num_processors, start_time, end_time, cpu_time, wall_time, pend_time, queue_id, status_id, command)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.AttemptResourceUsage">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">AttemptResourceUsage</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#AttemptResourceUsage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage" title="Permalink to this definition">¶</a></dt>
+<dd><p>AttemptResourceUsage(id, attempt_id, user_time, system_time, max_rss, integral_shared_text, integral_shared_memory, integral_unshared_data, integral_unshared_stack, page_reclaims, page_faults, swaps, input_block_ops, output_block_ops, charecter_io_ops, messages_sent, messages_received, num_signals, voluntary_context_switches, involuntary_context_switches, exact_user_time)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.Cluster">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Cluster</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cluster(id, name)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.ClusterLog">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">ClusterLog</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#ClusterLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.ClusterLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>ClusterLog(id, cluster_id, time, message)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.GridEngineAttemptInfo">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">GridEngineAttemptInfo</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#GridEngineAttemptInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.GridEngineAttemptInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>GridEngineAttemptInfo(id, attempt_id, project_id, department_id, cpu_time, integral_mem_usage, io_usage, catagory, io_wait, pe_task_id, max_vmem, advanced_reservation_id, advanced_reservation_submit_time)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.Host">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Host</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Host"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Host" title="Permalink to this definition">¶</a></dt>
+<dd><p>Host(id, name)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.HostLog">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">HostLog</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#HostLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.HostLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>HostLog(id, cluster_id, time, message, clusterlog_ptr_id, host_id)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.ImportKey">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">ImportKey</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#ImportKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.ImportKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Any client that attempts to import data must present a valid key. Keys are managed by the admin.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.Job">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Job</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Job(id, cluster_id, job_id, user_id, submit_host_id, submit_time)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.JobLog">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">JobLog</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#JobLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.JobLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>JobLog(id, cluster_id, time, message, clusterlog_ptr_id, job_id)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.JobStatus">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">JobStatus</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#JobStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.JobStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>JobStatus(id, code, name, description, friendly_name, exited_cleanly)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.JobSubmitOpenLava">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">JobSubmitOpenLava</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#JobSubmitOpenLava"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.JobSubmitOpenLava" title="Permalink to this definition">¶</a></dt>
+<dd><p>JobSubmitOpenLava(id, job_id, user_id, user_name, num_processors, begin_time, termination_time, signal_value, checkpoint_period, restart_pid, resource_limits_id, host_specification, host_factor, umask, queue_id, resource_request, submit_host_id, cwd, checkpoint_dir, input_file, output_file, error_file, input_file_spool, command_spool, job_spool_dir, submit_home_dir, job_file, dependency_condition, job_name, command, num_transfer_files, pre_execution_command, email_user, project_id, nios_port, max_num_processors, schedule_host_type, login_shell, user_priority)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.OpenLavaExitInfo">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">OpenLavaExitInfo</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#OpenLavaExitInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.OpenLavaExitInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenLavaExitInfo(id, attempt_id, user_id, user_id, begin_time, termination_time, resource_request, cwd, input_file, output_file, error_file, input_file_spool, command_spool, job_file, host_factor, job_name, dependency_condition, pre_execution_command, email_user, project_id, exit_status, max_num_processors, login_shell, array_index, max_residual_mem, max_swap)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.OpenLavaResourceLimit">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">OpenLavaResourceLimit</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#OpenLavaResourceLimit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.OpenLavaResourceLimit" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenLavaResourceLimit(id, cpu, file_size, data, stack, core, rss, run, process, swap, nofile, open_files)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.OpenLavaSubmitOption">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">OpenLavaSubmitOption</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#OpenLavaSubmitOption"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.OpenLavaSubmitOption" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenLavaSubmitOption(id, code, name, description, friendly_name)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.OpenLavaTransferFile">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">OpenLavaTransferFile</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#OpenLavaTransferFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.OpenLavaTransferFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenLavaTransferFile(id, submission_file_name, execution_file_name)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.OpenLavaTransferFileOption">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">OpenLavaTransferFileOption</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#OpenLavaTransferFileOption"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.OpenLavaTransferFileOption" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenLavaTransferFileOption(id, code, name, description, friendly_name)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.Project">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Project</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project" title="Permalink to this definition">¶</a></dt>
+<dd><p>Project(id, name)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.Queue">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Queue</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queue(id, cluster_id, name)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.QueueLog">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">QueueLog</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#QueueLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.QueueLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>QueueLog(id, cluster_id, time, message, clusterlog_ptr_id, queue_id)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.Task">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Task</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Task(id, cluster_id, job_id, user_id, task_id)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.TaskLog">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">TaskLog</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#TaskLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.TaskLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>TaskLog(id, cluster_id, time, message, clusterlog_ptr_id, job_id, joblog_ptr_id, task_id)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.User">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">User</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#User"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.User" title="Permalink to this definition">¶</a></dt>
+<dd><p>User(id, name)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.UserLog">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">UserLog</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#UserLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.UserLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>UserLog(id, cluster_id, time, message, clusterlog_ptr_id, user_id)</p>
+</dd></dl>
+
+</div>
 
 
           </div>
