@@ -1,0 +1,194 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Openlava Import &mdash; LavaFlow 1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="LavaFlow 1.1 documentation" href="index.html" />
+    <link rel="prev" title="Web Server Installation" href="install.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Web Server Installation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">LavaFlow 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="openlava-import">
+<h1>Openlava Import<a class="headerlink" href="#openlava-import" title="Permalink to this headline">¶</a></h1>
+<p>lavaFlow comes with a script that will read OpenLava log files, and upload data to the lavaFlow server, this tool can
+continuously in the background, or via a cron job, or manually as required.</p>
+<div class="section" id="installataion">
+<h2>Installataion<a class="headerlink" href="#installataion" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="openlava-python-bindings">
+<h3>Openlava-python bindings<a class="headerlink" href="#openlava-python-bindings" title="Permalink to this headline">¶</a></h3>
+<p>In order to read and upload log files, you need to install the openlava python bindings.  These are used only by the
+upload tools, generally you only need to install this on the master node of each cluster, this may or may not be the
+machine you are running lavaFlow on.
+Install the Openlava python bindings.:</p>
+<div class="highlight-python"><pre>$ git clone https://github.com/irvined1982/openlava-python.git
+$ cd openlava-python/openlava/
+$ python setup.py install</pre>
+</div>
+</div>
+<div class="section" id="download-lavaflow">
+<h3>Download lavaFlow<a class="headerlink" href="#download-lavaflow" title="Permalink to this headline">¶</a></h3>
+<p>Use git to checkout <a class="reference external" href="https://github.com/irvined1982/lavaFlow">lavaFlow</a>.:</p>
+<div class="highlight-python"><pre>$ git clone https://github.com/irvined1982/lavaflow.git
+$ git submodule update --init --recursive</pre>
+</div>
+<p>Inside the import directory you will find</p>
+<p>Reads openlava log files and uploads them.  Will read and attempt to upload all entries in the file.
+This is not desirable if you have large logfiles and want to upload regularly, for that you should use
+logtail or some other utility to only read entries that have not yet been uploaded.  There is no harm in
+re-uploading, but it is time expensive.</p>
+<dl class="option">
+<dt>
+<tt class="descname">log_file</tt></dt>
+<dd></dd></dl>
+
+<p>The path to the log file to read, should be one of lsb.acct or lsb.events*</p>
+<dl class="option">
+<dt>
+<tt class="descname">url</tt></dt>
+<dd></dd></dl>
+
+<p>Fully qualified URL to the lavaflow server.</p>
+<dl class="option">
+<dt>
+<tt class="descname">key</tt></dt>
+<dd></dd></dl>
+
+<p>Pre shared key that will be used to verify the client has permission to publish to the server.</p>
+<dl class="option">
+<dt>
+<tt class="descname">tail_log</tt></dt>
+<dd></dd></dl>
+
+<p>When enabled, will not exit when the end of the input file is reached.  Instead, it will wait for new data,
+or if the file is rotated, reopen the file and continue reading.</p>
+<dl class="option">
+<dt>
+<tt class="descname">cluster_name</tt></dt>
+<dd></dd></dl>
+
+<p>Optional name of the cluster, if no cluster name is specified, will attempt to infer cluster name from openlava
+directly.</p>
+<dl class="option">
+<dt>
+<tt class="descname">chunk_size</tt></dt>
+<dd></dd></dl>
+
+<p>Number of records to group together before sending to server.</p>
+<dl class="option">
+<dt>
+<tt class="descname">log_level</tt></dt>
+<dd></dd></dl>
+
+<p>Log level to use, can be one of debug, info, warn, error, critical.</p>
+<p>When enabled, will not exit when the end of the input file is reached.  Instead, it will wait for new data,
+or if the file is rotated, reopen the file and continue reading.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Openlava Import</a><ul>
+<li><a class="reference internal" href="#installataion">Installataion</a><ul>
+<li><a class="reference internal" href="#openlava-python-bindings">Openlava-python bindings</a></li>
+<li><a class="reference internal" href="#download-lavaflow">Download lavaFlow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="install.html"
+                        title="previous chapter">Web Server Installation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/import.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Web Server Installation"
+             >previous</a> |</li>
+        <li><a href="index.html">LavaFlow 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, David Irvine.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
