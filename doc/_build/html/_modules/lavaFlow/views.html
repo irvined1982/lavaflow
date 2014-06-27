@@ -1,0 +1,1219 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>lavaFlow.views &mdash; LavaFlow 1.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="LavaFlow 1.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          LavaFlow</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Web Server Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../import.html">Openlava Import</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lavaFlow.html">API Doc</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for lavaFlow.views</h1><div class="highlight"><pre>
+<span class="c"># Copyright 2011 David Irvine</span>
+<span class="c">#</span>
+<span class="c"># This file is part of LavaFlow</span>
+<span class="c">#</span>
+<span class="c"># LavaFlow is free software: you can redistribute it and/or modify</span>
+<span class="c"># it under the terms of the GNU General Public License as published by</span>
+<span class="c"># the Free Software Foundation, either version 3 of the License, or (at</span>
+<span class="c"># your option) any later version.</span>
+<span class="c">#</span>
+<span class="c"># LavaFlow is distributed in the hope that it will be useful, but</span>
+<span class="c"># WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span>
+<span class="c"># General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c"># You should have received a copy of the GNU General Public License</span>
+<span class="c"># along with LavaFlow.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c">#</span>
+<span class="c"># $Rev: 158 $:</span>
+<span class="c"># $Author: irvined $:</span>
+<span class="c"># $Date: 2012-10-31 23:42:17 +0100 (Wed, 31 Oct 2012) $:</span>
+<span class="c">#</span>
+<span class="c"># Create your views here.</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">django.views.decorators.csrf</span> <span class="kn">import</span> <span class="n">csrf_exempt</span><span class="p">,</span> <span class="n">ensure_csrf_cookie</span>
+<span class="kn">from</span> <span class="nn">django.views.decorators.cache</span> <span class="kn">import</span> <span class="n">cache_page</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Avg</span><span class="p">,</span> <span class="n">Count</span><span class="p">,</span> <span class="n">Sum</span>
+<span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">ListView</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span><span class="p">,</span> <span class="n">HttpResponseBadRequest</span><span class="p">,</span> <span class="n">HttpResponseForbidden</span>
+<span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ObjectDoesNotExist</span>
+<span class="kn">from</span> <span class="nn">django.middleware.csrf</span> <span class="kn">import</span> <span class="n">get_token</span>
+
+<span class="kn">from</span> <span class="nn">lavaFlow.models</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">OPENLAVA_JOB_STATES</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="mh">0x00</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;friendly&#39;</span><span class="p">:</span> <span class="s">&quot;Null&quot;</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;JOB_STAT_NULL&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;State null.&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x01</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;friendly&#39;</span><span class="p">:</span> <span class="s">&quot;Pending&quot;</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;JOB_STAT_PEND&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;The job is pending, i.e., it has not been dispatched yet.&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x02</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;friendly&#39;</span><span class="p">:</span> <span class="s">&quot;Held&quot;</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&quot;JOB_STAT_PSUSP&quot;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;The pending job was suspended by its owner or the LSF system administrator.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x04</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;friendly&#39;</span><span class="p">:</span> <span class="s">&quot;Running&quot;</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&quot;JOB_STAT_RUN&quot;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;The job is running.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x08</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;friendly&#39;</span><span class="p">:</span> <span class="s">&quot;Suspended by system&quot;</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&quot;JOB_STAT_SSUSP&quot;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;The running job was suspended by the system because an execution host was overloaded or the queue run window closed.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x10</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;friendly&#39;</span><span class="p">:</span> <span class="s">&quot;Suspended by user&quot;</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&quot;JOB_STAT_USUSP&quot;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;The running job was suspended by its owner or the LSF system administrator.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x20</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;friendly&#39;</span><span class="p">:</span> <span class="s">&quot;Exited&quot;</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&quot;JOB_STAT_EXIT&quot;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;The job has terminated with a non-zero status - it may have been aborted due to an error in its execution, or killed by its owner or by the LSF system administrator.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x40</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;friendly&#39;</span><span class="p">:</span> <span class="s">&quot;Completed&quot;</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&quot;JOB_STAT_DONE&quot;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;The job has terminated with status 0.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x80</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;friendly&#39;</span><span class="p">:</span> <span class="s">&quot;Process Completed&quot;</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&quot;JOB_STAT_PDONE&quot;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Post job process done successfully.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x100</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;friendly&#39;</span><span class="p">:</span> <span class="s">&quot;Process Error&quot;</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&quot;JOB_STAT_PERR&quot;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Post job process has error.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x200</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;friendly&#39;</span><span class="p">:</span> <span class="s">&quot;Waiting for execution&quot;</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&quot;JOB_STAT_WAIT&quot;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Chunk job waiting its turn to exec.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x10000</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;friendly&#39;</span><span class="p">:</span> <span class="s">&quot;Unknown&quot;</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&quot;JOB_STAT_UNKWN&quot;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;The slave batch daemon (sbatchd) on the host on which the job is processed has lost contact with the master batch daemon (mbatchd).&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="nd">@ensure_csrf_cookie</span>
+<div class="viewcode-block" id="get_csrf_token"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.get_csrf_token">[docs]</a><span class="k">def</span> <span class="nf">get_csrf_token</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the CSRF token to the client as part of a json document.</span>
+<span class="sd">    :param request: Request object</span>
+<span class="sd">    :return: HttpResponse with cookie containing JSON data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">create_js_success</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;cookie&#39;</span><span class="p">:</span> <span class="n">get_token</span><span class="p">(</span><span class="n">request</span><span class="p">)},</span> <span class="n">message</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="create_js_success"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.create_js_success">[docs]</a><span class="k">def</span> <span class="nf">create_js_success</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Takes a json serializable object, and an optional message, and creates a standard json response document.</span>
+<span class="sd">    :param data: json serializable object</span>
+<span class="sd">    :param message: Optional message to include with response</span>
+<span class="sd">    :return: HttpResponse object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+        <span class="s">&#39;status&#39;</span><span class="p">:</span><span class="s">&quot;OK&quot;</span><span class="p">,</span>
+        <span class="s">&#39;data&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">,</span>
+        <span class="s">&#39;message&#39;</span><span class="p">:</span><span class="n">message</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s">&quot;application/json&quot;</span><span class="p">)</span>
+
+</div>
+<span class="nd">@csrf_exempt</span>
+<span class="k">def</span> <span class="nf">gridengine_import</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">cluster_name</span><span class="p">):</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Cluster</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">cluster_name</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;owner&#39;</span><span class="p">])</span>
+    <span class="p">(</span><span class="n">submit_host</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Host</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Unspecified&quot;</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">cluster</span><span class="o">=</span><span class="n">cluster</span><span class="p">,</span> <span class="n">job_id</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;job_number&#39;</span><span class="p">],</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+                                               <span class="n">submit_host</span><span class="o">=</span><span class="n">submit_host</span><span class="p">,</span> <span class="n">submit_time</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;submission_time&#39;</span><span class="p">])</span>
+    <span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Queue</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;qname&#39;</span><span class="p">],</span> <span class="n">cluster</span><span class="o">=</span><span class="n">cluster</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Task</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">cluster</span><span class="o">=</span><span class="n">cluster</span><span class="p">,</span> <span class="n">job</span><span class="o">=</span><span class="n">job</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;task_number&#39;</span><span class="p">])</span>
+    <span class="n">num_processors</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;slots&#39;</span><span class="p">]</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;start_time&#39;</span><span class="p">]</span>
+    <span class="n">end_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;end_time&#39;</span><span class="p">]</span>
+    <span class="n">wall_time</span> <span class="o">=</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span>
+    <span class="n">cpu_time</span> <span class="o">=</span> <span class="n">num_processors</span> <span class="o">*</span> <span class="n">wall_time</span>
+    <span class="n">submit_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;submission_time&#39;</span><span class="p">]</span>
+    <span class="n">pend_time</span> <span class="o">=</span> <span class="n">start_time</span> <span class="o">-</span> <span class="n">submit_time</span>
+
+    <span class="n">states</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="mi">0</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&quot;No Failure&quot;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Ran and Exited normally&quot;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">1</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&quot;Assumedly before job&quot;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;failed early in execd&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">3</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Before writing config&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;failed before execd set up local spool&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">4</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Before writing PID&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;shepherd failed to record its pid&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">6</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Setting processor set&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;failed setting up processor set&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">7</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Before prolog&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;failed before prolog&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">8</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;In prolog&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;failed in prolog&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">9</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Before pestart&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;failed before starting PE&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">10</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;in pestart&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;failed in PE starter&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">11</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Before job&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;failed in shepherd before starting job&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">12</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Before PE Stop&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;ran, but failed before calling PE stop procedure&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">13</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;In PE Stop&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;ran, but PE stop procedure failed&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">14</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Before Epilog&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;ran, but failed in epilog script&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">16</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Releasing processor set&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;ran, but processor set could not be released&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">17</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Through signal&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;job killed by signal (possibly qdel)&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">18</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Shepherd returned error&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;Shephard Died&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">19</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">19</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Before writing exit_status&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;shepherd didnt write reports corectly&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">20</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Found unexpected error file&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;shepherd encountered a problem&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">21</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">21</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;In recognizing job&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;qmaster asked about an unknown job (Not in accounting)&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">24</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Migrating (checkpointing jobs)&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;ran, will be migrated&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">25</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Rescheduling&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;ran, will be rescheduled&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">26</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">26</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Opening output file&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;failed opening stderr/stdout file&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">27</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">27</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Searching requested shell&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;failed finding specified shell&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">28</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">28</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Changing to working directory&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;failed changing to start directory&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">29</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">29</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;AFS setup&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;failed setting up AFS security&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">30</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Application error returned&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;ran and exited 100 - maybe re-scheduled&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">31</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">31</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Accessing sgepasswd file&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;failed because sgepasswd not readable (MS Windows)&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">32</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;entry is missing in password file&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;failed because user not in sgepasswd (MS Windows)&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">33</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Wrong password&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;failed because of wrong password against sgepasswd (MS Windows)&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">34</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">34</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Communicating with Grid Engine Helper Service&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;failed because of failure of helper service (MS Windows)&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">35</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">35</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Before job in Grid Engine Helper Service&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;failed because of failure running helper service (MS Windows)&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">36</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">36</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Checking configured daemons&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;failed because of configured remote startup daemon&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">37</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">37</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;qmaster enforced h_rt, h_cpu, or h_vmem limit&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;ran, but killed due to exceeding run time limit&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">38</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">38</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Adding supplementary group&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;failed adding supplementary gid to job&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mi">100</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Assumedly after job&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;ran, but killed by a signal (perhaps due to exceeding resources), task died, shepherd died (e.g. node crash), etc.&#39;</span><span class="p">,</span>
+            <span class="s">&#39;exited_cleanly&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">states</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;failed&#39;</span><span class="p">]]</span>
+    <span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="o">**</span><span class="n">state</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">attempt</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Attempt</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span>
+        <span class="n">cluster</span><span class="o">=</span><span class="n">cluster</span><span class="p">,</span>
+        <span class="n">job</span><span class="o">=</span><span class="n">job</span><span class="p">,</span>
+        <span class="n">task</span><span class="o">=</span><span class="n">task</span><span class="p">,</span>
+        <span class="n">start_time</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span>
+        <span class="n">defaults</span><span class="o">=</span><span class="p">{</span>
+            <span class="s">&#39;user&#39;</span><span class="p">:</span> <span class="n">user</span><span class="p">,</span>
+            <span class="s">&#39;num_processors&#39;</span><span class="p">:</span> <span class="n">num_processors</span><span class="p">,</span>
+            <span class="s">&#39;end_time&#39;</span><span class="p">:</span> <span class="n">end_time</span><span class="p">,</span>
+            <span class="s">&#39;cpu_time&#39;</span><span class="p">:</span> <span class="n">cpu_time</span><span class="p">,</span>
+            <span class="s">&#39;wall_time&#39;</span><span class="p">:</span> <span class="n">wall_time</span><span class="p">,</span>
+            <span class="s">&#39;pend_time&#39;</span><span class="p">:</span> <span class="n">pend_time</span><span class="p">,</span>
+            <span class="s">&#39;queue&#39;</span><span class="p">:</span> <span class="n">queue</span><span class="p">,</span>
+            <span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="n">status</span><span class="p">,</span>
+            <span class="s">&#39;command&#39;</span><span class="p">:</span> <span class="s">&quot;Unspecified&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">created</span><span class="p">:</span>
+        <span class="p">(</span><span class="n">execution_host</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Host</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;hostname&#39;</span><span class="p">])</span>
+        <span class="n">attempt</span><span class="o">.</span><span class="n">execution_hosts</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">execution_host</span><span class="p">)</span>
+        <span class="n">dept</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">project</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;project&#39;</span><span class="p">]:</span>
+            <span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Project</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;project&#39;</span><span class="p">])</span>
+            <span class="n">attempt</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;department&#39;</span><span class="p">]:</span>
+            <span class="p">(</span><span class="n">dept</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Project</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;department&#39;</span><span class="p">])</span>
+            <span class="n">attempt</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">dept</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">AttemptResourceUsage</span><span class="p">()</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">attempt</span> <span class="o">=</span> <span class="n">attempt</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">user_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;ru_utime&#39;</span><span class="p">]</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">system_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;ru_stime&#39;</span><span class="p">]</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">max_rss</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;ru_maxrss&#39;</span><span class="p">]</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">integral_shared_text</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">integral_shared_memory</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;ru_ixrss&#39;</span><span class="p">]</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">integral_unshared_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;ru_idrss&#39;</span><span class="p">]</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">integral_unshared_stack</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;ru_isrss&#39;</span><span class="p">]</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">page_reclaims</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;ru_minflt&#39;</span><span class="p">]</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">page_faults</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;ru_majflt&#39;</span><span class="p">]</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">swaps</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;ru_nswap&#39;</span><span class="p">]</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">input_block_ops</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;ru_inblock&#39;</span><span class="p">]</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">output_block_ops</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;ru_oublock&#39;</span><span class="p">]</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">charecter_io_ops</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">messages_sent</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;ru_msgsnd&#39;</span><span class="p">]</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">messages_received</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;ru_msgrcv&#39;</span><span class="p">]</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">num_signals</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;ru_nsignals&#39;</span><span class="p">]</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">voluntary_context_switches</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;ru_nvcsw&#39;</span><span class="p">]</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">involuntary_context_switches</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;ru_nivcsw&#39;</span><span class="p">]</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">exact_user_time</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">GridEngineAttemptInfo</span><span class="p">()</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">attempt</span> <span class="o">=</span> <span class="n">attempt</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">project</span> <span class="o">=</span> <span class="n">project</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">department</span> <span class="o">=</span> <span class="n">dept</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">cpu_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;cpu&#39;</span><span class="p">]</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">integral_mem_usage</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;mem&#39;</span><span class="p">]</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">io_usage</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;io&#39;</span><span class="p">]</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">catagory</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;catagory&#39;</span><span class="p">]:</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">catagory</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;catagory&#39;</span><span class="p">]</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">io_wait</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;iow&#39;</span><span class="p">]</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">pe_task_id</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;pe_taskid&#39;</span><span class="p">]</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">max_vmem</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;maxvmem&#39;</span><span class="p">]</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">advanced_reservation_id</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;arid&#39;</span><span class="p">]</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">advanced_reservation_submit_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;ar_submission_time&#39;</span><span class="p">]</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">&quot;OK&quot;</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="s">&quot;text/plain&quot;</span><span class="p">)</span>
+
+
+<span class="nd">@csrf_exempt</span>
+<div class="viewcode-block" id="openlava_import"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.openlava_import">[docs]</a><span class="k">def</span> <span class="nf">openlava_import</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">cluster_name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Imports one or more openlava log entries, log entries are uploaded as JSON data in the request body.</span>
+<span class="sd">    :param request: Request object</span>
+<span class="sd">    :param cluster_name: name of cluster (Specified in URL)</span>
+<span class="sd">    :return: JSON Status</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># Parse the body for json data</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HttpResponseBadRequest</span><span class="p">(</span><span class="s">&quot;Invalid JSON data&quot;</span><span class="p">)</span>
+
+    <span class="c"># check it contains the upload key</span>
+    <span class="k">if</span> <span class="s">&#39;key&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HttpResponseBadRequest</span><span class="p">(</span><span class="s">&quot;key not specified&quot;</span><span class="p">)</span>
+
+    <span class="c"># Check the key is valid</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ImportKey</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">client_key</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;key&#39;</span><span class="p">])</span>
+    <span class="k">except</span> <span class="n">ObjectDoesNotExist</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HttpResponseForbidden</span><span class="p">(</span><span class="s">&quot;Invalid key specified&quot;</span><span class="p">)</span>
+
+    <span class="c"># Get or create the cluster</span>
+    <span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Cluster</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">cluster_name</span><span class="p">)</span>
+
+    <span class="c"># Process each entry in the array of entries</span>
+    <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;payload&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c"># EVENT_JOB_NEW</span>
+            <span class="n">openlava_import_job_new</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">10</span><span class="p">:</span>  <span class="c"># EVENT_JOB_FINISH</span>
+            <span class="n">openlava_import_job_finish</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">create_js_success</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s">&quot;Import Successful&quot;</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="openlava_import_job_new"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.openlava_import_job_new">[docs]</a><span class="k">def</span> <span class="nf">openlava_import_job_new</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Imports a single openlava job_new event event.</span>
+<span class="sd">    :param cluster: Cluster object</span>
+<span class="sd">    :param event: Dict containing event details</span>
+<span class="sd">    :return: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">event</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;eventLog&#39;</span><span class="p">][</span><span class="s">&#39;jobNewLog&#39;</span><span class="p">]</span>
+
+    <span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s">&#39;userName&#39;</span><span class="p">])</span>
+    <span class="p">(</span><span class="n">submit_host</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Host</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s">&#39;fromHost&#39;</span><span class="p">])</span>
+    <span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span>
+        <span class="n">cluster</span><span class="o">=</span><span class="n">cluster</span><span class="p">,</span>
+        <span class="n">job_id</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s">&#39;jobId&#39;</span><span class="p">],</span>
+        <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+        <span class="n">submit_host</span><span class="o">=</span><span class="n">submit_host</span><span class="p">,</span>
+        <span class="n">submit_time</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s">&#39;submitTime&#39;</span><span class="p">])</span>
+    <span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Queue</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s">&#39;queue&#39;</span><span class="p">],</span> <span class="n">cluster</span><span class="o">=</span><span class="n">cluster</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">job</span><span class="o">.</span><span class="n">jobsubmitopenlava</span>
+    <span class="k">except</span> <span class="n">ObjectDoesNotExist</span><span class="p">:</span>
+        <span class="n">js</span> <span class="o">=</span> <span class="n">JobSubmitOpenLava</span><span class="p">()</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">job</span> <span class="o">=</span> <span class="n">job</span>
+        <span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Project</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s">&#39;projectName&#39;</span><span class="p">])</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">project</span> <span class="o">=</span> <span class="n">project</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">user_name</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">queue</span> <span class="o">=</span> <span class="n">queue</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">submit_host</span> <span class="o">=</span> <span class="n">submit_host</span>
+
+        <span class="n">limit</span> <span class="o">=</span> <span class="n">OpenLavaResourceLimit</span><span class="p">()</span>
+        <span class="n">limit</span><span class="o">.</span><span class="n">cpu</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;rLimits&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">limit</span><span class="o">.</span><span class="n">file_size</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;rLimits&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">limit</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;rLimits&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">limit</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;rLimits&#39;</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">limit</span><span class="o">.</span><span class="n">core</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;rLimits&#39;</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">limit</span><span class="o">.</span><span class="n">rss</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;rLimits&#39;</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span>
+        <span class="n">limit</span><span class="o">.</span><span class="n">run</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;rLimits&#39;</span><span class="p">][</span><span class="mi">9</span><span class="p">]</span>
+        <span class="n">limit</span><span class="o">.</span><span class="n">process</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;rLimits&#39;</span><span class="p">][</span><span class="mi">10</span><span class="p">]</span>
+        <span class="n">limit</span><span class="o">.</span><span class="n">swap</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;rLimits&#39;</span><span class="p">][</span><span class="mi">8</span><span class="p">]</span>
+        <span class="n">limit</span><span class="o">.</span><span class="n">nofile</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;rLimits&#39;</span><span class="p">][</span><span class="mi">6</span><span class="p">]</span>
+        <span class="n">limit</span><span class="o">.</span><span class="n">open_files</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;rLimits&#39;</span><span class="p">][</span><span class="mi">7</span><span class="p">]</span>
+        <span class="n">limit</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="n">js</span><span class="o">.</span><span class="n">resource_limits</span> <span class="o">=</span> <span class="n">limit</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;userId&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">num_processors</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;numProcessors&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">begin_time</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;beginTime&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">termination_time</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;termTime&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">signal_value</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;sigValue&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">checkpoint_period</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;chkpntPeriod&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">restart_pid</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;restartPid&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">host_specification</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;hostSpec&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">host_factor</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;hostFactor&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">umask</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;umask&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">resource_request</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;resReq&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">cwd</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;cwd&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">checkpoint_dir</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;chkpntDir&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">input_file</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;inFile&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">output_file</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;outFile&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">error_file</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;errFile&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">input_file_spool</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;inFileSpool&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">command_spool</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;commandSpool&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">job_spool_dir</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;jobSpoolDir&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">submit_home_dir</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;subHomeDir&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">job_file</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;jobFile&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">dependency_condition</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;dependCond&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">job_name</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;jobName&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;command&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">num_transfer_files</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;nxf&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">pre_execution_cmd</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;preExecCmd&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">email_user</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;mailUser&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">nios_port</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;niosPort&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">max_num_processors</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;maxNumProcessors&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">schedule_host_type</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;schedHostType&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">login_shell</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;loginShell&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">user_priority</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;userPriority&#39;</span><span class="p">]</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">host</span> <span class="ow">in</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;askedHosts&#39;</span><span class="p">]:</span>
+            <span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Host</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">host</span><span class="p">)</span>
+            <span class="n">js</span><span class="o">.</span><span class="n">asked_hosts</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">fl</span> <span class="ow">in</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;xf&#39;</span><span class="p">]:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">OpenLavaTransferFile</span><span class="p">()</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">submission_file_name</span> <span class="o">=</span> <span class="n">fl</span><span class="p">[</span><span class="s">&#39;subFn&#39;</span><span class="p">]</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">execution_file_name</span> <span class="o">=</span> <span class="n">fl</span><span class="p">[</span><span class="s">&#39;execFn&#39;</span><span class="p">]</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">js</span><span class="o">.</span><span class="n">transfer_files</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">OpenLavaSubmitOption</span><span class="o">.</span><span class="n">get_status_list</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s">&#39;options&#39;</span><span class="p">]):</span>
+                <span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">OpenLavaSubmitOption</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="o">**</span><span class="n">state</span><span class="p">)</span>
+                <span class="n">js</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+
+
+</div>
+<div class="viewcode-block" id="openlava_import_job_finish"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.views.openlava_import_job_finish">[docs]</a><span class="k">def</span> <span class="nf">openlava_import_job_finish</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Imports a single openlava job finish event.</span>
+<span class="sd">    :param cluster: Cluster object</span>
+<span class="sd">    :param event: event to import</span>
+<span class="sd">    :return: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">log</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;eventLog&#39;</span><span class="p">][</span><span class="s">&#39;jobFinishLog&#39;</span><span class="p">]</span>
+
+    <span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">log</span><span class="p">[</span><span class="s">&#39;userName&#39;</span><span class="p">])</span>
+    <span class="p">(</span><span class="n">submit_host</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Host</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">log</span><span class="p">[</span><span class="s">&#39;fromHost&#39;</span><span class="p">])</span>
+    <span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span>
+        <span class="n">cluster</span><span class="o">=</span><span class="n">cluster</span><span class="p">,</span>
+        <span class="n">job_id</span><span class="o">=</span><span class="n">log</span><span class="p">[</span><span class="s">&#39;jobId&#39;</span><span class="p">],</span>
+        <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+        <span class="n">submit_host</span><span class="o">=</span><span class="n">submit_host</span><span class="p">,</span>
+        <span class="n">submit_time</span><span class="o">=</span><span class="n">log</span><span class="p">[</span><span class="s">&#39;submitTime&#39;</span><span class="p">])</span>
+
+    <span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Task</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">cluster</span><span class="o">=</span><span class="n">cluster</span><span class="p">,</span> <span class="n">job</span><span class="o">=</span><span class="n">job</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">log</span><span class="p">[</span><span class="s">&#39;idx&#39;</span><span class="p">])</span>
+    <span class="n">num_processors</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;numProcessors&#39;</span><span class="p">]</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;startTime&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">start_time</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c"># Job was killed before starting</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;eventTime&#39;</span><span class="p">]</span>
+
+    <span class="n">end_time</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;eventTime&#39;</span><span class="p">]</span>
+
+    <span class="n">wall_time</span> <span class="o">=</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span>
+    <span class="n">cpu_time</span> <span class="o">=</span> <span class="n">wall_time</span> <span class="o">*</span> <span class="n">num_processors</span>
+    <span class="n">pend_time</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s">&#39;eventTime&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;submitTime&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">start_time</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c"># 0 == job didn&#39;t start</span>
+        <span class="n">pend_time</span> <span class="o">=</span> <span class="n">start_time</span> <span class="o">-</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;submitTime&#39;</span><span class="p">]</span>
+
+    <span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Queue</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">log</span><span class="p">[</span><span class="s">&#39;queue&#39;</span><span class="p">],</span> <span class="n">cluster</span><span class="o">=</span><span class="n">cluster</span><span class="p">)</span>
+
+    <span class="n">job_state</span> <span class="o">=</span> <span class="n">OPENLAVA_JOB_STATES</span><span class="p">[</span><span class="n">log</span><span class="p">[</span><span class="s">&#39;jStatus&#39;</span><span class="p">]]</span>
+    <span class="n">clean</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">job_state</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&quot;JOB_STAT_DONE&quot;</span><span class="p">:</span>
+        <span class="n">clean</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span>
+        <span class="n">code</span><span class="o">=</span><span class="n">log</span><span class="p">[</span><span class="s">&#39;jStatus&#39;</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">job_state</span><span class="p">[</span><span class="s">&#39;friendly&#39;</span><span class="p">],</span>
+        <span class="n">description</span><span class="o">=</span><span class="n">job_state</span><span class="p">[</span><span class="s">&#39;description&#39;</span><span class="p">],</span>
+        <span class="n">exited_cleanly</span><span class="o">=</span><span class="n">clean</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="p">(</span><span class="n">attempt</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Attempt</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span>
+        <span class="n">cluster</span><span class="o">=</span><span class="n">cluster</span><span class="p">,</span>
+        <span class="n">job</span><span class="o">=</span><span class="n">job</span><span class="p">,</span>
+        <span class="n">task</span><span class="o">=</span><span class="n">task</span><span class="p">,</span>
+        <span class="n">start_time</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span>
+        <span class="n">defaults</span><span class="o">=</span><span class="p">{</span>
+            <span class="s">&#39;user&#39;</span><span class="p">:</span> <span class="n">user</span><span class="p">,</span>
+            <span class="s">&#39;num_processors&#39;</span><span class="p">:</span> <span class="n">num_processors</span><span class="p">,</span>
+            <span class="s">&#39;end_time&#39;</span><span class="p">:</span> <span class="n">end_time</span><span class="p">,</span>
+            <span class="s">&#39;cpu_time&#39;</span><span class="p">:</span> <span class="n">cpu_time</span><span class="p">,</span>
+            <span class="s">&#39;wall_time&#39;</span><span class="p">:</span> <span class="n">wall_time</span><span class="p">,</span>
+            <span class="s">&#39;pend_time&#39;</span><span class="p">:</span> <span class="n">pend_time</span><span class="p">,</span>
+            <span class="s">&#39;queue&#39;</span><span class="p">:</span> <span class="n">queue</span><span class="p">,</span>
+            <span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="n">status</span><span class="p">,</span>
+            <span class="s">&#39;command&#39;</span><span class="p">:</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;command&#39;</span><span class="p">],</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">created</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">host</span> <span class="ow">in</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;execHosts&#39;</span><span class="p">]:</span>
+            <span class="p">(</span><span class="n">execution_host</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Host</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">host</span><span class="p">)</span>
+            <span class="n">attempt</span><span class="o">.</span><span class="n">execution_hosts</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">execution_host</span><span class="p">)</span>
+
+        <span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Project</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">log</span><span class="p">[</span><span class="s">&#39;projectName&#39;</span><span class="p">])</span>
+        <span class="n">attempt</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">attempt</span><span class="o">.</span><span class="n">attemptresourceusage</span>
+        <span class="k">except</span> <span class="n">ObjectDoesNotExist</span><span class="p">:</span>
+            <span class="n">resource_usage</span> <span class="o">=</span> <span class="n">AttemptResourceUsage</span><span class="p">()</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">user_time</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;lsfRusage&#39;</span><span class="p">][</span><span class="s">&#39;ru_utime&#39;</span><span class="p">]</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">system_time</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;lsfRusage&#39;</span><span class="p">][</span><span class="s">&#39;ru_stime&#39;</span><span class="p">]</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">max_rss</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;lsfRusage&#39;</span><span class="p">][</span><span class="s">&#39;ru_maxrss&#39;</span><span class="p">]</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">integral_shared_text</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;lsfRusage&#39;</span><span class="p">][</span><span class="s">&#39;ru_ixrss&#39;</span><span class="p">]</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">integral_shared_memory</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;lsfRusage&#39;</span><span class="p">][</span><span class="s">&#39;ru_ismrss&#39;</span><span class="p">]</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">integral_unshared_data</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;lsfRusage&#39;</span><span class="p">][</span><span class="s">&#39;ru_idrss&#39;</span><span class="p">]</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">integral_unshared_stack</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;lsfRusage&#39;</span><span class="p">][</span><span class="s">&#39;ru_isrss&#39;</span><span class="p">]</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">page_reclaims</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;lsfRusage&#39;</span><span class="p">][</span><span class="s">&#39;ru_minflt&#39;</span><span class="p">]</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">page_faults</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;lsfRusage&#39;</span><span class="p">][</span><span class="s">&#39;ru_majflt&#39;</span><span class="p">]</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">swaps</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;lsfRusage&#39;</span><span class="p">][</span><span class="s">&#39;ru_nswap&#39;</span><span class="p">]</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">input_block_ops</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;lsfRusage&#39;</span><span class="p">][</span><span class="s">&#39;ru_inblock&#39;</span><span class="p">]</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">output_block_ops</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;lsfRusage&#39;</span><span class="p">][</span><span class="s">&#39;ru_oublock&#39;</span><span class="p">]</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">charecter_io_ops</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;lsfRusage&#39;</span><span class="p">][</span><span class="s">&#39;ru_ioch&#39;</span><span class="p">]</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">messages_sent</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;lsfRusage&#39;</span><span class="p">][</span><span class="s">&#39;ru_msgsnd&#39;</span><span class="p">]</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">messages_received</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;lsfRusage&#39;</span><span class="p">][</span><span class="s">&#39;ru_msgrcv&#39;</span><span class="p">]</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">num_signals</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;lsfRusage&#39;</span><span class="p">][</span><span class="s">&#39;ru_nsignals&#39;</span><span class="p">]</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">voluntary_context_switches</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;lsfRusage&#39;</span><span class="p">][</span><span class="s">&#39;ru_nvcsw&#39;</span><span class="p">]</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">involuntary_context_switches</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;lsfRusage&#39;</span><span class="p">][</span><span class="s">&#39;ru_nivcsw&#39;</span><span class="p">]</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">exact_user_time</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;lsfRusage&#39;</span><span class="p">][</span><span class="s">&#39;ru_exutime&#39;</span><span class="p">]</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">attempt</span> <span class="o">=</span> <span class="n">attempt</span>
+            <span class="n">resource_usage</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">attempt</span><span class="o">.</span><span class="n">openlavaexitinfo</span>
+        <span class="k">except</span> <span class="n">ObjectDoesNotExist</span><span class="p">:</span>
+            <span class="n">ol</span> <span class="o">=</span> <span class="n">OpenLavaExitInfo</span><span class="p">()</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">attempt</span> <span class="o">=</span> <span class="n">attempt</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;userId&#39;</span><span class="p">]</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">user</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">begin_time</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;beginTime&#39;</span><span class="p">]</span>
+
+            <span class="n">ol</span><span class="o">.</span><span class="n">termination_time</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;termTime&#39;</span><span class="p">]</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">resource_request</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;resReq&#39;</span><span class="p">]</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">cwd</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;cwd&#39;</span><span class="p">]</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">input_file</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;inFile&#39;</span><span class="p">]</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">output_file</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;outFile&#39;</span><span class="p">]</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">error_file</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;errFile&#39;</span><span class="p">]</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">input_file_spool</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;inFileSpool&#39;</span><span class="p">]</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">command_spool</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;commandSpool&#39;</span><span class="p">]</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">job_file</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;jobFile&#39;</span><span class="p">]</span>
+
+            <span class="n">ol</span><span class="o">.</span><span class="n">resource_usage</span> <span class="o">=</span> <span class="n">resource_usage</span>
+
+            <span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Project</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">log</span><span class="p">[</span><span class="s">&#39;projectName&#39;</span><span class="p">])</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">project</span> <span class="o">=</span> <span class="n">project</span>
+
+            <span class="n">ol</span><span class="o">.</span><span class="n">host_factor</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;hostFactor&#39;</span><span class="p">]</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">job_name</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;jobName&#39;</span><span class="p">]</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">dependency_condition</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;dependCond&#39;</span><span class="p">]</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">pre_execution_cmd</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;preExecCmd&#39;</span><span class="p">]</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">email_user</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;mailUser&#39;</span><span class="p">]</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">exit_status</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;exitStatus&#39;</span><span class="p">]</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">max_num_processors</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;maxNumProcessors&#39;</span><span class="p">]</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">login_shell</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;loginShell&#39;</span><span class="p">]</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">array_index</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;idx&#39;</span><span class="p">]</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">max_residual_mem</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;maxRMem&#39;</span><span class="p">]</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">max_swap</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;maxRSwap&#39;</span><span class="p">]</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">OpenLavaSubmitOption</span><span class="o">.</span><span class="n">get_status_list</span><span class="p">(</span><span class="n">log</span><span class="p">[</span><span class="s">&#39;options&#39;</span><span class="p">]):</span>
+                <span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">OpenLavaSubmitOption</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="o">**</span><span class="n">state</span><span class="p">)</span>
+                <span class="n">ol</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">host</span> <span class="ow">in</span> <span class="n">log</span><span class="p">[</span><span class="s">&#39;askedHosts&#39;</span><span class="p">]:</span>
+                <span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Host</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">host</span><span class="p">)</span>
+                <span class="n">ol</span><span class="o">.</span><span class="n">asked_hosts</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+            <span class="n">ol</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+</div>
+<span class="k">def</span> <span class="nf">get_attempts</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">,</span> <span class="n">end_time_js</span><span class="p">,</span> <span class="n">exclude_string</span><span class="p">,</span> <span class="n">filter_string</span><span class="p">):</span>
+    <span class="n">filter_args</span> <span class="o">=</span> <span class="n">filter_string_to_params</span><span class="p">(</span><span class="n">filter_string</span><span class="p">)</span>
+    <span class="n">exclude_args</span> <span class="o">=</span> <span class="n">filter_string_to_params</span><span class="p">(</span><span class="n">exclude_string</span><span class="p">)</span>
+    <span class="n">attempts</span> <span class="o">=</span> <span class="n">Attempt</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">start_time_js</span><span class="p">:</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+        <span class="n">attempts</span> <span class="o">=</span> <span class="n">attempts</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">end_time__gte</span><span class="o">=</span><span class="n">start_time</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">end_time_js</span><span class="p">:</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">end_time_js</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+        <span class="n">attempts</span> <span class="o">=</span> <span class="n">attempts</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">job__submit_time__lte</span><span class="o">=</span><span class="n">end_time</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">filter_args</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">attempts</span> <span class="o">=</span> <span class="n">attempts</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">val</span><span class="p">})</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">exclude_args</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">attempts</span> <span class="o">=</span> <span class="n">attempts</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">val</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">attempts</span>
+
+
+<span class="nd">@cache_page</span><span class="p">(</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">utilization_table</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">start_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">group_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+    <span class="n">start_time_js</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">)</span>
+    <span class="n">end_time_js</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">end_time_js</span><span class="p">)</span>
+    <span class="n">attempts</span> <span class="o">=</span> <span class="n">get_attempts</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">,</span> <span class="n">end_time_js</span><span class="p">,</span> <span class="n">exclude_string</span><span class="p">,</span> <span class="n">filter_string</span><span class="p">)</span>
+    <span class="n">group_args</span> <span class="o">=</span> <span class="n">group_string_to_group_args</span><span class="p">(</span><span class="n">group_string</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">group_args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">attempts</span> <span class="o">=</span> <span class="n">attempts</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="o">*</span><span class="n">group_args</span><span class="p">)</span>
+    <span class="n">annotations</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">aggs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;pend_time&#39;</span><span class="p">,</span> <span class="s">&#39;wall_time&#39;</span><span class="p">,</span> <span class="s">&#39;cpu_time&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">aggs</span><span class="p">:</span>
+        <span class="n">annotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Avg</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        <span class="n">annotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Min</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        <span class="n">annotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Max</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        <span class="n">annotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Sum</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">nice_names</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;num_processors&#39;</span><span class="p">:</span> <span class="s">&quot;Num Slots&quot;</span><span class="p">,</span>
+        <span class="s">&#39;cluster__name&#39;</span><span class="p">:</span> <span class="s">&quot;Cluster&quot;</span><span class="p">,</span>
+        <span class="s">&#39;status__name&#39;</span><span class="p">:</span> <span class="s">&quot;Exit Reason&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">group_args</span><span class="p">:</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">field</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="k">if</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">nice_names</span><span class="p">:</span>
+            <span class="n">field</span><span class="p">[</span><span class="s">&#39;nice_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nice_names</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">field</span><span class="p">[</span><span class="s">&#39;nice_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="n">header</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">attempts</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="o">*</span><span class="n">annotations</span><span class="p">):</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;groups&#39;</span><span class="p">:</span> <span class="p">[]</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">group_args</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">f</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">nice_names</span><span class="p">:</span>
+                <span class="n">f</span><span class="p">[</span><span class="s">&#39;nice_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nice_names</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">f</span><span class="p">[</span><span class="s">&#39;nice_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span>
+
+            <span class="n">f</span><span class="p">[</span><span class="s">&#39;value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+            <span class="n">row</span><span class="p">[</span><span class="s">&#39;groups&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">aggs</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;avg&quot;</span><span class="p">,</span> <span class="s">&quot;min&quot;</span><span class="p">,</span> <span class="s">&quot;max&quot;</span><span class="p">,</span> <span class="s">&quot;sum&quot;</span><span class="p">]:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">__</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                <span class="n">row</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="n">name</span><span class="p">]))</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&quot;lavaFlow/widgets/utilization_chart.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;header&#39;</span><span class="p">:</span> <span class="n">header</span><span class="p">,</span> <span class="s">&#39;rows&#39;</span><span class="p">:</span> <span class="n">rows</span><span class="p">})</span>
+
+
+<span class="k">def</span> <span class="nf">utilization_bar_size</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">start_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">group_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+    <span class="n">start_time_js</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">)</span>
+    <span class="n">end_time_js</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">end_time_js</span><span class="p">)</span>
+    <span class="n">attempts</span> <span class="o">=</span> <span class="n">get_attempts</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">,</span> <span class="n">end_time_js</span><span class="p">,</span> <span class="n">exclude_string</span><span class="p">,</span> <span class="n">filter_string</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">attempts</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s">&#39;num_processors&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">Sum</span><span class="p">(</span><span class="s">&#39;pend_time&#39;</span><span class="p">),</span> <span class="n">Sum</span><span class="p">(</span><span class="s">&#39;wall_time&#39;</span><span class="p">),</span> <span class="n">Sum</span><span class="p">(</span><span class="s">&#39;cpu_time&#39;</span><span class="p">),</span>
+                                                          <span class="n">Count</span><span class="p">(</span><span class="s">&#39;num_processors&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;num_processors&#39;</span><span class="p">):</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s">&#39;key&#39;</span><span class="p">:</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s"> Processors&quot;</span> <span class="o">%</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;num_processors&#39;</span><span class="p">],</span>
+            <span class="s">&#39;values&#39;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s">&#39;x&#39;</span><span class="p">:</span> <span class="s">&quot;Sum CPU&quot;</span><span class="p">,</span>
+                    <span class="s">&#39;y&#39;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;cpu_time__sum&#39;</span><span class="p">],</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s">&#39;x&#39;</span><span class="p">:</span> <span class="s">&quot;Sum Wall&quot;</span><span class="p">,</span>
+                    <span class="s">&#39;y&#39;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;wall_time__sum&#39;</span><span class="p">],</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s">&#39;x&#39;</span><span class="p">:</span> <span class="s">&quot;Sum Pend&quot;</span><span class="p">,</span>
+                    <span class="s">&#39;y&#39;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;pend_time__sum&#39;</span><span class="p">],</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s">&#39;x&#39;</span><span class="p">:</span> <span class="s">&quot;Total Tasks&quot;</span><span class="p">,</span>
+                    <span class="s">&#39;y&#39;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;num_processors__count&#39;</span><span class="p">],</span>
+                <span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">})</span>
+
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s">&quot;application/json&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">utilization_bar_exit</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">start_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">group_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+    <span class="n">start_time_js</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">)</span>
+    <span class="n">end_time_js</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">end_time_js</span><span class="p">)</span>
+    <span class="n">attempts</span> <span class="o">=</span> <span class="n">get_attempts</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">,</span> <span class="n">end_time_js</span><span class="p">,</span> <span class="n">exclude_string</span><span class="p">,</span> <span class="n">filter_string</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">attempts</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s">&#39;status__exited_cleanly&#39;</span><span class="p">,</span> <span class="s">&#39;status__name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">Sum</span><span class="p">(</span><span class="s">&#39;pend_time&#39;</span><span class="p">),</span> <span class="n">Sum</span><span class="p">(</span><span class="s">&#39;wall_time&#39;</span><span class="p">),</span>
+                                                                                  <span class="n">Sum</span><span class="p">(</span><span class="s">&#39;cpu_time&#39;</span><span class="p">),</span>
+                                                                                  <span class="n">Count</span><span class="p">(</span><span class="s">&#39;num_processors&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span>
+            <span class="s">&#39;num_processors&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;status__exited_cleanly&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">clean</span> <span class="o">=</span> <span class="s">&quot;Success&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">clean</span> <span class="o">=</span> <span class="s">&quot;Failed&quot;</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s">&#39;key&#39;</span><span class="p">:</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s"> (</span><span class="si">%s</span><span class="s">)&quot;</span> <span class="o">%</span> <span class="p">(</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;status__name&#39;</span><span class="p">],</span> <span class="n">clean</span>    <span class="p">),</span>
+            <span class="s">&#39;values&#39;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s">&#39;x&#39;</span><span class="p">:</span> <span class="s">&quot;Sum CPU&quot;</span><span class="p">,</span>
+                    <span class="s">&#39;y&#39;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;cpu_time__sum&#39;</span><span class="p">],</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s">&#39;x&#39;</span><span class="p">:</span> <span class="s">&quot;Sum Wall&quot;</span><span class="p">,</span>
+                    <span class="s">&#39;y&#39;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;wall_time__sum&#39;</span><span class="p">],</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s">&#39;x&#39;</span><span class="p">:</span> <span class="s">&quot;Sum Pend&quot;</span><span class="p">,</span>
+                    <span class="s">&#39;y&#39;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;pend_time__sum&#39;</span><span class="p">],</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s">&#39;x&#39;</span><span class="p">:</span> <span class="s">&quot;Total Tasks&quot;</span><span class="p">,</span>
+                    <span class="s">&#39;y&#39;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;num_processors__count&#39;</span><span class="p">],</span>
+                <span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">})</span>
+
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s">&quot;application/json&quot;</span><span class="p">)</span>
+
+
+<span class="c"># @cache_page(60 * 60 * 2)</span>
+<span class="k">def</span> <span class="nf">utilization_data</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">start_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_time_js</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">group_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+    <span class="n">attempts</span> <span class="o">=</span> <span class="n">get_attempts</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">exclude_string</span><span class="p">,</span> <span class="n">filter_string</span><span class="p">)</span>
+    <span class="n">group_args</span> <span class="o">=</span> <span class="n">group_string_to_group_args</span><span class="p">(</span><span class="n">group_string</span><span class="p">)</span>
+    <span class="n">attempts</span> <span class="o">=</span> <span class="n">attempts</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="o">*</span><span class="n">group_args</span><span class="p">)</span>
+
+    <span class="n">start_time_js</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">)</span>
+    <span class="n">end_time_js</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">end_time_js</span><span class="p">)</span>
+
+    <span class="n">start_time_ep</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start_time_js</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">end_time_ep</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">end_time_js</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+
+    <span class="n">slice_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">end_time_ep</span> <span class="o">-</span> <span class="n">start_time_ep</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2000</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">slice_size</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">slice_size</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">serieses</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">bucket_time_ep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_time_ep</span><span class="p">,</span> <span class="n">end_time_ep</span><span class="p">,</span> <span class="n">slice_size</span><span class="p">):</span>
+        <span class="n">bucket_time_js</span> <span class="o">=</span> <span class="n">bucket_time_ep</span> <span class="o">*</span> <span class="mi">1000</span>
+        <span class="n">times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bucket_time_js</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;pend&#39;</span><span class="p">,</span> <span class="s">&#39;run&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="s">&quot;pend&quot;</span><span class="p">:</span>
+                <span class="n">entries</span> <span class="o">=</span> <span class="n">attempts</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">start_time__gt</span><span class="o">=</span><span class="n">bucket_time_ep</span><span class="p">,</span> <span class="n">job__submit_time__lte</span><span class="o">=</span><span class="n">bucket_time_ep</span><span class="p">)</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Pending&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">entries</span> <span class="o">=</span> <span class="n">attempts</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">start_time__lte</span><span class="o">=</span><span class="n">bucket_time_ep</span><span class="p">,</span> <span class="n">end_time__gt</span><span class="o">=</span><span class="n">bucket_time_ep</span><span class="p">)</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Running&quot;</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">group_args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">entries</span> <span class="o">=</span> <span class="n">entries</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">Sum</span><span class="p">(</span><span class="s">&#39;num_processors&#39;</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+                    <span class="n">series_name</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+                    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">group_args</span><span class="p">:</span>
+                        <span class="n">series_name</span> <span class="o">=</span> <span class="s">u&quot;</span><span class="si">%s%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">series_name</span><span class="p">,</span> <span class="n">entry</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+                        <span class="n">series_name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">series_name</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s">&#39;num_processors__sum&#39;</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="bp">None</span>
+
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">series_name</span> <span class="ow">in</span> <span class="n">serieses</span><span class="p">:</span>
+                        <span class="n">serieses</span><span class="p">[</span><span class="n">series_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                            <span class="s">&#39;key&#39;</span><span class="p">:</span> <span class="n">series_name</span><span class="p">,</span>
+                            <span class="s">&#39;values&#39;</span><span class="p">:</span> <span class="p">{}</span>
+                        <span class="p">}</span>
+                    <span class="n">serieses</span><span class="p">[</span><span class="n">series_name</span><span class="p">][</span><span class="s">&#39;values&#39;</span><span class="p">][</span><span class="n">bucket_time_js</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s">&#39;x&#39;</span><span class="p">:</span> <span class="n">bucket_time_js</span><span class="p">,</span>
+                        <span class="s">&#39;y&#39;</span><span class="p">:</span> <span class="n">value</span><span class="p">,</span>
+                    <span class="p">}</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">series_name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">name</span>
+                <span class="n">entries</span> <span class="o">=</span> <span class="n">entries</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Sum</span><span class="p">(</span><span class="s">&#39;num_processors&#39;</span><span class="p">))</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">series_name</span> <span class="ow">in</span> <span class="n">serieses</span><span class="p">:</span>
+                    <span class="n">serieses</span><span class="p">[</span><span class="n">series_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s">&#39;key&#39;</span><span class="p">:</span> <span class="n">series_name</span><span class="p">,</span>
+                        <span class="s">&#39;values&#39;</span><span class="p">:</span> <span class="p">{}</span>
+                    <span class="p">}</span>
+                <span class="n">serieses</span><span class="p">[</span><span class="n">series_name</span><span class="p">][</span><span class="s">&#39;values&#39;</span><span class="p">][</span><span class="n">bucket_time_js</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s">&#39;x&#39;</span><span class="p">:</span> <span class="n">bucket_time_js</span><span class="p">,</span>
+                    <span class="s">&#39;y&#39;</span><span class="p">:</span> <span class="n">entries</span><span class="p">[</span><span class="s">&#39;num_processors__sum&#39;</span><span class="p">]</span>
+                <span class="p">}</span>
+    <span class="k">for</span> <span class="n">series</span> <span class="ow">in</span> <span class="n">serieses</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">time</span> <span class="ow">in</span> <span class="n">times</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">series</span><span class="p">[</span><span class="s">&#39;values&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">time</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+                <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="n">time</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                    <span class="s">&#39;x&#39;</span><span class="p">:</span> <span class="n">time</span><span class="p">,</span>
+                    <span class="s">&#39;y&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                <span class="p">})</span>
+        <span class="n">series</span><span class="p">[</span><span class="s">&#39;values&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">serieses</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s">&quot;application/json&quot;</span><span class="p">)</span>
+
+
+<span class="nd">@cache_page</span><span class="p">(</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">utilization_view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">start_time_js</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">end_time_js</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;none&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;none&quot;</span><span class="p">,</span>
+                     <span class="n">group_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+    <span class="c">#</span>
+    <span class="k">if</span> <span class="n">start_time_js</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">start_time_js</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">if</span> <span class="n">end_time_js</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">end_time_js</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;filters&#39;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">filter_string_to_params</span><span class="p">(</span><span class="n">filter_string</span><span class="p">)),</span>
+        <span class="s">&#39;excludes&#39;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">filter_string_to_params</span><span class="p">(</span><span class="n">exclude_string</span><span class="p">)),</span>
+        <span class="s">&#39;report_range_url&#39;</span><span class="p">:</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&#39;lf_get_report_range&#39;</span><span class="p">,</span>
+                                    <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;filter_string&#39;</span><span class="p">:</span> <span class="n">filter_string</span><span class="p">,</span> <span class="s">&#39;exclude_string&#39;</span><span class="p">:</span> <span class="n">exclude_string</span><span class="p">}),</span>
+        <span class="s">&#39;build_filter_url&#39;</span><span class="p">:</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&#39;lf_build_filter&#39;</span><span class="p">),</span>
+        <span class="s">&#39;start_time&#39;</span><span class="p">:</span> <span class="n">start_time_js</span><span class="p">,</span>
+        <span class="s">&#39;end_time&#39;</span><span class="p">:</span> <span class="n">end_time_js</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&quot;lavaFlow/utilization_view.html&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">util_total_attempts</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">start_time_js</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">end_time_js</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span>
+                        <span class="n">group_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+    <span class="n">start_time_js</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">)</span>
+    <span class="n">end_time_js</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">end_time_js</span><span class="p">)</span>
+    <span class="n">attempts</span> <span class="o">=</span> <span class="n">get_attempts</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">,</span> <span class="n">end_time_js</span><span class="p">,</span> <span class="n">exclude_string</span><span class="p">,</span> <span class="n">filter_string</span><span class="p">)</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">attempts</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;count&#39;</span><span class="p">:</span> <span class="n">count</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s">&quot;application/json&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">util_report_range</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">exclude_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">filter_string</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+    <span class="n">ONE_DAY</span> <span class="o">=</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span>  <span class="c"># 1 day in seconds</span>
+    <span class="n">filter_args</span> <span class="o">=</span> <span class="n">filter_string_to_params</span><span class="p">(</span><span class="n">filter_string</span><span class="p">)</span>
+    <span class="n">exclude_args</span> <span class="o">=</span> <span class="n">filter_string_to_params</span><span class="p">(</span><span class="n">exclude_string</span><span class="p">)</span>
+    <span class="n">attempts</span> <span class="o">=</span> <span class="n">Attempt</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">filter_args</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">attempts</span> <span class="o">=</span> <span class="n">attempts</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">val</span><span class="p">})</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">exclude_args</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">attempts</span> <span class="o">=</span> <span class="n">attempts</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">val</span><span class="p">})</span>
+
+    <span class="n">count</span> <span class="o">=</span> <span class="n">attempts</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+    <span class="n">end_time</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">suggested_end_time</span> <span class="o">=</span> <span class="n">end_time</span>
+    <span class="n">suggested_start_time</span> <span class="o">=</span> <span class="n">end_time</span>
+
+    <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">attempts</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;job__submit_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">submit_time</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">attempts</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">end_time</span>
+        <span class="n">suggested_end_time</span> <span class="o">=</span> <span class="n">end_time</span>
+        <span class="n">suggested_start_time</span> <span class="o">=</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">ONE_DAY</span>
+        <span class="k">if</span> <span class="n">suggested_start_time</span> <span class="o">&lt;</span> <span class="n">start_time</span><span class="p">:</span>
+            <span class="n">suggested_start_time</span> <span class="o">=</span> <span class="n">start_time</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;count&#39;</span><span class="p">:</span> <span class="n">count</span><span class="p">,</span>
+        <span class="s">&#39;end_time&#39;</span><span class="p">:</span> <span class="n">end_time</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="s">&#39;start_time&#39;</span><span class="p">:</span> <span class="n">start_time</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="s">&#39;suggested_end_time&#39;</span><span class="p">:</span> <span class="n">suggested_end_time</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="s">&#39;suggested_start_time&#39;</span><span class="p">:</span> <span class="n">suggested_start_time</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s">&quot;application/json&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">group_string_to_group_args</span><span class="p">(</span><span class="n">group_string</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">group_string</span> <span class="o">==</span> <span class="s">&quot;none&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="n">group_args</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">group_string</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">group_args</span> <span class="o">=</span> <span class="n">group_string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">group_args</span>
+
+
+<span class="k">def</span> <span class="nf">filter_string_to_params</span><span class="p">(</span><span class="n">filter_string</span><span class="p">):</span>
+    <span class="c"># Build the additional filters</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filter_string</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">filter_string</span> <span class="o">==</span> <span class="s">&quot;none&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{}</span>
+    <span class="n">filter_args</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filter_string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">):</span>
+        <span class="p">(</span><span class="nb">filter</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s">&quot;.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">filter</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&quot;__in&quot;</span><span class="p">):</span>  <span class="c"># multi value...</span>
+            <span class="k">if</span> <span class="nb">filter</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">filter_args</span><span class="p">:</span>
+                <span class="n">filter_args</span><span class="p">[</span><span class="nb">filter</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">filter_args</span><span class="p">[</span><span class="nb">filter</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">filter_args</span><span class="p">[</span><span class="nb">filter</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">return</span> <span class="n">filter_args</span>
+
+
+<span class="c"># data.filters{name:[values]</span>
+
+<span class="nd">@csrf_exempt</span>
+<span class="k">def</span> <span class="nf">build_filter</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+
+    <span class="n">view</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;view&#39;</span><span class="p">]</span>
+    <span class="n">start_time_js</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;start_time_js&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">start_time_js</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">start_time_js</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">end_time_js</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;end_time_js&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">end_time_js</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">end_time_js</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;filters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;__in&#39;</span><span class="p">):</span>  <span class="c"># list context</span>
+            <span class="n">values</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">value</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+    <span class="n">filter_string</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filter_string</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">filter_string</span> <span class="o">=</span> <span class="s">&quot;none&quot;</span>
+
+    <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;excludes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;__in&#39;</span><span class="p">):</span>  <span class="c"># list context</span>
+            <span class="n">values</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">value</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+    <span class="n">exclude_string</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">exclude_string</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">exclude_string</span> <span class="o">=</span> <span class="s">&quot;none&quot;</span>
+
+    <span class="n">group_string</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;groups&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">group_string</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">group_string</span> <span class="o">=</span> <span class="s">&quot;none&quot;</span>
+
+    <span class="k">if</span> <span class="n">view</span> <span class="o">==</span> <span class="s">&#39;lf_get_report_range&#39;</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;exclude_string&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">exclude_string</span><span class="p">),</span> <span class="s">&#39;filter_string&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">filter_string</span><span class="p">)})</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;start_time_js&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">start_time_js</span><span class="p">),</span> <span class="s">&#39;end_time_js&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">end_time_js</span><span class="p">),</span>
+                                    <span class="s">&#39;exclude_string&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">exclude_string</span><span class="p">),</span> <span class="s">&#39;filter_string&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">filter_string</span><span class="p">),</span>
+                                    <span class="s">&#39;group_string&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">group_string</span><span class="p">)})</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">build_absolute_uri</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s">&#39;url&#39;</span><span class="p">:</span> <span class="n">url</span><span class="p">}),</span> <span class="n">content_type</span><span class="o">=</span><span class="s">&quot;application/json&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">JobView</span><span class="p">(</span><span class="n">ListView</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Job</span>
+    <span class="n">paginate_by</span> <span class="o">=</span> <span class="mi">20</span>
+
+    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;jobId&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">id</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="k">if</span> <span class="nb">id</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">job_id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2014, David Irvine.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

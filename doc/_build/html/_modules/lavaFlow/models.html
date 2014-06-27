@@ -1,0 +1,1110 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>lavaFlow.models &mdash; LavaFlow 1.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="LavaFlow 1.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          LavaFlow</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Web Server Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../import.html">Openlava Import</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lavaFlow.html">API Doc</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for lavaFlow.models</h1><div class="highlight"><pre>
+<span class="c"># Copyright 2011 David Irvine</span>
+<span class="c"># </span>
+<span class="c"># This file is part of LavaFlow</span>
+<span class="c">#</span>
+<span class="c"># LavaFlow is free software: you can redistribute it and/or modify </span>
+<span class="c"># it under the terms of the GNU General Public License as published by </span>
+<span class="c"># the Free Software Foundation, either version 3 of the License, or (at </span>
+<span class="c"># your option) any later version.</span>
+<span class="c">#</span>
+<span class="c"># LavaFlow is distributed in the hope that it will be useful, but </span>
+<span class="c"># WITHOUT ANY WARRANTY; without even the implied warranty of </span>
+<span class="c"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU </span>
+<span class="c"># General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c"># You should have received a copy of the GNU General Public License </span>
+<span class="c"># along with LavaFlow.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c">#</span>
+<span class="c"># $Rev: 158 $:   </span>
+<span class="c"># $Author: irvined $: </span>
+<span class="c"># $Date: 2012-10-31 23:42:17 +0100 (Wed, 31 Oct 2012) $:  </span>
+<span class="c">#</span>
+<span class="kn">import</span> <span class="nn">array</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Avg</span><span class="p">,</span> <span class="n">Count</span><span class="p">,</span> <span class="n">Sum</span><span class="p">,</span> <span class="n">Min</span><span class="p">,</span> <span class="n">Max</span>
+<span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">django.core.cache</span> <span class="kn">import</span> <span class="n">cache</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ImportKey"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.ImportKey">[docs]</a><span class="k">class</span> <span class="nc">ImportKey</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Any client that attempts to import data must present a valid key. Keys are managed by the admin.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">client_key</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+</div>
+<span class="k">class</span> <span class="nc">OpenLavaState</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">friendly_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_status_list</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">mask</span><span class="p">):</span>
+        <span class="n">statuses</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">states</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">key</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">)</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
+                <span class="n">statuses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">statuses</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">abstract</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">index_together</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s">&#39;code&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">,),</span>
+        <span class="p">]</span>
+
+
+
+<div class="viewcode-block" id="OpenLavaSubmitOption"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.OpenLavaSubmitOption">[docs]</a><span class="k">class</span> <span class="nc">OpenLavaSubmitOption</span><span class="p">(</span><span class="n">OpenLavaState</span><span class="p">):</span>
+        <span class="n">states</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="mh">0x01</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span><span class="mh">0x01</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_JOB_NAME&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Submitted with a job name&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x02</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x02</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_QUEUE&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Job submitted with queue&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x04</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x04</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_HOST&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;SUB_HOST&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x08</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x08</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_IN_FILE&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Job Submitted with input file&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x10</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x10</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_OUT_FILE&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Job submitted with output file&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x20</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x20</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_ERR_FILE&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Job submitted with error file&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x40</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x40</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_EXCLUSIVE&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Job submitted to run exclusively&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x80</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x80</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_NOTIFY_END&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;SUB_NOTIFY_END&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x100</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x100</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_NOTIFY_BEGIN&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;SUB_NOTIFY_BEGIN&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x200</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x200</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_USER_GROUP&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;SUB_USER_GROUP&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x400</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x400</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_CHKPNT_PERIOD&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Job submitted with checkpoint period&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x800</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x800</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_CHKPNT_DIR&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Job submitted with checkpoint directory&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x1000</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x1000</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_RESTART_FORCE&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;SUB_RESTART_FORCE&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x2000</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x2000</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_RESTART&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;SUB_RESTART&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x4000</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x4000</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_RERUNNABLE&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Job submitted as rerunnable&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x8000</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x8000</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_WINDOW_SIG&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;SUB_WINDOW_SIG&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x10000</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x10000</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_HOST_SPEC&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Job submitted with host spec&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x20000</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x20000</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_DEPEND_COND&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Job submitted with depend conditions&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x40000</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x40000</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_RES_REQ&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Job submitted with resource request&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x80000</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x80000</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_OTHER_FILES&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;SUB_OTHER_FILES&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x100000</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x100000</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_PRE_EXEC&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Job submitted with pre exec script&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x200000</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x200000</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_LOGIN_SHELL&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Job submitted with login shell&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x400000</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x400000</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_MAIL_USER&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Job submitted to email user&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x800000</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x800000</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_MODIFY&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;SUB_MODIFY&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x1000000</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x1000000</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_MODIFY_ONCE&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;SUB_MODIFY_ONCE&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x2000000</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x2000000</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_PROJECT_NAME&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Job submitted to project&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x4000000</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x4000000</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_INTERACTIVE&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Job submitted as interactive&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x8000000</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x8000000</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_PTY&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;SUB_PTY&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="mh">0x10000000</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="mh">0x10000000</span><span class="p">,</span>
+            <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;SUB_PTY_SHELL&#39;</span><span class="p">,</span>
+            <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;SUB_PTY_SHELL&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+
+</div>
+<div class="viewcode-block" id="OpenLavaTransferFileOption"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.OpenLavaTransferFileOption">[docs]</a><span class="k">class</span> <span class="nc">OpenLavaTransferFileOption</span><span class="p">(</span><span class="n">OpenLavaState</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+</div>
+<div class="viewcode-block" id="JobStatus"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.JobStatus">[docs]</a><span class="k">class</span> <span class="nc">JobStatus</span><span class="p">(</span><span class="n">OpenLavaState</span><span class="p">):</span>
+    <span class="n">exited_cleanly</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">()</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">index_together</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s">&#39;code&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;exited_cleanly&#39;</span><span class="p">)</span>
+        <span class="p">]</span>
+
+</div>
+<div class="viewcode-block" id="Cluster"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Cluster">[docs]</a><span class="k">class</span> <span class="nc">Cluster</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">db_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">help_text</span><span class="o">=</span><span class="s">&#39;The name of the cluster&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;start_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">&#39;end_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">&#39;exclude_string&#39;</span><span class="p">:</span> <span class="s">&quot;none&quot;</span><span class="p">,</span>
+        <span class="s">&#39;filter_string&#39;</span><span class="p">:</span> <span class="s">&quot;cluster__id__in.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="s">&#39;group_string&#39;</span><span class="p">:</span> <span class="s">&quot;none&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&quot;lf_utilization_view&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">u&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">total_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">attempt__cluster</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Task</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">attempt__cluster</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">total_attempts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;start_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">last_failed_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">status__exited_cleanly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">average_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_cluster_average_pend_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+        <span class="n">pend</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pend</span><span class="p">:</span>
+            <span class="n">pend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Avg</span><span class="p">(</span><span class="s">&#39;pend_time&#39;</span><span class="p">))[</span><span class="s">&#39;pend_time__avg&#39;</span><span class="p">]</span>
+            <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pend</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pend</span>
+
+    <span class="k">def</span> <span class="nf">average_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">average_pend_time_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">()))</span> <span class="o">*</span> <span class="mi">100</span>
+
+    <span class="k">def</span> <span class="nf">average_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_cluster_average_wall_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+        <span class="n">wall</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">wall</span><span class="p">:</span>
+            <span class="n">wall</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Avg</span><span class="p">(</span><span class="s">&#39;wall_time&#39;</span><span class="p">))[</span><span class="s">&#39;wall_time__avg&#39;</span><span class="p">]</span>
+            <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wall</span>
+
+    <span class="k">def</span> <span class="nf">average_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">())</span>
+
+</div>
+<div class="viewcode-block" id="ClusterLog"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.ClusterLog">[docs]</a><span class="k">class</span> <span class="nc">ClusterLog</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">cluster</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Cluster</span><span class="p">)</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="Project"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Project">[docs]</a><span class="k">class</span> <span class="nc">Project</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;start_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">&#39;end_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">&#39;exclude_string&#39;</span><span class="p">:</span> <span class="s">&quot;none&quot;</span><span class="p">,</span>
+        <span class="s">&#39;filter_string&#39;</span><span class="p">:</span> <span class="s">&quot;project__id__in.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="s">&#39;group_string&#39;</span><span class="p">:</span> <span class="s">&quot;none&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">u&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">total_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">attempt__projects</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Task</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">attempt__projects</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">total_attempts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;start_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">last_failed_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">status__exited_cleanly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">average_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_project_average_pend_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+        <span class="n">pend</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pend</span><span class="p">:</span>
+            <span class="n">pend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Avg</span><span class="p">(</span><span class="s">&#39;pend_time&#39;</span><span class="p">))[</span><span class="s">&#39;pend_time__avg&#39;</span><span class="p">]</span>
+            <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pend</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pend</span>
+
+    <span class="k">def</span> <span class="nf">average_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">average_pend_time_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">()))</span> <span class="o">*</span> <span class="mi">100</span>
+
+    <span class="k">def</span> <span class="nf">average_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_project_average_wall_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+        <span class="n">wall</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">wall</span><span class="p">:</span>
+            <span class="n">wall</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Avg</span><span class="p">(</span><span class="s">&#39;wall_time&#39;</span><span class="p">))[</span><span class="s">&#39;wall_time__avg&#39;</span><span class="p">]</span>
+            <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wall</span>
+
+    <span class="k">def</span> <span class="nf">average_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">())</span>
+
+</div>
+<div class="viewcode-block" id="Host"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Host">[docs]</a><span class="k">class</span> <span class="nc">Host</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">u&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">total_submitted_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">submit_host</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">total_successful_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">status__exited_cleanly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">total_failed_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">status__exited_cleanly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">failure_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total_failed_tasks</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total_tasks</span><span class="p">())</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+
+    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;start_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;start_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">&#39;end_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">&#39;exclude_string&#39;</span><span class="p">:</span> <span class="s">&quot;none&quot;</span><span class="p">,</span>
+        <span class="s">&#39;filter_string&#39;</span><span class="p">:</span> <span class="s">&quot;execution_hosts__id__in.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="s">&#39;group_string&#39;</span><span class="p">:</span> <span class="s">&quot;none&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&quot;lf_utilization_view&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="HostLog"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.HostLog">[docs]</a><span class="k">class</span> <span class="nc">HostLog</span><span class="p">(</span><span class="n">ClusterLog</span><span class="p">):</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Host</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="Queue"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Queue">[docs]</a><span class="k">class</span> <span class="nc">Queue</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">cluster</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Cluster</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;start_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">&#39;end_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">&#39;exclude_string&#39;</span><span class="p">:</span> <span class="s">&quot;none&quot;</span><span class="p">,</span>
+        <span class="s">&#39;filter_string&#39;</span><span class="p">:</span> <span class="s">&quot;queue__id__in.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="s">&#39;group_string&#39;</span><span class="p">:</span> <span class="s">&quot;none&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">u&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">total_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">attempt__queue</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Task</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">attempt__queue</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">total_attempts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;start_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">last_failed_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">status__exited_cleanly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">average_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_queue_average_pend_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+        <span class="n">pend</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pend</span><span class="p">:</span>
+            <span class="n">pend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Avg</span><span class="p">(</span><span class="s">&#39;pend_time&#39;</span><span class="p">))[</span><span class="s">&#39;pend_time__avg&#39;</span><span class="p">]</span>
+            <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pend</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pend</span>
+
+    <span class="k">def</span> <span class="nf">average_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">average_pend_time_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">()))</span> <span class="o">*</span> <span class="mi">100</span>
+
+    <span class="k">def</span> <span class="nf">average_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_queue_average_wall_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+        <span class="n">wall</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">wall</span><span class="p">:</span>
+            <span class="n">wall</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Avg</span><span class="p">(</span><span class="s">&#39;wall_time&#39;</span><span class="p">))[</span><span class="s">&#39;wall_time__avg&#39;</span><span class="p">]</span>
+            <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wall</span>
+
+    <span class="k">def</span> <span class="nf">average_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">())</span>
+
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">unique_together</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;cluster&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">)</span>
+        <span class="n">index_together</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s">&#39;cluster&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">),</span>
+        <span class="p">]</span>
+
+</div>
+<div class="viewcode-block" id="QueueLog"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.QueueLog">[docs]</a><span class="k">class</span> <span class="nc">QueueLog</span><span class="p">(</span><span class="n">ClusterLog</span><span class="p">):</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Queue</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="User"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.User">[docs]</a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">u&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">total_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_set</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_set</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">total_attempts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;start_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">last_failed_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">status__exited_cleanly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">average_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_user_average_pend_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+        <span class="n">pend</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pend</span><span class="p">:</span>
+            <span class="n">pend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Avg</span><span class="p">(</span><span class="s">&#39;pend_time&#39;</span><span class="p">))[</span><span class="s">&#39;pend_time__avg&#39;</span><span class="p">]</span>
+            <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pend</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pend</span>
+
+    <span class="k">def</span> <span class="nf">average_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">average_pend_time_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">()))</span> <span class="o">*</span> <span class="mi">100</span>
+
+    <span class="k">def</span> <span class="nf">average_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_user_average_wall_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+        <span class="n">wall</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">wall</span><span class="p">:</span>
+            <span class="n">wall</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Avg</span><span class="p">(</span><span class="s">&#39;wall_time&#39;</span><span class="p">))[</span><span class="s">&#39;wall_time__avg&#39;</span><span class="p">]</span>
+            <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wall</span>
+
+    <span class="k">def</span> <span class="nf">average_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;start_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">&#39;end_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">&#39;exclude_string&#39;</span><span class="p">:</span> <span class="s">&quot;none&quot;</span><span class="p">,</span>
+        <span class="s">&#39;filter_string&#39;</span><span class="p">:</span> <span class="s">&quot;user__id__in.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="s">&#39;group_string&#39;</span><span class="p">:</span> <span class="s">&quot;none&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&quot;lf_utilization_view&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="UserLog"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.UserLog">[docs]</a><span class="k">class</span> <span class="nc">UserLog</span><span class="p">(</span><span class="n">ClusterLog</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="Job"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Job">[docs]</a><span class="k">class</span> <span class="nc">Job</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">cluster</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Cluster</span><span class="p">)</span>
+    <span class="n">job_id</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
+    <span class="n">submit_host</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Host</span><span class="p">)</span>
+    <span class="n">submit_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">util_chart_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">start_time_js</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_time</span> <span class="o">-</span> <span class="mi">60</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+        <span class="n">end_time_js</span> <span class="o">=</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_time</span><span class="p">()</span> <span class="o">+</span> <span class="mi">60</span> <span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+        <span class="n">filter_string</span> <span class="o">=</span> <span class="s">&quot;job.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&quot;lf_util_chart_view&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;start_time_js&#39;</span><span class="p">:</span> <span class="n">start_time_js</span><span class="p">,</span> <span class="s">&#39;end_time_js&#39;</span><span class="p">:</span> <span class="n">end_time_js</span><span class="p">,</span>
+                                                     <span class="s">&#39;filter_string&#39;</span><span class="p">:</span> <span class="n">filter_string</span><span class="p">,</span> <span class="s">&#39;exclude_string&#39;</span><span class="p">:</span> <span class="s">&quot;none&quot;</span><span class="p">,</span>
+                                                     <span class="s">&#39;group_string&#39;</span><span class="p">:</span> <span class="s">&quot;none&quot;</span><span class="p">})</span>
+
+    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&#39;lf_job_detail&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">u&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span>
+
+    <span class="k">def</span> <span class="nf">submit_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_time</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">submit_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_time</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">end_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Max</span><span class="p">(</span><span class="s">&#39;end_time&#39;</span><span class="p">))[</span><span class="s">&#39;end_time__max&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">date</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">date</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">date</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">date</span>
+
+    <span class="k">def</span> <span class="nf">end_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end_time</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">short_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">wall_time__lte</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">exited_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">status__exited_cleanly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">attempt_filter_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;job.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+
+    <span class="k">def</span> <span class="nf">total_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Sum</span><span class="p">(</span><span class="s">&#39;pend_time&#39;</span><span class="p">))[</span><span class="s">&#39;pend_time__sum&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">total_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">total_pend_time</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">total_cpu_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Sum</span><span class="p">(</span><span class="s">&#39;cpu_time&#39;</span><span class="p">))[</span><span class="s">&#39;cpu_time__sum&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">total_cpu_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">total_cpu_time</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">total_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Sum</span><span class="p">(</span><span class="s">&#39;wall_time&#39;</span><span class="p">))[</span><span class="s">&#39;wall_time__sum&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">total_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">total_wall_time</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;start_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">unique_together</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;cluster&#39;</span><span class="p">,</span> <span class="s">&#39;job_id&#39;</span><span class="p">,</span> <span class="s">&#39;submit_time&#39;</span><span class="p">)</span>
+
+        <span class="n">index_together</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="s">&#39;cluster&#39;</span><span class="p">,</span> <span class="s">&#39;user&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s">&#39;cluster&#39;</span><span class="p">,</span> <span class="s">&#39;job_id&#39;</span><span class="p">,</span> <span class="s">&#39;submit_time&#39;</span><span class="p">,</span> <span class="p">],</span>
+            <span class="p">[</span><span class="s">&#39;cluster&#39;</span><span class="p">,</span> <span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="s">&#39;submit_time&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s">&#39;submit_time&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s">&#39;cluster&#39;</span><span class="p">,</span> <span class="s">&#39;submit_time&#39;</span><span class="p">]</span>
+        <span class="p">]</span>
+
+</div>
+<div class="viewcode-block" id="JobLog"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.JobLog">[docs]</a><span class="k">class</span> <span class="nc">JobLog</span><span class="p">(</span><span class="n">ClusterLog</span><span class="p">):</span>
+    <span class="n">job</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Job</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="OpenLavaTransferFile"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.OpenLavaTransferFile">[docs]</a><span class="k">class</span> <span class="nc">OpenLavaTransferFile</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">submission_file_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">4096</span><span class="p">)</span>
+    <span class="n">execution_file_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">4096</span><span class="p">)</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">OpenLavaTransferFileOption</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="OpenLavaResourceLimit"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.OpenLavaResourceLimit">[docs]</a><span class="k">class</span> <span class="nc">OpenLavaResourceLimit</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">cpu</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">file_size</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">stack</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">core</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">rss</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">run</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">process</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">swap</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">nofile</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">open_files</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="JobSubmitOpenLava"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.JobSubmitOpenLava">[docs]</a><span class="k">class</span> <span class="nc">JobSubmitOpenLava</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">job</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">Job</span><span class="p">)</span>
+    <span class="n">user_id</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">user_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">OpenLavaSubmitOption</span><span class="p">)</span>
+    <span class="n">num_processors</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">begin_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">begin_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">begin_time</span><span class="p">)</span>
+
+    <span class="n">termination_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">termination_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">termination_time</span><span class="p">)</span>
+
+    <span class="n">signal_value</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">checkpoint_period</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">checkpoint_period_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">checkpoint_period</span><span class="p">)</span>
+
+    <span class="n">restart_pid</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">resource_limits</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">OpenLavaResourceLimit</span><span class="p">)</span>
+    <span class="n">host_specification</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
+    <span class="n">host_factor</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">umask</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Queue</span><span class="p">)</span>
+    <span class="n">resource_request</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">submit_host</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Host</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&quot;submitted_openlava_jobs&quot;</span><span class="p">)</span>
+    <span class="n">cwd</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+    <span class="n">checkpoint_dir</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+    <span class="n">input_file</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+    <span class="n">output_file</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+    <span class="n">error_file</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+    <span class="n">input_file_spool</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+    <span class="n">command_spool</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+    <span class="n">job_spool_dir</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">4096</span><span class="p">)</span>
+    <span class="n">submit_home_dir</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">265</span><span class="p">)</span>
+    <span class="n">job_file</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">265</span><span class="p">)</span>
+    <span class="n">asked_hosts</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Host</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&quot;requested_by_openlava_jobs&quot;</span><span class="p">)</span>
+    <span class="n">dependency_condition</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">4096</span><span class="p">)</span>
+    <span class="n">job_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span>
+    <span class="n">command</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span>
+    <span class="n">num_transfer_files</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">transfer_files</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">OpenLavaTransferFile</span><span class="p">)</span>
+    <span class="n">pre_execution_command</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">email_user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span>
+    <span class="n">project</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Project</span><span class="p">)</span>
+    <span class="n">nios_port</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">max_num_processors</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">schedule_host_type</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>
+    <span class="n">login_shell</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>
+    <span class="n">user_priority</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="Task"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Task">[docs]</a><span class="k">class</span> <span class="nc">Task</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">cluster</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Cluster</span><span class="p">)</span>
+    <span class="n">job</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Job</span><span class="p">)</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
+    <span class="n">task_id</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&#39;lf_task_detail&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">u&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_id</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_id</span>
+
+    <span class="k">def</span> <span class="nf">short_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">wall_time__lte</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">exited_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">status__exited_cleanly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">index_together</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="s">&#39;cluster&#39;</span><span class="p">,</span> <span class="s">&#39;job&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s">&#39;cluster&#39;</span><span class="p">,</span> <span class="s">&#39;user&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s">&#39;user&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s">&#39;task_id&#39;</span><span class="p">],</span>
+        <span class="p">]</span>
+
+</div>
+<div class="viewcode-block" id="TaskLog"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.TaskLog">[docs]</a><span class="k">class</span> <span class="nc">TaskLog</span><span class="p">(</span><span class="n">JobLog</span><span class="p">):</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Task</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="Attempt"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.Attempt">[docs]</a><span class="k">class</span> <span class="nc">Attempt</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">cluster</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Cluster</span><span class="p">)</span>
+    <span class="n">job</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Job</span><span class="p">)</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Task</span><span class="p">)</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
+    <span class="n">num_processors</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">projects</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Project</span><span class="p">)</span>
+    <span class="n">execution_hosts</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Host</span><span class="p">)</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">start_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span>
+
+    <span class="n">end_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">end_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end_time</span><span class="p">)</span>
+
+    <span class="n">cpu_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">cpu_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cpu_time</span><span class="p">)</span>
+
+    <span class="n">wall_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wall_time</span><span class="p">)</span>
+
+    <span class="n">pend_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pend_time</span><span class="p">)</span>
+
+    <span class="n">queue</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Queue</span><span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">JobStatus</span><span class="p">)</span>
+    <span class="n">command</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&#39;lf_attempt_detail&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">get_attempt_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">counter</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;start_time&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">attempt</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">counter</span>
+            <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">get_execution_host_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">hosts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">execution_hosts</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s">&#39;pk&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">Count</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">)):</span>
+            <span class="n">host</span> <span class="o">=</span> <span class="n">Host</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">h</span><span class="p">[</span><span class="s">&#39;pk&#39;</span><span class="p">])</span>
+            <span class="n">hosts</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s">&#39;host&#39;</span><span class="p">:</span> <span class="n">host</span><span class="p">,</span> <span class="s">&#39;count&#39;</span><span class="p">:</span> <span class="n">h</span><span class="p">[</span><span class="s">&#39;name__count&#39;</span><span class="p">]})</span>
+        <span class="k">return</span> <span class="n">hosts</span>
+
+    <span class="k">def</span> <span class="nf">get_contending_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Attempt</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">end_time__gte</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span> <span class="n">start_time__lte</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">end_time</span><span class="p">,</span>
+                                      <span class="n">execution_hosts__in</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">execution_hosts</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">cluster_avg_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Attempt</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">num_processors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_processors</span><span class="p">,</span> <span class="n">cluster</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster</span><span class="p">)</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Avg</span><span class="p">(</span><span class="s">&#39;pend_time&#39;</span><span class="p">))[</span>
+            <span class="s">&#39;pend_time__avg&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">cluster_avg_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_avg_pend_time</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">queue_avg_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Attempt</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">num_processors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_processors</span><span class="p">,</span> <span class="n">queue</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="p">,</span> <span class="n">cluster</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster</span><span class="p">)</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span>
+            <span class="n">Avg</span><span class="p">(</span><span class="s">&#39;pend_time&#39;</span><span class="p">))[</span><span class="s">&#39;pend_time__avg&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">queue_avg_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_avg_pend_time</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">project_avg_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Attempt</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">num_processors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_processors</span><span class="p">,</span> <span class="n">project__in</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span>
+                              <span class="n">cluster</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster</span><span class="p">)</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Avg</span><span class="p">(</span><span class="s">&#39;pend_time&#39;</span><span class="p">))[</span><span class="s">&#39;pend_time__avg&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">project_avg_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_avg_pend_time</span><span class="p">)</span>
+
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">unique_together</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;cluster&#39;</span><span class="p">,</span> <span class="s">&#39;job&#39;</span><span class="p">,</span> <span class="s">&#39;task&#39;</span><span class="p">,</span> <span class="s">&#39;start_time&#39;</span><span class="p">)</span>
+        <span class="n">index_together</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="s">&#39;cluster&#39;</span><span class="p">,</span> <span class="s">&#39;job&#39;</span><span class="p">,</span> <span class="s">&#39;task&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s">&#39;cluster&#39;</span><span class="p">,</span> <span class="s">&#39;job&#39;</span><span class="p">,</span> <span class="s">&#39;task&#39;</span><span class="p">,</span> <span class="s">&#39;start_time&#39;</span><span class="p">,</span> <span class="p">],</span>
+            <span class="p">[</span><span class="s">&#39;end_time&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s">&#39;cluster&#39;</span><span class="p">,</span> <span class="s">&#39;end_time&#39;</span><span class="p">,</span> <span class="s">&#39;job&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="s">&#39;end_time&#39;</span><span class="p">,</span> <span class="s">&#39;job&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s">&#39;job&#39;</span><span class="p">,</span> <span class="s">&#39;end_time&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s">&#39;end_time&#39;</span><span class="p">,</span> <span class="s">&#39;job&#39;</span><span class="p">],</span>
+        <span class="p">]</span>
+
+</div>
+<div class="viewcode-block" id="GridEngineAttemptInfo"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.GridEngineAttemptInfo">[docs]</a><span class="k">class</span> <span class="nc">GridEngineAttemptInfo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">attempt</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">Attempt</span><span class="p">)</span>
+    <span class="n">project</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Project</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&quot;gridengine_projects&quot;</span><span class="p">)</span>
+    <span class="n">department</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Project</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&quot;gridengine_departments&quot;</span><span class="p">)</span>
+    <span class="n">cpu_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">integral_mem_usage</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">io_usage</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">catagory</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>
+    <span class="n">io_wait</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">pe_task_id</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">max_vmem</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">advanced_reservation_id</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">advanced_reservation_submit_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">advanced_reservation_submit_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">advanced_reservation_submit_time</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="AttemptResourceUsage"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.AttemptResourceUsage">[docs]</a><span class="k">class</span> <span class="nc">AttemptResourceUsage</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">attempt</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">Attempt</span><span class="p">)</span>
+    <span class="n">user_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">system_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">max_rss</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">integral_shared_text</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">integral_shared_memory</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">integral_unshared_data</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">integral_unshared_stack</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">page_reclaims</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">page_faults</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">swaps</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">input_block_ops</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">output_block_ops</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">charecter_io_ops</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">messages_sent</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">messages_received</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">num_signals</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">voluntary_context_switches</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">involuntary_context_switches</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">exact_user_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="OpenLavaExitInfo"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.OpenLavaExitInfo">[docs]</a><span class="k">class</span> <span class="nc">OpenLavaExitInfo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">attempt</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">Attempt</span><span class="p">)</span>
+    <span class="n">user_id</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&quot;user_numeric_id&quot;</span><span class="p">)</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">OpenLavaSubmitOption</span><span class="p">)</span>
+    <span class="n">begin_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">begin_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">begin_time</span><span class="p">)</span>
+
+    <span class="n">termination_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">termination_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">termination_time</span><span class="p">)</span>
+
+    <span class="n">resource_request</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">cwd</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+    <span class="n">input_file</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+    <span class="n">output_file</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+    <span class="n">error_file</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+    <span class="n">input_file_spool</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+    <span class="n">command_spool</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+    <span class="n">job_file</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">265</span><span class="p">)</span>
+    <span class="n">asked_hosts</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Host</span><span class="p">)</span>
+    <span class="n">host_factor</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">job_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span>
+    <span class="n">dependency_condition</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">4096</span><span class="p">)</span>
+    <span class="n">pre_execution_command</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">email_user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span>
+    <span class="n">project</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Project</span><span class="p">)</span>
+    <span class="n">exit_status</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">max_num_processors</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">login_shell</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>
+    <span class="n">array_index</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">max_residual_mem</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">max_swap</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+</pre></div></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2014, David Irvine.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
