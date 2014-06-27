@@ -163,7 +163,7 @@ while True:
                 logging.warn("Log file no longer exists, waiting on new one being created...")
                 time.sleep(60)
                 continue
-            if os.fstat(fh).st_ino != os.stat(args.log_file).st_ino:
+            if os.fstat(fh.fileno()).st_ino != os.stat(args.log_file).st_ino:
                 logging.info("Log file has been rotated, opening new file...")
                 fh.close()
                 try:
