@@ -13,8 +13,7 @@ Contents:
 
    install
    import
-
-.. automodule:: lavaFlow
+   lavaFlow
 
 
 Indices and tables
