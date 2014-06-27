@@ -6,4 +6,6 @@
 API Doc
 =======
 
-.. automodule:: lavaFlow
+.. automodule:: lavaFlow.views
+.. automodule:: lavaFlow.models
+
