@@ -31,6 +31,8 @@
     <script type="text/javascript" src="_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="LavaFlow 1.1 documentation" href="index.html" />
+    <link rel="next" title="Models" href="models.html" />
+    <link rel="prev" title="Openlava Import" href="import.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -66,9 +68,11 @@
      href="index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul>
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install.html">Web Server Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="import.html">Openlava Import</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Views</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 </ul>
 </ul>
 </li>
@@ -91,6 +95,14 @@
             
               
                 
+  <li>
+    <a href="import.html" title="Previous Chapter: Openlava Import"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Openlava Import</span>
+    </a>
+  </li>
+  <li>
+    <a href="models.html" title="Next Chapter: Models"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Models &raquo;</span>
+    </a>
+  </li>
               
             
             
@@ -128,196 +140,13 @@
 <dt id="lavaFlow.views.JobView">
 <em class="property">class </em><tt class="descclassname">lavaFlow.views.</tt><tt class="descname">JobView</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#JobView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.JobView" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="attribute">
-<dt id="lavaFlow.views.JobView.__class__">
-<tt class="descname">__class__</tt><a class="headerlink" href="#lavaFlow.views.JobView.__class__" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">type</span></tt></p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.views.JobView.__delattr__">
-<tt class="descname">__delattr__</tt><a class="headerlink" href="#lavaFlow.views.JobView.__delattr__" title="Permalink to this definition">¶</a></dt>
-<dd><p>x.__delattr__(&#8216;name&#8217;) &lt;==&gt; del x.name</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.views.JobView.__dict__">
-<tt class="descname">__dict__</tt><em class="property"> = dict_proxy({'model': &lt;class 'lavaFlow.models.Job'&gt;, '__module__': 'lavaFlow.views', 'get_queryset': &lt;function get_queryset at 0x49a7f50&gt;, 'paginate_by': 20, '__doc__': None})</em><a class="headerlink" href="#lavaFlow.views.JobView.__dict__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.views.JobView.__format__">
-<tt class="descname">__format__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.views.JobView.__format__" title="Permalink to this definition">¶</a></dt>
-<dd><p>default object formatter</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.views.JobView.__getattribute__">
-<tt class="descname">__getattribute__</tt><a class="headerlink" href="#lavaFlow.views.JobView.__getattribute__" title="Permalink to this definition">¶</a></dt>
-<dd><p>x.__getattribute__(&#8216;name&#8217;) &lt;==&gt; x.name</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.views.JobView.__hash__">
-<tt class="descname">__hash__</tt><a class="headerlink" href="#lavaFlow.views.JobView.__hash__" title="Permalink to this definition">¶</a></dt>
-<dd><p>x.__hash__() &lt;==&gt; hash(x)</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.views.JobView.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#lavaFlow.views.JobView.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Constructor. Called in the URLconf; can contain helpful extra
-keyword arguments, and other things.</p>
-</dd></dl>
-
-<dl class="attribute">
 <dt id="lavaFlow.views.JobView.__module__">
 <tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.views'</em><a class="headerlink" href="#lavaFlow.views.JobView.__module__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="staticmethod">
-<dt id="lavaFlow.views.JobView.__new__">
-<em class="property">static </em><tt class="descname">__new__</tt><big>(</big><em>S</em>, <em>...</em><big>)</big> &rarr; a new object with type S, a subtype of T<a class="headerlink" href="#lavaFlow.views.JobView.__new__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.views.JobView.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.views.JobView.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd><p>helper for pickle</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.views.JobView.__reduce_ex__">
-<tt class="descname">__reduce_ex__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.views.JobView.__reduce_ex__" title="Permalink to this definition">¶</a></dt>
-<dd><p>helper for pickle</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.views.JobView.__repr__">
-<tt class="descname">__repr__</tt><a class="headerlink" href="#lavaFlow.views.JobView.__repr__" title="Permalink to this definition">¶</a></dt>
-<dd><p>x.__repr__() &lt;==&gt; repr(x)</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.views.JobView.__setattr__">
-<tt class="descname">__setattr__</tt><a class="headerlink" href="#lavaFlow.views.JobView.__setattr__" title="Permalink to this definition">¶</a></dt>
-<dd><p>x.__setattr__(&#8216;name&#8217;, value) &lt;==&gt; x.name = value</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.views.JobView.__sizeof__">
-<tt class="descname">__sizeof__</tt><big>(</big><big>)</big> &rarr; int<a class="headerlink" href="#lavaFlow.views.JobView.__sizeof__" title="Permalink to this definition">¶</a></dt>
-<dd><p>size of object in memory, in bytes</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.views.JobView.__str__">
-<tt class="descname">__str__</tt><a class="headerlink" href="#lavaFlow.views.JobView.__str__" title="Permalink to this definition">¶</a></dt>
-<dd><p>x.__str__() &lt;==&gt; str(x)</p>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="lavaFlow.views.JobView.__subclasshook__">
-<em class="property">static </em><tt class="descname">__subclasshook__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.views.JobView.__subclasshook__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract classes can override this to customize issubclass().</p>
-<p>This is invoked early on by abc.ABCMeta.__subclasscheck__().
-It should return True, False or NotImplemented.  If it returns
-NotImplemented, the normal algorithm is used.  Otherwise, it
-overrides the normal algorithm (and the outcome is cached).</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.views.JobView.__weakref__">
-<tt class="descname">__weakref__</tt><a class="headerlink" href="#lavaFlow.views.JobView.__weakref__" title="Permalink to this definition">¶</a></dt>
-<dd><p>list of weak references to the object (if defined)</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.views.JobView._allowed_methods">
-<tt class="descname">_allowed_methods</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.views.JobView._allowed_methods" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.views.JobView.allow_empty">
-<tt class="descname">allow_empty</tt><em class="property"> = True</em><a class="headerlink" href="#lavaFlow.views.JobView.allow_empty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="classmethod">
-<dt id="lavaFlow.views.JobView.as_view">
-<em class="property">classmethod </em><tt class="descname">as_view</tt><big>(</big><em>**initkwargs</em><big>)</big><a class="headerlink" href="#lavaFlow.views.JobView.as_view" title="Permalink to this definition">¶</a></dt>
-<dd><p>Main entry point for a request-response process.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.views.JobView.content_type">
-<tt class="descname">content_type</tt><em class="property"> = None</em><a class="headerlink" href="#lavaFlow.views.JobView.content_type" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.views.JobView.context_object_name">
-<tt class="descname">context_object_name</tt><em class="property"> = None</em><a class="headerlink" href="#lavaFlow.views.JobView.context_object_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.views.JobView.dispatch">
-<tt class="descname">dispatch</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#lavaFlow.views.JobView.dispatch" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.views.JobView.get">
-<tt class="descname">get</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#lavaFlow.views.JobView.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.views.JobView.get_allow_empty">
-<tt class="descname">get_allow_empty</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.views.JobView.get_allow_empty" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns <tt class="docutils literal"><span class="pre">True</span></tt> if the view should display empty lists, and <tt class="docutils literal"><span class="pre">False</span></tt>
-if a 404 should be raised instead.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.views.JobView.get_context_data">
-<tt class="descname">get_context_data</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#lavaFlow.views.JobView.get_context_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the context for this view.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.views.JobView.get_context_object_name">
-<tt class="descname">get_context_object_name</tt><big>(</big><em>object_list</em><big>)</big><a class="headerlink" href="#lavaFlow.views.JobView.get_context_object_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the name of the item to be used in the context.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.views.JobView.get_paginate_by">
-<tt class="descname">get_paginate_by</tt><big>(</big><em>queryset</em><big>)</big><a class="headerlink" href="#lavaFlow.views.JobView.get_paginate_by" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the number of items to paginate by, or <tt class="docutils literal"><span class="pre">None</span></tt> for no pagination.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.views.JobView.get_paginator">
-<tt class="descname">get_paginator</tt><big>(</big><em>queryset</em>, <em>per_page</em>, <em>orphans=0</em>, <em>allow_empty_first_page=True</em><big>)</big><a class="headerlink" href="#lavaFlow.views.JobView.get_paginator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return an instance of the paginator for this view.</p>
-</dd></dl>
-
 <dl class="method">
 <dt id="lavaFlow.views.JobView.get_queryset">
 <tt class="descname">get_queryset</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#JobView.get_queryset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.JobView.get_queryset" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.views.JobView.get_template_names">
-<tt class="descname">get_template_names</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.views.JobView.get_template_names" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a list of template names to be used for the request. Must return
-a list. May not be called if render_to_response is overridden.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.views.JobView.http_method_names">
-<tt class="descname">http_method_names</tt><em class="property"> = [u'get', u'post', u'put', u'delete', u'head', u'options', u'trace']</em><a class="headerlink" href="#lavaFlow.views.JobView.http_method_names" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.views.JobView.http_method_not_allowed">
-<tt class="descname">http_method_not_allowed</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#lavaFlow.views.JobView.http_method_not_allowed" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -326,62 +155,9 @@ a list. May not be called if render_to_response is overridden.</p>
 <dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">Job</span></tt></p>
 </dd></dl>
 
-<dl class="method">
-<dt id="lavaFlow.views.JobView.options">
-<tt class="descname">options</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#lavaFlow.views.JobView.options" title="Permalink to this definition">¶</a></dt>
-<dd><p>Handles responding to requests for the OPTIONS HTTP verb.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.views.JobView.page_kwarg">
-<tt class="descname">page_kwarg</tt><em class="property"> = u'page'</em><a class="headerlink" href="#lavaFlow.views.JobView.page_kwarg" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="attribute">
 <dt id="lavaFlow.views.JobView.paginate_by">
 <tt class="descname">paginate_by</tt><em class="property"> = 20</em><a class="headerlink" href="#lavaFlow.views.JobView.paginate_by" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.views.JobView.paginate_queryset">
-<tt class="descname">paginate_queryset</tt><big>(</big><em>queryset</em>, <em>page_size</em><big>)</big><a class="headerlink" href="#lavaFlow.views.JobView.paginate_queryset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Paginate the queryset, if needed.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.views.JobView.paginator_class">
-<tt class="descname">paginator_class</tt><a class="headerlink" href="#lavaFlow.views.JobView.paginator_class" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">Paginator</span></tt></p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.views.JobView.queryset">
-<tt class="descname">queryset</tt><em class="property"> = None</em><a class="headerlink" href="#lavaFlow.views.JobView.queryset" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.views.JobView.render_to_response">
-<tt class="descname">render_to_response</tt><big>(</big><em>context</em>, <em>**response_kwargs</em><big>)</big><a class="headerlink" href="#lavaFlow.views.JobView.render_to_response" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a response, using the <cite>response_class</cite> for this
-view, with a template rendered with the given context.</p>
-<p>If any keyword arguments are provided, they will be
-passed to the constructor of the response class.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.views.JobView.response_class">
-<tt class="descname">response_class</tt><a class="headerlink" href="#lavaFlow.views.JobView.response_class" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">TemplateResponse</span></tt></p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.views.JobView.template_name">
-<tt class="descname">template_name</tt><em class="property"> = None</em><a class="headerlink" href="#lavaFlow.views.JobView.template_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.views.JobView.template_name_suffix">
-<tt class="descname">template_name_suffix</tt><em class="property"> = u'_list'</em><a class="headerlink" href="#lavaFlow.views.JobView.template_name_suffix" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -394,10 +170,22 @@ passed to the constructor of the response class.</p>
 <dl class="function">
 <dt id="lavaFlow.views.create_js_success">
 <tt class="descclassname">lavaFlow.views.</tt><tt class="descname">create_js_success</tt><big>(</big><em>data=None</em>, <em>message=''</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#create_js_success"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.create_js_success" title="Permalink to this definition">¶</a></dt>
-<dd><p>Takes a json serializable object, and an optional message, and creates a standard json response document.
-:param data: json serializable object
-:param message: Optional message to include with response
-:return: HttpResponse object</p>
+<dd><p>Takes a json serializable object, and an optional message, and creates a standard json response document.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> &#8211; json serializable object</li>
+<li><strong>message</strong> &#8211; Optional message to include with response</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">HttpResponse object</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -413,9 +201,17 @@ passed to the constructor of the response class.</p>
 <dl class="function">
 <dt id="lavaFlow.views.get_csrf_token">
 <tt class="descclassname">lavaFlow.views.</tt><tt class="descname">get_csrf_token</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#get_csrf_token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.get_csrf_token" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the CSRF token to the client as part of a json document.
-:param request: Request object
-:return: HttpResponse with cookie containing JSON data.</p>
+<dd><p>Returns the CSRF token to the client as part of a json document.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> &#8211; Request object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">HttpResponse with cookie containing JSON data.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -431,28 +227,64 @@ passed to the constructor of the response class.</p>
 <dl class="function">
 <dt id="lavaFlow.views.openlava_import">
 <tt class="descclassname">lavaFlow.views.</tt><tt class="descname">openlava_import</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#openlava_import"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.openlava_import" title="Permalink to this definition">¶</a></dt>
-<dd><p>Imports one or more openlava log entries, log entries are uploaded as JSON data in the request body.
-:param request: Request object
-:param cluster_name: name of cluster (Specified in URL)
-:return: JSON Status</p>
+<dd><p>Imports one or more openlava log entries, log entries are uploaded as JSON data in the request body.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>request</strong> &#8211; Request object</li>
+<li><strong>cluster_name</strong> &#8211; name of cluster (Specified in URL)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">JSON Status</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="lavaFlow.views.openlava_import_job_finish">
 <tt class="descclassname">lavaFlow.views.</tt><tt class="descname">openlava_import_job_finish</tt><big>(</big><em>cluster</em>, <em>event</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#openlava_import_job_finish"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.openlava_import_job_finish" title="Permalink to this definition">¶</a></dt>
-<dd><p>Imports a single openlava job finish event.
-:param cluster: Cluster object
-:param event: event to import
-:return: None</p>
+<dd><p>Imports a single openlava job finish event.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cluster</strong> &#8211; Cluster object</li>
+<li><strong>event</strong> &#8211; event to import</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="lavaFlow.views.openlava_import_job_new">
 <tt class="descclassname">lavaFlow.views.</tt><tt class="descname">openlava_import_job_new</tt><big>(</big><em>cluster</em>, <em>event</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#openlava_import_job_new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.openlava_import_job_new" title="Permalink to this definition">¶</a></dt>
-<dd><p>Imports a single openlava job_new event event.
-:param cluster: Cluster object
-:param event: Dict containing event details
-:return: None</p>
+<dd><p>Imports a single openlava job_new event event.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cluster</strong> &#8211; Cluster object</li>
+<li><strong>event</strong> &#8211; Dict containing event details</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">

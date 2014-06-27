@@ -11,6 +11,5 @@ Views
     :undoc-members:
     :private-members:
     :special-members:
-    :inherited-members:
 
 
