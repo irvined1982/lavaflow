@@ -73,6 +73,7 @@
 <li class="toctree-l1"><a class="reference internal" href="import.html">Openlava Import</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Views</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core_models.html">Core Models</a></li>
 </ul>
 </ul>
 </li>
@@ -170,7 +171,26 @@
 <dl class="function">
 <dt id="lavaFlow.views.get_attempts">
 <tt class="descclassname">lavaFlow.views.</tt><tt class="descname">get_attempts</tt><big>(</big><em>start_time_js</em>, <em>end_time_js</em>, <em>exclude_string</em>, <em>filter_string</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#get_attempts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.get_attempts" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Gets all attempts that are active between the specified time periods, after
+having applied the filters and exclude options.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start_time_js</strong> &#8211; Start time for the chart data, in milliseconds since epoch</li>
+<li><strong>end_time_js</strong> &#8211; End time for the chart data, in milliseconds since epoch</li>
+<li><strong>exclude_string</strong> &#8211; a string of options to exclude data</li>
+<li><strong>filter_string</strong> &#8211; s string of options to filter data</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Queryset</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="lavaFlow.views.get_csrf_token">
@@ -284,7 +304,28 @@
 <dl class="function">
 <dt id="lavaFlow.views.utilization_data">
 <tt class="descclassname">lavaFlow.views.</tt><tt class="descname">utilization_data</tt><big>(</big><em>request</em>, <em>start_time_js=0</em>, <em>end_time_js=0</em>, <em>exclude_string=''</em>, <em>filter_string=''</em>, <em>group_string=''</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#utilization_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.utilization_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Generates utilization data for the utilization chart, this is essentially number of processors requested, vs
+number of processors that are in use, for the given time period. Grouped by zero or more fields.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>request</strong> &#8211; Request object</li>
+<li><strong>start_time_js</strong> &#8211; Start time for the chart data, in milliseconds since epoch</li>
+<li><strong>end_time_js</strong> &#8211; End time for the chart data, in milliseconds since epoch</li>
+<li><strong>exclude_string</strong> &#8211; a string of options to exclude data</li>
+<li><strong>filter_string</strong> &#8211; s string of options to filter data</li>
+<li><strong>group_string</strong> &#8211; a string of fields to group by</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">json data object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="lavaFlow.views.utilization_table">
@@ -294,7 +335,27 @@
 <dl class="function">
 <dt id="lavaFlow.views.utilization_view">
 <tt class="descclassname">lavaFlow.views.</tt><tt class="descname">utilization_view</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#utilization_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.utilization_view" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Renders and displays the utilization view page.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>request</strong> &#8211; Request object passed by django.</li>
+<li><strong>start_time_js</strong> &#8211; Start time for the chart data, in milliseconds since epoch</li>
+<li><strong>end_time_js</strong> &#8211; End time for the chart data, in milliseconds since epoch</li>
+<li><strong>exclude_string</strong> &#8211; a string of options to exclude data</li>
+<li><strong>filter_string</strong> &#8211; s string of options to filter data</li>
+<li><strong>group_string</strong> &#8211; a string of fields to group data by.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rendered HTML page.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </div>
 
