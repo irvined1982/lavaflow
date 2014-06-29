@@ -32,6 +32,7 @@
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="LavaFlow 1.1 documentation" href="index.html" />
+    <link rel="next" title="Glossary of Terms" href="glossary.html" />
     <link rel="prev" title="Models" href="models.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -75,6 +76,7 @@
 <li class="toctree-l1"><a class="reference internal" href="views.html">Views</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Core Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary of Terms</a></li>
 </ul>
 </ul>
 </li>
@@ -104,6 +106,10 @@
                 
   <li>
     <a href="models.html" title="Previous Chapter: Models"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Models</span>
+    </a>
+  </li>
+  <li>
+    <a href="glossary.html" title="Next Chapter: Glossary of Terms"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Glossary of Term... &raquo;</span>
     </a>
   </li>
               
@@ -533,15 +539,55 @@ report which hosts were used for a task.  In that case only the primary host wil
 <tt class="descname">submit_time</tt><a class="headerlink" href="#Attempt.submit_time" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<p>The time in seconds since epoch UTC that the
-.. py:attribute:: start_time
-.. py:attribute:: end_time
-.. py:attribute:: cpu_time
-.. py:attribute:: wall_time
-.. py:attribute:: pend_time
-.. py:attribute:: queue
-.. py:attribute:: status
-.. py:attribute:: command</p>
+<p>The time in seconds since epoch UTC that the task was submitted to the cluster</p>
+<dl class="attribute">
+<dt id="Attempt.start_time">
+<tt class="descname">start_time</tt><a class="headerlink" href="#Attempt.start_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The time in seconds since epoch UTC that the task was executed</p>
+<dl class="attribute">
+<dt id="Attempt.end_time">
+<tt class="descname">end_time</tt><a class="headerlink" href="#Attempt.end_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The time in seconds since epoch UTC that the task ended</p>
+<dl class="attribute">
+<dt id="Attempt.cpu_time">
+<tt class="descname">cpu_time</tt><a class="headerlink" href="#Attempt.cpu_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The cpu time in seconds for the job.</p>
+<dl class="attribute">
+<dt id="Attempt.wall_time">
+<tt class="descname">wall_time</tt><a class="headerlink" href="#Attempt.wall_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The wall clock time in seconds for the job.</p>
+<dl class="attribute">
+<dt id="Attempt.pend_time">
+<tt class="descname">pend_time</tt><a class="headerlink" href="#Attempt.pend_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The number of seconds the job was pending</p>
+<dl class="attribute">
+<dt id="Attempt.queue">
+<tt class="descname">queue</tt><a class="headerlink" href="#Attempt.queue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The Queue object the job was in</p>
+<dl class="attribute">
+<dt id="Attempt.status">
+<tt class="descname">status</tt><a class="headerlink" href="#Attempt.status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The Exit Status of the job</p>
+<dl class="attribute">
+<dt id="Attempt.command">
+<tt class="descname">command</tt><a class="headerlink" href="#Attempt.command" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The command executed by the job</p>
 </dd></dl>
 
 <dl class="class">

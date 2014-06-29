@@ -1,7 +1,5 @@
-.. LavaFlow documentation master file, created by
-   sphinx-quickstart on Sun Aug  3 11:38:20 2014.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+LavaFlow
+========
 
 LavaFlow creates useful reports on the usage of high performance compute clusters. LavaFlow takes data from the
 batch scheduling system, monitoring, and other tooling, and creates reports that help administrators, managers,
@@ -24,6 +22,7 @@ Contents:
    views
    models
    core_models
+   glossary
 
 Indices and tables
 ==================

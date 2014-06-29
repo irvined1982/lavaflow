@@ -76,6 +76,7 @@
 <li class="toctree-l1"><a class="reference internal" href="views.html">Views</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core_models.html">Core Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary of Terms</a></li>
 </ul>
 </ul>
 </li>
@@ -193,15 +194,55 @@ report which hosts were used for a task.  In that case only the primary host wil
 <tt class="descname">submit_time</tt><a class="headerlink" href="#lavaFlow.models.Attempt.submit_time" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<p>The time in seconds since epoch UTC that the
-.. py:attribute:: start_time
-.. py:attribute:: end_time
-.. py:attribute:: cpu_time
-.. py:attribute:: wall_time
-.. py:attribute:: pend_time
-.. py:attribute:: queue
-.. py:attribute:: status
-.. py:attribute:: command</p>
+<p>The time in seconds since epoch UTC that the task was submitted to the cluster</p>
+<dl class="attribute">
+<dt id="lavaFlow.models.Attempt.start_time">
+<tt class="descname">start_time</tt><a class="headerlink" href="#lavaFlow.models.Attempt.start_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The time in seconds since epoch UTC that the task was executed</p>
+<dl class="attribute">
+<dt id="lavaFlow.models.Attempt.end_time">
+<tt class="descname">end_time</tt><a class="headerlink" href="#lavaFlow.models.Attempt.end_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The time in seconds since epoch UTC that the task ended</p>
+<dl class="attribute">
+<dt id="lavaFlow.models.Attempt.cpu_time">
+<tt class="descname">cpu_time</tt><a class="headerlink" href="#lavaFlow.models.Attempt.cpu_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The cpu time in seconds for the job.</p>
+<dl class="attribute">
+<dt id="lavaFlow.models.Attempt.wall_time">
+<tt class="descname">wall_time</tt><a class="headerlink" href="#lavaFlow.models.Attempt.wall_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The wall clock time in seconds for the job.</p>
+<dl class="attribute">
+<dt id="lavaFlow.models.Attempt.pend_time">
+<tt class="descname">pend_time</tt><a class="headerlink" href="#lavaFlow.models.Attempt.pend_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The number of seconds the job was pending</p>
+<dl class="attribute">
+<dt id="lavaFlow.models.Attempt.queue">
+<tt class="descname">queue</tt><a class="headerlink" href="#lavaFlow.models.Attempt.queue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The Queue object the job was in</p>
+<dl class="attribute">
+<dt id="lavaFlow.models.Attempt.status">
+<tt class="descname">status</tt><a class="headerlink" href="#lavaFlow.models.Attempt.status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The Exit Status of the job</p>
+<dl class="attribute">
+<dt id="lavaFlow.models.Attempt.command">
+<tt class="descname">command</tt><a class="headerlink" href="#lavaFlow.models.Attempt.command" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The command executed by the job</p>
 <dl class="exception">
 <dt id="lavaFlow.models.Attempt.DoesNotExist">
 <em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#lavaFlow.models.Attempt.DoesNotExist" title="Permalink to this definition">¶</a></dt>
@@ -249,12 +290,12 @@ report which hosts were used for a task.  In that case only the primary host wil
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Attempt._base_manager">
-<tt class="descclassname">Attempt.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x282a790&gt;</em><a class="headerlink" href="#lavaFlow.models.Attempt._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Attempt.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3402910&gt;</em><a class="headerlink" href="#lavaFlow.models.Attempt._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Attempt._default_manager">
-<tt class="descclassname">Attempt.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x282a790&gt;</em><a class="headerlink" href="#lavaFlow.models.Attempt._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Attempt.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3402910&gt;</em><a class="headerlink" href="#lavaFlow.models.Attempt._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -329,7 +370,7 @@ report which hosts were used for a task.  In that case only the primary host wil
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Attempt.objects">
-<tt class="descclassname">Attempt.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x282a790&gt;</em><a class="headerlink" href="#lavaFlow.models.Attempt.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Attempt.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3402910&gt;</em><a class="headerlink" href="#lavaFlow.models.Attempt.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -358,8 +399,8 @@ report which hosts were used for a task.  In that case only the primary host wil
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="lavaFlow.models.Attempt.queue">
-<tt class="descclassname">Attempt.</tt><tt class="descname">queue</tt><a class="headerlink" href="#lavaFlow.models.Attempt.queue" title="Permalink to this definition">¶</a></dt>
+<dt>
+<tt class="descclassname">Attempt.</tt><tt class="descname">queue</tt></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -383,8 +424,8 @@ report which hosts were used for a task.  In that case only the primary host wil
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="lavaFlow.models.Attempt.status">
-<tt class="descclassname">Attempt.</tt><tt class="descname">status</tt><a class="headerlink" href="#lavaFlow.models.Attempt.status" title="Permalink to this definition">¶</a></dt>
+<dt>
+<tt class="descclassname">Attempt.</tt><tt class="descname">status</tt></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -584,12 +625,12 @@ the current process exceeded its time slice.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.AttemptResourceUsage._base_manager">
-<tt class="descclassname">AttemptResourceUsage.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x282fc10&gt;</em><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">AttemptResourceUsage.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3406d50&gt;</em><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.AttemptResourceUsage._default_manager">
-<tt class="descclassname">AttemptResourceUsage.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x282fc10&gt;</em><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">AttemptResourceUsage.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3406d50&gt;</em><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -604,7 +645,7 @@ the current process exceeded its time slice.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.AttemptResourceUsage.objects">
-<tt class="descclassname">AttemptResourceUsage.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x282fc10&gt;</em><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">AttemptResourceUsage.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3406d50&gt;</em><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -715,12 +756,12 @@ overridden manually by the cluster administator.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Cluster._base_manager">
-<tt class="descclassname">Cluster.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27fd190&gt;</em><a class="headerlink" href="#lavaFlow.models.Cluster._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Cluster.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33d4310&gt;</em><a class="headerlink" href="#lavaFlow.models.Cluster._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Cluster._default_manager">
-<tt class="descclassname">Cluster.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27fd190&gt;</em><a class="headerlink" href="#lavaFlow.models.Cluster._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Cluster.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33d4310&gt;</em><a class="headerlink" href="#lavaFlow.models.Cluster._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -873,7 +914,7 @@ cluster, returns None</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Cluster.objects">
-<tt class="descclassname">Cluster.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27fd190&gt;</em><a class="headerlink" href="#lavaFlow.models.Cluster.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Cluster.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33d4310&gt;</em><a class="headerlink" href="#lavaFlow.models.Cluster.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1000,12 +1041,12 @@ the admin interface by an administator.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.ClusterLog._base_manager">
-<tt class="descclassname">ClusterLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27fd590&gt;</em><a class="headerlink" href="#lavaFlow.models.ClusterLog._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">ClusterLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33d4710&gt;</em><a class="headerlink" href="#lavaFlow.models.ClusterLog._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.ClusterLog._default_manager">
-<tt class="descclassname">ClusterLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27fd590&gt;</em><a class="headerlink" href="#lavaFlow.models.ClusterLog._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">ClusterLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33d4710&gt;</em><a class="headerlink" href="#lavaFlow.models.ClusterLog._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1030,7 +1071,7 @@ the admin interface by an administator.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.ClusterLog.objects">
-<tt class="descclassname">ClusterLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27fd590&gt;</em><a class="headerlink" href="#lavaFlow.models.ClusterLog.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">ClusterLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33d4710&gt;</em><a class="headerlink" href="#lavaFlow.models.ClusterLog.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1096,12 +1137,12 @@ the admin interface by an administator.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.GridEngineAttemptInfo._base_manager">
-<tt class="descclassname">GridEngineAttemptInfo.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x282f290&gt;</em><a class="headerlink" href="#lavaFlow.models.GridEngineAttemptInfo._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">GridEngineAttemptInfo.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3406410&gt;</em><a class="headerlink" href="#lavaFlow.models.GridEngineAttemptInfo._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.GridEngineAttemptInfo._default_manager">
-<tt class="descclassname">GridEngineAttemptInfo.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x282f290&gt;</em><a class="headerlink" href="#lavaFlow.models.GridEngineAttemptInfo._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">GridEngineAttemptInfo.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3406410&gt;</em><a class="headerlink" href="#lavaFlow.models.GridEngineAttemptInfo._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1126,7 +1167,7 @@ the admin interface by an administator.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.GridEngineAttemptInfo.objects">
-<tt class="descclassname">GridEngineAttemptInfo.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x282f290&gt;</em><a class="headerlink" href="#lavaFlow.models.GridEngineAttemptInfo.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">GridEngineAttemptInfo.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3406410&gt;</em><a class="headerlink" href="#lavaFlow.models.GridEngineAttemptInfo.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1197,12 +1238,12 @@ the admin interface by an administator.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Host._base_manager">
-<tt class="descclassname">Host.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27fdb10&gt;</em><a class="headerlink" href="#lavaFlow.models.Host._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Host.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33d4c90&gt;</em><a class="headerlink" href="#lavaFlow.models.Host._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Host._default_manager">
-<tt class="descclassname">Host.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27fdb10&gt;</em><a class="headerlink" href="#lavaFlow.models.Host._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Host.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33d4c90&gt;</em><a class="headerlink" href="#lavaFlow.models.Host._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1247,7 +1288,7 @@ the admin interface by an administator.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Host.objects">
-<tt class="descclassname">Host.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27fdb10&gt;</em><a class="headerlink" href="#lavaFlow.models.Host.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Host.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33d4c90&gt;</em><a class="headerlink" href="#lavaFlow.models.Host.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1338,12 +1379,12 @@ the admin interface by an administator.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.HostLog._base_manager">
-<tt class="descclassname">HostLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27fdfd0&gt;</em><a class="headerlink" href="#lavaFlow.models.HostLog._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">HostLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33da190&gt;</em><a class="headerlink" href="#lavaFlow.models.HostLog._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.HostLog._default_manager">
-<tt class="descclassname">HostLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27fdfd0&gt;</em><a class="headerlink" href="#lavaFlow.models.HostLog._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">HostLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33da190&gt;</em><a class="headerlink" href="#lavaFlow.models.HostLog._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1363,7 +1404,7 @@ the admin interface by an administator.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.HostLog.objects">
-<tt class="descclassname">HostLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27fdfd0&gt;</em><a class="headerlink" href="#lavaFlow.models.HostLog.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">HostLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33da190&gt;</em><a class="headerlink" href="#lavaFlow.models.HostLog.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1469,12 +1510,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.ImportKey._base_manager">
-<tt class="descclassname">ImportKey.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27ae150&gt;</em><a class="headerlink" href="#lavaFlow.models.ImportKey._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">ImportKey.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33972d0&gt;</em><a class="headerlink" href="#lavaFlow.models.ImportKey._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.ImportKey._default_manager">
-<tt class="descclassname">ImportKey.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27ae150&gt;</em><a class="headerlink" href="#lavaFlow.models.ImportKey._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">ImportKey.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33972d0&gt;</em><a class="headerlink" href="#lavaFlow.models.ImportKey._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1484,7 +1525,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.ImportKey.objects">
-<tt class="descclassname">ImportKey.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27ae150&gt;</em><a class="headerlink" href="#lavaFlow.models.ImportKey.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">ImportKey.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33972d0&gt;</em><a class="headerlink" href="#lavaFlow.models.ImportKey.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1550,12 +1591,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Job._base_manager">
-<tt class="descclassname">Job.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x280b790&gt;</em><a class="headerlink" href="#lavaFlow.models.Job._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Job.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33e1910&gt;</em><a class="headerlink" href="#lavaFlow.models.Job._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Job._default_manager">
-<tt class="descclassname">Job.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x280b790&gt;</em><a class="headerlink" href="#lavaFlow.models.Job._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Job.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33e1910&gt;</em><a class="headerlink" href="#lavaFlow.models.Job._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1620,7 +1661,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Job.objects">
-<tt class="descclassname">Job.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x280b790&gt;</em><a class="headerlink" href="#lavaFlow.models.Job.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Job.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33e1910&gt;</em><a class="headerlink" href="#lavaFlow.models.Job.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1736,12 +1777,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.JobLog._base_manager">
-<tt class="descclassname">JobLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x280bc50&gt;</em><a class="headerlink" href="#lavaFlow.models.JobLog._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">JobLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33e1dd0&gt;</em><a class="headerlink" href="#lavaFlow.models.JobLog._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.JobLog._default_manager">
-<tt class="descclassname">JobLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x280bc50&gt;</em><a class="headerlink" href="#lavaFlow.models.JobLog._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">JobLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33e1dd0&gt;</em><a class="headerlink" href="#lavaFlow.models.JobLog._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1761,7 +1802,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.JobLog.objects">
-<tt class="descclassname">JobLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x280bc50&gt;</em><a class="headerlink" href="#lavaFlow.models.JobLog.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">JobLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33e1dd0&gt;</em><a class="headerlink" href="#lavaFlow.models.JobLog.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1822,12 +1863,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.JobStatus._base_manager">
-<tt class="descclassname">JobStatus.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27aee90&gt;</em><a class="headerlink" href="#lavaFlow.models.JobStatus._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">JobStatus.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33d4050&gt;</em><a class="headerlink" href="#lavaFlow.models.JobStatus._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.JobStatus._default_manager">
-<tt class="descclassname">JobStatus.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27aee90&gt;</em><a class="headerlink" href="#lavaFlow.models.JobStatus._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">JobStatus.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33d4050&gt;</em><a class="headerlink" href="#lavaFlow.models.JobStatus._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1842,7 +1883,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.JobStatus.objects">
-<tt class="descclassname">JobStatus.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27aee90&gt;</em><a class="headerlink" href="#lavaFlow.models.JobStatus.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">JobStatus.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33d4050&gt;</em><a class="headerlink" href="#lavaFlow.models.JobStatus.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1898,12 +1939,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.JobSubmitOpenLava._base_manager">
-<tt class="descclassname">JobSubmitOpenLava.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x281cf10&gt;</em><a class="headerlink" href="#lavaFlow.models.JobSubmitOpenLava._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">JobSubmitOpenLava.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33f70d0&gt;</em><a class="headerlink" href="#lavaFlow.models.JobSubmitOpenLava._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.JobSubmitOpenLava._default_manager">
-<tt class="descclassname">JobSubmitOpenLava.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x281cf10&gt;</em><a class="headerlink" href="#lavaFlow.models.JobSubmitOpenLava._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">JobSubmitOpenLava.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33f70d0&gt;</em><a class="headerlink" href="#lavaFlow.models.JobSubmitOpenLava._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1933,7 +1974,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.JobSubmitOpenLava.objects">
-<tt class="descclassname">JobSubmitOpenLava.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x281cf10&gt;</em><a class="headerlink" href="#lavaFlow.models.JobSubmitOpenLava.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">JobSubmitOpenLava.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33f70d0&gt;</em><a class="headerlink" href="#lavaFlow.models.JobSubmitOpenLava.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2024,12 +2065,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.OpenLavaExitInfo._base_manager">
-<tt class="descclassname">OpenLavaExitInfo.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2838ad0&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaExitInfo._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">OpenLavaExitInfo.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2eec350&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaExitInfo._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.OpenLavaExitInfo._default_manager">
-<tt class="descclassname">OpenLavaExitInfo.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2838ad0&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaExitInfo._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">OpenLavaExitInfo.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2eec350&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaExitInfo._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2054,7 +2095,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.OpenLavaExitInfo.objects">
-<tt class="descclassname">OpenLavaExitInfo.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2838ad0&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaExitInfo.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">OpenLavaExitInfo.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2eec350&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaExitInfo.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2130,12 +2171,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.OpenLavaResourceLimit._base_manager">
-<tt class="descclassname">OpenLavaResourceLimit.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x280ee10&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaResourceLimit._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">OpenLavaResourceLimit.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33e5f90&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaResourceLimit._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.OpenLavaResourceLimit._default_manager">
-<tt class="descclassname">OpenLavaResourceLimit.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x280ee10&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaResourceLimit._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">OpenLavaResourceLimit.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33e5f90&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaResourceLimit._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2150,7 +2191,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.OpenLavaResourceLimit.objects">
-<tt class="descclassname">OpenLavaResourceLimit.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x280ee10&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaResourceLimit.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">OpenLavaResourceLimit.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33e5f90&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaResourceLimit.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -2246,12 +2287,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.OpenLavaSubmitOption._base_manager">
-<tt class="descclassname">OpenLavaSubmitOption.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27ae710&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaSubmitOption._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">OpenLavaSubmitOption.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3397890&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaSubmitOption._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.OpenLavaSubmitOption._default_manager">
-<tt class="descclassname">OpenLavaSubmitOption.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27ae710&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaSubmitOption._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">OpenLavaSubmitOption.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3397890&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaSubmitOption._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2266,7 +2307,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.OpenLavaSubmitOption.objects">
-<tt class="descclassname">OpenLavaSubmitOption.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27ae710&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaSubmitOption.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">OpenLavaSubmitOption.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3397890&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaSubmitOption.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2332,12 +2373,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.OpenLavaTransferFile._base_manager">
-<tt class="descclassname">OpenLavaTransferFile.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x280e850&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaTransferFile._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">OpenLavaTransferFile.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33e59d0&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaTransferFile._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.OpenLavaTransferFile._default_manager">
-<tt class="descclassname">OpenLavaTransferFile.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x280e850&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaTransferFile._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">OpenLavaTransferFile.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33e59d0&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaTransferFile._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2352,7 +2393,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.OpenLavaTransferFile.objects">
-<tt class="descclassname">OpenLavaTransferFile.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x280e850&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaTransferFile.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">OpenLavaTransferFile.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33e59d0&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaTransferFile.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2413,12 +2454,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.OpenLavaTransferFileOption._base_manager">
-<tt class="descclassname">OpenLavaTransferFileOption.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27aea90&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaTransferFileOption._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">OpenLavaTransferFileOption.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3397c10&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaTransferFileOption._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.OpenLavaTransferFileOption._default_manager">
-<tt class="descclassname">OpenLavaTransferFileOption.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27aea90&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaTransferFileOption._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">OpenLavaTransferFileOption.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3397c10&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaTransferFileOption._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2428,7 +2469,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.OpenLavaTransferFileOption.objects">
-<tt class="descclassname">OpenLavaTransferFileOption.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27aea90&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaTransferFileOption.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">OpenLavaTransferFileOption.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3397c10&gt;</em><a class="headerlink" href="#lavaFlow.models.OpenLavaTransferFileOption.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2524,12 +2565,12 @@ multiple projects, and this is also supported.  Projects are unique globally.</p
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Project._base_manager">
-<tt class="descclassname">Project.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27fd850&gt;</em><a class="headerlink" href="#lavaFlow.models.Project._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Project.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33d49d0&gt;</em><a class="headerlink" href="#lavaFlow.models.Project._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Project._default_manager">
-<tt class="descclassname">Project.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27fd850&gt;</em><a class="headerlink" href="#lavaFlow.models.Project._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Project.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33d49d0&gt;</em><a class="headerlink" href="#lavaFlow.models.Project._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2687,7 +2728,7 @@ on the under this project, returns None</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Project.objects">
-<tt class="descclassname">Project.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x27fd850&gt;</em><a class="headerlink" href="#lavaFlow.models.Project.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Project.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33d49d0&gt;</em><a class="headerlink" href="#lavaFlow.models.Project.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2800,12 +2841,12 @@ on the under this project, returns None</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Queue._base_manager">
-<tt class="descclassname">Queue.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2804450&gt;</em><a class="headerlink" href="#lavaFlow.models.Queue._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Queue.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33da5d0&gt;</em><a class="headerlink" href="#lavaFlow.models.Queue._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Queue._default_manager">
-<tt class="descclassname">Queue.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2804450&gt;</em><a class="headerlink" href="#lavaFlow.models.Queue._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Queue.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33da5d0&gt;</em><a class="headerlink" href="#lavaFlow.models.Queue._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2875,7 +2916,7 @@ on the under this project, returns None</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Queue.objects">
-<tt class="descclassname">Queue.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2804450&gt;</em><a class="headerlink" href="#lavaFlow.models.Queue.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Queue.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33da5d0&gt;</em><a class="headerlink" href="#lavaFlow.models.Queue.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2951,12 +2992,12 @@ on the under this project, returns None</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.QueueLog._base_manager">
-<tt class="descclassname">QueueLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2804910&gt;</em><a class="headerlink" href="#lavaFlow.models.QueueLog._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">QueueLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33daa90&gt;</em><a class="headerlink" href="#lavaFlow.models.QueueLog._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.QueueLog._default_manager">
-<tt class="descclassname">QueueLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2804910&gt;</em><a class="headerlink" href="#lavaFlow.models.QueueLog._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">QueueLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33daa90&gt;</em><a class="headerlink" href="#lavaFlow.models.QueueLog._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2971,7 +3012,7 @@ on the under this project, returns None</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.QueueLog.objects">
-<tt class="descclassname">QueueLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2804910&gt;</em><a class="headerlink" href="#lavaFlow.models.QueueLog.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">QueueLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33daa90&gt;</em><a class="headerlink" href="#lavaFlow.models.QueueLog.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -3042,12 +3083,12 @@ on the under this project, returns None</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Task._base_manager">
-<tt class="descclassname">Task.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2821690&gt;</em><a class="headerlink" href="#lavaFlow.models.Task._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Task.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33f7810&gt;</em><a class="headerlink" href="#lavaFlow.models.Task._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Task._default_manager">
-<tt class="descclassname">Task.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2821690&gt;</em><a class="headerlink" href="#lavaFlow.models.Task._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Task.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33f7810&gt;</em><a class="headerlink" href="#lavaFlow.models.Task._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -3082,7 +3123,7 @@ on the under this project, returns None</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Task.objects">
-<tt class="descclassname">Task.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2821690&gt;</em><a class="headerlink" href="#lavaFlow.models.Task.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Task.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33f7810&gt;</em><a class="headerlink" href="#lavaFlow.models.Task.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -3153,12 +3194,12 @@ on the under this project, returns None</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.TaskLog._base_manager">
-<tt class="descclassname">TaskLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2821b10&gt;</em><a class="headerlink" href="#lavaFlow.models.TaskLog._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">TaskLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33f7c90&gt;</em><a class="headerlink" href="#lavaFlow.models.TaskLog._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.TaskLog._default_manager">
-<tt class="descclassname">TaskLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2821b10&gt;</em><a class="headerlink" href="#lavaFlow.models.TaskLog._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">TaskLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33f7c90&gt;</em><a class="headerlink" href="#lavaFlow.models.TaskLog._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -3173,7 +3214,7 @@ on the under this project, returns None</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.TaskLog.objects">
-<tt class="descclassname">TaskLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2821b10&gt;</em><a class="headerlink" href="#lavaFlow.models.TaskLog.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">TaskLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33f7c90&gt;</em><a class="headerlink" href="#lavaFlow.models.TaskLog.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -3244,12 +3285,12 @@ on the under this project, returns None</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.User._base_manager">
-<tt class="descclassname">User.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2804bd0&gt;</em><a class="headerlink" href="#lavaFlow.models.User._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">User.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33dad50&gt;</em><a class="headerlink" href="#lavaFlow.models.User._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.User._default_manager">
-<tt class="descclassname">User.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2804bd0&gt;</em><a class="headerlink" href="#lavaFlow.models.User._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">User.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33dad50&gt;</em><a class="headerlink" href="#lavaFlow.models.User._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -3314,7 +3355,7 @@ on the under this project, returns None</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.User.objects">
-<tt class="descclassname">User.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2804bd0&gt;</em><a class="headerlink" href="#lavaFlow.models.User.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">User.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33dad50&gt;</em><a class="headerlink" href="#lavaFlow.models.User.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -3400,12 +3441,12 @@ on the under this project, returns None</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.UserLog._base_manager">
-<tt class="descclassname">UserLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x280b0d0&gt;</em><a class="headerlink" href="#lavaFlow.models.UserLog._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">UserLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33e1250&gt;</em><a class="headerlink" href="#lavaFlow.models.UserLog._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.UserLog._default_manager">
-<tt class="descclassname">UserLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x280b0d0&gt;</em><a class="headerlink" href="#lavaFlow.models.UserLog._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">UserLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33e1250&gt;</em><a class="headerlink" href="#lavaFlow.models.UserLog._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -3420,7 +3461,7 @@ on the under this project, returns None</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.UserLog.objects">
-<tt class="descclassname">UserLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x280b0d0&gt;</em><a class="headerlink" href="#lavaFlow.models.UserLog.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">UserLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x33e1250&gt;</em><a class="headerlink" href="#lavaFlow.models.UserLog.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
