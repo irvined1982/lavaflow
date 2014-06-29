@@ -30,9 +30,8 @@
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="LavaFlow 1.1 documentation" href="index.html" />
-    <link rel="next" title="Models" href="models.html" />
-    <link rel="prev" title="Openlava Import" href="import.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -68,14 +67,7 @@
      href="index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="install.html">Web Server Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="import.html">Openlava Import</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Views</a></li>
-<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="core_models.html">Core Models</a></li>
-</ul>
-</ul>
+      aria-labelledby="dLabelGlobalToc"></ul>
 </li>
               
                 <li class="dropdown">
@@ -96,14 +88,6 @@
             
               
                 
-  <li>
-    <a href="import.html" title="Previous Chapter: Openlava Import"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Openlava Import</span>
-    </a>
-  </li>
-  <li>
-    <a href="models.html" title="Next Chapter: Models"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Models &raquo;</span>
-    </a>
-  </li>
               
             
             
@@ -141,6 +125,33 @@
 <dt id="lavaFlow.views.build_filter">
 <tt class="descclassname">lavaFlow.views.</tt><tt class="descname">build_filter</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#build_filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.build_filter" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="function">
+<dt id="lavaFlow.views.consumption_bar_data">
+<tt class="descclassname">lavaFlow.views.</tt><tt class="descname">consumption_bar_data</tt><big>(</big><em>request</em>, <em>start_time_js=0</em>, <em>end_time_js=0</em>, <em>exclude_string=''</em>, <em>filter_string=''</em>, <em>group_string=''</em><big>)</big><a class="headerlink" href="#lavaFlow.views.consumption_bar_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates consumption data for the consumption chart, this is a total of CPU time, wall time, pend time and the
+total number of tasks started during this time grouped by whatever the user requires.  To make reports clearer
+when the user requests num_processors, or exit state, these are made human readable.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>request</strong> &#8211; Request object</li>
+<li><strong>start_time_js</strong> &#8211; Start time for the chart data, in milliseconds since epoch, this is converted to the nearest minute</li>
+<li><strong>end_time_js</strong> &#8211; End time for the chart data, in milliseconds since epoch, this is converted to the nearest minute</li>
+<li><strong>exclude_string</strong> &#8211; a string of options to exclude data</li>
+<li><strong>filter_string</strong> &#8211; s string of options to filter data</li>
+<li><strong>group_string</strong> &#8211; a string of fields to group by</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">json data object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="lavaFlow.views.create_js_success">
@@ -289,16 +300,6 @@ having applied the filters and exclude options.</p>
 <dl class="function">
 <dt id="lavaFlow.views.util_total_attempts">
 <tt class="descclassname">lavaFlow.views.</tt><tt class="descname">util_total_attempts</tt><big>(</big><em>request</em>, <em>start_time_js=None</em>, <em>end_time_js=None</em>, <em>exclude_string=''</em>, <em>filter_string=''</em>, <em>group_string=''</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#util_total_attempts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.util_total_attempts" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="lavaFlow.views.utilization_bar_exit">
-<tt class="descclassname">lavaFlow.views.</tt><tt class="descname">utilization_bar_exit</tt><big>(</big><em>request</em>, <em>start_time_js=0</em>, <em>end_time_js=0</em>, <em>exclude_string=''</em>, <em>filter_string=''</em>, <em>group_string=''</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#utilization_bar_exit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.utilization_bar_exit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="lavaFlow.views.utilization_bar_size">
-<tt class="descclassname">lavaFlow.views.</tt><tt class="descname">utilization_bar_size</tt><big>(</big><em>request</em>, <em>start_time_js=0</em>, <em>end_time_js=0</em>, <em>exclude_string=''</em>, <em>filter_string=''</em>, <em>group_string=''</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#utilization_bar_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.utilization_bar_size" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">

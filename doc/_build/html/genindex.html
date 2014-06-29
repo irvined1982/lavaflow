@@ -32,6 +32,7 @@
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="LavaFlow 1.1 documentation" href="index.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -68,14 +69,7 @@
      href="index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Web Server Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="import.html">Openlava Import</a></li>
-<li class="toctree-l1"><a class="reference internal" href="views.html">Views</a></li>
-<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="core_models.html">Core Models</a></li>
-</ul>
-</ul>
+      aria-labelledby="dLabelGlobalToc"></ul>
 </li>
               
                 <li class="dropdown">
@@ -136,6 +130,8 @@
  | <a href="#I"><strong>I</strong></a>
  | <a href="#J"><strong>J</strong></a>
  | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
  | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#Q"><strong>Q</strong></a>
@@ -1446,12 +1442,16 @@
   </dt>
 
       
-  <dt><a href="models.html#lavaFlow.models.Attempt.cluster">cluster (lavaFlow.models.Attempt attribute)</a>, <a href="core_models.html#lavaFlow.models.Attempt.cluster">[1]</a>
+  <dt><a href="core_models.html#ClusterLog.cluster">cluster (ClusterLog attribute)</a>
   </dt>
 
       <dd><dl>
         
-  <dt><a href="models.html#lavaFlow.models.ClusterLog.cluster">(lavaFlow.models.ClusterLog attribute)</a>, <a href="core_models.html#lavaFlow.models.ClusterLog.cluster">[1]</a>
+  <dt><a href="models.html#lavaFlow.models.Attempt.cluster">(lavaFlow.models.Attempt attribute)</a>, <a href="core_models.html#lavaFlow.models.Attempt.cluster">[1]</a>
+  </dt>
+
+        
+  <dt><a href="models.html#lavaFlow.models.ClusterLog.cluster">(lavaFlow.models.ClusterLog attribute)</a>, <a href="models.html#lavaFlow.models.ClusterLog.cluster">[1]</a>, <a href="core_models.html#lavaFlow.models.ClusterLog.cluster">[2]</a>
   </dt>
 
         
@@ -1483,12 +1483,12 @@
   <dt><a href="models.html#lavaFlow.models.Attempt.cluster_avg_pend_time_timedelta">cluster_avg_pend_time_timedelta() (lavaFlow.models.Attempt method)</a>, <a href="core_models.html#lavaFlow.models.Attempt.cluster_avg_pend_time_timedelta">[1]</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="models.html#lavaFlow.models.ClusterLog">ClusterLog (class in lavaFlow.models)</a>, <a href="core_models.html#lavaFlow.models.ClusterLog">[1]</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="models.html#lavaFlow.models.ClusterLog.DoesNotExist">ClusterLog.DoesNotExist</a>, <a href="core_models.html#lavaFlow.models.ClusterLog.DoesNotExist">[1]</a>
   </dt>
@@ -1529,6 +1529,10 @@
   </dt>
 
       </dl></dd>
+      
+  <dt><a href="views.html#lavaFlow.views.consumption_bar_data">consumption_bar_data() (in module lavaFlow.views)</a>
+  </dt>
+
       
   <dt><a href="models.html#lavaFlow.models.Attempt.cpu_time_timedelta">cpu_time_timedelta() (lavaFlow.models.Attempt method)</a>, <a href="core_models.html#lavaFlow.models.Attempt.cpu_time_timedelta">[1]</a>
   </dt>
@@ -1979,6 +1983,38 @@
   <dt><a href="views.html#module-lavaFlow.views">lavaFlow.views (module)</a>
   </dt>
 
+  </dl></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="core_models.html#ClusterLog.message">message (ClusterLog attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="models.html#lavaFlow.models.ClusterLog.message">(lavaFlow.models.ClusterLog attribute)</a>
+  </dt>
+
+      </dl></dd>
+  </dl></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="core_models.html#Cluster.name">name (Cluster attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="models.html#lavaFlow.models.Cluster.name">(lavaFlow.models.Cluster attribute)</a>
+  </dt>
+
+      </dl></dd>
   </dl></td>
 </tr></table>
 
@@ -2468,6 +2504,16 @@
 
       </dl></dd>
       
+  <dt><a href="core_models.html#ClusterLog.time">time (ClusterLog attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="models.html#lavaFlow.models.ClusterLog.time">(lavaFlow.models.ClusterLog attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
   <dt><a href="models.html#lavaFlow.models.Cluster.total_attempts">total_attempts() (lavaFlow.models.Cluster method)</a>, <a href="core_models.html#lavaFlow.models.Cluster.total_attempts">[1]</a>
   </dt>
 
@@ -2623,12 +2669,12 @@
   <dt><a href="models.html#lavaFlow.models.UserLog.MultipleObjectsReturned">UserLog.MultipleObjectsReturned</a>, <a href="core_models.html#lavaFlow.models.UserLog.MultipleObjectsReturned">[1]</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="models.html#lavaFlow.models.User.userlog_set">userlog_set (lavaFlow.models.User attribute)</a>, <a href="core_models.html#lavaFlow.models.User.userlog_set">[1]</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="models.html#lavaFlow.models.Job.util_chart_url">util_chart_url() (lavaFlow.models.Job method)</a>, <a href="core_models.html#lavaFlow.models.Job.util_chart_url">[1]</a>
   </dt>
@@ -2639,14 +2685,6 @@
 
       
   <dt><a href="views.html#lavaFlow.views.util_total_attempts">util_total_attempts() (in module lavaFlow.views)</a>
-  </dt>
-
-      
-  <dt><a href="views.html#lavaFlow.views.utilization_bar_exit">utilization_bar_exit() (in module lavaFlow.views)</a>
-  </dt>
-
-      
-  <dt><a href="views.html#lavaFlow.views.utilization_bar_size">utilization_bar_size() (in module lavaFlow.views)</a>
   </dt>
 
       

@@ -1,10 +1,11 @@
-.. LavaFlow documentation master file, created by
-   sphinx-quickstart on Sun Aug  3 11:38:20 2014.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Core Models
 ===========
+
+The following classes form the core lavaFlow functionality, they are used by all scheduling environments, and contain
+all the data required for the core reports.
+
+lavaFlow.models.ImportKey
+-------------------------
 
 .. autoclass:: lavaFlow.models.ImportKey
     :members:
@@ -12,11 +13,17 @@ Core Models
     :private-members:
     :special-members:
 
+lavaFlow.models.Cluster
+-----------------------
+
 .. autoclass:: lavaFlow.models.Cluster
     :members:
     :undoc-members:
     :private-members:
     :special-members:
+
+lavaFlow.models.ClusterLog
+--------------------------
 
 .. autoclass:: lavaFlow.models.ClusterLog
     :members:

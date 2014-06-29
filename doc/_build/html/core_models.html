@@ -30,8 +30,8 @@
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="LavaFlow 1.1 documentation" href="index.html" />
-    <link rel="prev" title="Models" href="models.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -67,14 +67,7 @@
      href="index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="install.html">Web Server Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="import.html">Openlava Import</a></li>
-<li class="toctree-l1"><a class="reference internal" href="views.html">Views</a></li>
-<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Core Models</a></li>
-</ul>
-</ul>
+      aria-labelledby="dLabelGlobalToc"></ul>
 </li>
               
                 <li class="dropdown">
@@ -86,7 +79,12 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Core Models</a></li>
+<li><a class="reference internal" href="#">Core Models</a><ul>
+<li><a class="reference internal" href="#lavaflow-models-importkey">lavaFlow.models.ImportKey</a></li>
+<li><a class="reference internal" href="#lavaflow-models-cluster">lavaFlow.models.Cluster</a></li>
+<li><a class="reference internal" href="#lavaflow-models-clusterlog">lavaFlow.models.ClusterLog</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -95,10 +93,6 @@
             
               
                 
-  <li>
-    <a href="models.html" title="Previous Chapter: Models"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Models</span>
-    </a>
-  </li>
               
             
             
@@ -132,10 +126,23 @@
       
   <div class="section" id="core-models">
 <h1>Core Models<a class="headerlink" href="#core-models" title="Permalink to this headline">¶</a></h1>
+<p>The following classes form the core lavaFlow functionality, they are used by all scheduling environments, and contain
+all the data required for the core reports.</p>
+<div class="section" id="lavaflow-models-importkey">
+<h2>lavaFlow.models.ImportKey<a class="headerlink" href="#lavaflow-models-importkey" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="lavaFlow.models.ImportKey">
 <em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">ImportKey</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#ImportKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.ImportKey" title="Permalink to this definition">¶</a></dt>
-<dd><p>Any client that attempts to import data must present a valid key. Keys are managed by the admin.</p>
+<dd><p>Any client that attempts to import data must present a valid key. Keys in general should be managed through the
+admin control panel.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lavaFlow.models</span> <span class="kn">import</span> <span class="n">ImportKey</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>...     key=ImportKey.objects.get(client_key=&#8221;key_to_check&#8221;)
+...     # Key is valid.
+... except ObjectDoesNotExist as e:
+...     # Key is invalid.</p>
 <dl class="attribute">
 <dt id="ImportKey.client_key">
 <tt class="descname">client_key</tt><a class="headerlink" href="#ImportKey.client_key" title="Permalink to this definition">¶</a></dt>
@@ -224,12 +231,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.ImportKey._base_manager">
-<tt class="descclassname">ImportKey.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bb9990&gt;</em><a class="headerlink" href="#lavaFlow.models.ImportKey._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">ImportKey.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x34f9d10&gt;</em><a class="headerlink" href="#lavaFlow.models.ImportKey._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.ImportKey._default_manager">
-<tt class="descclassname">ImportKey.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bb9990&gt;</em><a class="headerlink" href="#lavaFlow.models.ImportKey._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">ImportKey.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x34f9d10&gt;</em><a class="headerlink" href="#lavaFlow.models.ImportKey._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -239,15 +246,45 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.ImportKey.objects">
-<tt class="descclassname">ImportKey.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bb9990&gt;</em><a class="headerlink" href="#lavaFlow.models.ImportKey.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">ImportKey.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x34f9d10&gt;</em><a class="headerlink" href="#lavaFlow.models.ImportKey.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
+</div>
+<div class="section" id="lavaflow-models-cluster">
+<h2>lavaFlow.models.Cluster<a class="headerlink" href="#lavaflow-models-cluster" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="lavaFlow.models.Cluster">
 <em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Cluster</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster" title="Permalink to this definition">¶</a></dt>
-<dd><p>Cluster(id, name)</p>
+<dd><p>Almost every bit of data stored in lavaFlow can be traced back to a cluster, clusters represent the physical compute
+clusters that jobs are executed on.  There could be just one, for a simple departmental cluster, or many for an
+entire organization with both regional and centralized compute services.  Cluster objects are generally created
+automatically by the agents monitoring the cluster.  Extended information is generally added by the end user via
+the admin interface.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lavaFlow.models</span> <span class="kn">import</span> <span class="n">Cluster</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Cluster</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;openlava&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cluster</span><span class="o">.</span><span class="n">name</span>
+</pre></div>
+</div>
+<p>u&#8217;openlava&#8217;
+&gt;&gt;&gt; cluster.total_attempts()
+9000
+&gt;&gt;&gt; cluster.first_task()
+&lt;Attempt: Attempt object&gt;
+&gt;&gt;&gt; cluster.last_task()
+&lt;Attempt: Attempt object&gt;
+&gt;&gt;&gt; cluster.average_pend_time_timedelta()
+datetime.timedelta(0, 12001, 831000)
+&gt;&gt;&gt; cluster.average_pend_time()
+12001.831</p>
+<dl class="attribute">
+<dt id="Cluster.name">
+<tt class="descname">name</tt><a class="headerlink" href="#Cluster.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This is the name of the cluster, generally this is whatever the scheduler thinks its name is, however it can be
+overridden manually by the cluster administator.</p>
 <dl class="exception">
 <dt id="lavaFlow.models.Cluster.DoesNotExist">
 <em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#lavaFlow.models.Cluster.DoesNotExist" title="Permalink to this definition">¶</a></dt>
@@ -296,21 +333,39 @@ Not used in any way for authentication.</p>
 <dl class="method">
 <dt id="lavaFlow.models.Cluster.__str__">
 <tt class="descclassname">Cluster.</tt><tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.__str__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns a  str containing the name of the cluster.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str(name)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="lavaFlow.models.Cluster.__unicode__">
 <tt class="descclassname">Cluster.</tt><tt class="descname">__unicode__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.__unicode__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.__unicode__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns a unicode str containing the name of the cluster.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">unicode(self.__str__())</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Cluster._base_manager">
-<tt class="descclassname">Cluster.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bc19d0&gt;</em><a class="headerlink" href="#lavaFlow.models.Cluster._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Cluster.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3501d50&gt;</em><a class="headerlink" href="#lavaFlow.models.Cluster._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Cluster._default_manager">
-<tt class="descclassname">Cluster.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bc19d0&gt;</em><a class="headerlink" href="#lavaFlow.models.Cluster._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Cluster.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3501d50&gt;</em><a class="headerlink" href="#lavaFlow.models.Cluster._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -326,27 +381,72 @@ Not used in any way for authentication.</p>
 <dl class="method">
 <dt id="lavaFlow.models.Cluster.average_pend_time">
 <tt class="descclassname">Cluster.</tt><tt class="descname">average_pend_time</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.average_pend_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.average_pend_time" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculates the average pend time in seconds for all jobs that executed on the cluster.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Number of seconds on average that jobs pend for on this cluster.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="lavaFlow.models.Cluster.average_pend_time_percent">
 <tt class="descclassname">Cluster.</tt><tt class="descname">average_pend_time_percent</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.average_pend_time_percent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.average_pend_time_percent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Gets the average pend time of jobs on the cluster as a percent of their overall wall clock time.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Average Pend Time as a percent</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="lavaFlow.models.Cluster.average_pend_time_timedelta">
 <tt class="descclassname">Cluster.</tt><tt class="descname">average_pend_time_timedelta</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.average_pend_time_timedelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.average_pend_time_timedelta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Timedelta object of the number of seconds that jobs pend for</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Average pend time as timedelta.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="lavaFlow.models.Cluster.average_wall_time">
 <tt class="descclassname">Cluster.</tt><tt class="descname">average_wall_time</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.average_wall_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.average_wall_time" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculates the average wall clock time in seconds for all jobs that executed on the cluster.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Number of seconds on average that jobs take from submission to completion.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="lavaFlow.models.Cluster.average_wall_time_timedelta">
 <tt class="descclassname">Cluster.</tt><tt class="descname">average_wall_time_timedelta</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.average_wall_time_timedelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.average_wall_time_timedelta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Timedelta object of the number of seconds of the average wall clock time.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Average wall clock time as timedelta.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Cluster.clusterlog_set">
@@ -356,12 +456,30 @@ Not used in any way for authentication.</p>
 <dl class="method">
 <dt id="lavaFlow.models.Cluster.first_task">
 <tt class="descclassname">Cluster.</tt><tt class="descname">first_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.first_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.first_task" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Gets the first task that was executed on the cluster.  If no tasks were executed on the cluster, returns None.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Attempt object of the first attempt executed.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="lavaFlow.models.Cluster.get_absolute_url">
 <tt class="descclassname">Cluster.</tt><tt class="descname">get_absolute_url</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.get_absolute_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.get_absolute_url" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The absolute URL to the cluster view.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">URL of the cluster view page for this instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Cluster.job_set">
@@ -371,16 +489,36 @@ Not used in any way for authentication.</p>
 <dl class="method">
 <dt id="lavaFlow.models.Cluster.last_failed_task">
 <tt class="descclassname">Cluster.</tt><tt class="descname">last_failed_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.last_failed_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.last_failed_task" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Gets the last task that exited with a non-successful exit state on the cluster.  If no tasks have been executed
+on the cluster, or none of the tasks have exited witha  failure, returns None</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Attempt object of the last attempt that failed, returns None of no failed attempts.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="lavaFlow.models.Cluster.last_task">
 <tt class="descclassname">Cluster.</tt><tt class="descname">last_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.last_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.last_task" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Gets the last task that ended on the cluster, regardless of exit status.  If no tasks have been executed on the
+cluster, returns None</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Attempt object of the last attempt ended, returns None of no attempts.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Cluster.objects">
-<tt class="descclassname">Cluster.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bc19d0&gt;</em><a class="headerlink" href="#lavaFlow.models.Cluster.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Cluster.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3501d50&gt;</em><a class="headerlink" href="#lavaFlow.models.Cluster.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -396,24 +534,73 @@ Not used in any way for authentication.</p>
 <dl class="method">
 <dt id="lavaFlow.models.Cluster.total_attempts">
 <tt class="descclassname">Cluster.</tt><tt class="descname">total_attempts</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.total_attempts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.total_attempts" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns an total number of tasks that have been executed on this cluster since time began.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Integer containing total number of tasks</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="lavaFlow.models.Cluster.total_jobs">
 <tt class="descclassname">Cluster.</tt><tt class="descname">total_jobs</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.total_jobs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.total_jobs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns an total number of jobs that have been submitted to this cluster since time began.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Integer containing total number of jobs</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="lavaFlow.models.Cluster.total_tasks">
 <tt class="descclassname">Cluster.</tt><tt class="descname">total_tasks</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.total_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.total_tasks" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns an total number of tasks that have been submitted to this cluster since time began.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Integer containing total number of tasks</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
+</div>
+<div class="section" id="lavaflow-models-clusterlog">
+<h2>lavaFlow.models.ClusterLog<a class="headerlink" href="#lavaflow-models-clusterlog" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="lavaFlow.models.ClusterLog">
 <em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">ClusterLog</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#ClusterLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.ClusterLog" title="Permalink to this definition">¶</a></dt>
-<dd><p>ClusterLog(id, cluster_id, time, message)</p>
+<dd><p>ClusterLog objects are log entries that relate to the cluster as a whole. These can be created by tools, or through
+the admin interface by an administator.</p>
+<dl class="attribute">
+<dt id="ClusterLog.cluster">
+<tt class="descname">cluster</tt><a class="headerlink" href="#ClusterLog.cluster" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Foreign key to the Cluster that the log is part of</p>
+<dl class="attribute">
+<dt id="ClusterLog.time">
+<tt class="descname">time</tt><a class="headerlink" href="#ClusterLog.time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Time of the log entry, in seconds since Epoch</p>
+<dl class="attribute">
+<dt id="ClusterLog.message">
+<tt class="descname">message</tt><a class="headerlink" href="#ClusterLog.message" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The message, a text field that can contain freeform text.</p>
 <dl class="exception">
 <dt id="lavaFlow.models.ClusterLog.DoesNotExist">
 <em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#lavaFlow.models.ClusterLog.DoesNotExist" title="Permalink to this definition">¶</a></dt>
@@ -461,12 +648,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.ClusterLog._base_manager">
-<tt class="descclassname">ClusterLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bc1dd0&gt;</em><a class="headerlink" href="#lavaFlow.models.ClusterLog._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">ClusterLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3506190&gt;</em><a class="headerlink" href="#lavaFlow.models.ClusterLog._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.ClusterLog._default_manager">
-<tt class="descclassname">ClusterLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bc1dd0&gt;</em><a class="headerlink" href="#lavaFlow.models.ClusterLog._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">ClusterLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3506190&gt;</em><a class="headerlink" href="#lavaFlow.models.ClusterLog._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -491,7 +678,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.ClusterLog.objects">
-<tt class="descclassname">ClusterLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bc1dd0&gt;</em><a class="headerlink" href="#lavaFlow.models.ClusterLog.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">ClusterLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3506190&gt;</em><a class="headerlink" href="#lavaFlow.models.ClusterLog.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -567,12 +754,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Job._base_manager">
-<tt class="descclassname">Job.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bcdfd0&gt;</em><a class="headerlink" href="#lavaFlow.models.Job._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Job.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3513390&gt;</em><a class="headerlink" href="#lavaFlow.models.Job._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Job._default_manager">
-<tt class="descclassname">Job.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bcdfd0&gt;</em><a class="headerlink" href="#lavaFlow.models.Job._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Job.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3513390&gt;</em><a class="headerlink" href="#lavaFlow.models.Job._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -637,7 +824,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Job.objects">
-<tt class="descclassname">Job.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bcdfd0&gt;</em><a class="headerlink" href="#lavaFlow.models.Job.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Job.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3513390&gt;</em><a class="headerlink" href="#lavaFlow.models.Job.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -753,12 +940,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.JobLog._base_manager">
-<tt class="descclassname">JobLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bd24d0&gt;</em><a class="headerlink" href="#lavaFlow.models.JobLog._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">JobLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3513850&gt;</em><a class="headerlink" href="#lavaFlow.models.JobLog._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.JobLog._default_manager">
-<tt class="descclassname">JobLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bd24d0&gt;</em><a class="headerlink" href="#lavaFlow.models.JobLog._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">JobLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3513850&gt;</em><a class="headerlink" href="#lavaFlow.models.JobLog._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -778,7 +965,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.JobLog.objects">
-<tt class="descclassname">JobLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bd24d0&gt;</em><a class="headerlink" href="#lavaFlow.models.JobLog.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">JobLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3513850&gt;</em><a class="headerlink" href="#lavaFlow.models.JobLog.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -849,12 +1036,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Task._base_manager">
-<tt class="descclassname">Task.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3c80e90&gt;</em><a class="headerlink" href="#lavaFlow.models.Task._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Task.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x35cf250&gt;</em><a class="headerlink" href="#lavaFlow.models.Task._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Task._default_manager">
-<tt class="descclassname">Task.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3c80e90&gt;</em><a class="headerlink" href="#lavaFlow.models.Task._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Task.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x35cf250&gt;</em><a class="headerlink" href="#lavaFlow.models.Task._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -889,7 +1076,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Task.objects">
-<tt class="descclassname">Task.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3c80e90&gt;</em><a class="headerlink" href="#lavaFlow.models.Task.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Task.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x35cf250&gt;</em><a class="headerlink" href="#lavaFlow.models.Task.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -960,12 +1147,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Attempt._base_manager">
-<tt class="descclassname">Attempt.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3c8af50&gt;</em><a class="headerlink" href="#lavaFlow.models.Attempt._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Attempt.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x35d8310&gt;</em><a class="headerlink" href="#lavaFlow.models.Attempt._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Attempt._default_manager">
-<tt class="descclassname">Attempt.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3c8af50&gt;</em><a class="headerlink" href="#lavaFlow.models.Attempt._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Attempt.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x35d8310&gt;</em><a class="headerlink" href="#lavaFlow.models.Attempt._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1040,7 +1227,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Attempt.objects">
-<tt class="descclassname">Attempt.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3c8af50&gt;</em><a class="headerlink" href="#lavaFlow.models.Attempt.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Attempt.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x35d8310&gt;</em><a class="headerlink" href="#lavaFlow.models.Attempt.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1181,12 +1368,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Queue._base_manager">
-<tt class="descclassname">Queue.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bc9c90&gt;</em><a class="headerlink" href="#lavaFlow.models.Queue._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Queue.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x350c050&gt;</em><a class="headerlink" href="#lavaFlow.models.Queue._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Queue._default_manager">
-<tt class="descclassname">Queue.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bc9c90&gt;</em><a class="headerlink" href="#lavaFlow.models.Queue._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Queue.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x350c050&gt;</em><a class="headerlink" href="#lavaFlow.models.Queue._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1256,7 +1443,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Queue.objects">
-<tt class="descclassname">Queue.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bc9c90&gt;</em><a class="headerlink" href="#lavaFlow.models.Queue.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Queue.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x350c050&gt;</em><a class="headerlink" href="#lavaFlow.models.Queue.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1342,12 +1529,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Project._base_manager">
-<tt class="descclassname">Project.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bc90d0&gt;</em><a class="headerlink" href="#lavaFlow.models.Project._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Project.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3506450&gt;</em><a class="headerlink" href="#lavaFlow.models.Project._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Project._default_manager">
-<tt class="descclassname">Project.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bc90d0&gt;</em><a class="headerlink" href="#lavaFlow.models.Project._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Project.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3506450&gt;</em><a class="headerlink" href="#lavaFlow.models.Project._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1422,7 +1609,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Project.objects">
-<tt class="descclassname">Project.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bc90d0&gt;</em><a class="headerlink" href="#lavaFlow.models.Project.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Project.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3506450&gt;</em><a class="headerlink" href="#lavaFlow.models.Project.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1508,12 +1695,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Host._base_manager">
-<tt class="descclassname">Host.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bc9390&gt;</em><a class="headerlink" href="#lavaFlow.models.Host._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Host.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3506710&gt;</em><a class="headerlink" href="#lavaFlow.models.Host._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Host._default_manager">
-<tt class="descclassname">Host.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bc9390&gt;</em><a class="headerlink" href="#lavaFlow.models.Host._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Host.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3506710&gt;</em><a class="headerlink" href="#lavaFlow.models.Host._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1558,7 +1745,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.Host.objects">
-<tt class="descclassname">Host.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bc9390&gt;</em><a class="headerlink" href="#lavaFlow.models.Host.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Host.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3506710&gt;</em><a class="headerlink" href="#lavaFlow.models.Host.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1649,12 +1836,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.HostLog._base_manager">
-<tt class="descclassname">HostLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bc9850&gt;</em><a class="headerlink" href="#lavaFlow.models.HostLog._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">HostLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3506bd0&gt;</em><a class="headerlink" href="#lavaFlow.models.HostLog._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.HostLog._default_manager">
-<tt class="descclassname">HostLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bc9850&gt;</em><a class="headerlink" href="#lavaFlow.models.HostLog._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">HostLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3506bd0&gt;</em><a class="headerlink" href="#lavaFlow.models.HostLog._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1674,7 +1861,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.HostLog.objects">
-<tt class="descclassname">HostLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bc9850&gt;</em><a class="headerlink" href="#lavaFlow.models.HostLog.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">HostLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3506bd0&gt;</em><a class="headerlink" href="#lavaFlow.models.HostLog.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1730,12 +1917,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.QueueLog._base_manager">
-<tt class="descclassname">QueueLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bcd190&gt;</em><a class="headerlink" href="#lavaFlow.models.QueueLog._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">QueueLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x350c510&gt;</em><a class="headerlink" href="#lavaFlow.models.QueueLog._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.QueueLog._default_manager">
-<tt class="descclassname">QueueLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bcd190&gt;</em><a class="headerlink" href="#lavaFlow.models.QueueLog._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">QueueLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x350c510&gt;</em><a class="headerlink" href="#lavaFlow.models.QueueLog._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1750,7 +1937,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.QueueLog.objects">
-<tt class="descclassname">QueueLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bcd190&gt;</em><a class="headerlink" href="#lavaFlow.models.QueueLog.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">QueueLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x350c510&gt;</em><a class="headerlink" href="#lavaFlow.models.QueueLog.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1821,12 +2008,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.User._base_manager">
-<tt class="descclassname">User.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bcd450&gt;</em><a class="headerlink" href="#lavaFlow.models.User._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">User.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x350c7d0&gt;</em><a class="headerlink" href="#lavaFlow.models.User._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.User._default_manager">
-<tt class="descclassname">User.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bcd450&gt;</em><a class="headerlink" href="#lavaFlow.models.User._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">User.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x350c7d0&gt;</em><a class="headerlink" href="#lavaFlow.models.User._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1891,7 +2078,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.User.objects">
-<tt class="descclassname">User.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bcd450&gt;</em><a class="headerlink" href="#lavaFlow.models.User.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">User.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x350c7d0&gt;</em><a class="headerlink" href="#lavaFlow.models.User.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1977,12 +2164,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.UserLog._base_manager">
-<tt class="descclassname">UserLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bcd910&gt;</em><a class="headerlink" href="#lavaFlow.models.UserLog._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">UserLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x350cc90&gt;</em><a class="headerlink" href="#lavaFlow.models.UserLog._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.UserLog._default_manager">
-<tt class="descclassname">UserLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bcd910&gt;</em><a class="headerlink" href="#lavaFlow.models.UserLog._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">UserLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x350cc90&gt;</em><a class="headerlink" href="#lavaFlow.models.UserLog._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1997,7 +2184,7 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.UserLog.objects">
-<tt class="descclassname">UserLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3bcd910&gt;</em><a class="headerlink" href="#lavaFlow.models.UserLog.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">UserLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x350cc90&gt;</em><a class="headerlink" href="#lavaFlow.models.UserLog.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2058,12 +2245,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.AttemptResourceUsage._base_manager">
-<tt class="descclassname">AttemptResourceUsage.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3c93410&gt;</em><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage._base_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">AttemptResourceUsage.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x35db790&gt;</em><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage._base_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.AttemptResourceUsage._default_manager">
-<tt class="descclassname">AttemptResourceUsage.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3c93410&gt;</em><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage._default_manager" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">AttemptResourceUsage.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x35db790&gt;</em><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage._default_manager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2078,11 +2265,12 @@ Not used in any way for authentication.</p>
 
 <dl class="attribute">
 <dt id="lavaFlow.models.AttemptResourceUsage.objects">
-<tt class="descclassname">AttemptResourceUsage.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3c93410&gt;</em><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">AttemptResourceUsage.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x35db790&gt;</em><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
+</div>
 </div>
 
 
