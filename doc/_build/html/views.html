@@ -293,6 +293,32 @@ having applied the filters and exclude options.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="lavaFlow.views.resource_data">
+<tt class="descclassname">lavaFlow.views.</tt><tt class="descname">resource_data</tt><big>(</big><em>request</em>, <em>start_time_js=0</em>, <em>end_time_js=0</em>, <em>exclude_string=''</em>, <em>filter_string=''</em>, <em>group_string=''</em><big>)</big><a class="headerlink" href="#lavaFlow.views.resource_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates resource usage data for the resource chart, this is the average of each field that is available on linux
+from AttemptResourceUsage.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>request</strong> &#8211; Request object</li>
+<li><strong>start_time_js</strong> &#8211; Start time for the chart data, in milliseconds since epoch</li>
+<li><strong>end_time_js</strong> &#8211; End time for the chart data, in milliseconds since epoch</li>
+<li><strong>exclude_string</strong> &#8211; a string of options to exclude data</li>
+<li><strong>filter_string</strong> &#8211; s string of options to filter data</li>
+<li><strong>group_string</strong> &#8211; a string of fields to group by</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">json data object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="lavaFlow.views.util_report_range">
 <tt class="descclassname">lavaFlow.views.</tt><tt class="descname">util_report_range</tt><big>(</big><em>request</em>, <em>exclude_string=''</em>, <em>filter_string=''</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#util_report_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.util_report_range" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
