@@ -16,6 +16,7 @@ Contents:
 
 .. toctree::
    :maxdepth: 3
+
    about
    features
    install
