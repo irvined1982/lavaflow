@@ -72,7 +72,6 @@
       aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">Features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Web Server Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="views.html">Views</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core_models.html">Core Models</a></li>
@@ -155,6 +154,16 @@
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="models.html#lavaFlow.models.JSEdge.__init__">__init__() (lavaFlow.models.JSEdge method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="models.html#lavaFlow.models.JSNode.__init__">(lavaFlow.models.JSNode method)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="models.html#lavaFlow.models.Attempt.__module__">__module__ (lavaFlow.models.Attempt attribute)</a>
   </dt>
@@ -250,6 +259,14 @@
 
         
   <dt><a href="models.html#lavaFlow.models.ImportKey.MultipleObjectsReturned.__module__">(lavaFlow.models.ImportKey.MultipleObjectsReturned attribute)</a>
+  </dt>
+
+        
+  <dt><a href="models.html#lavaFlow.models.JSEdge.__module__">(lavaFlow.models.JSEdge attribute)</a>
+  </dt>
+
+        
+  <dt><a href="models.html#lavaFlow.models.JSNode.__module__">(lavaFlow.models.JSNode attribute)</a>
   </dt>
 
         
@@ -1268,6 +1285,12 @@
   </dt>
 
       
+  <dt><a href="models.html#lavaFlow.models.Attempt.attempt_id">attempt_id() (lavaFlow.models.Attempt method)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
   <dt><a href="models.html#lavaFlow.models.Cluster.attempt_set">attempt_set (lavaFlow.models.Cluster attribute)</a>
   </dt>
 
@@ -1301,8 +1324,6 @@
   </dt>
 
       </dl></dd>
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="models.html#lavaFlow.models.AttemptResourceUsage">AttemptResourceUsage (class in lavaFlow.models)</a>, <a href="core_models.html#lavaFlow.models.AttemptResourceUsage">[1]</a>
   </dt>
@@ -1587,6 +1608,10 @@
 
       
   <dt><a href="views.html#lavaFlow.views.create_js_success">create_js_success() (in module lavaFlow.views)</a>
+  </dt>
+
+      
+  <dt><a href="models.html#lavaFlow.models.JSNode.current_node_id">current_node_id (lavaFlow.models.JSNode attribute)</a>
   </dt>
 
   </dl></td>
@@ -1970,6 +1995,10 @@
   </dt>
 
       
+  <dt><a href="models.html#lavaFlow.models.Job.job_flow">job_flow() (lavaFlow.models.Job method)</a>
+  </dt>
+
+      
   <dt><a href="models.html#lavaFlow.models.Cluster.job_set">job_set (lavaFlow.models.Cluster attribute)</a>
   </dt>
 
@@ -1999,12 +2028,12 @@
   <dt><a href="models.html#lavaFlow.models.JobLog.MultipleObjectsReturned">JobLog.MultipleObjectsReturned</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="models.html#lavaFlow.models.TaskLog.joblog_ptr">joblog_ptr (lavaFlow.models.TaskLog attribute)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="models.html#lavaFlow.models.Job.joblog_set">joblog_set (lavaFlow.models.Job attribute)</a>
   </dt>
@@ -2061,6 +2090,14 @@
   </dt>
 
       </dl></dd>
+      
+  <dt><a href="models.html#lavaFlow.models.JSEdge">JSEdge (class in lavaFlow.models)</a>
+  </dt>
+
+      
+  <dt><a href="models.html#lavaFlow.models.JSNode">JSNode (class in lavaFlow.models)</a>
+  </dt>
+
   </dl></td>
 </tr></table>
 
@@ -2181,11 +2218,19 @@
 
       <dd><dl>
         
+  <dt><a href="core_models.html#Host.name">(Host attribute)</a>
+  </dt>
+
+        
   <dt><a href="core_models.html#Project.name">(Project attribute)</a>
   </dt>
 
         
   <dt><a href="models.html#lavaFlow.models.Cluster.name">(lavaFlow.models.Cluster attribute)</a>
+  </dt>
+
+        
+  <dt><a href="models.html#lavaFlow.models.Host.name">(lavaFlow.models.Host attribute)</a>
   </dt>
 
         
@@ -2637,6 +2682,16 @@
   <dt><a href="models.html#lavaFlow.models.Attempt.save">save() (lavaFlow.models.Attempt method)</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="models.html#lavaFlow.models.Job.save">(lavaFlow.models.Job method)</a>
+  </dt>
+
+        
+  <dt><a href="models.html#lavaFlow.models.Task.save">(lavaFlow.models.Task method)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="models.html#lavaFlow.models.Job.short_jobs">short_jobs() (lavaFlow.models.Job method)</a>
   </dt>
@@ -2675,6 +2730,10 @@
   </dt>
 
       </dl></dd>
+      
+  <dt><a href="views.html#lavaFlow.views.submission_bar_data">submission_bar_data() (in module lavaFlow.views)</a>
+  </dt>
+
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
@@ -2704,6 +2763,10 @@
       <dd><dl>
         
   <dt><a href="models.html#lavaFlow.models.Job.submit_time_datetime">(lavaFlow.models.Job method)</a>
+  </dt>
+
+        
+  <dt><a href="models.html#lavaFlow.models.Task.submit_time_datetime">(lavaFlow.models.Task method)</a>
   </dt>
 
       </dl></dd>

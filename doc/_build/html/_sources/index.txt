@@ -6,7 +6,7 @@ batch scheduling system, monitoring, and other tooling, and creates reports that
 and end users better understand their cluster environment. LavaFlow supports OpenLava and Grid Engine.
 
 LavaFlow is written in Python, and uses the Django web framework. Reports are modular, new modules are easy to
-create using templates and Djangos query set API. LavaFlow uses human readable RESTful URLS, making it easy to
+create using templates and Django's query set API. LavaFlow uses human readable RESTful URLS, making it easy to
 automate, and share links to reports.
 
 

@@ -470,7 +470,7 @@ the admin interface by an administator.</p>
 <dl class="class">
 <dt id="lavaFlow.models.Job">
 <em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Job</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Job" title="Permalink to this definition">¶</a></dt>
-<dd><p>Job(id, cluster_id, job_id, user_id, submit_host_id, submit_time)</p>
+<dd><p>Job(id, cluster_id, job_id, user_id, submit_host_id, submit_time, submit_hour_of_day, submit_day_of_week, submit_day_of_month, submit_week_of_year, submit_month)</p>
 </dd></dl>
 
 <dl class="class">
@@ -482,7 +482,7 @@ the admin interface by an administator.</p>
 <dl class="class">
 <dt id="lavaFlow.models.Task">
 <em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Task</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Task" title="Permalink to this definition">¶</a></dt>
-<dd><p>Task(id, cluster_id, job_id, user_id, task_id)</p>
+<dd><p>Task(id, cluster_id, job_id, user_id, task_id, submit_time, submit_hour_of_day, submit_day_of_week, submit_day_of_month, submit_week_of_year, submit_month)</p>
 </dd></dl>
 
 <dl class="class">
@@ -810,7 +810,14 @@ on the under this project, returns None</p>
 <dl class="class">
 <dt id="lavaFlow.models.Host">
 <em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Host</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Host"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Host" title="Permalink to this definition">¶</a></dt>
-<dd><p>Host(id, name)</p>
+<dd><p>Hosts represent actual hosts, these may be any arbitrary host, but generally are hosts that are either execution
+hosts or submission hosts.</p>
+<dl class="attribute">
+<dt id="Host.name">
+<tt class="descname">name</tt><a class="headerlink" href="#Host.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This is the name of the host. It is generally not the fully qualified domain name, but simply the local hostname.</p>
 </dd></dl>
 
 <dl class="class">

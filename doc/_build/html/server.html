@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Python Module Index &mdash; LavaFlow 1.1 documentation</title>
+    <title>Web Server Installation &mdash; LavaFlow 1.1 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -32,13 +32,10 @@
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="LavaFlow 1.1 documentation" href="index.html" />
-
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-
-
 
   </head>
   <body>
@@ -89,7 +86,18 @@
      href="#">Page <b class="caret"></b></a>
   <ul class="dropdown-menu localtoc"
       role="menu"
-      aria-labelledby="dLabelLocalToc"></ul>
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Web Server Installation</a><ul>
+<li><a class="reference internal" href="#install-django">Install Django</a></li>
+<li><a class="reference internal" href="#django-project">Django Project</a></li>
+<li><a class="reference internal" href="#web-server-configuration">Web Server Configuration</a></li>
+<li><a class="reference internal" href="#download-lavaflow">Download lavaFlow</a></li>
+<li><a class="reference internal" href="#install-lavaflow">Install lavaFlow</a></li>
+<li><a class="reference internal" href="#activate-lavaflow">Activate lavaFlow</a></li>
+</ul>
+</li>
+</ul>
+</ul>
 </li>
               
             
@@ -101,7 +109,11 @@
             
             
             
-              <li class="hidden-sm"></li>
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/server.txt"
+     rel="nofollow">Source</a>
+</div></li>
             
           </ul>
 
@@ -123,34 +135,51 @@
   <div class="row">
     <div class="col-md-12">
       
-
-   <h1>Python Module Index</h1>
-
-   <div class="modindex-jumpbox">
-   <a href="#cap-l"><strong>l</strong></a>
-   </div>
-
-   <table class="indextable modindextable" cellspacing="0" cellpadding="2">
-     <tr class="pcap"><td></td><td>&nbsp;</td><td></td></tr>
-     <tr class="cap" id="cap-l"><td></td><td>
-       <strong>l</strong></td><td></td></tr>
-     <tr>
-       <td><img src="_static/minus.png" class="toggler"
-              id="toggle-1" style="display: none" alt="-" /></td>
-       <td>
-       <tt class="xref">lavaFlow</tt></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="models.html#module-lavaFlow.models"><tt class="xref">lavaFlow.models</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="views.html#module-lavaFlow.views"><tt class="xref">lavaFlow.views</tt></a></td><td>
-       <em></em></td></tr>
-   </table>
+  <div class="section" id="web-server-installation">
+<h1>Web Server Installation<a class="headerlink" href="#web-server-installation" title="Permalink to this headline">¶</a></h1>
+<p>LavaFlow is a django application. It is installed and configured just like any other Django application would be. The
+following steps are required to install LavaFlow.</p>
+<div class="section" id="install-django">
+<h2>Install Django<a class="headerlink" href="#install-django" title="Permalink to this headline">¶</a></h2>
+<p>If you have not already done so, <a class="reference external" href="https://docs.djangoproject.com/en/1.6/intro/install/">Install Django</a>.</p>
+</div>
+<div class="section" id="django-project">
+<h2>Django Project<a class="headerlink" href="#django-project" title="Permalink to this headline">¶</a></h2>
+<p>Create and configure a django project. This can be done by following <a class="reference external" href="https://docs.djangoproject.com/en/1.6/intro/tutorial01/#creating-a-project">these steps</a>.</p>
+</div>
+<div class="section" id="web-server-configuration">
+<h2>Web Server Configuration<a class="headerlink" href="#web-server-configuration" title="Permalink to this headline">¶</a></h2>
+<p>Configure Lavaflow as a WSGI application as prescribed in the Django tutorial.</p>
+</div>
+<div class="section" id="download-lavaflow">
+<h2>Download lavaFlow<a class="headerlink" href="#download-lavaflow" title="Permalink to this headline">¶</a></h2>
+<p>Use git to checkout <a class="reference external" href="https://github.com/irvined1982/lavaflowb">lavaFlow</a>.:</p>
+<div class="highlight-python"><pre>$ git clone https://github.com/irvined1982/lavaflow.git
+$ git submodule update --init --recursive</pre>
+</div>
+</div>
+<div class="section" id="install-lavaflow">
+<h2>Install lavaFlow<a class="headerlink" href="#install-lavaflow" title="Permalink to this headline">¶</a></h2>
+<p>Use setuptools to install the module.:</p>
+<div class="highlight-python"><pre>$ sudo python setup.py install</pre>
+</div>
+</div>
+<div class="section" id="activate-lavaflow">
+<h2>Activate lavaFlow<a class="headerlink" href="#activate-lavaflow" title="Permalink to this headline">¶</a></h2>
+<p>Install lavaFlow as an application in your django project.:</p>
+<div class="highlight-python"><pre>INSTALLED_APPS = (
+...
+    'lavaFlow',
+...
+)</pre>
+</div>
+<p>Configure the URLs for lavaFlow. Open urls.py in your django project, and include the url configuration for lavaFlow:</p>
+<div class="highlight-python"><pre>urlpatterns = patterns('',
+    url(r'^', include('lavaFlow.urls')),</pre>
+</div>
+<p>You can now view lavaFlow by visiting your web server.</p>
+</div>
+</div>
 
 
     </div>
