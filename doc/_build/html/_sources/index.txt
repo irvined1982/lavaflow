@@ -17,7 +17,8 @@ Contents:
 
    about
    features
-   install
+   server
+   client
    import
    views
    models

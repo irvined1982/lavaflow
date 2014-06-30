@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Web Server Installation &mdash; LavaFlow 1.1 documentation</title>
+    <title>Client Tools Installation &mdash; LavaFlow 1.1 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -32,6 +32,8 @@
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="LavaFlow 1.1 documentation" href="index.html" />
+    <link rel="next" title="Import Tools" href="import.html" />
+    <link rel="prev" title="Web Server Installation" href="server.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -67,9 +69,12 @@
      href="index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul>
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server.html">Web Server Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Client Tools Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="import.html">Import Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="views.html">Views</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core_models.html">Core Models</a></li>
@@ -87,13 +92,10 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Web Server Installation</a><ul>
-<li><a class="reference internal" href="#install-django">Install Django</a></li>
-<li><a class="reference internal" href="#django-project">Django Project</a></li>
-<li><a class="reference internal" href="#web-server-configuration">Web Server Configuration</a></li>
+<li><a class="reference internal" href="#">Client Tools Installation</a><ul>
 <li><a class="reference internal" href="#download-lavaflow">Download lavaFlow</a></li>
 <li><a class="reference internal" href="#install-lavaflow">Install lavaFlow</a></li>
-<li><a class="reference internal" href="#activate-lavaflow">Activate lavaFlow</a></li>
+<li><a class="reference internal" href="#openlava-python-bindings">Openlava-python bindings</a></li>
 </ul>
 </li>
 </ul>
@@ -104,6 +106,14 @@
             
               
                 
+  <li>
+    <a href="server.html" title="Previous Chapter: Web Server Installation"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Web Server Insta...</span>
+    </a>
+  </li>
+  <li>
+    <a href="import.html" title="Next Chapter: Import Tools"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Import Tools &raquo;</span>
+    </a>
+  </li>
               
             
             
@@ -135,22 +145,11 @@
   <div class="row">
     <div class="col-md-12">
       
-  <div class="section" id="web-server-installation">
-<h1>Web Server Installation<a class="headerlink" href="#web-server-installation" title="Permalink to this headline">¶</a></h1>
-<p>LavaFlow is a django application. It is installed and configured just like any other Django application would be. The
-following steps are required to install LavaFlow.</p>
-<div class="section" id="install-django">
-<h2>Install Django<a class="headerlink" href="#install-django" title="Permalink to this headline">¶</a></h2>
-<p>If you have not already done so, <a class="reference external" href="https://docs.djangoproject.com/en/1.6/intro/install/">Install Django</a>.</p>
-</div>
-<div class="section" id="django-project">
-<h2>Django Project<a class="headerlink" href="#django-project" title="Permalink to this headline">¶</a></h2>
-<p>Create and configure a django project. This can be done by following <a class="reference external" href="https://docs.djangoproject.com/en/1.6/intro/tutorial01/#creating-a-project">these steps</a>.</p>
-</div>
-<div class="section" id="web-server-configuration">
-<h2>Web Server Configuration<a class="headerlink" href="#web-server-configuration" title="Permalink to this headline">¶</a></h2>
-<p>Configure Lavaflow as a WSGI application as prescribed in the Django tutorial.</p>
-</div>
+  <div class="section" id="client-tools-installation">
+<h1>Client Tools Installation<a class="headerlink" href="#client-tools-installation" title="Permalink to this headline">¶</a></h1>
+<p>LavaFlow comes with client tooling for various scheduling environments which enable the administator to import data from
+the cluster. This is typically done on the cluster front end, but it can be done on any machine that has access to the
+log files regardless if that machine is actually part of the  cluster environment.</p>
 <div class="section" id="download-lavaflow">
 <h2>Download lavaFlow<a class="headerlink" href="#download-lavaflow" title="Permalink to this headline">¶</a></h2>
 <p>Use git to checkout <a class="reference external" href="https://github.com/irvined1982/lavaflowb">lavaFlow</a>.:</p>
@@ -163,21 +162,21 @@ $ git submodule update --init --recursive</pre>
 <p>Use setuptools to install the module.:</p>
 <div class="highlight-python"><pre>$ sudo python setup.py install</pre>
 </div>
+<p>This will install the lava-import-openlava script which is used to import data.</p>
 </div>
-<div class="section" id="activate-lavaflow">
-<h2>Activate lavaFlow<a class="headerlink" href="#activate-lavaflow" title="Permalink to this headline">¶</a></h2>
-<p>Install lavaFlow as an application in your django project.:</p>
-<div class="highlight-python"><pre>INSTALLED_APPS = (
-...
-    'lavaFlow',
-...
-)</pre>
+<div class="section" id="openlava-python-bindings">
+<h2>Openlava-python bindings<a class="headerlink" href="#openlava-python-bindings" title="Permalink to this headline">¶</a></h2>
+<p>In order to read and upload log files from openlava, you need to install the openlava python bindings.  These are used
+only by the upload tools for openlava.  If you are not using openlava, you do not need to install these.</p>
+<p>The openlava import client does not need to communicate with the cluster, it does however require access to the openlava
+API, so openlava will need to be built even if it is not active.  This is in order to parse the log files.  Openlava
+installation and configuration is out of hte scope of this document.  It is however assumed that the openlava
+libraries are available.</p>
+<p>Install the Openlava python bindings.:</p>
+<div class="highlight-python"><pre>$ git clone https://github.com/irvined1982/openlava-python.git
+$ cd openlava-python/openlava/
+$ python setup.py install</pre>
 </div>
-<p>Configure the URLs for lavaFlow. Open urls.py in your django project, and include the url configuration for lavaFlow:</p>
-<div class="highlight-python"><pre>urlpatterns = patterns('',
-    url(r'^', include('lavaFlow.urls')),</pre>
-</div>
-<p>You can now view lavaFlow by visiting your web server.</p>
 </div>
 </div>
 

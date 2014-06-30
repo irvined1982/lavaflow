@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Openlava Import &mdash; LavaFlow 1.1 documentation</title>
+    <title>Import Tools &mdash; LavaFlow 1.1 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -30,9 +30,10 @@
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="LavaFlow 1.1 documentation" href="index.html" />
     <link rel="next" title="Views" href="views.html" />
-    <link rel="prev" title="Web Server Installation" href="install.html" />
+    <link rel="prev" title="Client Tools Installation" href="client.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -69,10 +70,15 @@
   <ul class="dropdown-menu globaltoc"
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="install.html">Web Server Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Openlava Import</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server.html">Web Server Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">Client Tools Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Import Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="views.html">Views</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core_models.html">Core Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary of Terms</a></li>
 </ul>
 </ul>
 </li>
@@ -86,16 +92,12 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Openlava Import</a><ul>
-<li><a class="reference internal" href="#installataion">Installataion</a><ul>
-<li><a class="reference internal" href="#openlava-python-bindings">Openlava-python bindings</a></li>
-<li><a class="reference internal" href="#download-lavaflow">Download lavaFlow</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#lava-import-openlava-py">lava-import-openlava.py</a></li>
-<li><a class="reference internal" href="#importing-guidelines">Importing Guidelines</a><ul>
-<li><a class="reference internal" href="#post-installation">Post Installation</a></li>
-<li><a class="reference internal" href="#automatic-import">Automatic Import</a></li>
+<li><a class="reference internal" href="#">Import Tools</a><ul>
+<li><a class="reference internal" href="#import-key">Import Key</a></li>
+<li><a class="reference internal" href="#openlava">Openlava</a><ul>
+<li><a class="reference internal" href="#initial-import">Initial Import</a></li>
+<li><a class="reference internal" href="#normal-import">Normal Import</a></li>
+<li><a class="reference internal" href="#lava-import-openlava">lava-import-openlava</a></li>
 </ul>
 </li>
 </ul>
@@ -109,7 +111,7 @@
               
                 
   <li>
-    <a href="install.html" title="Previous Chapter: Web Server Installation"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Web Server Insta...</span>
+    <a href="client.html" title="Previous Chapter: Client Tools Installation"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Client Tools Ins...</span>
     </a>
   </li>
   <li>
@@ -147,43 +149,61 @@
   <div class="row">
     <div class="col-md-12">
       
-  <div class="section" id="openlava-import">
-<h1>Openlava Import<a class="headerlink" href="#openlava-import" title="Permalink to this headline">¶</a></h1>
-<p>lavaFlow comes with a script that will read OpenLava log files, and upload data to the lavaFlow server, this tool can
-continuously in the background, or via a cron job, or manually as required.</p>
-<div class="section" id="installataion">
-<h2>Installataion<a class="headerlink" href="#installataion" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="openlava-python-bindings">
-<h3>Openlava-python bindings<a class="headerlink" href="#openlava-python-bindings" title="Permalink to this headline">¶</a></h3>
-<p>In order to read and upload log files, you need to install the openlava python bindings.  These are used only by the
-upload tools, generally you only need to install this on the master node of each cluster, this may or may not be the
-machine you are running lavaFlow on.</p>
-<p>Install the Openlava python bindings.:</p>
-<div class="highlight-python"><pre>$ git clone https://github.com/irvined1982/openlava-python.git
-$ cd openlava-python/openlava/
-$ python setup.py install</pre>
+  <div class="section" id="import-tools">
+<h1>Import Tools<a class="headerlink" href="#import-tools" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="import-key">
+<h2>Import Key<a class="headerlink" href="#import-key" title="Permalink to this headline">¶</a></h2>
+<img alt="_images/create_import_key.png" class="align-center" src="_images/create_import_key.png" style="width: 600px;" />
+<p>Regardless of how you are importing data, you will require a shared key, this is stored in the ImportKey table, and
+is part of the admin interface.  Log into the django admin interface, and click on the ImportKey item under the
+lavaFlow section.</p>
+<p>Create a new ImportKey, setting the client_key to the value of the shared key, it is recommended that you use a
+different key for each cluster, however there is no hard requirement to do so.</p>
 </div>
+<div class="section" id="openlava">
+<h2>Openlava<a class="headerlink" href="#openlava" title="Permalink to this headline">¶</a></h2>
+<p>data from lsb.acct and lsb.events needs to be imported into LavaFlow, this is done using lava-import-openlava, a python
+script that reads the log file using the python bindings for openlava, and uploads them using another API call to the
+openlava web server.</p>
+<div class="section" id="initial-import">
+<h3>Initial Import<a class="headerlink" href="#initial-import" title="Permalink to this headline">¶</a></h3>
+<p>At first, it is likely you will have various log files, some of which have been rotated by the scheduler, others that
+perhaps are from an older cluster that has been retired and you wish to import historical data.  In that case it is
+generally easiest to just run lava-import-python on each file once before setting up any recurring import.</p>
+<p>For each cluster you will typically have at least one lsb.acct file, and many lsb.events files, these are rotated to
+lsb.events.n where n is a number indicating the index of the file, the bigger the number, the older the data in the
+file.</p>
+<p>If you are on an active openlava cluster, the following example will import all existing data:</p>
+<div class="highlight-python"><pre>$ for i in $LSF_ENVDIR/../work/logdir/lsb.events* $LSF_ENVDIR/../work/logdir/lsb.acct*  ;
+  do
+   lava-import-openlava --chunk_size 500 --log_level=info $i http://MyLavaServer/lavaflow topSecretKey
+  done</pre>
 </div>
-<div class="section" id="download-lavaflow">
-<h3>Download lavaFlow<a class="headerlink" href="#download-lavaflow" title="Permalink to this headline">¶</a></h3>
-<p>Use git to checkout <a class="reference external" href="https://github.com/irvined1982/lavaFlow">lavaFlow</a>.:</p>
-<div class="highlight-python"><pre>$ git clone https://github.com/irvined1982/lavaflow.git
-$ git submodule update --init --recursive</pre>
+<p>In this case, the chunk_size is set slightly higher than normal which will give a faster import, however if you make
+this too high, it is possible that the server will timeout when importing, which will result in a fatal error.</p>
+<p>If you are importing data from a machine that is not part of the openlava cluster, or you want to specify a specific
+name for the cluster other than what is reported by the scheduling system, you should use the &#8211;cluster_name option.</p>
 </div>
-<p>Inside the import directory you will find the import scripts.</p>
+<div class="section" id="normal-import">
+<h3>Normal Import<a class="headerlink" href="#normal-import" title="Permalink to this headline">¶</a></h3>
+<p>Once you have historical data imported, you need to run the import script with the &#8211;tail_log option, this will read
+the log file to completion, and wait on new data.  If the log file is rotated, it will automatically load the new file
+each time.</p>
+<p>These should, ideally be started at system boot.</p>
+<p>If you have a cluster that has a very low rate of job turnover, it is advisable to reduce the chunk_size so that
+data is uploaded more often.:</p>
+<div class="highlight-python"><pre>lava-import-openlava --chunk_size 50 --tail_log --log_level=warn $LSF_ENVDIR/../work/logdir/lsb.events http://MyLavaServer/lavaflow topSecretKey
+lava-import-openlava --chunk_size 50 --tail_log --log_level=warn $LSF_ENVDIR/../work/logdir/lsb.events http://MyLavaServer/lavaflow topSecretKey</pre>
 </div>
+<p>If you have issues with network reliability, you may wish to use the &#8211;retry_forever which will never give up in the
+event that the server does not respond.</p>
 </div>
-<div class="section" id="lava-import-openlava-py">
-<h2>lava-import-openlava.py<a class="headerlink" href="#lava-import-openlava-py" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="lava-import-openlava">
+<h3>lava-import-openlava<a class="headerlink" href="#lava-import-openlava" title="Permalink to this headline">¶</a></h3>
 <p>Reads openlava log files and uploads them.  Will read and attempt to upload all entries in the file.
 This is not desirable if you have large logfiles and want to upload regularly, for that you should use
 logtail or some other utility to only read entries that have not yet been uploaded.  There is no harm in
-re-uploading, but it is time expensive.:</p>
-<div class="highlight-python"><pre>usage: lava-import-openlava.py [-h] [--tail_log] [--cluster_name NAME]
-                               [--chunk_size CHUNK_SIZE]
-                               [--log_level LOG_LEVEL] [--retry_forever]
-                               LOGFILE URL KEY</pre>
-</div>
+re-uploading, but it is time expensive.</p>
 <dl class="option">
 <dt>
 <tt class="descname">log_file</tt></dt>
@@ -230,30 +250,6 @@ directly.</p>
 <p>Log level to use, can be one of debug, info, warn, error, critical.</p>
 <p>When enabled, will not exit when the end of the input file is reached.  Instead, it will wait for new data,
 or if the file is rotated, reopen the file and continue reading.</p>
-</div>
-<div class="section" id="importing-guidelines">
-<h2>Importing Guidelines<a class="headerlink" href="#importing-guidelines" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="post-installation">
-<h3>Post Installation<a class="headerlink" href="#post-installation" title="Permalink to this headline">¶</a></h3>
-<p>After completing the installation, you need to populate the database, generally it is best to pull all lsb.event
-files and the lsb.acct file into lavaFlow.  It doesnt matter which you do first. Something like the following:</p>
-<div class="highlight-python"><pre>$ ./import/lava-import-openlava.py /opt/openlava/work/logdir/lsb.events https://OPENLAVA_SERVER/lavaFlow T0PS3CRETK3YFILE --chunk_size=1000 --log_level=info
-$ for i in /opt/openlava/work/logdir/lsb.events
-&gt; do
-&gt; ./import/lava-import-openlava.py $i https://OPENLAVA_SERVER/lavaFlow T0PS3CRETK3YFILE --chunk_size=1000 --log_level=info
-&gt; done
-$</pre>
-</div>
-</div>
-<div class="section" id="automatic-import">
-<h3>Automatic Import<a class="headerlink" href="#automatic-import" title="Permalink to this headline">¶</a></h3>
-<p>Once the database has been populated with a backlog of events, you need to continue to add new data when it becomes
-available.  For this you can use the tail_log option.  Something like the following:</p>
-<div class="highlight-python"><pre>$ ./import/lava-import-openlava.py /opt/openlava/work/logdir/lsb.acct https://OPENLAVA_SERVER/lavaFlow T0PS3CRETK3YFILE --tail_log &amp;
-$ ./import/lava-import-openlava.py /opt/openlava/work/logdir/lsb.events https://OPENLAVA_SERVER/lavaFlow T0PS3CRETK3YFILE --tail_log &amp;</pre>
-</div>
-<p>By using the tail_log option, the importer will tail the log file waiting for new data before uploading.  Additionally,
-if the log file is rotated, the script will load the new file once it has processed all data from the old one.</p>
 </div>
 </div>
 </div>
