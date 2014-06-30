@@ -1,6 +1,9 @@
 Import Tools
 ============
 
+For each type of cluster that LavaFlow supports, there is also a corresponding set of tooling to import data form that
+cluster.  The usage of which is documented below.
+
 Import Key
 ----------
 
