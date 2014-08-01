@@ -609,8 +609,25 @@ def openlava_import_job_finish(cluster, event):
             attempt.attemptresourceusage
         except ObjectDoesNotExist:
             resource_usage = AttemptResourceUsage()
-            for i, v in log['lsfRusage'].items():
-                setattr(resource_usage, i, v)
+            resource_usage.user_time = log['lsfRusage']['ru_utime']
+            resource_usage.system_time = log['lsfRusage']['ru_stime']
+            resource_usage.max_rss = log['lsfRusage']['ru_maxrss']
+            resource_usage.integral_shared_text = log['lsfRusage']['ru_ixrss']
+            resource_usage.integral_shared_memory = log['lsfRusage']['ru_ismrss']
+            resource_usage.integral_unshared_data = log['lsfRusage']['ru_idrss']
+            resource_usage.integral_unshared_stack = log['lsfRusage']['ru_isrss']
+            resource_usage.page_reclaims = log['lsfRusage']['ru_minflt']
+            resource_usage.page_faults = log['lsfRusage']['ru_majflt']
+            resource_usage.swaps = log['lsfRusage']['ru_nswap']
+            resource_usage.input_block_ops = log['lsfRusage']['ru_inblock']
+            resource_usage.output_block_ops = log['lsfRusage']['ru_oublock']
+            resource_usage.charecter_io_ops = log['lsfRusage']['ru_ioch']
+            resource_usage.messages_sent = log['lsfRusage']['ru_msgsnd']
+            resource_usage.messages_received = log['lsfRusage']['ru_msgrcv']
+            resource_usage.num_signals = log['lsfRusage']['ru_nsignals']
+            resource_usage.voluntary_context_switches = log['lsfRusage']['ru_nvcsw']
+            resource_usage.involuntary_context_switches =log['lsfRusage']['ru_nivcsw']
+            resource_usage.exact_user_time = log['lsfRusage']['ru_exutime']
             resource_usage.attempt = attempt
             resource_usage.save()
 
