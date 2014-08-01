@@ -582,8 +582,6 @@ def openlava_import_job_finish(cluster, event):
 
     (queue, created) = Queue.objects.get_or_create(name=log['queue'], cluster=cluster)
 
-    
-
     job_state = OPENLAVA_JOB_STATES[log['jStatus']]
     clean = False
     if job_state['name'] == "JOB_STAT_DONE":
