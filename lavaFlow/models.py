@@ -935,7 +935,7 @@ class AttemptResourceUsage(models.Model):
 class OpenLavaExitInfo(models.Model):
     attempt = models.OneToOneField(Attempt)
     user_id = models.IntegerField()
-    user = models.ForeignKey(User, db_column="user_rem_id")
+    user = models.ForeignKey(User)
     options = models.ManyToManyField(OpenLavaSubmitOption)
     begin_time = models.IntegerField()
 

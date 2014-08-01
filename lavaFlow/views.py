@@ -636,12 +636,10 @@ def openlava_import_job_finish(cluster, event):
         except ObjectDoesNotExist:
             ol = OpenLavaExitInfo()
             ol.attempt = attempt
-            ol.resource_usage = resource_usage
-            ol.user = user
-            (project, created) = Project.objects.get_or_create(name=log['projectName'])
-            ol.project=project
             ol.user_id = log['userId']
+            ol.user = user
             ol.begin_time  = log['beginTime']
+
             ol.termination_time  = log['termTime']
             ol.resource_request = log['resReq']
             ol.cwd = log['cwd']
@@ -651,6 +649,16 @@ def openlava_import_job_finish(cluster, event):
             ol.input_file_spool = log['inFileSpool']
             ol.command_spool = log['commandSpool']
             ol.job_file = log['jobFile']
+
+
+
+            ol.resource_usage = resource_usage
+
+            (project, created) = Project.objects.get_or_create(name=log['projectName'])
+            ol.project=project
+
+
+
             ol.host_factor = log['hostFactor']
             ol.job_name = log['jobName']
             ol.dependency_condition = log['dependCond']
