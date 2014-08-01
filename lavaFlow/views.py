@@ -468,8 +468,8 @@ def openlava_import_job_new(cluster, event):
             f.execution_file_name = fl['execFn']
             f.save()
             js.transfer_files.add(f)
-        for option in event['options']:
-            for state in OpenLavaSubmitOption.get_status_list(option):
+
+            for state in OpenLavaSubmitOption.get_status_list(event['options']):
                 (o, created) = OpenLavaSubmitOption.objects.get_or_create(**state)
                 js.options.add(o)
         js.save()
@@ -671,10 +671,10 @@ def openlava_import_job_finish(cluster, event):
             ol.max_residual_mem = log['maxRMem']
             ol.max_swap = log['maxRSwap']
             ol.save()
-            for option in log['options']:
-                for state in OpenLavaSubmitOption.get_status_list(option):
-                    (o, created) = OpenLavaSubmitOption.objects.get_or_create(**state)
-                    ol.options.add(o)
+
+            for state in OpenLavaSubmitOption.get_status_list(log['options']):
+                (o, created) = OpenLavaSubmitOption.objects.get_or_create(**state)
+                ol.options.add(o)
 
             for host in log['askedHosts']:
                 (h, created) = Host.objects.get_or_create(name=host)
