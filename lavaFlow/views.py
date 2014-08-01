@@ -20,35 +20,104 @@
 # $Date: 2012-10-31 23:42:17 +0100 (Wed, 31 Oct 2012) $:
 #
 # Create your views here.
-from scipy import interpolate
-import base64
-import re
-import uuid
 import datetime
 import json
-import time
-import tempfile
 import logging
+
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import cache_page
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponse
-from django.shortcuts import render, render_to_response
-from django.conf import settings
-from django.shortcuts import get_object_or_404
-from django.db.models import Avg
-from django.db.models import Count
-from django.db.models import Sum
-from django.template import RequestContext
-from django.http import Http404
+from django.shortcuts import render
+from django.db.models import Avg, Count, Sum
 from django.views.generic import ListView
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
+from django.core.exceptions import ObjectDoesNotExist
+
 from lavaFlow.models import *
 
+OPENLAVA_JOB_STATES = {
+        0x00: {
+            'friendly': "Null",
+            'name': 'JOB_STAT_NULL',
+            'description': 'State null.',
+        },
+        0x01: {
+            'friendly': "Pending",
+            'name': 'JOB_STAT_PEND',
+            'description': 'The job is pending, i.e., it has not been dispatched yet.',
+        },
+        0x02: {
+            'friendly': "Held",
+            'name': "JOB_STAT_PSUSP",
+            'description': "The pending job was suspended by its owner or the LSF system administrator.",
+        },
+        0x04: {
+            'friendly': "Running",
+            'name': "JOB_STAT_RUN",
+            'description': "The job is running.",
+        },
+        0x08: {
+            'friendly': "Suspended by system",
+            'name': "JOB_STAT_SSUSP",
+            'description': "The running job was suspended by the system because an execution host was overloaded or the queue run window closed.",
+        },
+        0x10: {
+            'friendly': "Suspended by user",
+            'name': "JOB_STAT_USUSP",
+            'description': "The running job was suspended by its owner or the LSF system administrator.",
+        },
+        0x20: {
+            'friendly': "Exited",
+            'name': "JOB_STAT_EXIT",
+            'description': "The job has terminated with a non-zero status - it may have been aborted due to an error in its execution, or killed by its owner or by the LSF system administrator.",
+        },
+        0x40: {
+            'friendly': "Completed",
+            'name': "JOB_STAT_DONE",
+            'description': "The job has terminated with status 0.",
+        },
+        0x80: {
+            'friendly': "Process Completed",
+            'name': "JOB_STAT_PDONE",
+            'description': "Post job process done successfully.",
+        },
+        0x100: {
+            'friendly': "Process Error",
+            'name': "JOB_STAT_PERR",
+            'description': "Post job process has error.",
+        },
+        0x200: {
+            'friendly': "Waiting for execution",
+            'name': "JOB_STAT_WAIT",
+            'description': "Chunk job waiting its turn to exec.",
+        },
+        0x10000: {
+            'friendly': "Unknown",
+            'name': "JOB_STAT_UNKWN",
+            'description': "The slave batch daemon (sbatchd) on the host on which the job is processed has lost contact with the master batch daemon (mbatchd).",
+        },
+    }
+
+
 log = logging.getLogger(__name__)
+
+def create_js_success(data=None, message=""):
+    """
+    Takes a json serializable object, and an optional message, and creates a standard json response document.
+    :param data: json serializable object
+    :param message: Optional message to include with response
+    :return: HttpResponse object
+    """
+    data={
+        'status':"OK",
+        'data':data,
+        'message':message,
+    }
+    return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 @csrf_exempt
 def gridengine_import(request, cluster_name):
+
     data = json.loads(request.body)
     (cluster, created) = Cluster.objects.get_or_create(name=cluster_name)
     (user, created) = User.objects.get_or_create(name=data['owner'])
@@ -66,216 +135,216 @@ def gridengine_import(request, cluster_name):
     pend_time = start_time - submit_time
 
     states = {
-    0: {
-    'code': 0,
-    'name': "No Failure",
-    'description': "Ran and Exited normally",
-    'exited_cleanly': True,
-    },
-    1: {
-    'code': 1,
-    'name': "Assumedly before job",
-    'description': 'failed early in execd',
-    'exited_cleanly': False,
-    },
-    3: {
-    'code': 3,
-    'name': 'Before writing config',
-    'description': 'failed before execd set up local spool',
-    'exited_cleanly': False,
-    },
-    4: {
-    'code': 4,
-    'name': 'Before writing PID',
-    'description': 'shepherd failed to record its pid',
-    'exited_cleanly': False,
-    },
-    6: {
-    'code': 6,
-    'name': 'Setting processor set',
-    'description': 'failed setting up processor set',
-    'exited_cleanly': False,
-    },
-    7: {
-    'code': 7,
-    'name': 'Before prolog',
-    'description': 'failed before prolog',
-    'exited_cleanly': False,
-    },
-    8: {
-    'code': 8,
-    'name': 'In prolog',
-    'description': 'failed in prolog',
-    'exited_cleanly': False,
-    },
-    9: {
-    'code': 9,
-    'name': 'Before pestart',
-    'description': 'failed before starting PE',
-    'exited_cleanly': False,
-    },
-    10: {
-    'code': 10,
-    'name': 'in pestart',
-    'description': 'failed in PE starter',
-    'exited_cleanly': False,
-    },
-    11: {
-    'code': 11,
-    'name': 'Before job',
-    'description': 'failed in shepherd before starting job',
-    'exited_cleanly': False,
-    },
-    12: {
-    'code': 12,
-    'name': 'Before PE Stop',
-    'description': 'ran, but failed before calling PE stop procedure',
-    'exited_cleanly': True,
-    },
-    13: {
-    'code': 13,
-    'name': 'In PE Stop',
-    'description': 'ran, but PE stop procedure failed',
-    'exited_cleanly': True,
-    },
-    14: {
-    'code': 14,
-    'name': 'Before Epilog',
-    'description': 'ran, but failed in epilog script',
-    'exited_cleanly': True,
-    },
-    16: {
-    'code': 16,
-    'name': 'Releasing processor set',
-    'description': 'ran, but processor set could not be released',
-    'exited_cleanly': True,
-    },
-    17: {
-    'code': 17,
-    'name': 'Through signal',
-    'description': 'job killed by signal (possibly qdel)',
-    'exited_cleanly': True,
-    },
-    18: {
-    'code': 18,
-    'name': 'Shepherd returned error',
-    'description': 'Shephard Died',
-    'exited_cleanly': False,
-    },
-    19: {
-    'code': 19,
-    'name': 'Before writing exit_status',
-    'description': 'shepherd didnt write reports corectly',
-    'exited_cleanly': False,
-    },
-    20: {
-    'code': 20,
-    'name': 'Found unexpected error file',
-    'description': 'shepherd encountered a problem',
-    'exited_cleanly': True,
-    },
-    21: {
-    'code': 21,
-    'name': 'In recognizing job',
-    'description': 'qmaster asked about an unknown job (Not in accounting)',
-    'exited_cleanly': False,
-    },
-    24: {
-    'code': 24,
-    'name': 'Migrating (checkpointing jobs)',
-    'description': 'ran, will be migrated',
-    'exited_cleanly': True,
-    },
-    25: {
-    'code': 25,
-    'name': 'Rescheduling',
-    'description': 'ran, will be rescheduled',
-    'exited_cleanly': True,
-    },
-    26: {
-    'code': 26,
-    'name': 'Opening output file',
-    'description': 'failed opening stderr/stdout file',
-    'exited_cleanly': False,
-    },
-    27: {
-    'code': 27,
-    'name': 'Searching requested shell',
-    'description': 'failed finding specified shell',
-    'exited_cleanly': False,
-    },
-    28: {
-    'code': 28,
-    'name': 'Changing to working directory',
-    'description': 'failed changing to start directory',
-    'exited_cleanly': False,
-    },
-    29: {
-    'code': 29,
-    'name': 'AFS setup',
-    'description': 'failed setting up AFS security',
-    'exited_cleanly': False,
-    },
-    30: {
-    'code': 30,
-    'name': 'Application error returned',
-    'description': 'ran and exited 100 - maybe re-scheduled',
-    'exited_cleanly': True,
-    },
-    31: {
-    'code': 31,
-    'name': 'Accessing sgepasswd file',
-    'description': 'failed because sgepasswd not readable (MS Windows)',
-    'exited_cleanly': False,
-    },
-    32: {
-    'code': 32,
-    'name': 'entry is missing in password file',
-    'description': 'failed because user not in sgepasswd (MS Windows)',
-    'exited_cleanly': False,
-    },
-    33: {
-    'code': 33,
-    'name': 'Wrong password',
-    'description': 'failed because of wrong password against sgepasswd (MS Windows)',
-    'exited_cleanly': False,
-    },
-    34: {
-    'code': 34,
-    'name': 'Communicating with Grid Engine Helper Service',
-    'description': 'failed because of failure of helper service (MS Windows)',
-    'exited_cleanly': False,
-    },
-    35: {
-    'code': 35,
-    'name': 'Before job in Grid Engine Helper Service',
-    'description': 'failed because of failure running helper service (MS Windows)',
-    'exited_cleanly': False,
-    },
-    36: {
-    'code': 36,
-    'name': 'Checking configured daemons',
-    'description': 'failed because of configured remote startup daemon',
-    'exited_cleanly': False,
-    },
-    37: {
-    'code': 37,
-    'name': 'qmaster enforced h_rt, h_cpu, or h_vmem limit',
-    'description': 'ran, but killed due to exceeding run time limit',
-    'exited_cleanly': True,
-    },
-    38: {
-    'code': 38,
-    'name': 'Adding supplementary group',
-    'description': 'failed adding supplementary gid to job',
-    'exited_cleanly': False,
-    },
-    100: {
-    'code': 100,
-    'name': 'Assumedly after job',
-    'description': 'ran, but killed by a signal (perhaps due to exceeding resources), task died, shepherd died (e.g. node crash), etc.',
-    'exited_cleanly': True,
-    },
+        0: {
+            'code': 0,
+            'name': "No Failure",
+            'description': "Ran and Exited normally",
+            'exited_cleanly': True,
+        },
+        1: {
+            'code': 1,
+            'name': "Assumedly before job",
+            'description': 'failed early in execd',
+            'exited_cleanly': False,
+        },
+        3: {
+            'code': 3,
+            'name': 'Before writing config',
+            'description': 'failed before execd set up local spool',
+            'exited_cleanly': False,
+        },
+        4: {
+            'code': 4,
+            'name': 'Before writing PID',
+            'description': 'shepherd failed to record its pid',
+            'exited_cleanly': False,
+        },
+        6: {
+            'code': 6,
+            'name': 'Setting processor set',
+            'description': 'failed setting up processor set',
+            'exited_cleanly': False,
+        },
+        7: {
+            'code': 7,
+            'name': 'Before prolog',
+            'description': 'failed before prolog',
+            'exited_cleanly': False,
+        },
+        8: {
+            'code': 8,
+            'name': 'In prolog',
+            'description': 'failed in prolog',
+            'exited_cleanly': False,
+        },
+        9: {
+            'code': 9,
+            'name': 'Before pestart',
+            'description': 'failed before starting PE',
+            'exited_cleanly': False,
+        },
+        10: {
+            'code': 10,
+            'name': 'in pestart',
+            'description': 'failed in PE starter',
+            'exited_cleanly': False,
+        },
+        11: {
+            'code': 11,
+            'name': 'Before job',
+            'description': 'failed in shepherd before starting job',
+            'exited_cleanly': False,
+        },
+        12: {
+            'code': 12,
+            'name': 'Before PE Stop',
+            'description': 'ran, but failed before calling PE stop procedure',
+            'exited_cleanly': True,
+        },
+        13: {
+            'code': 13,
+            'name': 'In PE Stop',
+            'description': 'ran, but PE stop procedure failed',
+            'exited_cleanly': True,
+        },
+        14: {
+            'code': 14,
+            'name': 'Before Epilog',
+            'description': 'ran, but failed in epilog script',
+            'exited_cleanly': True,
+        },
+        16: {
+            'code': 16,
+            'name': 'Releasing processor set',
+            'description': 'ran, but processor set could not be released',
+            'exited_cleanly': True,
+        },
+        17: {
+            'code': 17,
+            'name': 'Through signal',
+            'description': 'job killed by signal (possibly qdel)',
+            'exited_cleanly': True,
+        },
+        18: {
+            'code': 18,
+            'name': 'Shepherd returned error',
+            'description': 'Shephard Died',
+            'exited_cleanly': False,
+        },
+        19: {
+            'code': 19,
+            'name': 'Before writing exit_status',
+            'description': 'shepherd didnt write reports corectly',
+            'exited_cleanly': False,
+        },
+        20: {
+            'code': 20,
+            'name': 'Found unexpected error file',
+            'description': 'shepherd encountered a problem',
+            'exited_cleanly': True,
+        },
+        21: {
+            'code': 21,
+            'name': 'In recognizing job',
+            'description': 'qmaster asked about an unknown job (Not in accounting)',
+            'exited_cleanly': False,
+        },
+        24: {
+            'code': 24,
+            'name': 'Migrating (checkpointing jobs)',
+            'description': 'ran, will be migrated',
+            'exited_cleanly': True,
+        },
+        25: {
+            'code': 25,
+            'name': 'Rescheduling',
+            'description': 'ran, will be rescheduled',
+            'exited_cleanly': True,
+        },
+        26: {
+            'code': 26,
+            'name': 'Opening output file',
+            'description': 'failed opening stderr/stdout file',
+            'exited_cleanly': False,
+        },
+        27: {
+            'code': 27,
+            'name': 'Searching requested shell',
+            'description': 'failed finding specified shell',
+            'exited_cleanly': False,
+        },
+        28: {
+            'code': 28,
+            'name': 'Changing to working directory',
+            'description': 'failed changing to start directory',
+            'exited_cleanly': False,
+        },
+        29: {
+            'code': 29,
+            'name': 'AFS setup',
+            'description': 'failed setting up AFS security',
+            'exited_cleanly': False,
+        },
+        30: {
+            'code': 30,
+            'name': 'Application error returned',
+            'description': 'ran and exited 100 - maybe re-scheduled',
+            'exited_cleanly': True,
+        },
+        31: {
+            'code': 31,
+            'name': 'Accessing sgepasswd file',
+            'description': 'failed because sgepasswd not readable (MS Windows)',
+            'exited_cleanly': False,
+        },
+        32: {
+            'code': 32,
+            'name': 'entry is missing in password file',
+            'description': 'failed because user not in sgepasswd (MS Windows)',
+            'exited_cleanly': False,
+        },
+        33: {
+            'code': 33,
+            'name': 'Wrong password',
+            'description': 'failed because of wrong password against sgepasswd (MS Windows)',
+            'exited_cleanly': False,
+        },
+        34: {
+            'code': 34,
+            'name': 'Communicating with Grid Engine Helper Service',
+            'description': 'failed because of failure of helper service (MS Windows)',
+            'exited_cleanly': False,
+        },
+        35: {
+            'code': 35,
+            'name': 'Before job in Grid Engine Helper Service',
+            'description': 'failed because of failure running helper service (MS Windows)',
+            'exited_cleanly': False,
+        },
+        36: {
+            'code': 36,
+            'name': 'Checking configured daemons',
+            'description': 'failed because of configured remote startup daemon',
+            'exited_cleanly': False,
+        },
+        37: {
+            'code': 37,
+            'name': 'qmaster enforced h_rt, h_cpu, or h_vmem limit',
+            'description': 'ran, but killed due to exceeding run time limit',
+            'exited_cleanly': True,
+        },
+        38: {
+            'code': 38,
+            'name': 'Adding supplementary group',
+            'description': 'failed adding supplementary gid to job',
+            'exited_cleanly': False,
+        },
+        100: {
+            'code': 100,
+            'name': 'Assumedly after job',
+            'description': 'ran, but killed by a signal (perhaps due to exceeding resources), task died, shepherd died (e.g. node crash), etc.',
+            'exited_cleanly': True,
+        },
     }
     state = states[data['failed']]
     (status, created) = JobStatus.objects.get_or_create(**state)
@@ -285,15 +354,15 @@ def gridengine_import(request, cluster_name):
         task=task,
         start_time=start_time,
         defaults={
-        'user': user,
-        'num_processors': num_processors,
-        'end_time': end_time,
-        'cpu_time': cpu_time,
-        'wall_time': wall_time,
-        'pend_time': pend_time,
-        'queue': queue,
-        'status': status,
-        'command': "Unspecified",
+            'user': user,
+            'num_processors': num_processors,
+            'end_time': end_time,
+            'cpu_time': cpu_time,
+            'wall_time': wall_time,
+            'pend_time': pend_time,
+            'queue': queue,
+            'status': status,
+            'command': "Unspecified",
         },
     )
     if created:
@@ -347,18 +416,22 @@ def gridengine_import(request, cluster_name):
         a.save()
     return HttpResponse("OK", content_type="text/plain")
 
-from django.http import HttpResponseBadRequest, HttpResponseForbidden
-from django.core.exceptions import ObjectDoesNotExist
 
 @csrf_exempt
 def openlava_import(request, cluster_name):
+    """
+    Imports one or more openlava log entries, log entries are uploaded as JSON data in the request body.
+    :param request: Request object
+    :param cluster_name: name of cluster (Specified in URL)
+    :return: JSON Status
+    """
     # Parse the body for json data
     try:
         data = json.loads(request.body)
     except ValueError:
         return HttpResponseBadRequest("Invalid JSON data")
 
-    #check it contains the upload key
+    # check it contains the upload key
     if 'key' not in data:
         return HttpResponseBadRequest("key not specified")
 
@@ -373,21 +446,19 @@ def openlava_import(request, cluster_name):
 
     # Process each entry in the array of entries
     for event in data['payload']:
-        if event['type'] == 1: # EVENT_JOB_NEW
+        if event['type'] == 1:  # EVENT_JOB_NEW
             openlava_import_job_new(cluster, event)
-        elif event['type'] == 10: # EVENT_JOB_FINISH
+        elif event['type'] == 10:  # EVENT_JOB_FINISH
             openlava_import_job_finish(cluster, event)
 
-
-    return HttpResponse("OK", content_type="text/plain")
-
+    return create_js_success(message="Import Successful")
 
 
 def openlava_import_job_new(cluster, event):
     """
-    Imports a single openlava event.
+    Imports a single openlava job_new event event.
     :param cluster: Cluster object
-    :param entry: Dict containing event details
+    :param event: Dict containing event details
     :return: None
     """
     event = event['eventLog']['jobNewLog']
@@ -458,7 +529,7 @@ def openlava_import_job_new(cluster, event):
         js.max_num_processors = event['maxNumProcessors']
         js.schedule_host_type = event['schedHostType']
         js.login_shell = event['loginShell']
-
+        js.user_priority = event['userPriority']
         for host in event['askedHosts']:
             (h, created) = Host.objects.get_or_create(name=host)
             js.asked_hosts.add(h)
@@ -476,7 +547,13 @@ def openlava_import_job_new(cluster, event):
 
 
 def openlava_import_job_finish(cluster, event):
-    log=event['eventLog']['jobFinishLog']
+    """
+    Imports a single openlava job finish event.
+    :param cluster: Cluster object
+    :param event: event to import
+    :return: None
+    """
+    log = event['eventLog']['jobFinishLog']
 
     (user, created) = User.objects.get_or_create(name=log['userName'])
     (submit_host, created) = Host.objects.get_or_create(name=log['fromHost'])
@@ -487,7 +564,7 @@ def openlava_import_job_finish(cluster, event):
         submit_host=submit_host,
         submit_time=log['submitTime'])
 
-    (task, created) = Task.objects.get_or_create(cluster=cluster, job=job, user=user,task_id=log['idx'])
+    (task, created) = Task.objects.get_or_create(cluster=cluster, job=job, user=user, task_id=log['idx'])
     num_processors = log['numProcessors']
     start_time = log['startTime']
     if start_time == 0:  # Job was killed before starting
@@ -504,73 +581,11 @@ def openlava_import_job_finish(cluster, event):
 
     (queue, created) = Queue.objects.get_or_create(name=log['queue'], cluster=cluster)
 
+    
 
-    job_states={
-        0x00: {
-            'friendly': "Null",
-            'name': 'JOB_STAT_NULL',
-            'description': 'State null.',
-        },
-        0x01: {
-            'friendly': "Pending",
-            'name': 'JOB_STAT_PEND',
-            'description': 'The job is pending, i.e., it has not been dispatched yet.',
-        },
-        0x02: {
-            'friendly': "Held",
-            'name': "JOB_STAT_PSUSP",
-            'description': "The pending job was suspended by its owner or the LSF system administrator.",
-        },
-        0x04: {
-            'friendly': "Running",
-            'name': "JOB_STAT_RUN",
-            'description': "The job is running.",
-        },
-        0x08: {
-            'friendly': "Suspended by system",
-            'name': "JOB_STAT_SSUSP",
-            'description': "The running job was suspended by the system because an execution host was overloaded or the queue run window closed.",
-        },
-        0x10: {
-            'friendly': "Suspended by user",
-            'name': "JOB_STAT_USUSP",
-            'description': "The running job was suspended by its owner or the LSF system administrator.",
-        },
-        0x20: {
-            'friendly': "Exited",
-            'name': "JOB_STAT_EXIT",
-            'description': "The job has terminated with a non-zero status - it may have been aborted due to an error in its execution, or killed by its owner or by the LSF system administrator.",
-        },
-        0x40: {
-            'friendly': "Completed",
-            'name': "JOB_STAT_DONE",
-            'description': "The job has terminated with status 0.",
-        },
-        0x80: {
-            'friendly': "Process Completed",
-            'name': "JOB_STAT_PDONE",
-            'description': "Post job process done successfully.",
-        },
-        0x100: {
-            'friendly': "Process Error",
-            'name': "JOB_STAT_PERR",
-            'description': "Post job process has error.",
-        },
-        0x200: {
-            'friendly': "Waiting for execution",
-            'name': "JOB_STAT_WAIT",
-            'description': "Chunk job waiting its turn to exec.",
-        },
-        0x10000: {
-            'friendly': "Unknown",
-            'name': "JOB_STAT_UNKWN",
-            'description': "The slave batch daemon (sbatchd) on the host on which the job is processed has lost contact with the master batch daemon (mbatchd).",
-        },
-    }
-
-    job_state=job_states[ log['jStatus'] ]
+    job_state = OPENLAVA_JOB_STATES[log['jStatus']]
     clean = False
-    if job_state['name']== "JOB_STAT_DONE":
+    if job_state['name'] == "JOB_STAT_DONE":
         clean = True
     (status, created) = JobStatus.objects.get_or_create(
         code=log['jStatus'],
@@ -585,15 +600,15 @@ def openlava_import_job_finish(cluster, event):
         task=task,
         start_time=start_time,
         defaults={
-        'user': user,
-        'num_processors': num_processors,
-        'end_time': end_time,
-        'cpu_time': cpu_time,
-        'wall_time': wall_time,
-        'pend_time': pend_time,
-        'queue': queue,
-        'status': status,
-        'command': log['command'],
+            'user': user,
+            'num_processors': num_processors,
+            'end_time': end_time,
+            'cpu_time': cpu_time,
+            'wall_time': wall_time,
+            'pend_time': pend_time,
+            'queue': queue,
+            'status': status,
+            'command': log['command'],
         },
     )
 
@@ -626,7 +641,7 @@ def openlava_import_job_finish(cluster, event):
             resource_usage.messages_received = log['lsfRusage']['ru_msgrcv']
             resource_usage.num_signals = log['lsfRusage']['ru_nsignals']
             resource_usage.voluntary_context_switches = log['lsfRusage']['ru_nvcsw']
-            resource_usage.involuntary_context_switches =log['lsfRusage']['ru_nivcsw']
+            resource_usage.involuntary_context_switches = log['lsfRusage']['ru_nivcsw']
             resource_usage.exact_user_time = log['lsfRusage']['ru_exutime']
             resource_usage.attempt = attempt
             resource_usage.save()
@@ -638,9 +653,9 @@ def openlava_import_job_finish(cluster, event):
             ol.attempt = attempt
             ol.user_id = log['userId']
             ol.user = user
-            ol.begin_time  = log['beginTime']
+            ol.begin_time = log['beginTime']
 
-            ol.termination_time  = log['termTime']
+            ol.termination_time = log['termTime']
             ol.resource_request = log['resReq']
             ol.cwd = log['cwd']
             ol.input_file = log['inFile']
@@ -650,14 +665,10 @@ def openlava_import_job_finish(cluster, event):
             ol.command_spool = log['commandSpool']
             ol.job_file = log['jobFile']
 
-
-
             ol.resource_usage = resource_usage
 
             (project, created) = Project.objects.get_or_create(name=log['projectName'])
-            ol.project=project
-
-
+            ol.project = project
 
             ol.host_factor = log['hostFactor']
             ol.job_name = log['jobName']
@@ -680,10 +691,6 @@ def openlava_import_job_finish(cluster, event):
                 (h, created) = Host.objects.get_or_create(name=host)
                 ol.asked_hosts.add(h)
             ol.save()
-
-
-
-
 
 
 def get_attempts(start_time_js, end_time_js, exclude_string, filter_string):
@@ -721,9 +728,9 @@ def utilization_table(request, start_time_js=0, end_time_js=0, exclude_string=""
     rows = []
     header = []
     nice_names = {
-    'num_processors': "Num Slots",
-    'cluster__name': "Cluster",
-    'status__name': "Exit Reason",
+        'num_processors': "Num Slots",
+        'cluster__name': "Cluster",
+        'status__name': "Exit Reason",
     }
     for a in group_args:
         field = {}
@@ -736,7 +743,7 @@ def utilization_table(request, start_time_js=0, end_time_js=0, exclude_string=""
 
     for r in attempts.annotate(*annotations):
         row = {
-        'groups': []
+            'groups': []
         }
         for field in group_args:
             f = {}
@@ -766,25 +773,25 @@ def utilization_bar_size(request, start_time_js=0, end_time_js=0, exclude_string
     for row in attempts.values('num_processors').annotate(Sum('pend_time'), Sum('wall_time'), Sum('cpu_time'),
                                                           Count('num_processors')).order_by('num_processors'):
         data.append({
-        'key': "%s Processors" % row['num_processors'],
-        'values': [
-            {
-            'x': "Sum CPU",
-            'y': row['cpu_time__sum'],
-            },
-            {
-            'x': "Sum Wall",
-            'y': row['wall_time__sum'],
-            },
-            {
-            'x': "Sum Pend",
-            'y': row['pend_time__sum'],
-            },
-            {
-            'x': "Total Tasks",
-            'y': row['num_processors__count'],
-            },
-        ]
+            'key': "%s Processors" % row['num_processors'],
+            'values': [
+                {
+                    'x': "Sum CPU",
+                    'y': row['cpu_time__sum'],
+                },
+                {
+                    'x': "Sum Wall",
+                    'y': row['wall_time__sum'],
+                },
+                {
+                    'x': "Sum Pend",
+                    'y': row['pend_time__sum'],
+                },
+                {
+                    'x': "Total Tasks",
+                    'y': row['num_processors__count'],
+                },
+            ]
         })
 
     return HttpResponse(json.dumps(data, indent=3, sort_keys=True), content_type="application/json")
@@ -804,25 +811,25 @@ def utilization_bar_exit(request, start_time_js=0, end_time_js=0, exclude_string
         else:
             clean = "Failed"
         data.append({
-        'key': "%s (%s)" % ( row['status__name'], clean    ),
-        'values': [
-            {
-            'x': "Sum CPU",
-            'y': row['cpu_time__sum'],
-            },
-            {
-            'x': "Sum Wall",
-            'y': row['wall_time__sum'],
-            },
-            {
-            'x': "Sum Pend",
-            'y': row['pend_time__sum'],
-            },
-            {
-            'x': "Total Tasks",
-            'y': row['num_processors__count'],
-            },
-        ]
+            'key': "%s (%s)" % ( row['status__name'], clean    ),
+            'values': [
+                {
+                    'x': "Sum CPU",
+                    'y': row['cpu_time__sum'],
+                },
+                {
+                    'x': "Sum Wall",
+                    'y': row['wall_time__sum'],
+                },
+                {
+                    'x': "Sum Pend",
+                    'y': row['pend_time__sum'],
+                },
+                {
+                    'x': "Total Tasks",
+                    'y': row['num_processors__count'],
+                },
+            ]
         })
 
     return HttpResponse(json.dumps(data, indent=3, sort_keys=True), content_type="application/json")
@@ -870,24 +877,24 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
 
                     if not series_name in serieses:
                         serieses[series_name] = {
-                        'key': series_name,
-                        'values': {}
+                            'key': series_name,
+                            'values': {}
                         }
                     serieses[series_name]['values'][bucket_time_js] = {
-                    'x': bucket_time_js,
-                    'y': value,
+                        'x': bucket_time_js,
+                        'y': value,
                     }
             else:
                 series_name = "%s" % name
                 entries = entries.aggregate(Sum('num_processors'))
                 if not series_name in serieses:
                     serieses[series_name] = {
-                    'key': series_name,
-                    'values': {}
+                        'key': series_name,
+                        'values': {}
                     }
                 serieses[series_name]['values'][bucket_time_js] = {
-                'x': bucket_time_js,
-                'y': entries['num_processors__sum']
+                    'x': bucket_time_js,
+                    'y': entries['num_processors__sum']
                 }
     for series in serieses.values():
         v = []
@@ -897,8 +904,8 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
                 v.append(values[time])
             else:
                 v.append({
-                'x': time,
-                'y': None,
+                    'x': time,
+                    'y': None,
                 })
         series['values'] = v
     return HttpResponse(json.dumps(serieses.values(), indent=1), content_type="application/json")
@@ -914,13 +921,13 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
         end_time_js = -1
 
     data = {
-    'filters': json.dumps(filter_string_to_params(filter_string)),
-    'excludes': json.dumps(filter_string_to_params(exclude_string)),
-    'report_range_url': reverse('lf_get_report_range',
-                                kwargs={'filter_string': filter_string, 'exclude_string': exclude_string}),
-    'build_filter_url': reverse('lf_build_filter'),
-    'start_time': start_time_js,
-    'end_time': end_time_js,
+        'filters': json.dumps(filter_string_to_params(filter_string)),
+        'excludes': json.dumps(filter_string_to_params(exclude_string)),
+        'report_range_url': reverse('lf_get_report_range',
+                                    kwargs={'filter_string': filter_string, 'exclude_string': exclude_string}),
+        'build_filter_url': reverse('lf_build_filter'),
+        'start_time': start_time_js,
+        'end_time': end_time_js,
     }
     return render(request, "lavaFlow/utilization_view.html", data)
 
@@ -932,7 +939,7 @@ def util_total_attempts(request, start_time_js=None, end_time_js=None, exclude_s
     attempts = get_attempts(start_time_js, end_time_js, exclude_string, filter_string)
     count = attempts.count()
     data = {
-    'count': count,
+        'count': count,
     }
     return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -962,11 +969,11 @@ def util_report_range(request, exclude_string="", filter_string=""):
             suggested_start_time = start_time
 
     data = {
-    'count': count,
-    'end_time': end_time * 1000,
-    'start_time': start_time * 1000,
-    'suggested_end_time': suggested_end_time * 1000,
-    'suggested_start_time': suggested_start_time * 1000,
+        'count': count,
+        'end_time': end_time * 1000,
+        'start_time': start_time * 1000,
+        'suggested_end_time': suggested_end_time * 1000,
+        'suggested_start_time': suggested_start_time * 1000,
     }
 
     return HttpResponse(json.dumps(data), content_type="application/json")
@@ -1013,7 +1020,7 @@ def build_filter(request):
 
     values = []
     for name, value in data['filters'].iteritems():
-        if name.endswith('__in'):  #list context
+        if name.endswith('__in'):  # list context
             values.extend(["%s.%s" % (name, val) for val in value])
         else:
             values.append("%s.%s" % (name, value))
@@ -1023,7 +1030,7 @@ def build_filter(request):
 
     values = []
     for name, value in data['excludes'].iteritems():
-        if name.endswith('__in'):  #list context
+        if name.endswith('__in'):  # list context
             values.extend(["%s.%s" % (name, val) for val in value])
         else:
             values.append("%s.%s" % (name, value))

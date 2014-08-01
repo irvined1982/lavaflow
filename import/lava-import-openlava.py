@@ -46,10 +46,15 @@ def upload(rows):
     request = urllib2.Request(url, json.dumps({'key':args.key, 'payload':rows}), {'Content-Type': 'application/json'})
     try:
         f = urllib2.urlopen(request)
+        data=json.load(f)
+        if data['status'] == "OK":
+            print "Imported %d rows." % row_num
+        else:
+            print "Unable to import rows: %s" % data['message']
         f.close()
     except:
-        pass
-    print "Imported %d rows." % row_num
+        print "Error: Failed to import rows"
+
 
 class OOLDumper(json.JSONEncoder):
     def default(self, obj):
