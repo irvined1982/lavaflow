@@ -570,7 +570,7 @@ def openlava_import_job_finish(cluster, event):
 
     job_state=job_states[ log['jStatus'] ]
     clean = False
-    if state['name']== "JOB_STAT_DONE":
+    if job_state['name']== "JOB_STAT_DONE":
         clean = True
     (status, created) = JobStatus.objects.get_or_create(
         code=log['jStatus'],
