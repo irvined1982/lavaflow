@@ -43,7 +43,7 @@ url += "/clusters/%s/import/openlava" % cluster_name
 
 
 def upload(rows):
-    request = urllib2.Request(url, json.dumps(rows), {'Content-Type': 'application/json'})
+    request = urllib2.Request(url, json.dumps({'key':args.key, 'payload':rows}), {'Content-Type': 'application/json'})
     try:
         f = urllib2.urlopen(request)
         f.close()
