@@ -50,7 +50,7 @@ class OpenLavaState(models.Model):
         statuses = []
         for key in cls.states.keys():
             if (key & mask) == key:
-                statuses.append(cls.states[key)
+                statuses.append(cls.states[key])
         return statuses
 
     class Meta:

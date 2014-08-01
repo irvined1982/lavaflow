@@ -350,6 +350,7 @@ def gridengine_import(request, cluster_name):
 from django.http import HttpResponseBadRequest, HttpResponseForbidden
 from django.core.exceptions import ObjectDoesNotExist
 
+@csrf_exempt
 def openlava_import(request, cluster_name):
     # Parse the body for json data
     try:
