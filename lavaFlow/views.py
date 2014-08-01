@@ -530,6 +530,7 @@ def openlava_import_job_new(cluster, event):
         js.schedule_host_type = event['schedHostType']
         js.login_shell = event['loginShell']
         js.user_priority = event['userPriority']
+        js.save()
         for host in event['askedHosts']:
             (h, created) = Host.objects.get_or_create(name=host)
             js.asked_hosts.add(h)
@@ -543,7 +544,7 @@ def openlava_import_job_new(cluster, event):
             for state in OpenLavaSubmitOption.get_status_list(event['options']):
                 (o, created) = OpenLavaSubmitOption.objects.get_or_create(**state)
                 js.options.add(o)
-        js.save()
+
 
 
 def openlava_import_job_finish(cluster, event):
