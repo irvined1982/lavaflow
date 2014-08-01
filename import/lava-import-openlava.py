@@ -18,48 +18,65 @@
 import urllib2
 import json
 import argparse
-from openlava import EventLog, OpenLava
+from openlava import lsblib
+
 parser = argparse.ArgumentParser(description='Import OpenLava Log Files into LavaFlow')
 parser.add_argument('log_file', metavar='LOGFILE', type=str, help="Path to Logfile")
 parser.add_argument('url', metavar='URL', type=str, help="URL to LavaFlow server")
-parser.add_argument('--cluster_name', metavar="NAME", type=str, help="Optional cluster name to use, default is to get lsf cluster name", default=None)
+parser.add_argument('key', metavar='KEY', type=str, help="Authentication key")
+parser.add_argument('--cluster_name', metavar="NAME", type=str,
+                    help="Optional cluster name to use, default is to get lsf cluster name", default=None)
 args = parser.parse_args()
 
 # Open the event log file
-el=EventLog(file_name=args.log_file)
+fh = open(args.log_file)
 
 # Get the cluster name
 if args.cluster_name:
-	cluster_name=args.cluster_name
+    cluster_name = args.cluster_name
 else:
-	cluster_name=OpenLava.get_cluster_name()
+    cluster_name = OpenLava.get_cluster_name()
 
 # Get the URL to submit to
-url=args.url.rstrip("/")
-url+="/clusters/%s/import/openlava" % cluster_name
-
+url = args.url.rstrip("/")
+url += "/clusters/%s/import/openlava" % cluster_name
 
 
 def upload(rows):
-		request = urllib2.Request(url, json.dumps(rows), {'Content-Type': 'application/json'})
-		try:
-			f = urllib2.urlopen(request)
-			f.close()
-		except:
-			pass
-		print "Imported %d rows." % row_num
+    request = urllib2.Request(url, json.dumps(rows), {'Content-Type': 'application/json'})
+    try:
+        f = urllib2.urlopen(request)
+        f.close()
+    except:
+        pass
+    print "Imported %d rows." % row_num
 
+class OOLDumper(json.JSONEncoder):
+    def default(self, obj):
+        try:
+            return obj.__to_dict()
+        except AttributeError:
+            return json.JSONEncoder.default(self, obj)
 
 
 # Iterate through the log file and upload in batches of 200
-row_num=0
-rows=[]
-for row in el:
-	row_num += 1
-	rows.append(json.loads(OpenLava.dumps(row)))# memory is reused in structs...
-	if row_num % 200 == 0:
-		upload(rows)
-		rows=[]
+row_num = 0
+rows = []
+while(True):
+    rec = lsblib.lsb_geteventrec(fh, row_num)
+    if rec == None:
+        if lsblib.get_lsberrno() == lsblib.LSBE_EOF:
+        break
+    if lsblib.get_lsberrno() == lsblib.LSBE_EVENT_FORMAT:
+        print "Bad Row: %s in %s" % (row_num, args.log_file)
+        continue
 
-if len(rows)>0:
-	upload(rows)
+    rows.append(json.loads(OOLDumper.dumps(rec)))
+    # ^^converts to dictionary which does a full copy of the data
+
+    if row_num % 200 == 0:
+        upload(rows)
+        rows = []
+
+if len(rows) > 0:
+    upload(rows)
