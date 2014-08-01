@@ -598,7 +598,7 @@ def openlava_import_job_finish(cluster, event):
     )
 
     if created:
-        for host in log['execution_hosts']:
+        for host in log['execHosts']:
             (execution_host, created) = Host.objects.get_or_create(name=host)
             attempt.execution_hosts.add(execution_host)
 
