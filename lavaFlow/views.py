@@ -31,6 +31,7 @@ from django.db.models import Avg, Count, Sum
 from django.views.generic import ListView
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.core.exceptions import ObjectDoesNotExist
+from django.middleware.csrf import get_token
 
 from lavaFlow.models import *
 
@@ -99,6 +100,11 @@ OPENLAVA_JOB_STATES = {
 
 
 log = logging.getLogger(__name__)
+
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    return HttpResponse(json.dumps({'cookie': get_token(request)}), content_type="application/json")
+
 
 def create_js_success(data=None, message=""):
     """

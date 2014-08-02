@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright 2011 David Irvine
+# Copyright 2014 David Irvine
 #
 # This file is part of LavaFlow
 #
@@ -15,10 +15,11 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with LavaFlow.  If not, see <http://www.gnu.org/licenses/>.
+import sys
 import urllib2
 import json
 import argparse
-from openlava import lsblib,lslib
+from openlava import lsblib, lslib
 
 parser = argparse.ArgumentParser(description='Import OpenLava Log Files into LavaFlow')
 parser.add_argument('log_file', metavar='LOGFILE', type=str, help="Path to Logfile")
@@ -29,54 +30,106 @@ parser.add_argument('--cluster_name', metavar="NAME", type=str,
 args = parser.parse_args()
 
 # Open the event log file
-fh = open(args.log_file)
+if not os.path.exists(args.log_file):
+    sys.stderr.write("Error: Path: %s does not exist. Exiting.\n" % args.log_file)
+    sys.exit(1)
+try:
+    fh = open(args.log_file)
+except IOError as e:
+    sys.stderr.write("Error: Unable to open %s: %s. Exiting.\n" % (args.log_file, str(e)))
+    sys.exit(1)
 
 # Get the cluster name
 if args.cluster_name:
     cluster_name = args.cluster_name
 else:
     cluster_name = lslib.ls_getclustername()
+if len(cluster_name) < 1:
+    sys.stderr.write("Error: Unable to determine clustername. Exiting.\n")
+    sys.exit(2)
 
-# Get the URL to submit to
+# Set the URLs to submit to
 url = args.url.rstrip("/")
 url += "/clusters/%s/import/openlava" % cluster_name
 
+# Set the url to get the CSRF token
+token_url = args.url.rstrip("/")
+token_url += "/get_token"
+token = None
+try:
+    token_request = urllib2.Request(token_url)
+    f = urllib2.urlopen(token_request)
+    data = json.load(f)
+    token=data['cookie']
+except IOError as e:
+    sys.stderr.write("Error: Unable to get CSRF Token: %s. Exiting\n" % str(e))
+
 
 def upload(rows):
+    """
+    Uploads a bunch of rows to the server.
+    :param rows: Array of objects to try to upload
+    :return: None
+    """
+
+    # loop X times, then bail on error
     request = urllib2.Request(url, json.dumps({'key':args.key, 'payload':rows}), {'Content-Type': 'application/json'})
-    try:
-        f = urllib2.urlopen(request)
-        data=json.load(f)
-        if data['status'] == "OK":
-            print "Imported %d rows." % row_num
-        else:
-            print "Unable to import rows: %s" % data['message']
-        f.close()
-    except:
-        print "Error: Failed to import rows"
+    # Ensure server knows this is an AJAX request.
+    request.add_header('HTTP_X_REQUESTED_WITH', 'XMLHttpRequest')
+    request.add_header('X-Requested-With', 'XMLHttpRequest')
+    # Set the CSRF token
+    request.add_header('X-CSRFToken', token)
+    failed = True
+    count = 0
+    # Try up to ten times to upload the data, after that bail out.
+    while failed and count < 10:
+        count += 1
+        try:
+            f = urllib2.urlopen(request)
+            data=json.load(f)
+            if data['status'] == "OK":
+                print "Imported %d rows." % row_num
+                failed = False
+            else:
+                sys.stderr.write( "Error: Unable to import rows: %s\n" % data['message'])
+            f.close()
+        except IOError as e:
+            sys.stderr.write("Error: Failed to import rows: %s\n" % str(e))
+    if failed:
+        sys.stderr.write("Error: Retry timeout reached. Exiting.")
 
 
-class OOLDumper(json.JSONEncoder):
+class OLDumper(json.JSONEncoder):
+    """
+    Encoder to dump OpenLava objects to JSON.
+    """
     def default(self, obj):
+        """
+        Attempts to call __to_dict(), the method used to return a dictionary copy, on the supplied object.
+        If not supported calls the parent classes default encoder, which will raise an exception if the data type
+        is not a standard python object.
+        :param obj: Object to encode
+        :return: json serializable object
+        """
         try:
             return getattr(obj, "__to_dict")()
-        except ValueError:
+        except AttributeError:
             return json.JSONEncoder.default(self, obj)
 
 
 # Iterate through the log file and upload in batches of 200
 row_num = 0
 rows = []
-while(True):
+while True:
     rec = lsblib.lsb_geteventrec(fh, row_num)
-    if rec == None:
+    if rec is None:
         if lsblib.get_lsberrno() == lsblib.LSBE_EOF:
             break
     if lsblib.get_lsberrno() == lsblib.LSBE_EVENT_FORMAT:
         print "Bad Row: %s in %s" % (row_num, args.log_file)
         continue
 
-    rows.append(json.loads(json.dumps(rec, cls=OOLDumper)))
+    rows.append(json.loads(json.dumps(rec, cls=OLDumper)))
     # ^^converts to dictionary which does a full copy of the data
 
     row_num += 1
@@ -86,3 +139,4 @@ while(True):
 
 if len(rows) > 0:
     upload(rows)
+fh.close()
