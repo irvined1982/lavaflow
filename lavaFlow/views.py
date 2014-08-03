@@ -894,34 +894,34 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
             if len(group_name) > 0:
                 group_name += u" "
             group_name += n
-            pend_series=u"%s Pending" % group_name
-            run_series=u"%s running" % group_name
-            if pend_series not in serieses:
-                serieses[pend_series]={'key': pend_series, 'values':{}}
-            pend_series=serieses[pend_series]['values']
+        pend_series=u"%s Pending" % group_name
+        run_series=u"%s running" % group_name
+        if pend_series not in serieses:
+            serieses[pend_series]={'key': pend_series, 'values':{}}
+        pend_series=serieses[pend_series]['values']
 
-            if run_series not in serieses:
-                serieses[run_series]={'key': run_series, 'values':{}}
-            run_series=serieses[run_series]['values']
+        if run_series not in serieses:
+            serieses[run_series]={'key': run_series, 'values':{}}
+        run_series=serieses[run_series]['values']
 
-            if submit_time  in pend_series:
-                pend_series[submit_time] += np
-            else:
-                pend_series[submit_time] = np
+        if submit_time  in pend_series:
+            pend_series[submit_time] += np
+        else:
+            pend_series[submit_time] = np
 
-            if start_time in pend_series:
-                pend_series[start_time] -= np
-            else:
-                pend_series[start_time] = -1 * np
+        if start_time in pend_series:
+            pend_series[start_time] -= np
+        else:
+            pend_series[start_time] = -1 * np
 
-            if start_time in run_series:
-                run_series[start_time] += np
-            else:
-                run_series[start_time] = np
-            if end_time in run_series:
-                run_series[end_time] -= np
-            else:
-                run_series[end_time] = -1 * np
+        if start_time in run_series:
+            run_series[start_time] += np
+        else:
+            run_series[start_time] = np
+        if end_time in run_series:
+            run_series[end_time] -= np
+        else:
+            run_series[end_time] = -1 * np
     if len(times) > 500:
         times=range(start_time_js, end_time_js, ( ( end_time_js-start_time_js )/1000))
     else:
