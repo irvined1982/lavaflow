@@ -922,7 +922,7 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
             run_series[end_time] -= np
         else:
             run_series[end_time] = -1 * np
-    if len(times) > 500:
+    if len(times) > 2000:
         times=range(start_time_js, end_time_js, ( ( end_time_js-start_time_js )/1000))
     else:
         times=sorted(times)
@@ -933,6 +933,8 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
         ts=[]
         vs=[]
         for time in sorted(values.keys()):
+            ts.append(time-1)
+            vs.append(total)
             total += values[time]
             ts.append(time)
             vs.append(total)
