@@ -13,6 +13,7 @@ Openlava-python bindings
 In order to read and upload log files, you need to install the openlava python bindings.  These are used only by the
 upload tools, generally you only need to install this on the master node of each cluster, this may or may not be the
 machine you are running lavaFlow on.
+
 Install the Openlava python bindings.::
 
     $ git clone https://github.com/irvined1982/openlava-python.git
@@ -27,14 +28,22 @@ Use git to checkout `lavaFlow <https://github.com/irvined1982/lavaFlow>`_.::
     $ git clone https://github.com/irvined1982/lavaflow.git
     $ git submodule update --init --recursive
 
-Inside the import directory you will find
+Inside the import directory you will find the import scripts.
+
+lava-import-openlava.py
+=======================
 
 .. program:: lava-import-openlava.py
 
 Reads openlava log files and uploads them.  Will read and attempt to upload all entries in the file.
 This is not desirable if you have large logfiles and want to upload regularly, for that you should use
 logtail or some other utility to only read entries that have not yet been uploaded.  There is no harm in
-re-uploading, but it is time expensive.
+re-uploading, but it is time expensive.::
+
+    usage: lava-import-openlava.py [-h] [--tail_log] [--cluster_name NAME]
+                                   [--chunk_size CHUNK_SIZE]
+                                   [--log_level LOG_LEVEL] [--retry_forever]
+                                   LOGFILE URL KEY
 
 .. option:: log_file
 
