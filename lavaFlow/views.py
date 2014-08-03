@@ -869,12 +869,9 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
     # Attempts now only contains the exact data needed to perform the query, no other data is retrieved.
     # This should in the best case only require data from a single table.
     group_args = group_string_to_group_args(group_string)
-    # Always need to have num_processors so they can be counted.
-    group_args.append("num_processors")
-    group_args.append("submit_time")
-    group_args.append("start_time")
-    group_args.append("end_time")
-    attempts = attempts.values(*group_args)
+    
+    required_values=["num_processors", "submit_time", "start_time","end_time"] + group_args
+    attempts = attempts.values(*required_values)
 
     # Unique list of times that are used, for smaller datasets, this is the best possible list of times to use.
     times=set()
