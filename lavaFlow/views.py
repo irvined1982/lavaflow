@@ -103,7 +103,12 @@ log = logging.getLogger(__name__)
 
 @ensure_csrf_cookie
 def get_csrf_token(request):
-    return HttpResponse(json.dumps({'cookie': get_token(request)}), content_type="application/json")
+    """
+    Returns the CSRF token to the client as part of a json document.
+    :param request: Request object
+    :return: HttpResponse with cookie containing JSON data.
+    """
+    return create_js_success(data={'cookie': get_token(request)}, message="")
 
 
 def create_js_success(data=None, message=""):

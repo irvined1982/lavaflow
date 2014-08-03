@@ -20,24 +20,30 @@ import sys
 import urllib2
 import json
 import argparse
+import time
 from openlava import lsblib, lslib
+import logging
 
 parser = argparse.ArgumentParser(description='Import OpenLava Log Files into LavaFlow')
 parser.add_argument('log_file', metavar='LOGFILE', type=str, help="Path to Logfile")
 parser.add_argument('url', metavar='URL', type=str, help="URL to LavaFlow server")
 parser.add_argument('key', metavar='KEY', type=str, help="Authentication key")
+parser.add_argument("--tail_log", type=bool, action="store_true", default=False,
+                    help="When enabled, will not exit when the end of the input file is reached.  \
+                    Instead, it will wait for new data, or if the file is rotated, reopen the file \
+                    and continue reading.")
 parser.add_argument('--cluster_name', metavar="NAME", type=str,
                     help="Optional cluster name to use, default is to get lsf cluster name", default=None)
 args = parser.parse_args()
 
 # Open the event log file
 if not os.path.exists(args.log_file):
-    sys.stderr.write("Error: Path: %s does not exist. Exiting.\n" % args.log_file)
+    logging.critical("Error: Path: %s does not exist. Exiting.\n" % args.log_file)
     sys.exit(1)
 try:
     fh = open(args.log_file)
 except IOError as e:
-    sys.stderr.write("Error: Unable to open %s: %s. Exiting.\n" % (args.log_file, str(e)))
+    logging.critical("Error: Unable to open %s: %s. Exiting.\n" % (args.log_file, str(e)))
     sys.exit(1)
 
 # Get the cluster name
@@ -46,7 +52,7 @@ if args.cluster_name:
 else:
     cluster_name = lslib.ls_getclustername()
 if len(cluster_name) < 1:
-    sys.stderr.write("Error: Unable to determine clustername. Exiting.\n")
+    logging.critical("Error: Unable to determine clustername. Exiting.\n")
     sys.exit(2)
 
 # Set the URLs to submit to
@@ -61,9 +67,12 @@ try:
     token_request = urllib2.Request(token_url)
     f = urllib2.urlopen(token_request)
     data = json.load(f)
-    token=data['cookie']
+    if data['status'] != "OK":
+        logging.critical("Error: Unable to get CSRF Token: %s. Exiting\n" % data['message'])
+        sys.exit(1)
+    token=data['data']['cookie']
 except IOError as e:
-    sys.stderr.write("Error: Unable to get CSRF Token: %s. Exiting\n" % str(e))
+    logging.critical("Error: Unable to get CSRF Token: %s. Exiting\n" % str(e))
     sys.exit(1)
 
 
@@ -90,15 +99,15 @@ def upload(rows):
             f = urllib2.urlopen(request)
             data=json.load(f)
             if data['status'] == "OK":
-                print "Imported %d rows." % row_num
+                logging.info("Imported %d rows." % row_num)
                 failed = False
             else:
-                sys.stderr.write( "Error: Unable to import rows: %s\n" % data['message'])
+                logging.error("Error: Unable to import rows: %s\n" % data['message'])
             f.close()
         except IOError as e:
-            sys.stderr.write("Error: Failed to import rows: %s\n" % str(e))
+            logging.error("Error: Failed to import rows: %s\n" % str(e))
     if failed:
-        sys.stderr.write("Error: Retry timeout reached. Exiting.")
+        logging.critical("Error: Retry timeout reached. Exiting.")
 
 
 class OLDumper(json.JSONEncoder):
@@ -126,9 +135,11 @@ while True:
     rec = lsblib.lsb_geteventrec(fh, row_num)
     if rec is None:
         if lsblib.get_lsberrno() == lsblib.LSBE_EOF:
-            break
+            logging.info("EOF Reached, waiting on new data")
+            time.sleep(20)
+            continue
     if lsblib.get_lsberrno() == lsblib.LSBE_EVENT_FORMAT:
-        print "Bad Row: %s in %s" % (row_num, args.log_file)
+        logging.error("Bad Row: %s in %s" % (row_num, args.log_file))
         continue
 
     rows.append(json.loads(json.dumps(rec, cls=OLDumper)))
