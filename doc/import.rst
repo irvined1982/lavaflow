@@ -79,3 +79,33 @@ Log level to use, can be one of debug, info, warn, error, critical.
 
 When enabled, will not exit when the end of the input file is reached.  Instead, it will wait for new data,
 or if the file is rotated, reopen the file and continue reading.
+
+Importing Guidelines
+====================
+
+Post Installation
+-----------------
+
+After completing the installation, you need to populate the database, generally it is best to pull all lsb.event
+files and the lsb.acct file into lavaFlow.  It doesnt matter which you do first. Something like the following::
+
+    $ ./import/lava-import-openlava.py /opt/openlava/work/logdir/lsb.events https://OPENLAVA_SERVER/lavaFlow T0PS3CRETK3YFILE --chunk_size=1000 --log_level=info
+    $ for i in /opt/openlava/work/logdir/lsb.events
+    > do
+    > ./import/lava-import-openlava.py $i https://OPENLAVA_SERVER/lavaFlow T0PS3CRETK3YFILE --chunk_size=1000 --log_level=info
+    > done
+    $
+
+
+Automatic Import
+----------------
+
+Once the database has been populated with a backlog of events, you need to continue to add new data when it becomes
+available.  For this you can use the tail_log option.  Something like the following::
+
+    $ ./import/lava-import-openlava.py /opt/openlava/work/logdir/lsb.acct https://OPENLAVA_SERVER/lavaFlow T0PS3CRETK3YFILE --tail_log &
+    $ ./import/lava-import-openlava.py /opt/openlava/work/logdir/lsb.events https://OPENLAVA_SERVER/lavaFlow T0PS3CRETK3YFILE --tail_log &
+
+By using the tail_log option, the importer will tail the log file waiting for new data before uploading.  Additionally,
+if the log file is rotated, the script will load the new file once it has processed all data from the old one.
+
