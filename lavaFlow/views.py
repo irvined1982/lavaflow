@@ -103,22 +103,22 @@ log = logging.getLogger(__name__)
 
 @ensure_csrf_cookie
 def get_csrf_token(request):
-    """
-    Returns the CSRF token to the client as part of a json document.
+    """Returns the CSRF token to the client as part of a json document.
 
     :param request: Request object
     :return: HttpResponse with cookie containing JSON data.
+
     """
     return create_js_success(data={'cookie': get_token(request)}, message="")
 
 
 def create_js_success(data=None, message=""):
-    """
-    Takes a json serializable object, and an optional message, and creates a standard json response document.
+    """Takes a json serializable object, and an optional message, and creates a standard json response document.
 
     :param data: json serializable object
     :param message: Optional message to include with response
     :return: HttpResponse object
+
     """
     data={
         'status':"OK",
@@ -432,11 +432,12 @@ def gridengine_import(request, cluster_name):
 
 @csrf_exempt
 def openlava_import(request, cluster_name):
-    """
-    Imports one or more openlava log entries, log entries are uploaded as JSON data in the request body.
+    """Imports one or more openlava log entries, log entries are uploaded as JSON data in the request body.
+
     :param request: Request object
     :param cluster_name: name of cluster (Specified in URL)
     :return: JSON Status
+
     """
     # Parse the body for json data
     try:
@@ -468,11 +469,12 @@ def openlava_import(request, cluster_name):
 
 
 def openlava_import_job_new(cluster, event):
-    """
-    Imports a single openlava job_new event event.
+    """Imports a single openlava job_new event event.
+
     :param cluster: Cluster object
     :param event: Dict containing event details
     :return: None
+
     """
     event = event['eventLog']['jobNewLog']
 
@@ -561,11 +563,12 @@ def openlava_import_job_new(cluster, event):
 
 
 def openlava_import_job_finish(cluster, event):
-    """
-    Imports a single openlava job finish event.
+    """Imports a single openlava job finish event.
+
     :param cluster: Cluster object
     :param event: event to import
     :return: None
+
     """
     log = event['eventLog']['jobFinishLog']
 
