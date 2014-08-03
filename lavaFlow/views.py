@@ -869,7 +869,7 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
     # Attempts now only contains the exact data needed to perform the query, no other data is retrieved.
     # This should in the best case only require data from a single table.
     group_args = group_string_to_group_args(group_string)
-    
+
     required_values=["num_processors", "submit_time", "start_time","end_time"] + group_args
     attempts = attempts.values(*required_values)
 
@@ -922,8 +922,10 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
                 run_series[end_time] -= np
             else:
                 run_series[end_time] = -1 * np
-
-    times=sorted(times)
+    if len(times) > 500:
+        times=range(start_time_js, end_time_js, ( ( end_time_js-start_time_js )/1000))
+    else:
+        times=sorted(times)
     # Serieses now contains an item for each series we need to chart
     for s in serieses.itervalues():
         values=s['values']
