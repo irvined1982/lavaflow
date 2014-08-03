@@ -920,11 +920,10 @@ class Attempt(models.Model):
         unique_together = ('cluster', 'job', 'task', 'start_time')
         index_together = [
             ['start_time', 'submit_time'],
-            ['start_time','end_time','user'],
+            ['start_time','end_time',],
             ['cluster', 'job', 'task'],
             ['cluster', 'job', 'task', 'start_time', ],
-            ['job', 'end_time'],
-            ['end_time', 'job'],
+            ['job', 'end_time']
         ]
 
 
