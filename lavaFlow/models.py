@@ -48,6 +48,25 @@ class ImportKey(models.Model):
     client_key = models.CharField(max_length=255, primary_key=True, help_text="Client key, passed by the client to authenticate")
     comment = models.TextField(default="", help_text=("Optional description/comment."))
 
+    def __str__(self):
+        """
+        Returns a str containing the client key.
+
+        :return: str(client_key)
+
+        """
+        return str(self.client_key)
+
+    def __unicode__(self):
+        """
+        Returns the unicode represenation of the client_key
+
+        :return: unicode(client_key)
+
+        """
+        return u"%s" % self.__str__()
+
+    
 
 class OpenLavaState(models.Model):
     code = models.CharField(max_length=50)
