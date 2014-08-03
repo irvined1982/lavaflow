@@ -835,7 +835,7 @@ class Attempt(models.Model):
     num_processors = models.IntegerField()
     projects = models.ManyToManyField(Project)
     execution_hosts = models.ManyToManyField(Host)
-    submit_time = models.IntegerField
+    submit_time = models.IntegerField()
 
     def save(self, *args, **kwargs):
         self.submit_time = self.job.submit_time
