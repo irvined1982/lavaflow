@@ -937,7 +937,7 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
             total += values[time]
             ts.append(time)
             vs.append(total)
-        s['f']=interp1d(ts, vs)
+        s['f']=interp1d(ts, vs, copy=False, bounds_error=False, fill_value=0, assume_sorted=True)
         s['values']=[{'x':time, 'y':s['f'](time)} for time in times]
 
     return HttpResponse(json.dumps(serieses.values(), indent=1), content_type="application/json")
