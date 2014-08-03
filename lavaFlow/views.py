@@ -897,8 +897,8 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
             if len(group_name) > 0:
                 group_name += u" "
             group_name += n
-            pend_series=u"%s Pending" group_name
-            run_series=u"%s running" group_name
+            pend_series=u"%s Pending" % group_name
+            run_series=u"%s running" % group_name
             if pend_series not in serieses:
                 serieses[pend_series]={'key': pend_series, 'values':{}}
             pend_series=serieses[pend_series]['values']
@@ -939,7 +939,7 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
             vs.append(total)
         s['f']=interp1d(ts, vs)
         s['values']=[{'x':time, 'y':s['f'](time)} for time in times]
-    
+
     return HttpResponse(json.dumps(serieses.values(), indent=1), content_type="application/json")
 
 
