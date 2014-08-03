@@ -66,7 +66,7 @@ class ImportKey(models.Model):
         """
         return u"%s" % self.__str__()
 
-    
+
 
 class OpenLavaState(models.Model):
     code = models.CharField(max_length=50)
@@ -835,6 +835,15 @@ class Attempt(models.Model):
     num_processors = models.IntegerField()
     projects = models.ManyToManyField(Project)
     execution_hosts = models.ManyToManyField(Host)
+    submit_time = models.IntegerField
+
+    def save(self, *args, **kwargs):
+        self.submit_time = self.job.submit_time
+        super(Attempt, self).save(*args, **kwargs)
+
+    def submit_time_datetime(self):
+        return datetime.datetime.utcfromtimestamp(self.submit_time)
+
     start_time = models.IntegerField()
 
     def start_time_datetime(self):
@@ -910,11 +919,10 @@ class Attempt(models.Model):
     class Meta:
         unique_together = ('cluster', 'job', 'task', 'start_time')
         index_together = [
+            ['start_time', 'submit_time'],
+            ['start_time','end_time','user'],
             ['cluster', 'job', 'task'],
             ['cluster', 'job', 'task', 'start_time', ],
-            ['end_time'],
-            ['cluster', 'end_time', 'job'],
-            ['user', 'end_time', 'job'],
             ['job', 'end_time'],
             ['end_time', 'job'],
         ]
