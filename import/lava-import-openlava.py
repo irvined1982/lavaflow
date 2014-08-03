@@ -43,7 +43,7 @@ def upload(rows):
     failed = True
     count = 0
     # Try up to ten times to upload the data, after that bail out.
-    while failed and count < 10:
+    while failed and (args.retry_forever or count < 10):
         count += 1
         try:
             f = urllib2.urlopen(request)
@@ -58,6 +58,7 @@ def upload(rows):
             logging.error("Error: Failed to import rows: %s\n" % str(e))
     if failed:
         logging.critical("Error: Retry timeout reached. Exiting.")
+        sys.exit(1)
 
 
 class OLDumper(json.JSONEncoder):
