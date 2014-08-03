@@ -57,10 +57,21 @@ urlpatterns = patterns('',
                            r'^util_total_attempts/(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$',
                            'lavaFlow.views.util_total_attempts', name='lf_util_total_attempts'),
 
+
+
+
+
+
                        url(
                            r'^util/(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$',
                            'lavaFlow.views.utilization_data', name='lf_util_chart_view'),
                        url(
+
+
+
+
+
+
                            r'^utilization_table/(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$',
                            'lavaFlow.views.utilization_table', name='lf_utilization_table'),
 

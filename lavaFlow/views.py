@@ -32,6 +32,7 @@ from django.views.generic import ListView
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.core.exceptions import ObjectDoesNotExist
 from django.middleware.csrf import get_token
+from scipy.interpolate import interp1d
 
 from lavaFlow.models import *
 
@@ -852,77 +853,93 @@ def utilization_bar_exit(request, start_time_js=0, end_time_js=0, exclude_string
 
 # @cache_page(60 * 60 * 2)
 def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
-    attempts = get_attempts(None, None, exclude_string, filter_string)
-    group_args = group_string_to_group_args(group_string)
-    attempts = attempts.values(*group_args)
-
+    # Start time in milliseconds
     start_time_js = int(start_time_js)
-    end_time_js = int(end_time_js)
-
+    # Start time in seconds
     start_time_ep = int(start_time_js / 1000)
+    # end time in milliseconds
+    end_time_js = int(end_time_js)
+    # end time in seconds
     end_time_ep = int(end_time_js / 1000)
 
-    slice_size = int((end_time_ep - start_time_ep) / 2000)
-    if slice_size < 1:
-        slice_size = 1
-    times = []
-    serieses = {}
+    # Attempts now contains all attempts that were active in this time period, ie, submitted before
+    # the end and finished after the start time.
+    attempts = get_attempts(start_time_js, end_time_js, exclude_string, filter_string)
 
-    for bucket_time_ep in range(start_time_ep, end_time_ep, slice_size):
-        bucket_time_js = bucket_time_ep * 1000
-        times.append(bucket_time_js)
-        for t in ['pend', 'run']:
-            if t == "pend":
-                entries = attempts.filter(start_time__gt=bucket_time_ep, submit_time__lte=bucket_time_ep)
-                name = "Pending"
-            else:
-                entries = attempts.filter(start_time__lte=bucket_time_ep, end_time__gt=bucket_time_ep)
-                name = "Running"
+    # Attempts now only contains the exact data needed to perform the query, no other data is retrieved.
+    # This should in the best case only require data from a single table.
+    group_args = group_string_to_group_args(group_string)
+    # Always need to have num_processors so they can be counted.
+    group_args.append("num_processors")
+    group_args.append("submit_time")
+    group_args.append("start_time")
+    group_args.append("end_time")
+    attempts = attempts.values(*group_args)
 
-            if len(group_args) > 0:
-                entries = entries.annotate(Sum('num_processors'))
-                for entry in entries:
-                    series_name = ""
-                    for n in group_args:
-                        series_name = u"%s%s" % (series_name, entry[n])
-                        series_name = "%s %s" % (series_name, name)
-                    value = entry['num_processors__sum']
-                    if value == 0:
-                        value = None
+    # Unique list of times that are used, for smaller datasets, this is the best possible list of times to use.
+    times=set()
+    times.add(start_time_js)
+    times.add(end_time_js)
 
-                    if not series_name in serieses:
-                        serieses[series_name] = {
-                            'key': series_name,
-                            'values': {}
-                        }
-                    serieses[series_name]['values'][bucket_time_js] = {
-                        'x': bucket_time_js,
-                        'y': value,
-                    }
+    # Dict containing each series.
+    serieses={}
+    for at in attempts:
+        submit_time = at['submit_time'] * 1000
+        start_time = at['start_time'] * 1000
+        end_time = at['end_time'] * 1000
+        times.add(submit_time)
+        times.add(start_time)
+        times.add(end_time)
+        np=at['num_processors']
+
+        group_name = u""
+        for n in group_args:
+            if len(group_name) > 0:
+                group_name += u" "
+            group_name += n
+            pend_series=u"%s Pending" group_name
+            run_series=u"%s running" group_name
+            if pend_series not in serieses:
+                serieses[pend_series]={'key': pend_series, 'values':{}}
+            pend_series=serieses[pend_series]['values']
+
+            if run_series not in serieses:
+                serieses[run_series]={'key': run_series, 'values':{}}
+            run_series=serieses[run_series]['values']
+
+            if submit_time  in pend_series:
+                pend_series[submit_time] += np
             else:
-                series_name = "%s" % name
-                entries = entries.aggregate(Sum('num_processors'))
-                if not series_name in serieses:
-                    serieses[series_name] = {
-                        'key': series_name,
-                        'values': {}
-                    }
-                serieses[series_name]['values'][bucket_time_js] = {
-                    'x': bucket_time_js,
-                    'y': entries['num_processors__sum']
-                }
-    for series in serieses.values():
-        v = []
-        for time in times:
-            values = series['values']
-            if time in values:
-                v.append(values[time])
+                pend_series[submit_time] = np
+
+            if start_time in pend_series:
+                pend_series[start_time] -= np
             else:
-                v.append({
-                    'x': time,
-                    'y': None,
-                })
-        series['values'] = v
+                pend_series[start_time] = -1 * np
+
+            if start_time in run_series:
+                run_series[start_time] += np
+            else:
+                run_series[start_time] = np
+            if end_time in run_series:
+                run_series[end_time] -= np
+            else:
+                run_series[end_time] = -1 * np
+
+    times=sorted(times)
+    # Serieses now contains an item for each series we need to chart
+    for s in serieses.itervalues():
+        values=s['values']
+        total=0
+        ts=[]
+        vs=[]
+        for time in sorted(values.keys()):
+            total += values[time]
+            ts.append(time)
+            vs.append(total)
+        s['f']=interp1d(ts, vs)
+        s['values']=[{'x':time, 'y':s['f'](time)} for time in times]
+    
     return HttpResponse(json.dumps(serieses.values(), indent=1), content_type="application/json")
 
 
