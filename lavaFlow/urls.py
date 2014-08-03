@@ -22,7 +22,7 @@ from django.conf.urls import patterns, include, url
 from django.views.generic import ListView
 from django.views.generic import DetailView
 from lavaFlow.models import *
-from lavaFlow.views import JobView
+
 
 urlpatterns = patterns('',
                        url(r'^$', 'lavaFlow.views.utilization_view', name="lf_utilization_view_default"),
