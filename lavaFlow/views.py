@@ -105,6 +105,7 @@ log = logging.getLogger(__name__)
 def get_csrf_token(request):
     """
     Returns the CSRF token to the client as part of a json document.
+
     :param request: Request object
     :return: HttpResponse with cookie containing JSON data.
     """
@@ -114,6 +115,7 @@ def get_csrf_token(request):
 def create_js_success(data=None, message=""):
     """
     Takes a json serializable object, and an optional message, and creates a standard json response document.
+
     :param data: json serializable object
     :param message: Optional message to include with response
     :return: HttpResponse object
