@@ -33,10 +33,20 @@ log = logging.getLogger(__name__)
 
 
 class ImportKey(models.Model):
+    """Any client that attempts to import data must present a valid key. Keys are managed by the admin.
+
+    .. py:attribute:: client_key
+
+        The Client Key, used by each uploader to authenticate.  This is very rudimentary.
+
+    .. py:attribute:: comment
+
+        Optional comment/description field, free form, example might include which servers/clusters are using this key.
+        Not used in any way for authentication.
+
     """
-    Any client that attempts to import data must present a valid key. Keys are managed by the admin.
-    """
-    client_key = models.CharField(max_length=255, primary_key=True)
+    client_key = models.CharField(max_length=255, primary_key=True, help_text="Client key, passed by the client to authenticate")
+    comment = models.TextField(default="", help_text=("Optional description/comment."))
 
 
 class OpenLavaState(models.Model):
