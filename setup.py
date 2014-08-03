@@ -4,6 +4,7 @@ from setuptools import setup
 README = open(os.path.join(os.path.dirname(__file__), 'README')).read()
 
 setup(
+		zip_safe=False,
 		name='django-lavaflow',
 		version='1.1',
 		packages=['lavaFlow'],
