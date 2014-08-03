@@ -893,7 +893,8 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
         for n in group_args:
             if len(group_name) > 0:
                 group_name += u" "
-            group_name += at[n]
+            group_name += u"%s" % at[n]
+
         pend_series=u"%s Pending" % group_name
         run_series=u"%s running" % group_name
         if pend_series not in serieses:
