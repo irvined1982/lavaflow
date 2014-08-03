@@ -46,7 +46,7 @@ class ImportKey(models.Model):
 
     """
     client_key = models.CharField(max_length=255, primary_key=True, help_text="Client key, passed by the client to authenticate")
-    comment = models.TextField(default="", help_text=("Optional description/comment."))
+    comment = models.TextField(default="", blank=True, help_text=("Optional description/comment."))
 
     def __str__(self):
         """
