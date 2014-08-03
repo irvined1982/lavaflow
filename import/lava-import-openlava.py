@@ -158,6 +158,9 @@ while True:
     rec = lsblib.lsb_geteventrec(fh, row_num)
     if rec is None:
         if lsblib.get_lsberrno() == lsblib.LSBE_EOF:
+            if not args.tail_log:
+                logging.info("EOF Reached, exiting....")
+                sys.exit(0)
             logging.info("EOF Reached, waiting on new data")
             if not os.path.exists(args.log_file):
                 logging.warn("Log file no longer exists, waiting on new one being created...")
