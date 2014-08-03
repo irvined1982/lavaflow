@@ -43,7 +43,7 @@ urlpatterns = patterns('',
                        url(r'^attempts/(?P<pk>\d+)$', DetailView.as_view(model=Attempt), name="lf_attempt_detail"),
                        url(r'^tasks/$', ListView.as_view(model=Task, paginate_by=20), name="lf_task_list"),
                        url(r'^tasks/(?P<pk>\d+)$', DetailView.as_view(model=Task), name="lf_task_detail"),
-                       url(r'^jobs/$', JobView.as_view(), name="lf_job_list"),
+                       url(r'^jobs/$', ListView.as_view(model=Job, paginate_by=20), name="lsf_job_list"),
                        url(r'^jobs/(?P<pk>\d+)$', DetailView.as_view(model=Job), name="lf_job_detail"),
 
                        url(
