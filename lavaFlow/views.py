@@ -717,7 +717,7 @@ def get_attempts(start_time_js, end_time_js, exclude_string, filter_string):
         attempts = attempts.filter(end_time__gte=start_time)
     if end_time_js:
         end_time = int(int(end_time_js) / 1000)
-        attempts = attempts.filter(job__submit_time__lte=end_time)
+        attempts = attempts.filter(submit_time__lte=end_time)
     for key, val in filter_args.items():
         attempts = attempts.filter(**{key: val})
     for key, val in exclude_args.items():
@@ -873,7 +873,7 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
         times.append(bucket_time_js)
         for t in ['pend', 'run']:
             if t == "pend":
-                entries = attempts.filter(start_time__gt=bucket_time_ep, job__submit_time__lte=bucket_time_ep)
+                entries = attempts.filter(start_time__gt=bucket_time_ep, submit_time__lte=bucket_time_ep)
                 name = "Pending"
             else:
                 entries = attempts.filter(start_time__lte=bucket_time_ep, end_time__gt=bucket_time_ep)
@@ -976,7 +976,7 @@ def util_report_range(request, exclude_string="", filter_string=""):
     suggested_start_time = end_time
 
     if count > 0:
-        start_time = attempts.order_by('job__submit_time')[0].job.submit_time
+        start_time = attempts.order_by('submit_time')[0].submit_time
         end_time = attempts.order_by('-end_time')[0].end_time
         suggested_end_time = end_time
         suggested_start_time = end_time - ONE_DAY
