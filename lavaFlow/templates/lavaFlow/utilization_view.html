@@ -412,7 +412,7 @@
 		        report_data['overall']['table']=data;
     		    // Check if selected, then display....
     		    if (current_report == "overall"){
-    		        $("#table_utilization").html(report_data['overall']);
+    		        $("#table_utilization").html(report_data['overall']['table']);
     		    }
 	    	});
         });
@@ -439,7 +439,7 @@
 		        report_data['cluster']['table']=data;
 		        // Check if selected, then display....
 		        if (current_report == "cluster"){
-    		        $("#table_utilization").html(report_data['cluster']);
+    		        $("#table_utilization").html(report_data['cluster']['table']);
     		    }
 		    });
 		});
@@ -466,7 +466,7 @@
                 report_data['queue']['table']=data;
                 // Check if selected, then display....
                 if (current_report == "queue"){
-    		        $("#table_utilization").html(report_data['queue']);
+    		        $("#table_utilization").html(report_data['queue']['table']);
     		    }
 		    });
         });
@@ -493,7 +493,7 @@
 		        report_data['user']['table']=data;
     		    // Check if selected, then display....
     		    if (current_report == "user"){
-    		        $("#table_utilization").html(report_data['user']);
+    		        $("#table_utilization").html(report_data['user']['table']);
     		    }
             });
 		});
@@ -520,7 +520,7 @@
                 report_data['overall']['size']=data;
                 // Check if selected, then display....
                 if (current_report == "size"){
-    		        $("#table_utilization").html(report_data['size']);
+    		        $("#table_utilization").html(report_data['size']['table']);
     		    }
 		    });
 		});
@@ -547,7 +547,7 @@
                 report_data['project']['table']=data;
                 // Check if selected, then display....
                 if (current_report == "project"){
-    		        $("#table_utilization").html(report_data['project']);
+    		        $("#table_utilization").html(report_data['project']['table']);
     		    }
 		    });
 		});
