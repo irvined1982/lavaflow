@@ -330,6 +330,7 @@
             .datum(report_data[state]['chart'])
             .transition().duration(500)
             .call(utilChart);
+        $("#table_utilization").html(report_data[state]['table']);
     }
 
 	function clearWidgets(){
