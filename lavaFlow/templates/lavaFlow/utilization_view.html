@@ -408,7 +408,7 @@
 
 		filterData.view='lf_utilization_table'
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
+		    $.get(data.url, function(data) {
 		        report_data['overall']['table']=data;
     		    // Check if selected, then display....
     		    if (current_report == "overall"){
@@ -435,7 +435,7 @@
 
 		filterData.view='lf_utilization_table'
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
+		    $.get(data.url, function(data) {
 		        report_data['cluster']['table']=data;
 		        // Check if selected, then display....
 		        if (current_report == "cluster"){
@@ -462,7 +462,7 @@
 
         filterData.view='lf_utilization_table'
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
+		    $.get(data.url, function(data) {
                 report_data['queue']['table']=data;
                 // Check if selected, then display....
                 if (current_report == "queue"){
@@ -489,7 +489,7 @@
 
         filterData.view='lf_utilization_table'
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
+		    $.get(data.url, function(data) {
 		        report_data['user']['table']=data;
     		    // Check if selected, then display....
     		    if (current_report == "user"){
@@ -516,7 +516,7 @@
 
 		filterData.view='lf_utilization_table'
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
+		    $.get(data.url, function(data) {
                 report_data['overall']['size']=data;
                 // Check if selected, then display....
                 if (current_report == "size"){
@@ -543,7 +543,7 @@
 
 		filterData.view='lf_utilization_table'
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
+		    $.get(data.url, function(data) {
                 report_data['project']['table']=data;
                 // Check if selected, then display....
                 if (current_report == "project"){
