@@ -315,7 +315,11 @@
 
         // Set the attributes for the active graph
         d3.select("#chart_utilization svg")
-            .datum(data)
+            .datum([{x:0,y:0},{x:1,y:0}])
+            .transition().duration(500)
+            .call(utilChart);
+        d3.select("#chart_utilization svg")
+            .datum(report_data[state]['chart'])
             .transition().duration(500)
             .call(utilChart);
     }
