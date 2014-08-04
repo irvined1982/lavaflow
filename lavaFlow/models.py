@@ -19,9 +19,7 @@
 # $Author: irvined $: 
 # $Date: 2012-10-31 23:42:17 +0100 (Wed, 31 Oct 2012) $:  
 #
-import array
 import datetime
-import json
 import logging
 import time
 from django.db import models

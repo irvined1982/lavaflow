@@ -708,8 +708,131 @@ def openlava_import_job_finish(cluster, event):
                 ol.asked_hosts.add(h)
             ol.save()
 
+def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
+    """
+    Generates utilization data for the utilization chart, this is essentially number of processors requested, vs
+    number of processors that are in use, for the given time period. Grouped by zero or more fields.
+
+    :param request: Request object
+    :param start_time_js: Start time for the chart data, in milliseconds since epoch
+    :param end_time_js: End time for the chart data, in milliseconds since epoch
+    :param exclude_string: a string of options to exclude data
+    :param filter_string: s string of options to filter data
+    :param group_string: a string of fields to group by
+    :return: json data object.
+
+    """
+    # Start time in milliseconds, rounded to nearest minute.
+    start_time_js = int(int(start_time_js)/60000)*60000
+    # Start time in seconds
+    start_time_ep = int(start_time_js / 1000)
+    # end time in milliseconds
+    end_time_js = int(int(end_time_js)/60000)*60000
+    # end time in seconds
+    end_time_ep = int(end_time_js / 1000)
+
+    # Attempts now contains all attempts that were active in this time period, ie, submitted before
+    # the end and finished after the start time.
+    attempts = get_attempts(start_time_js, end_time_js, exclude_string, filter_string)
+
+    # Attempts now only contains the exact data needed to perform the query, no other data is retrieved.
+    # This should in the best case only require data from a single table.
+    group_args = group_string_to_group_args(group_string)
+
+    required_values=["num_processors", "submit_time", "start_time","end_time"] + group_args
+    attempts = attempts.values(*required_values)
+
+    # Unique list of times that are used, for smaller datasets, this is the best possible list of times to use.
+    times=set()
+    times.add(start_time_js)
+    times.add(end_time_js)
+
+    # Dict containing each series.
+    serieses={}
+    for at in attempts:
+        submit_time = at['submit_time'] * 1000
+        start_time = at['start_time'] * 1000
+        end_time = at['end_time'] * 1000
+        times.add(submit_time)
+        times.add(start_time)
+        times.add(end_time)
+        np=at['num_processors']
+
+        group_name = u""
+        for n in group_args:
+            if len(group_name) > 0:
+                group_name += u" "
+            group_name += u"%s" % at[n]
+
+        pend_series=u"%s Pending" % group_name
+        run_series=u"%s running" % group_name
+        if pend_series not in serieses:
+            serieses[pend_series]={'key': pend_series, 'values':{}}
+        pend_series=serieses[pend_series]['values']
+
+        if run_series not in serieses:
+            serieses[run_series]={'key': run_series, 'values':{}}
+        run_series=serieses[run_series]['values']
+
+        if submit_time  in pend_series:
+            pend_series[submit_time] += np
+        else:
+            pend_series[submit_time] = np
+
+        if start_time in pend_series:
+            pend_series[start_time] -= np
+        else:
+            pend_series[start_time] = -1 * np
+
+        if start_time in run_series:
+            run_series[start_time] += np
+        else:
+            run_series[start_time] = np
+        if end_time in run_series:
+            run_series[end_time] -= np
+        else:
+            run_series[end_time] = -1 * np
+    if len(times) > 2000:
+        step_size=( ( end_time_js-start_time_js )/1000)
+        step_size=int(step_size/30000)
+        step_size *= 30000 # Multiple of 30 seconds....
+        times = range(start_time_js, end_time_js, step_size)
+    else:
+        times=sorted(times)
+    # Serieses now contains an item for each series we need to chart
+    for s in serieses.itervalues():
+        values=s['values']
+        total=0
+        ts=[]
+        vs=[]
+        for time in times:
+            if time not in values:
+                values[time] = 0
+        for time in sorted(values.keys()):
+            ts.append(time-1)
+            vs.append(total)
+            total += values[time]
+            ts.append(time)
+            vs.append(total)
+        f=interp1d(ts, vs, copy=False, bounds_error=False, fill_value=0)
+        s['values']=[{'x':time, 'y':float(f(time))} for time in times]
+
+    return HttpResponse(json.dumps(serieses.values(), indent=1), content_type="application/json")
+
 
 def get_attempts(start_time_js, end_time_js, exclude_string, filter_string):
+    """
+
+    Gets all attempts that are active between the specified time periods, after
+    having applied the filters and exclude options.
+
+    :param start_time_js: Start time for the chart data, in milliseconds since epoch
+    :param end_time_js: End time for the chart data, in milliseconds since epoch
+    :param exclude_string: a string of options to exclude data
+    :param filter_string: s string of options to filter data
+    :return: Queryset
+
+    """
     filter_args = filter_string_to_params(filter_string)
     exclude_args = filter_string_to_params(exclude_string)
     attempts = Attempt.objects.all()
@@ -851,103 +974,25 @@ def utilization_bar_exit(request, start_time_js=0, end_time_js=0, exclude_string
     return HttpResponse(json.dumps(data, indent=3, sort_keys=True), content_type="application/json")
 
 
-# @cache_page(60 * 60 * 2)
-def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
-    # Start time in milliseconds
-    start_time_js = int(start_time_js)
-    # Start time in seconds
-    start_time_ep = int(start_time_js / 1000)
-    # end time in milliseconds
-    end_time_js = int(end_time_js)
-    # end time in seconds
-    end_time_ep = int(end_time_js / 1000)
 
-    # Attempts now contains all attempts that were active in this time period, ie, submitted before
-    # the end and finished after the start time.
-    attempts = get_attempts(start_time_js, end_time_js, exclude_string, filter_string)
-
-    # Attempts now only contains the exact data needed to perform the query, no other data is retrieved.
-    # This should in the best case only require data from a single table.
-    group_args = group_string_to_group_args(group_string)
-
-    required_values=["num_processors", "submit_time", "start_time","end_time"] + group_args
-    attempts = attempts.values(*required_values)
-
-    # Unique list of times that are used, for smaller datasets, this is the best possible list of times to use.
-    times=set()
-    times.add(start_time_js)
-    times.add(end_time_js)
-
-    # Dict containing each series.
-    serieses={}
-    for at in attempts:
-        submit_time = at['submit_time'] * 1000
-        start_time = at['start_time'] * 1000
-        end_time = at['end_time'] * 1000
-        times.add(submit_time)
-        times.add(start_time)
-        times.add(end_time)
-        np=at['num_processors']
-
-        group_name = u""
-        for n in group_args:
-            if len(group_name) > 0:
-                group_name += u" "
-            group_name += u"%s" % at[n]
-
-        pend_series=u"%s Pending" % group_name
-        run_series=u"%s running" % group_name
-        if pend_series not in serieses:
-            serieses[pend_series]={'key': pend_series, 'values':{}}
-        pend_series=serieses[pend_series]['values']
-
-        if run_series not in serieses:
-            serieses[run_series]={'key': run_series, 'values':{}}
-        run_series=serieses[run_series]['values']
-
-        if submit_time  in pend_series:
-            pend_series[submit_time] += np
-        else:
-            pend_series[submit_time] = np
-
-        if start_time in pend_series:
-            pend_series[start_time] -= np
-        else:
-            pend_series[start_time] = -1 * np
-
-        if start_time in run_series:
-            run_series[start_time] += np
-        else:
-            run_series[start_time] = np
-        if end_time in run_series:
-            run_series[end_time] -= np
-        else:
-            run_series[end_time] = -1 * np
-    if len(times) > 2000:
-        times=range(start_time_js, end_time_js, ( ( end_time_js-start_time_js )/1000))
-    else:
-        times=sorted(times)
-    # Serieses now contains an item for each series we need to chart
-    for s in serieses.itervalues():
-        values=s['values']
-        total=0
-        ts=[]
-        vs=[]
-        for time in sorted(values.keys()):
-            ts.append(time-1)
-            vs.append(total)
-            total += values[time]
-            ts.append(time)
-            vs.append(total)
-        f=interp1d(ts, vs, copy=False, bounds_error=False, fill_value=0)
-        s['values']=[{'x':time, 'y':float(f(time))} for time in times]
-
-    return HttpResponse(json.dumps(serieses.values(), indent=1), content_type="application/json")
 
 
 @cache_page(60 * 60 * 2)
 def utilization_view(request, start_time_js=None, end_time_js=None, exclude_string="none", filter_string="none",
                      group_string=""):
+    """
+
+    Renders and displays the utilization view page.
+
+    :param request: Request object passed by django.
+    :param start_time_js: Start time for the chart data, in milliseconds since epoch
+    :param end_time_js: End time for the chart data, in milliseconds since epoch
+    :param exclude_string: a string of options to exclude data
+    :param filter_string: s string of options to filter data
+    :param group_string: a string of fields to group data by.
+    :return: Rendered HTML page.
+
+    """
     #
     if start_time_js == None:
         start_time_js = -1
