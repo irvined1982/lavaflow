@@ -409,7 +409,7 @@
 		filterData.view='lf_utilization_table'
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 		    $.getJSON(data.url, function(data) {
-		        report_data['overall']['table']=data['data'];
+		        report_data['overall']['table']=data;
     		    // Check if selected, then display....
     		    if (current_report == "overall"){
     		        $("#table_utilization").html(report_data['overall']);
@@ -436,7 +436,7 @@
 		filterData.view='lf_utilization_table'
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 		    $.getJSON(data.url, function(data) {
-		        report_data['cluster']['table']=data['data'];
+		        report_data['cluster']['table']=data;
 		        // Check if selected, then display....
 		        if (current_report == "cluster"){
     		        $("#table_utilization").html(report_data['cluster']);
@@ -463,7 +463,7 @@
         filterData.view='lf_utilization_table'
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 		    $.getJSON(data.url, function(data) {
-                report_data['queue']['table']=data['data'];
+                report_data['queue']['table']=data;
                 // Check if selected, then display....
                 if (current_report == "queue"){
     		        $("#table_utilization").html(report_data['queue']);
@@ -490,7 +490,7 @@
         filterData.view='lf_utilization_table'
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 		    $.getJSON(data.url, function(data) {
-		        report_data['user']['table']=data['data'];
+		        report_data['user']['table']=data;
     		    // Check if selected, then display....
     		    if (current_report == "user"){
     		        $("#table_utilization").html(report_data['user']);
@@ -517,7 +517,7 @@
 		filterData.view='lf_utilization_table'
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 		    $.getJSON(data.url, function(data) {
-                report_data['overall']['size']=data['data'];
+                report_data['overall']['size']=data;
                 // Check if selected, then display....
                 if (current_report == "size"){
     		        $("#table_utilization").html(report_data['size']);
@@ -544,7 +544,7 @@
 		filterData.view='lf_utilization_table'
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 		    $.getJSON(data.url, function(data) {
-                report_data['project']['table']=data['data'];
+                report_data['project']['table']=data;
                 // Check if selected, then display....
                 if (current_report == "project"){
     		        $("#table_utilization").html(report_data['project']);
