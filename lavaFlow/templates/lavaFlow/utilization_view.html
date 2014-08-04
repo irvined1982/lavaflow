@@ -351,7 +351,7 @@
 		];
 		charts.forEach(function(entry){
 			d3.select(entry.id)
-			.datum([{x:0,y:0},{x:1,y:0}])
+			.datum(empty_chart)
 			.transition().duration(500)
 			.call(entry.container);
 			d3.select(entry.id)
