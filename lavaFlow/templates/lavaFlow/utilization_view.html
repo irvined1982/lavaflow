@@ -82,108 +82,13 @@
 		},
 	});
 	
-	// Add the utilization charts
-	var utilChart;
-	nv.addGraph(function() {
-		utilChart = nv.models.stackedAreaChart();
-		utilChart.clipEdge(true);
-		utilChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d)) });
-		utilChart.xAxis.rotateLabels(-45);
-		utilChart.margin({bottom: 120, left:100});
-		utilChart.xAxis.axisLabel('Date');
-		utilChart.showControls(false);
-		d3.select('#utilizationChart svg')
-		.datum([])
-		.transition().duration(500)
-		.call(utilChart);
-		nv.utils.windowResize(utilChart.update);
-		return utilChart;
-	});
 
-	var utilClusterChart;
-		nv.addGraph(function() {
-		utilClusterChart = nv.models.stackedAreaChart();
-		utilClusterChart.clipEdge(true);
-		utilClusterChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d)) });
-		utilClusterChart.xAxis.rotateLabels(-45);
-		utilClusterChart.margin({bottom: 120, left:100});
-		utilClusterChart.xAxis.axisLabel('Date');
-		utilClusterChart.showControls(false);
-			d3.select('#utilizationClusterChart svg')
-		.datum([])
-		.transition().duration(500)
-		.call(utilClusterChart);
-		nv.utils.windowResize(utilClusterChart.update);
-		return utilClusterChart;
-	});
 
-	var utilQueueChart;
-	nv.addGraph(function() {
-		utilQueueChart = nv.models.stackedAreaChart();
-		utilQueueChart.clipEdge(true);
-		utilQueueChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d)) });
-		utilQueueChart.xAxis.rotateLabels(-45);
-		utilQueueChart.margin({bottom: 120, left:100});
-		utilQueueChart.xAxis.axisLabel('Date');
-		utilQueueChart.showControls(false);
-			d3.select('#utilizationQueueChart svg')
-		.datum([])
-		.transition().duration(500)
-		.call(utilQueueChart);
 
-		nv.utils.windowResize(utilQueueChart.update);
-		return utilQueueChart;
-	});
-	var utilProjectChart;
-	nv.addGraph(function() {
-		utilProjectChart = nv.models.stackedAreaChart();
-		utilProjectChart.clipEdge(true);
-		utilProjectChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d)) });
-		utilProjectChart.xAxis.rotateLabels(-45);
-		utilProjectChart.margin({bottom: 120, left:100});
-		utilProjectChart.xAxis.axisLabel('Date');
-		utilProjectChart.showControls(false);
-			d3.select('#utilizationQueueChart svg')
-		.datum([])
-		.transition().duration(500)
-		.call(utilProjectChart);
-			nv.utils.windowResize(utilProjectChart.update);
-		return utilProjectChart;
-	});
 
-	var utilUserChart;
-	nv.addGraph(function() {
-		utilUserChart = nv.models.stackedAreaChart();
-		utilUserChart.clipEdge(true);
-		utilUserChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d)) });
-		utilUserChart.xAxis.rotateLabels(-45);
-		utilUserChart.margin({bottom: 120, left:100});
-		utilUserChart.xAxis.axisLabel('Date');
-		utilUserChart.showControls(false);
-		d3.select('#utilizationUserChart svg')
-		.datum([])
-		.transition().duration(500)
-		.call(utilChart);
-		nv.utils.windowResize(utilUserChart.update);
-		return utilUserChart;
-	});
 
-	var utilSizeChart;
-	nv.addGraph(function() {
-		utilSizeChart = nv.models.stackedAreaChart();
-		utilSizeChart.clipEdge(true);
-		utilSizeChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d)) });
-		utilSizeChart.xAxis.rotateLabels(-45);
-		utilSizeChart.margin({bottom: 120, left:100});
-		utilSizeChart.xAxis.axisLabel('Date');
-		utilSizeChart.showControls(false);
-			d3.select('#utilizationSizeChart svg')
-		.datum([])
-		.transition().duration(500)
-		.call(utilSizeChart);
-			nv.utils.windowResize(utilSizeChart.update);
-		return utilSizeChart;
-	});
+
+
 
 
 
@@ -346,33 +251,81 @@
 		updateReport();
 	}
 
+    // Add the utilization charts
+	var utilChart;
+	nv.addGraph(function() {
+		utilChart = nv.models.stackedAreaChart();
+		utilChart.clipEdge(true);
+		utilChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d)) });
+		utilChart.xAxis.rotateLabels(-45);
+		utilChart.margin({bottom: 120, left:100});
+		utilChart.xAxis.axisLabel('Date');
+		utilChart.showControls(false);
+		d3.select('#chart_utilization svg')
+		.datum([])
+		.transition().duration(500)
+		.call(utilChart);
+		nv.utils.windowResize(utilChart.update);
+		return utilChart;
+	});
+
+
+
+
+    var current_report="overview";
+    var report_data={
+        overview:{
+            chart=[],
+            table=""
+        },
+        cluster:{
+                chart=[],
+                table=""
+            },
+        queue:{
+                chart=[],
+                table=""
+            },
+        user:{
+                chart=[],
+                table=""
+            },
+        size:{
+                chart=[],
+                table=""
+            },
+        project:{
+                chart=[],
+                table=""
+            }
+       };
+
+    function set_active_chart(selector, state){
+        current_report = state;
+        // Change the classes in the tabs...
+        var as=["overview", "cluster", "queue", "user", "size","project"];
+        var ws=selector+"_"+state;
+        $.each( as, function( index, value ){
+            var v = selector+"_"+value;
+            document.getElementById(v).className ="";
+        if (v.valueOf() === ws.valueOf()){
+                document.getElementById(v).className ="active";
+        }
+        });
+
+        // Set the attributes for the active graph
+        d3.select("#chart_utilization svg")
+            .datum(data)
+            .transition().duration(500)
+            .call(utilChart);
+    }
 
 	function clearWidgets(){
 		// Clears data from all widgets...
 		charts=[
 			{
-				id:"#utilizationChart svg",
+				id:"#chart_utilization svg",
 				container:utilChart
-			},
-			{
-				id:"#utilizationClusterChart svg",
-				container:utilClusterChart
-			},
-			{
-				id:"#utilizationQueueChart svg",
-				container:utilQueueChart
-			},
-			{
-				id:"#utilizationUserChart svg",
-				container:utilUserChart
-			},
-			{
-				id:"#utilizationSizeChart svg",
-				container:utilSizeChart
-			},
-			{
-				id:"#utilizationProjectChart svg",
-				container:utilProjectChart
 			},
 			{
 				id:"#jobSizeChartBar svg",
@@ -385,19 +338,20 @@
 		];
 		charts.forEach(function(entry){
 			d3.select(entry.id)
+			.datum([{x:0,y:0},{x:1,y:0}])
+			.transition().duration(500)
+			.call(entry.container);
+			d3.select(entry.id)
 			.datum([])
 			.transition().duration(500)
 			.call(entry.container);
 		});
+
 		areas=[
-			'#clusterOverview',
-			'#utilizationQueueTable',
-			'#utilizationUserTable',
-			'#utilizationSizeTable',
-			'#utilizationProjectTable'
+			'#table_utilization',
 			];
 		areas.forEach(function(entry){
-			$(entry).html('');
+			$(entry).html('Updating.....');
 		});
 	}
 
@@ -422,63 +376,169 @@
 			$("#counterText").text(data.count);
 		});
 
+
+        // Load data for each of the widgets
 		filterData.view='lf_util_chart_view';
 		filterData.groups=[];
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-			$.getJSON(data.url, function(data) {
-				d3.select('#utilizationChart svg')
-				.datum(data)
-				.transition().duration(500)
-				.call(utilChart);
-			});
-		});
+		    $.getJSON(data.url, function(data) {
+                report_data['overview']['chart']=data['data'];
+                // Check if selected, then display....
+                if (current_report == "overview"){
+                    d3.select("#chart_utilization svg")
+                    .datum(report_data['overview']['chart'])
+                    .transition().duration(500)
+                    .call(utilChart);
+                }
+		    });
+        });
 
+		filterData.view='lf_utilization_table'
+		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+		        report_data['overview']['table']=data['data'];
+    		    // Check if selected, then display....
+    		    if (current_report == "overview"){
+    		        $("#table_utilization").html(report_data['overview']);
+    		    }
+	    	});
+        });
+
+
+		filterData.view='lf_util_chart_view';
 		filterData.groups=['cluster__name'];
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 			 $.getJSON(data.url, function(data) {
-				d3.select('#utilizationClusterChart svg')
-				.datum(data)
-				.transition().duration(500)
-				.call(utilClusterChart);
+				report_data['cluster']['chart']=data['data'];
+			    // Check if selected, then display....
+			    if (current_report == "cluster"){
+                    d3.select("#chart_utilization svg")
+                    .datum(report_data['cluster']['chart'])
+                    .transition().duration(500)
+                    .call(utilChart);
+	    		}
 			});
 		});
 
+		filterData.view='lf_utilization_table'
+		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+		        report_data['cluster']['table']=data['data'];
+		        // Check if selected, then display....
+		        if (current_report == "cluster"){
+    		        $("#table_utilization").html(report_data['cluster']);
+    		    }
+		    });
+		});
+
+
+        filterData.view='lf_util_chart_view';
 		filterData.groups=['queue__name'];
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-			 $.getJSON(data.url, function(data) {
-				d3.select('#utilizationQueueChart svg')
-				.datum(data)
-				.transition().duration(500)
-				.call(utilQueueChart);
-			});
-		});
+		    $.getJSON(data.url, function(data) {
+                report_data['queue']['chart']=data['data'];
+                // Check if selected, then display....
+                if (current_report == "queue"){
+                    d3.select("#chart_utilization svg")
+                    .datum(report_data['queue']['chart'])
+                    .transition().duration(500)
+                    .call(utilChart);
+                }
+            });
+        });
+
+        filterData.view='lf_utilization_table'
+		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+                report_data['queue']['table']=data['data'];
+                // Check if selected, then display....
+                if (current_report == "queue"){
+    		        $("#table_utilization").html(report_data['queue']);
+    		    }
+		    });
+        });
+
+
+        filterData.view='lf_util_chart_view';
 		filterData.groups=['user__name'];
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-			 $.getJSON(data.url, function(data) {
-				d3.select('#utilizationUserChart svg')
-				.datum(data)
-				.transition().duration(500)
-				.call(utilUserChart);
-			});
+           $.getJSON(data.url, function(data) {
+                report_data['user']['chart']=data['data'];
+			    // Check if selected, then display....
+			    if (current_report == "user"){
+                    d3.select("#chart_utilization svg")
+                    .datum(report_data['user']['chart'])
+                    .transition().duration(500)
+                    .call(utilChart);
+                }
+            });
 		});
+
+        filterData.view='lf_utilization_table'
+		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+		        report_data['user']['table']=data['data'];
+    		    // Check if selected, then display....
+    		    if (current_report == "user"){
+    		        $("#table_utilization").html(report_data['user']);
+    		    }
+            });
+		});
+
+
+        filterData.view='lf_util_chart_view';
 		filterData.groups=['num_processors'];
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-			 $.getJSON(data.url, function(data) {
-				d3.select('#utilizationSizeChart svg')
-				.datum(data)
-				.transition().duration(500)
-				.call(utilSizeChart);
+		    $.getJSON(data.url, function(data) {
+                 report_data['size']['chart']=data['data'];
+                // Check if selected, then display....
+                if (current_report == "size"){
+                    d3.select("#chart_utilization svg")
+                    .datum(report_data['size']['chart'])
+                    .transition().duration(500)
+                    .call(utilChart);
+                }
 			});
 		});
+
+		filterData.view='lf_utilization_table'
+		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+                report_data['overview']['size']=data['data'];
+                // Check if selected, then display....
+                if (current_report == "size"){
+    		        $("#table_utilization").html(report_data['size']);
+    		    }
+		    });
+		});
+
+
+        filterData.view='lf_util_chart_view';
 		filterData.groups=['projects__name'];
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-			 $.getJSON(data.url, function(data) {
-				d3.select('#utilizationProjectChart svg')
-				.datum(data)
-				.transition().duration(500)
-				.call(utilProjectChart);
-			});
+		    $.getJSON(data.url, function(data) {
+                report_data['project']['chart']=data['data'];
+                // Check if selected, then display....
+                if (current_report == "project"){
+                    d3.select("#chart_utilization svg")
+                    .datum(report_data['project']['chart'])
+                    .transition().duration(500)
+                    .call(utilChart);
+                }
+            });
 		});
+
+		filterData.view='lf_utilization_table'
+		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+                report_data['project']['table']=data['data'];
+                // Check if selected, then display....
+                if (current_report == "project"){
+    		        $("#table_utilization").html(report_data['project']);
+    		    }
+		    });
+		});
+
 
 		filterData.view='lf_util_bar_exit';
 		filterData.groups=['status__name'];
@@ -491,7 +551,8 @@
 			});
 
 		});
-		
+
+
 		filterData.view='lf_util_bar_size';
 		filterData.groups=['num_processors'];
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
@@ -504,64 +565,51 @@
 
 		});
 		
-		filterData.view='lf_utilization_table'
-		filterData.groups=['cluster__name'];
-		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-			$.get(data.url, function(data) {
-				 $('#clusterOverview').html(data);
-			 });
-		});
 
-		filterData.groups=['queue__name'];
-		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-			$.get(data.url, function(data) {
-				$('#utilizationQueueTable').html(data);
-			});
-		});
-		filterData.groups=['user__name'];
-		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-			 $.get(data.url, function(data) {
-				 $('#utilizationUserTable').html(data);
-			 });
-		});
-		filterData.groups=['num_processors'];
-		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-			 $.get(data.url, function(data) {
-				 $('#utilizationSizeTable').html(data);
-			 });
-		});
-		filterData.groups=['projects__name'];
-		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-			 $.get(data.url, function(data) {
-				 $('#utilizationProjectTable').html(data);
-			});
-		});
+
 	}
 
+
+
+
+
+
+
+
 	initializeReport();
+
+
+
+
+
+
+
+
+
 </script>
-<h1>Overall Utilization</h1>
-<div id='utilizationChart'><svg style='height:500px'> </svg></div>
 
-<h1>Utilization by Cluster</h1>
-<div id='utilizationClusterChart'><svg style='height:500px'> </svg></div>
-<div id="clusterOverview"></div>
 
-<h2>Utilization by Queue</h2>
-<div id='utilizationQueueChart'><svg style='height:500px'> </svg></div>
-<div id="utilizationQueueTable"></div>
 
-<h2>Utilization by Project</h2>
-<div id='utilizationProjectChart'><svg style='height:500px'> </svg></div>
-<div id="utilizationProjectTable"></div>
+<h1>Utilization</h1>
 
-<h2>Utilization by User</h2>
-<div id='utilizationUserChart'><svg style='height:500px'> </svg></div>
-<div id="utilizationUserTable"></div>
+<ul id="chart_utilization_nav" class="nav nav-tabs">
+    <li id="chart_utilization_overall" class="active"><a href="#" onClick='set_active_chart("chart_utilization", "overall"); return false;'>Overall</a></li>
+    <li id="chart_utilization_cluster"><a href="#" onClick='set_active_chart("chart_utilization", "cluster"); return false;'>By Cluster</a></li>
+    <li id="chart_utilization_queue"><a href="#" onClick='set_active_chart("chart_utilization", "queue"); return false;'>By Queue</a></li>
+    <li id="chart_utilization_project"><a href="#" onClick='set_active_chart("chart_utilization", "project"); return false;'>By Project</a></li>
+    <li id="chart_utilization_user"><a href="#" onClick='set_active_chart("chart_utilization", "user"); return false;'>By User</a></li>
+    <li id="chart_utilization_job_size"><a href="#" onClick='set_active_chart("chart_utilization", "job_size"); return false;'>By Size</a></li>
+</ul>
+<div id="chart_utilization">
+    <svg height="400px"></svg>
+</div>
+<div id="table_utilization"></div>
 
-<h2>Utilization by Job Size</h2>
-<div id='utilizationSizeChart'><svg style='height:500px'></svg></div>
-<div id="utilizationSizeTable"></div>
+
+
+
+
+
 
 <h3>Job Size</h3>
 <div id='jobSizeChartBar'><svg style='height:500px'></svg></div>
