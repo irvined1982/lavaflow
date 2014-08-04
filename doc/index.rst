@@ -15,6 +15,7 @@ Contents:
    import
    views
    models
+   core_models
 
 
 Indices and tables
