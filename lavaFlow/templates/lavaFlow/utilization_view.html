@@ -300,6 +300,14 @@
             }
        };
 
+    var empty_chart=[
+    {
+        key:"Loading...",
+        values:[
+        {x:0, y:0}, {x:1, y:0}
+        ]
+    }
+    ];
     function set_active_chart(selector, state){
         current_report = state;
         // Change the classes in the tabs...
@@ -315,7 +323,7 @@
 
         // Set the attributes for the active graph
         d3.select("#chart_utilization svg")
-            .datum([ {values:[x:0,y:0},{x:1,y:0}], key:"Loading..."}])
+            .datum(empty_chart)
             .transition().duration(500)
             .call(utilChart);
         d3.select("#chart_utilization svg")
