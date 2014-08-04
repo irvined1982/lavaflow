@@ -315,7 +315,7 @@
 
         // Set the attributes for the active graph
         d3.select("#chart_utilization svg")
-            .datum([{x:0,y:0},{x:1,y:0}])
+            .datum([ {values:[x:0,y:0},{x:1,y:0}], key:"Loading..."}])
             .transition().duration(500)
             .call(utilChart);
         d3.select("#chart_utilization svg")
