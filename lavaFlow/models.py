@@ -31,7 +31,15 @@ log = logging.getLogger(__name__)
 
 
 class ImportKey(models.Model):
-    """Any client that attempts to import data must present a valid key. Keys are managed by the admin.
+    """Any client that attempts to import data must present a valid key. Keys in general should be managed through the
+    admin control panel.::
+
+    >>> from lavaFlow.models import ImportKey
+    >>> try:
+    ...     key=ImportKey.objects.get(client_key="key_to_check")
+    ...     # Key is valid.
+    ... except ObjectDoesNotExist as e:
+    ...     # Key is invalid.
 
     .. py:attribute:: client_key
 
@@ -252,6 +260,35 @@ class JobStatus(OpenLavaState):
 
 
 class Cluster(models.Model):
+    """
+
+    Almost every bit of data stored in lavaFlow can be traced back to a cluster, clusters represent the physical compute
+    clusters that jobs are executed on.  There could be just one, for a simple departmental cluster, or many for an
+    entire organization with both regional and centralized compute services.  Cluster objects are generally created
+    automatically by the agents monitoring the cluster.  Extended information is generally added by the end user via
+    the admin interface.::
+
+    >>> from lavaFlow.models import Cluster
+    >>> (cluster, created) = Cluster.objects.get_or_create(name="openlava")
+    >>> cluster.name
+    u'openlava'
+    >>> cluster.total_attempts()
+    9000
+    >>> cluster.first_task()
+    <Attempt: Attempt object>
+    >>> cluster.last_task()
+    <Attempt: Attempt object>
+    >>> cluster.average_pend_time_timedelta()
+    datetime.timedelta(0, 12001, 831000)
+    >>> cluster.average_pend_time()
+    12001.831
+
+    .. py:attribute:: name
+
+    This is the name of the cluster, generally this is whatever the scheduler thinks its name is, however it can be
+    overridden manually by the cluster administator.
+
+    """
     name = models.CharField(
         max_length=100,
         unique=True,
@@ -260,6 +297,12 @@ class Cluster(models.Model):
     )
 
     def get_absolute_url(self):
+        """
+        The absolute URL to the cluster view.
+
+        :return: URL of the cluster view page for this instance.
+
+        """
         args = {
         'start_time_js': 0,
         'end_time_js': 0,
@@ -270,39 +313,96 @@ class Cluster(models.Model):
         return reverse("lf_utilization_view", kwargs=args)
 
     def __unicode__(self):
+        """
+        Returns a unicode str containing the name of the cluster.
+
+        :return: unicode(self.__str__())
+
+        """
         return u'%s' % self.name
 
     def __str__(self):
+        """
+        Returns a  str containing the name of the cluster.
+
+        :return: str(name)
+
+        """
         return self.name
 
     def total_jobs(self):
+        """
+        Returns an total number of jobs that have been submitted to this cluster since time began.
+
+        :return: Integer containing total number of jobs
+
+        """
         return Job.objects.filter(attempt__cluster=self).distinct().count()
 
     def total_tasks(self):
+        """
+        Returns an total number of tasks that have been submitted to this cluster since time began.
+
+        :return: Integer containing total number of tasks
+
+        """
         return Task.objects.filter(attempt__cluster=self).distinct().count()
 
     def total_attempts(self):
+        """
+        Returns an total number of tasks that have been executed on this cluster since time began.
+
+        :return: Integer containing total number of tasks
+
+        """
         return self.attempt_set.count()
 
     def first_task(self):
+        """
+        Gets the first task that was executed on the cluster.  If no tasks were executed on the cluster, returns None.
+
+        :return: Attempt object of the first attempt executed.
+
+        """
         try:
             return self.attempt_set.order_by('start_time')[0]
         except:
             return None
 
     def last_task(self):
+        """
+        Gets the last task that ended on the cluster, regardless of exit status.  If no tasks have been executed on the
+        cluster, returns None
+
+        :return: Attempt object of the last attempt ended, returns None of no attempts.
+
+        """
         try:
             return self.attempt_set.order_by('-end_time')[0]
         except:
             return None
 
     def last_failed_task(self):
+        """
+        Gets the last task that exited with a non-successful exit state on the cluster.  If no tasks have been executed
+        on the cluster, or none of the tasks have exited witha  failure, returns None
+
+        :return: Attempt object of the last attempt that failed, returns None of no failed attempts.
+
+        """
         try:
             return self.attempt_set.exclude(status__exited_cleanly=True).order_by('-end_time')[0]
         except:
             return None
 
     def average_pend_time(self):
+        """
+        Calculates the average pend time in seconds for all jobs that executed on the cluster.
+
+        :return: Number of seconds on average that jobs pend for on this cluster.
+
+        """
+
         name = "%s_cluster_average_pend_time" % self.id
         pend = cache.get(name)
         if not pend:
@@ -311,12 +411,30 @@ class Cluster(models.Model):
         return pend
 
     def average_pend_time_timedelta(self):
+        """
+        Timedelta object of the number of seconds that jobs pend for
+
+        :return: Average pend time as timedelta.
+
+        """
         return datetime.timedelta(seconds=self.average_pend_time())
 
     def average_pend_time_percent(self):
+        """
+        Gets the average pend time of jobs on the cluster as a percent of their overall wall clock time.
+
+        :return: Average Pend Time as a percent
+
+        """
         return (float(self.average_pend_time()) / float(self.average_wall_time())) * 100
 
     def average_wall_time(self):
+        """
+        Calculates the average wall clock time in seconds for all jobs that executed on the cluster.
+
+        :return: Number of seconds on average that jobs take from submission to completion.
+
+        """
         name = "%s_cluster_average_wall_time" % self.id
         wall = cache.get(name)
         if not wall:
@@ -325,10 +443,33 @@ class Cluster(models.Model):
         return wall
 
     def average_wall_time_timedelta(self):
+        """
+        Timedelta object of the number of seconds of the average wall clock time.
+
+        :return: Average wall clock time as timedelta.
+
+        """
         return datetime.timedelta(seconds=self.average_wall_time())
 
 
 class ClusterLog(models.Model):
+    """
+    ClusterLog objects are log entries that relate to the cluster as a whole. These can be created by tools, or through
+    the admin interface by an administator.
+
+    .. py:attribute:: cluster
+
+    Foreign key to the Cluster that the log is part of
+
+    .. py:attribute:: time
+
+    Time of the log entry, in seconds since Epoch
+
+    .. py:attribute:: message
+
+    The message, a text field that can contain freeform text.
+
+    """
     cluster = models.ForeignKey(Cluster)
     time = models.IntegerField()
     message = models.TextField()
