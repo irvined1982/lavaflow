@@ -348,6 +348,29 @@
             .call(utilChart);
         $("#table_utilization").html(util_report_data[state]['table']);
     }
+    function set_active_resource_chart(selector, state){
+        current_util_report = state;
+        // Change the classes in the tabs...
+        var as=["overall", "size", "cluster", "queue", "project", "user"];
+        var ws=selector+"_"+state;
+        $.each( as, function( index, value ){
+            var v = selector+"_"+value;
+            document.getElementById(v).className ="";
+            if (v.valueOf() === ws.valueOf()){
+                    document.getElementById(v).className ="active";
+            }
+        });
+
+        // Set the attributes for the active graph
+        d3.select("#chart_resources svg")
+            .datum(empty_chart)
+            .transition().duration(500)
+            .call(resourceChart);
+        d3.select("#chart_resources svg")
+            .datum(resource_report_data[state])
+            .transition().duration(500)
+            .call(resourceChart);
+    }
     function set_active_consumption_chart(selector, state){
         current_util_report = state;
         // Change the classes in the tabs...
@@ -821,12 +844,12 @@
 <h1>Resource Usage</h1>
 
 <ul id="chart_resources_nav" class="nav nav-tabs">
-    <li id="chart_resources_overall" class="active"><a href="#" onClick='set_active_consumption_chart("chart_resources", "overall"); return false;'>Overall</a></li>
-    <li id="chart_resources_size"><a href="#" onClick='set_active_consumption_chart("chart_resources", "size"); return false;'>By Job Size</a></li>
-    <li id="chart_resources_cluster"><a href="#" onClick='set_active_consumption_chart("chart_resources", "cluster"); return false;'>By Cluster</a></li>
-    <li id="chart_resources_project"><a href="#" onClick='set_active_consumption_chart("chart_resources", "project"); return false;'>By Project</a></li>
-    <li id="chart_resources_queue"><a href="#" onClick='set_active_consumption_chart("chart_resources", "queue"); return false;'>By Queue</a></li>
-    <li id="chart_resources_user"><a href="#" onClick='set_active_consumption_chart("chart_resources", "user"); return false;'>By User</a></li>
+    <li id="chart_resources_overall" class="active"><a href="#" onClick='set_active_resource_chart("chart_resources", "overall"); return false;'>Overall</a></li>
+    <li id="chart_resources_size"><a href="#" onClick='set_active_resource_chart("chart_resources", "size"); return false;'>By Job Size</a></li>
+    <li id="chart_resources_cluster"><a href="#" onClick='set_active_resource_chart("chart_resources", "cluster"); return false;'>By Cluster</a></li>
+    <li id="chart_resources_project"><a href="#" onClick='set_active_resource_chart("chart_resources", "project"); return false;'>By Project</a></li>
+    <li id="chart_resources_queue"><a href="#" onClick='set_active_resource_chart("chart_resources", "queue"); return false;'>By Queue</a></li>
+    <li id="chart_resources_user"><a href="#" onClick='set_active_resource_chart("chart_resources", "user"); return false;'>By User</a></li>
 </ul>
 
 <div id='chart_resources'><svg style='height:500px'></svg></div>
