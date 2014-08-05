@@ -890,7 +890,7 @@
 		});
 
         filterData.view='lf_submission_chart';
-		filterData.groups=['project__name'];
+		filterData.groups=['projects__name'];
         $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 		    $.getJSON(data.url, function(data) {
                 submission_report_data['project']=data['data'];
@@ -974,11 +974,11 @@ were pending at that time.  Pending tasks are those that have been submitted to 
 <p>Shows data on when jobs were submitted to the cluster</p>
 
 <ul id="chart_submission_nav" class="nav nav-tabs">
-    <li id="chart_submission_overall" class="active"><a href="#" onClick='set_active_submission_chart("chart_submission", "overall"); return false;'>By Hour</a></li>
-    <li id="chart_submission_size"><a href="#" onClick='set_active_submission_chart("chart_submission", "size"); return false;'>By Day of Week</a></li>
-    <li id="chart_submission_project"><a href="#" onClick='set_active_submission_chart("chart_submission", "project"); return false;'>By Day of Month</a></li>
-    <li id="chart_submission_cluster"><a href="#" onClick='set_active_submission_chart("chart_submission", "cluster"); return false;'>By Week of Year</a></li>
-    <li id="chart_submission_queue"><a href="#" onClick='set_active_submission_chart("chart_submission", "queue"); return false;'>By Month</a></li>
+    <li id="chart_submission_overall" class="active"><a href="#" onClick='set_active_submission_chart("chart_submission", "overall"); return false;'>Overall</a></li>
+    <li id="chart_submission_size"><a href="#" onClick='set_active_submission_chart("chart_submission", "size"); return false;'>By Job Size</a></li>
+    <li id="chart_submission_cluster"><a href="#" onClick='set_active_submission_chart("chart_submission", "cluster"); return false;'>By Cluster</a></li>
+    <li id="chart_submission_project"><a href="#" onClick='set_active_submission_chart("chart_submission", "project"); return false;'>By Project</a></li>
+    <li id="chart_submission_queue"><a href="#" onClick='set_active_submission_chart("chart_submission", "queue"); return false;'>By Queue</a></li>
 
 </ul>
 
