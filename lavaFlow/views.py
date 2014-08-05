@@ -1131,7 +1131,7 @@ def submission_bar_data(request, start_time_js=0, end_time_js=0, exclude_string=
     group_args = ["attempt__%s" % a for a in group_args]
 
     jobs = Job.objects.filter(attempt__pk__in=attempts).distinct()
-    vargs=group_args + ["submit_hour"]
+    vargs=group_args + ["submit_hour_of_day"]
 
     jobs = jobs.values(*vargs)
 
@@ -1185,7 +1185,7 @@ def submission_bar_data(request, start_time_js=0, end_time_js=0, exclude_string=
 
                 }
             }
-        data[group_name]['values'][row['submit_hour']] += row['job_id__count']
+        data[group_name]['values'][row['submit_hour_of_day']] += row['job_id__count']
     data = sorted(data.values(), key=lambda v: v['key'])
     for series in data:
         series['values'] = [{'x': k, 'y': v} for k, v in series['values'].iteritems()]
