@@ -62,15 +62,14 @@
 <h1>Job Flow</h1>
 <div id="mynetwork"></div>
 <script>
-    var d={{object.job_flow|safe}};
-    var nodes=d.nodes
+    
     var container = document.getElementById('mynetwork');
     var options = {
     width: '400px',
     height: '400px'
   };
 
-    var network = new vis.Network(container, d, options);
+    var network = new vis.Network(container, {{object.job_flow|safe}}, options);
 
 
  </script>
