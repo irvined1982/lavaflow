@@ -262,7 +262,11 @@
     var consumption_report_data={
         overall:[],
         size:[],
-        exit:[]
+        exit:[],
+        cluster:[],
+        queue:[],
+        project:[],
+        user:[],
     };
 
     var current_util_report="overall";
@@ -328,7 +332,7 @@
     function set_active_consumption_chart(selector, state){
         current_util_report = state;
         // Change the classes in the tabs...
-        var as=["overall", "size", "exit"];
+        var as=["overall", "size", "exit", "cluster", "queue", "project", "user"];
         var ws=selector+"_"+state;
         $.each( as, function( index, value ){
             var v = selector+"_"+value;
@@ -608,6 +612,59 @@
             });
 		});
 
+        filterData.view='lf_consumption_chart';
+		filterData.groups=['cluster__name'];
+        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+                consumption_report_data['cluster']=data['data'];
+                if ( current_consumption_report == 'cluster' ){
+                        d3.select('#chart_consumption svg')
+                        .datum(consumption_report_data['cluster'])
+                        .transition().duration(500)
+                        .call(consumptionChart);
+                }
+            });
+		});
+		filterData.view='lf_consumption_chart';
+		filterData.groups=['queue__name'];
+        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+                consumption_report_data['queue']=data['data'];
+                if ( current_consumption_report == 'queue' ){
+                        d3.select('#chart_consumption svg')
+                        .datum(consumption_report_data['queue'])
+                        .transition().duration(500)
+                        .call(consumptionChart);
+                }
+            });
+		});
+		filterData.view='lf_consumption_chart';
+		filterData.groups=['user__name'];
+        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+                consumption_report_data['user']=data['data'];
+                if ( current_consumption_report == 'user' ){
+                        d3.select('#chart_consumption svg')
+                        .datum(consumption_report_data['user'])
+                        .transition().duration(500)
+                        .call(consumptionChart);
+                }
+            });
+		});
+		filterData.view='lf_consumption_chart';
+		filterData.groups=['projects__name'];
+        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+                consumption_report_data['project']=data['data'];
+                if ( current_consumption_report == 'project' ){
+                        d3.select('#chart_consumption svg')
+                        .datum(consumption_report_data['user'])
+                        .transition().duration(500)
+                        .call(consumptionChart);
+                }
+            });
+		});
+
 
 	}
 
@@ -638,10 +695,14 @@
 
 <h1>Consumption</h1>
 
-<ul id="chart_utilization_nav" class="nav nav-tabs">
+<ul id="chart_consumption_nav" class="nav nav-tabs">
     <li id="chart_consumption_overall" class="active"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "overall"); return false;'>Overall</a></li>
     <li id="chart_consumption_size"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "size"); return false;'>By Job Size</a></li>
     <li id="chart_consumption_exit"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "exit"); return false;'>By Exit Status</a></li>
+    <li id="chart_consumption_cluster"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "cluster"); return false;'>By Cluster</a></li>
+    <li id="chart_consumption_project"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "project"); return false;'>By Project</a></li>
+    <li id="chart_consumption_queue"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "queue"); return false;'>By Queue</a></li>
+    <li id="chart_consumption_user"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "user"); return false;'>By User</a></li>
 </ul>
 
 <div id='chart_consumption'><svg style='height:500px'></svg></div>
