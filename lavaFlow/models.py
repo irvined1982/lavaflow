@@ -33,13 +33,13 @@ log = logging.getLogger(__name__)
 class ImportKey(models.Model):
     """Any client that attempts to import data must present a valid key. Keys in general should be managed through the
     admin control panel.::
- 
+
     >>> from lavaFlow.models import ImportKey
     >>> try:
-    >>>         key=ImportKey.objects.get(client_key="key_to_check")
-    >>>         # Key is valid.
-    >>>    except ObjectDoesNotExist as e:
-    >>>         # Key is invalid.
+    >>>     key=ImportKey.objects.get(client_key="key_to_check")
+    >>>     # Key is valid.
+    >>> except ObjectDoesNotExist as e:
+    >>>     # Key is invalid.
 
     .. py:attribute:: client_key
 
