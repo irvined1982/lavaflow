@@ -903,77 +903,58 @@ def utilization_table(request, start_time_js=0, end_time_js=0, exclude_string=""
     return render(request, "lavaFlow/widgets/utilization_chart.html", {'header': header, 'rows': rows})
 
 
-def utilization_bar_size(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
-    start_time_js = int(start_time_js)
-    end_time_js = int(end_time_js)
+def consumption_bar_data(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
+    # Start time in milliseconds, rounded to nearest minute.
+    start_time_js = int(int(start_time_js)/60000)*60000
+    # end time in milliseconds
+    end_time_js = int(int(end_time_js)/60000)*60000
+
+    # Attempts now contains all attempts that were active in this time period, ie, submitted before
+    # the end and finished after the start time.
     attempts = get_attempts(start_time_js, end_time_js, exclude_string, filter_string)
-    data = []
-    for row in attempts.values('num_processors').annotate(Sum('pend_time'), Sum('wall_time'), Sum('cpu_time'),
-                                                          Count('num_processors')).order_by('num_processors'):
-        data.append({
-            'key': "%s Processors" % row['num_processors'],
-            'values': [
-                {
-                    'x': "Sum CPU",
-                    'y': row['cpu_time__sum'],
-                },
-                {
-                    'x': "Sum Wall",
-                    'y': row['wall_time__sum'],
-                },
-                {
-                    'x': "Sum Pend",
-                    'y': row['pend_time__sum'],
-                },
-                {
-                    'x': "Total Tasks",
-                    'y': row['num_processors__count'],
-                },
-            ]
-        })
 
+    # Attempts now only contains the exact data needed to perform the query, no other data is retrieved.
+    # This should in the best case only require data from a single table.
+    group_args = group_string_to_group_args(group_string)
+    if "status__name" in group_args and "status__exited_cleanly" not in group_args:
+        group_args.append("status__exited_cleanly")
+    if len(group_args) > 0:
+        attempts = attempts.values(*group_args)
+        attempts = attempts.annotate(Sum('pend_time'), Sum('wall_time'), Sum('cpu_time'), Count('num_processors')).order_by('num_processors')
+    else:
+        attempts = attempts.aggregate(Sum('pend_time'), Sum('wall_time'), Sum('cpu_time'), Count('num_processors')).order_by('num_processors')
+
+    data = {}
+    for row in attempts:
+        group_name = u""
+        for n in group_args:
+            if n == "status__exited_cleanly" and "status__name" in group_args:
+                continue
+            if len(group_name) > 0:
+                group_name += u" "
+            if n == "num_processors":
+                group_name += u"%s Processors" % row[n]
+            elif n == "status__name":
+                group_name += u"%s (%s)" % (row[n], "Clean" if row['status__exited_cleanly'] else "Failed")
+            group_name += u"%s" % row[n]
+        if group_name not in data:
+            data[group_name]={
+                'key': group_name,
+                'values': {
+                    "Sum CPU":0,
+                    "Sum Wall":0,
+                    "Sum Pend":0,
+                    "Total Tasks":0
+                }
+            }
+            data[group_name]['values']['Sum CPU'] += row['cpu_time__sum']
+            data[group_name]['values']['Sum Wall'] += row['wall_time__sum']
+            data[group_name]['values']['Sum Pend'] += row['pend_time__sum']
+            data[group_name]['values']['Total Tasks'] += row['num_processors__count']
+    data=data.values()
+    for series in data:
+        series['values'] = [{x:k, y:v} for k,v in series['values'].iteritems()]
     return create_js_success(data)
-
-
-
-def utilization_bar_exit(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
-    start_time_js = int(start_time_js)
-    end_time_js = int(end_time_js)
-    attempts = get_attempts(start_time_js, end_time_js, exclude_string, filter_string)
-    data = []
-    for row in attempts.values('status__exited_cleanly', 'status__name').annotate(Sum('pend_time'), Sum('wall_time'),
-                                                                                  Sum('cpu_time'),
-                                                                                  Count('num_processors')).order_by(
-            'num_processors'):
-        if row['status__exited_cleanly'] == True:
-            clean = "Success"
-        else:
-            clean = "Failed"
-        data.append({
-            'key': "%s (%s)" % ( row['status__name'], clean    ),
-            'values': [
-                {
-                    'x': "Sum CPU",
-                    'y': row['cpu_time__sum'],
-                },
-                {
-                    'x': "Sum Wall",
-                    'y': row['wall_time__sum'],
-                },
-                {
-                    'x': "Sum Pend",
-                    'y': row['pend_time__sum'],
-                },
-                {
-                    'x': "Total Tasks",
-                    'y': row['num_processors__count'],
-                },
-            ]
-        })
-
-    return create_js_success(data)
-
-
 
 
 
