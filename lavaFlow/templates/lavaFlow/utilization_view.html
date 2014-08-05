@@ -574,7 +574,7 @@
                         d3.select('#chart_consumption svg')
                         .datum(consumption_report_data['overall'])
                         .transition().duration(500)
-                        .call(chart_consumption);
+                        .call(consumptionChart);
                 }
             });
 		});
@@ -588,7 +588,7 @@
                         d3.select('#chart_consumption svg')
                         .datum(consumption_report_data['exit'])
                         .transition().duration(500)
-                        .call(chart_consumption);
+                        .call(consumptionChart);
                 }
             });
 		});
@@ -603,7 +603,7 @@
                         d3.select('#chart_consumption svg')
                         .datum(consumption_report_data['size'])
                         .transition().duration(500)
-                        .call(chart_consumption);
+                        .call(consumptionChart);
                 }
             });
 		});
