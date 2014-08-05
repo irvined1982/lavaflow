@@ -600,7 +600,7 @@
 
 		filterData.view='lf_util_bar_size';
 		filterData.groups=['num_processors'];
-				$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 		    consumption_report_data['size']=data['data'];
 		    if ( current_consumption_report == 'size' ){
 			    $.getJSON(data.url, function(data) {
