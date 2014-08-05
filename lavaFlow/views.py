@@ -920,9 +920,9 @@ def consumption_bar_data(request, start_time_js=0, end_time_js=0, exclude_string
         group_args.append("status__exited_cleanly")
     if len(group_args) > 0:
         attempts = attempts.values(*group_args)
-        attempts = attempts.annotate(Sum('pend_time'), Sum('wall_time'), Sum('cpu_time'), Count('num_processors')).order_by('num_processors')
+        attempts = attempts.annotate(Sum('pend_time'), Sum('wall_time'), Sum('cpu_time'), Count('num_processors'))
     else:
-        attempts = attempts.aggregate(Sum('pend_time'), Sum('wall_time'), Sum('cpu_time'), Count('num_processors')).order_by('num_processors')
+        attempts = attempts.aggregate(Sum('pend_time'), Sum('wall_time'), Sum('cpu_time'), Count('num_processors'))
 
     data = {}
     for row in attempts:
@@ -953,9 +953,9 @@ def consumption_bar_data(request, start_time_js=0, end_time_js=0, exclude_string
             data[group_name]['values']['Sum Wall'] += row['wall_time__sum']
             data[group_name]['values']['Sum Pend'] += row['pend_time__sum']
             data[group_name]['values']['Total Tasks'] += row['num_processors__count']
-    data=data.values()
+    data=sorted(data.values(),key=lambda v: v['key'])
     for series in data:
-        series['values'] = [{x:k, y:v} for k,v in series['values'].iteritems()]
+        series['values'] = [{'x':k, 'y':v} for k,v in series['values'].iteritems()]
     return create_js_success(data)
 
 
