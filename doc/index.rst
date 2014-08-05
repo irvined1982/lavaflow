@@ -1,3 +1,5 @@
+LavaFlow
+========
 
 LavaFlow creates useful reports on the usage of high performance compute clusters. LavaFlow takes data from the
 batch scheduling system, monitoring, and other tooling, and creates reports that help administrators, managers,
