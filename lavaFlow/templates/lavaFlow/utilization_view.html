@@ -342,7 +342,7 @@
         d3.select("#chart_consumption svg")
             .datum(empty_chart)
             .transition().duration(500)
-            .call(utilChart);
+            .call(consumptionChart);
         d3.select("#chart_consumption svg")
             .datum(consumption_report_data[state]['chart'])
             .transition().duration(500)
@@ -567,30 +567,34 @@
 
 		filterData.view='lf_util_bar_size';
 		filterData.groups=[];
-				$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 		    consumption_report_data['overall']=data['data'];
-		    if ( current_consumption_report == 'overall' ){
-			    $.getJSON(data.url, function(data) {
-                    d3.select('#chart_consumption svg')
-                    .datum(data)
-                    .transition().duration(500)
-                    .call(chart_consumption);
-                });
-            }
+		    $.getJSON(data.url, function(data) {
+                if ( current_consumption_report == 'overall' ){
+                    $.getJSON(data.url, function(data) {
+                        d3.select('#chart_consumption svg')
+                        .datum(data)
+                        .transition().duration(500)
+                        .call(chart_consumption);
+                    });
+                }
+            });
 		});
 
 		filterData.view='lf_util_bar_exit';
 		filterData.groups=['status__name'];
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    consumption_report_data['exit']=data['data'];
-		    if ( current_consumption_report == 'exit' ){
-			    $.getJSON(data.url, function(data) {
-                    d3.select('#chart_consumption svg')
-                    .datum(data)
-                    .transition().duration(500)
-                    .call(chart_consumption);
-                });
-            }
+		    $.getJSON(data.url, function(data) {
+                consumption_report_data['exit']=data['data'];
+                if ( current_consumption_report == 'exit' ){
+                    $.getJSON(data.url, function(data) {
+                        d3.select('#chart_consumption svg')
+                        .datum(data)
+                        .transition().duration(500)
+                        .call(consumptionChart);
+                    });
+                }
+            });
 		});
 
 
@@ -603,7 +607,7 @@
                     d3.select('#chart_consumption svg')
                     .datum(data)
                     .transition().duration(500)
-                    .call(chart_consumption);
+                    .call(consumptionChart);
                 });
             }
 		});
