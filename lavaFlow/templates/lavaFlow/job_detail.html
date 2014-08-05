@@ -59,7 +59,21 @@
 
 <h1>Submission Information</h1>
 {% include "lavaFlow/widgets/job_submit_info.html" with job=job %}
+<h1>Job Flow</h1>
+<div id="mynetwork"></div>
+<script>
+    var d={{object.job_flow|safe}};
+    var nodes=d.nodes
+    var container = document.getElementById('mynetwork');
+    var options = {
+    width: '400px',
+    height: '400px'
+  };
 
+    var network = new vis.Network(container, d, options);
+
+
+ </script>
 
 {% endblock %}
 {% block title %}Job: {{ object.job_id }}{% endblock %}

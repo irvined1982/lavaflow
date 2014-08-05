@@ -22,6 +22,7 @@
 import datetime
 import logging
 import time
+import json
 from django.db import models
 from django.db.models import Avg, Count, Sum, Min, Max
 from django.core.urlresolvers import reverse
@@ -863,12 +864,71 @@ class UserLog(ClusterLog):
     user = models.ForeignKey(User)
 
 
+class JSNode():
+    current_node_id=0
+    def __init__(self, **kwargs):
+        self.id=JSNode.current_node_id
+        JSNode.current_node_id+=1
+        for k,v in kwargs.iteritems():
+            setattr(self, k, v)
+
+class JSEdge():
+    def __init__(self, frm, to, **kwargs):
+        setattr(self, "from", frm.id)
+        self.to=to.id
+        for k,v in kwargs.iteritems():
+            setattr(self, k, v)
+
+
 class Job(models.Model):
     cluster = models.ForeignKey(Cluster)
     job_id = models.IntegerField()
     user = models.ForeignKey(User)
     submit_host = models.ForeignKey(Host)
     submit_time = models.IntegerField()
+
+
+    def job_flow(self):
+        edges=[]
+        users={}
+        jobs={}
+        clusters={}
+        queues={}
+        tasks={}
+        attempts={}
+        hosts={}
+
+
+        jobs[self.job_id]=JSNode(label=u"Job: %s" % self.job_id)
+
+        hosts[self.submit_host.name]=JSNode(label=self.submit_host.name)
+        users[self.user.name] = JSNode(label=self.user.name)
+        edges.append(JSEdge(hosts[self.submit_host.name], users[self.user.name]))
+        clusters[self.cluster.name]=JSNode(label=self.cluster.name)
+        edges.append(JSEdge(users[self.user.name], clusters[self.cluster.name]))
+        jobs[self.job_id]=JSNode(label=u"Job: %s" % self.job_id)
+        edges.append(JSEdge(clusters[self.cluster.name], jobs[self.job_id]))
+        edges.append(JSEdge(users[self.user.name], jobs[self.job_id]))
+        for t in self.task_set.all():
+            tasks[t.task_id]=JSNode(label="Task: %s:%s" % (self.job_id, t.task_id) )
+            edges.append(JSEdge(jobs[self.job_id], tasks[t.task_id]))
+            for at in t.attempt_set.all():
+                if at.queue.name not in queues:
+                    queues[at.queue.name] = JSNode(label=at.queue.name)
+                    edges.append(JSEdge(tasks[t.task_id],queues[at.queue.name]))
+                attempts[at.attempt_id()]=JSNode(label="Attempt: %s:%s:%s" % (self.job_id, t.task_id, at.attempt_id()))
+                edges.append(JSEdge(tasks[t.task_id], attempts[at.attempt_id()]))
+                edges.append(JSEdge(queues[at.queue.name], attempts[at.attempt_id()]))
+                for host in at.execution_hosts.all():
+                    if host.name not in hosts:
+                        hosts[host.name] = JSNode(label=host.name)
+                    edges.append(JSEdge(attempts[at.attempt_id()], hosts[host.name]))
+        nodes = users.values() + jobs.values() + clusters.values() + queues.values()+tasks.values()+attempts.values()+hosts.values()
+        nodes=[n.__dict__ for n in nodes]
+        edges=[e.__dict__ for e in edges]
+
+        return json.dumps({'nodes':nodes, 'edges':edges})
+
 
     def util_chart_url(self):
         start_time_js = (self.submit_time - 60) * 1000
@@ -1151,6 +1211,9 @@ class Attempt(models.Model):
     projects = models.ManyToManyField(Project)
     execution_hosts = models.ManyToManyField(Host)
     submit_time = models.IntegerField()
+
+    def attempt_id(self):
+        return Attempt.objects.filter(task_id=self.task_id, start_time__lt=self.start_time).count()
 
     def save(self, *args, **kwargs):
         self.submit_time = self.job.submit_time
