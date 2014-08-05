@@ -780,15 +780,15 @@ def resource_data(request, start_time_js=0, end_time_js=0, exclude_string="", fi
                         'involuntary_context_switches':0,
                     }
                 }
-            data[group_name]['values']['user_time'] += row['user_time']
-            data[group_name]['values']['system_time'] += row['system_time']
-            data[group_name]['values']['max_rss'] += row['max_rss']
-            data[group_name]['values']['page_reclaims'] += row['page_reclaims']
-            data[group_name]['values']['page_faults'] += row['page_faults']
-            data[group_name]['values']['input_block_ops'] += row['input_block_ops']
-            data[group_name]['values']['output_block_ops'] += row['output_block_ops']
-            data[group_name]['values']['voluntary_context_switches'] += row['voluntary_context_switches']
-            data[group_name]['values']['involuntary_context_switches'] += row['involuntary_context_switches']
+            data[group_name]['values']['user_time'] += row['user_time__avg']
+            data[group_name]['values']['system_time'] += row['system_time__avg']
+            data[group_name]['values']['max_rss'] += row['max_rss__avg']
+            data[group_name]['values']['page_reclaims'] += row['page_reclaims__avg']
+            data[group_name]['values']['page_faults'] += row['page_faults__avg']
+            data[group_name]['values']['input_block_ops'] += row['input_block_ops__avg']
+            data[group_name]['values']['output_block_ops'] += row['output_block_ops__avg']
+            data[group_name]['values']['voluntary_context_switches'] += row['voluntary_context_switches__avg']
+            data[group_name]['values']['involuntary_context_switches'] += row['involuntary_context_switches__avg']
     else:
         resources = resources.aggregate(
             Avg('user_time'),
@@ -806,15 +806,15 @@ def resource_data(request, start_time_js=0, end_time_js=0, exclude_string="", fi
             'Overall': {
                 'key': 'Overall',
                 'values': {
-                    "user_time": resources['user_time'],
-                    "system_time": resources['system_time'],
-                    "max_rss": resources['max_rss'],
-                    "page_reclaims": resources['page_reclaims'],
-                    "page_faults": resources['page_faults'],
-                    "input_block_ops": resources['input_block_ops'],
-                    "output_block_ops": resources['output_block_ops'],
-                    "voluntary_context_switches": resources['voluntary_context_switches'],
-                    "involuntary_context_switches": resources['involuntary_context_switches'],
+                    "user_time": resources['user_time__avg'],
+                    "system_time": resources['system_time__avg'],
+                    "max_rss": resources['max_rss__avg'],
+                    "page_reclaims": resources['page_reclaims__avg'],
+                    "page_faults": resources['page_faults__avg'],
+                    "input_block_ops": resources['input_block_ops__avg'],
+                    "output_block_ops": resources['output_block_ops__avg'],
+                    "voluntary_context_switches": resources['voluntary_context_switches__avg'],
+                    "involuntary_context_switches": resources['involuntary_context_switches__avg'],
                 }
             }
         }
