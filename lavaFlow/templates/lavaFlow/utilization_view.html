@@ -565,7 +565,7 @@
 		    });
 		});
 
-		filterData.view='lf_util_bar_size';
+		filterData.view='lf_consumption_chart';
 		filterData.groups=[];
         $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 		    $.getJSON(data.url, function(data) {
@@ -579,7 +579,7 @@
             });
 		});
 
-		filterData.view='lf_util_bar_exit';
+		filterData.view='lf_consumption_chart';
 		filterData.groups=['status__name'];
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 		    $.getJSON(data.url, function(data) {
@@ -594,7 +594,7 @@
 		});
 
 
-		filterData.view='lf_util_bar_size';
+		filterData.view='lf_consumption_chart';
 		filterData.groups=['num_processors'];
         $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 		    $.getJSON(data.url, function(data) {

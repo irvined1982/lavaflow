@@ -937,6 +937,8 @@ def consumption_bar_data(request, start_time_js=0, end_time_js=0, exclude_string
             elif n == "status__name":
                 group_name += u"%s (%s)" % (row[n], "Clean" if row['status__exited_cleanly'] else "Failed")
             group_name += u"%s" % row[n]
+        if len(group_name)<1:
+            group_name="Total"
         if group_name not in data:
             data[group_name]={
                 'key': group_name,
