@@ -37,70 +37,70 @@ from scipy.interpolate import interp1d
 from lavaFlow.models import *
 
 OPENLAVA_JOB_STATES = {
-        0x00: {
-            'friendly': "Null",
-            'name': 'JOB_STAT_NULL',
-            'description': 'State null.',
-        },
-        0x01: {
-            'friendly': "Pending",
-            'name': 'JOB_STAT_PEND',
-            'description': 'The job is pending, i.e., it has not been dispatched yet.',
-        },
-        0x02: {
-            'friendly': "Held",
-            'name': "JOB_STAT_PSUSP",
-            'description': "The pending job was suspended by its owner or the LSF system administrator.",
-        },
-        0x04: {
-            'friendly': "Running",
-            'name': "JOB_STAT_RUN",
-            'description': "The job is running.",
-        },
-        0x08: {
-            'friendly': "Suspended by system",
-            'name': "JOB_STAT_SSUSP",
-            'description': "The running job was suspended by the system because an execution host was overloaded or the queue run window closed.",
-        },
-        0x10: {
-            'friendly': "Suspended by user",
-            'name': "JOB_STAT_USUSP",
-            'description': "The running job was suspended by its owner or the LSF system administrator.",
-        },
-        0x20: {
-            'friendly': "Exited",
-            'name': "JOB_STAT_EXIT",
-            'description': "The job has terminated with a non-zero status - it may have been aborted due to an error in its execution, or killed by its owner or by the LSF system administrator.",
-        },
-        0x40: {
-            'friendly': "Completed",
-            'name': "JOB_STAT_DONE",
-            'description': "The job has terminated with status 0.",
-        },
-        0x80: {
-            'friendly': "Process Completed",
-            'name': "JOB_STAT_PDONE",
-            'description': "Post job process done successfully.",
-        },
-        0x100: {
-            'friendly': "Process Error",
-            'name': "JOB_STAT_PERR",
-            'description': "Post job process has error.",
-        },
-        0x200: {
-            'friendly': "Waiting for execution",
-            'name': "JOB_STAT_WAIT",
-            'description': "Chunk job waiting its turn to exec.",
-        },
-        0x10000: {
-            'friendly': "Unknown",
-            'name': "JOB_STAT_UNKWN",
-            'description': "The slave batch daemon (sbatchd) on the host on which the job is processed has lost contact with the master batch daemon (mbatchd).",
-        },
-    }
-
+    0x00: {
+        'friendly': "Null",
+        'name': 'JOB_STAT_NULL',
+        'description': 'State null.',
+    },
+    0x01: {
+        'friendly': "Pending",
+        'name': 'JOB_STAT_PEND',
+        'description': 'The job is pending, i.e., it has not been dispatched yet.',
+    },
+    0x02: {
+        'friendly': "Held",
+        'name': "JOB_STAT_PSUSP",
+        'description': "The pending job was suspended by its owner or the LSF system administrator.",
+    },
+    0x04: {
+        'friendly': "Running",
+        'name': "JOB_STAT_RUN",
+        'description': "The job is running.",
+    },
+    0x08: {
+        'friendly': "Suspended by system",
+        'name': "JOB_STAT_SSUSP",
+        'description': "The running job was suspended by the system because an execution host was overloaded or the queue run window closed.",
+    },
+    0x10: {
+        'friendly': "Suspended by user",
+        'name': "JOB_STAT_USUSP",
+        'description': "The running job was suspended by its owner or the LSF system administrator.",
+    },
+    0x20: {
+        'friendly': "Exited",
+        'name': "JOB_STAT_EXIT",
+        'description': "The job has terminated with a non-zero status - it may have been aborted due to an error in its execution, or killed by its owner or by the LSF system administrator.",
+    },
+    0x40: {
+        'friendly': "Completed",
+        'name': "JOB_STAT_DONE",
+        'description': "The job has terminated with status 0.",
+    },
+    0x80: {
+        'friendly': "Process Completed",
+        'name': "JOB_STAT_PDONE",
+        'description': "Post job process done successfully.",
+    },
+    0x100: {
+        'friendly': "Process Error",
+        'name': "JOB_STAT_PERR",
+        'description': "Post job process has error.",
+    },
+    0x200: {
+        'friendly': "Waiting for execution",
+        'name': "JOB_STAT_WAIT",
+        'description': "Chunk job waiting its turn to exec.",
+    },
+    0x10000: {
+        'friendly': "Unknown",
+        'name': "JOB_STAT_UNKWN",
+        'description': "The slave batch daemon (sbatchd) on the host on which the job is processed has lost contact with the master batch daemon (mbatchd).",
+    },
+}
 
 log = logging.getLogger(__name__)
+
 
 @ensure_csrf_cookie
 def get_csrf_token(request):
@@ -121,17 +121,16 @@ def create_js_success(data=None, message=""):
     :return: HttpResponse object
 
     """
-    data={
-        'status':"OK",
-        'data':data,
-        'message':message,
+    data = {
+        'status': "OK",
+        'data': data,
+        'message': message,
     }
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 @csrf_exempt
 def gridengine_import(request, cluster_name):
-
     data = json.loads(request.body)
     (cluster, created) = Cluster.objects.get_or_create(name=cluster_name)
     (user, created) = User.objects.get_or_create(name=data['owner'])
@@ -562,7 +561,6 @@ def openlava_import_job_new(cluster, event):
                 js.options.add(o)
 
 
-
 def openlava_import_job_finish(cluster, event):
     """Imports a single openlava job finish event.
 
@@ -708,6 +706,7 @@ def openlava_import_job_finish(cluster, event):
                 ol.asked_hosts.add(h)
             ol.save()
 
+
 def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
     """
     Generates utilization data for the utilization chart, this is essentially number of processors requested, vs
@@ -723,11 +722,11 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
 
     """
     # Start time in milliseconds, rounded to nearest minute.
-    start_time_js = int(int(start_time_js)/60000)*60000
+    start_time_js = int(int(start_time_js) / 60000) * 60000
     # Start time in seconds
     start_time_ep = int(start_time_js / 1000)
     # end time in milliseconds
-    end_time_js = int(int(end_time_js)/60000)*60000
+    end_time_js = int(int(end_time_js) / 60000) * 60000
     # end time in seconds
     end_time_ep = int(end_time_js / 1000)
 
@@ -739,16 +738,16 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
     # This should in the best case only require data from a single table.
     group_args = group_string_to_group_args(group_string)
 
-    required_values=["num_processors", "submit_time", "start_time","end_time"] + group_args
+    required_values = ["num_processors", "submit_time", "start_time", "end_time"] + group_args
     attempts = attempts.values(*required_values)
 
     # Unique list of times that are used, for smaller datasets, this is the best possible list of times to use.
-    times=set()
+    times = set()
     times.add(start_time_js)
     times.add(end_time_js)
 
     # Dict containing each series.
-    serieses={}
+    serieses = {}
     for at in attempts:
         submit_time = at['submit_time'] * 1000
         start_time = at['start_time'] * 1000
@@ -756,7 +755,7 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
         times.add(submit_time)
         times.add(start_time)
         times.add(end_time)
-        np=at['num_processors']
+        np = at['num_processors']
 
         group_name = u""
         for n in group_args:
@@ -764,17 +763,17 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
                 group_name += u" "
             group_name += u"%s" % at[n]
 
-        pend_series=u"%s Pending" % group_name
-        run_series=u"%s running" % group_name
+        pend_series = u"%s Pending" % group_name
+        run_series = u"%s running" % group_name
         if pend_series not in serieses:
-            serieses[pend_series]={'key': pend_series, 'values':{}}
-        pend_series=serieses[pend_series]['values']
+            serieses[pend_series] = {'key': pend_series, 'values': {}}
+        pend_series = serieses[pend_series]['values']
 
         if run_series not in serieses:
-            serieses[run_series]={'key': run_series, 'values':{}}
-        run_series=serieses[run_series]['values']
+            serieses[run_series] = {'key': run_series, 'values': {}}
+        run_series = serieses[run_series]['values']
 
-        if submit_time  in pend_series:
+        if submit_time in pend_series:
             pend_series[submit_time] += np
         else:
             pend_series[submit_time] = np
@@ -793,29 +792,29 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
         else:
             run_series[end_time] = -1 * np
     if len(times) > 2000:
-        step_size=( ( end_time_js-start_time_js )/1000)
-        step_size=int(step_size/30000)
-        step_size *= 30000 # Multiple of 30 seconds....
+        step_size = ( ( end_time_js - start_time_js ) / 1000)
+        step_size = int(step_size / 30000)
+        step_size *= 30000  # Multiple of 30 seconds....
         times = range(start_time_js, end_time_js, step_size)
     else:
-        times=sorted(times)
+        times = sorted(times)
     # Serieses now contains an item for each series we need to chart
     for s in serieses.itervalues():
-        values=s['values']
-        total=0
-        ts=[]
-        vs=[]
+        values = s['values']
+        total = 0
+        ts = []
+        vs = []
         for time in times:
             if time not in values:
                 values[time] = 0
         for time in sorted(values.keys()):
-            ts.append(time-1)
+            ts.append(time - 1)
             vs.append(total)
             total += values[time]
             ts.append(time)
             vs.append(total)
-        f=interp1d(ts, vs, copy=False, bounds_error=False, fill_value=0)
-        s['values']=[{'x':time, 'y':float(f(time))} for time in times]
+        f = interp1d(ts, vs, copy=False, bounds_error=False, fill_value=0)
+        s['values'] = [{'x': time, 'y': float(f(time))} for time in times]
     return create_js_success(serieses.values(), message="")
 
 
@@ -904,10 +903,24 @@ def utilization_table(request, start_time_js=0, end_time_js=0, exclude_string=""
 
 
 def consumption_bar_data(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
+    """
+    Generates consumption data for the consumption chart, this is a total of CPU time, wall time, pend time and the
+    total number of tasks started during this time grouped by whatever the user requires.  To make reports clearer
+    when the user requests num_processors, or exit state, these are made human readable.
+
+    :param request: Request object
+    :param start_time_js: Start time for the chart data, in milliseconds since epoch, this is converted to the nearest minute
+    :param end_time_js: End time for the chart data, in milliseconds since epoch, this is converted to the nearest minute
+    :param exclude_string: a string of options to exclude data
+    :param filter_string: s string of options to filter data
+    :param group_string: a string of fields to group by
+    :return: json data object.
+
+    """
     # Start time in milliseconds, rounded to nearest minute.
-    start_time_js = int(int(start_time_js)/60000)*60000
+    start_time_js = int(int(start_time_js) / 60000) * 60000
     # end time in milliseconds
-    end_time_js = int(int(end_time_js)/60000)*60000
+    end_time_js = int(int(end_time_js) / 60000) * 60000
 
     # Attempts now contains all attempts that were active in this time period, ie, submitted before
     # the end and finished after the start time.
@@ -935,16 +948,16 @@ def consumption_bar_data(request, start_time_js=0, end_time_js=0, exclude_string
                 elif n == "status__name":
                     group_name += u"%s (%s)" % (row[n], "Clean" if row['status__exited_cleanly'] else "Failed")
                 group_name += u"%s" % row[n]
-            if len(group_name)<1:
-                group_name="Total"
+            if len(group_name) < 1:
+                group_name = "Total"
             if group_name not in data:
-                data[group_name]={
+                data[group_name] = {
                     'key': group_name,
                     'values': {
-                        "Sum CPU":0,
-                        "Sum Wall":0,
-                        "Sum Pend":0,
-                        "Total Tasks":0
+                        "Sum CPU": 0,
+                        "Sum Wall": 0,
+                        "Sum Pend": 0,
+                        "Total Tasks": 0
                     }
                 }
             data[group_name]['values']['Sum CPU'] += row['cpu_time__sum']
@@ -954,23 +967,22 @@ def consumption_bar_data(request, start_time_js=0, end_time_js=0, exclude_string
 
     else:
         attempts = attempts.aggregate(Sum('pend_time'), Sum('wall_time'), Sum('cpu_time'), Count('num_processors'))
-        data={
-            'Overall':{
-                'key':'Overall',
+        data = {
+            'Overall': {
+                'key': 'Overall',
                 'values': {
-                            "Sum CPU":attempts['cpu_time__sum'],
-                            "Sum Wall":attempts['wall_time__sum'],
-                            "Sum Pend":attempts['pend_time__sum'],
-                            "Total Tasks":attempts['num_processors__count'],
-                        }
+                    "Sum CPU": attempts['cpu_time__sum'],
+                    "Sum Wall": attempts['wall_time__sum'],
+                    "Sum Pend": attempts['pend_time__sum'],
+                    "Total Tasks": attempts['num_processors__count'],
+                }
             }
         }
-    data=sorted(data.values(),key=lambda v: v['key'])
+    data = sorted(data.values(), key=lambda v: v['key'])
     for series in data:
-        series['values'] = [{'x':k, 'y':v} for k,v in series['values'].iteritems()]
+        series['values'] = [{'x': k, 'y': v} for k, v in series['values'].iteritems()]
 
     return create_js_success(data)
-
 
 
 @cache_page(60 * 60 * 2)
