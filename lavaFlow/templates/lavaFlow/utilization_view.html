@@ -571,9 +571,8 @@
 		    $.getJSON(data.url, function(data) {
 		        consumption_report_data['overall']=data['data'];
                 if ( current_consumption_report == 'overall' ){
-                    $.getJSON(data.url, function(data) {
                         d3.select('#chart_consumption svg')
-                        .datum(data)
+                        .datum(consumption_report_data['overall'])
                         .transition().duration(500)
                         .call(chart_consumption);
                     });
@@ -587,11 +586,10 @@
 		    $.getJSON(data.url, function(data) {
                 consumption_report_data['exit']=data['data'];
                 if ( current_consumption_report == 'exit' ){
-                    $.getJSON(data.url, function(data) {
                         d3.select('#chart_consumption svg')
-                        .datum(data)
+                        .datum(consumption_report_data['exit'])
                         .transition().duration(500)
-                        .call(consumptionChart);
+                        .call(chart_consumption);
                     });
                 }
             });
@@ -601,15 +599,16 @@
 		filterData.view='lf_util_bar_size';
 		filterData.groups=['num_processors'];
         $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    consumption_report_data['size']=data['data'];
-		    if ( current_consumption_report == 'size' ){
-			    $.getJSON(data.url, function(data) {
-                    d3.select('#chart_consumption svg')
-                    .datum(data)
-                    .transition().duration(500)
-                    .call(consumptionChart);
-                });
-            }
+		    $.getJSON(data.url, function(data) {
+                consumption_report_data['size']=data['data'];
+                if ( current_consumption_report == 'size' ){
+                        d3.select('#chart_consumption svg')
+                        .datum(consumption_report_data['size'])
+                        .transition().duration(500)
+                        .call(chart_consumption);
+                    });
+                }
+            });
 		});
 
 
