@@ -124,7 +124,11 @@
   <div class="row">
     <div class="col-md-12">
       
-  <div class="section" id="core-models">
+  <div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<div class="section" id="core-models">
 <h1>Core Models<a class="headerlink" href="#core-models" title="Permalink to this headline">¶</a></h1>
 <p>The following classes form the core lavaFlow functionality, they are used by all scheduling environments, and contain
 all the data required for the core reports.</p>
@@ -458,579 +462,83 @@ the admin interface by an administator.</p>
 <dt id="lavaFlow.models.JobLog">
 <em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">JobLog</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#JobLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.JobLog" title="Permalink to this definition">¶</a></dt>
 <dd><p>JobLog(id, cluster_id, time, message, clusterlog_ptr_id, job_id)</p>
-<dl class="exception">
-<dt id="lavaFlow.models.JobLog.DoesNotExist">
-<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#lavaFlow.models.JobLog.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.JobLog.DoesNotExist.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.JobLog.DoesNotExist.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.JobLog.DoesNotExist.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.JobLog.DoesNotExist.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.JobLog.DoesNotExist.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.JobLog.DoesNotExist.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="exception">
-<dt id="lavaFlow.models.JobLog.MultipleObjectsReturned">
-<em class="property">exception </em><tt class="descclassname">JobLog.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#lavaFlow.models.JobLog.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.JobLog.MultipleObjectsReturned.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.JobLog.MultipleObjectsReturned.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.JobLog.MultipleObjectsReturned.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.JobLog.MultipleObjectsReturned.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.JobLog.MultipleObjectsReturned.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.JobLog.MultipleObjectsReturned.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.JobLog.__module__">
-<tt class="descclassname">JobLog.</tt><tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.JobLog.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.JobLog._base_manager">
-<tt class="descclassname">JobLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2b043d0&gt;</em><a class="headerlink" href="#lavaFlow.models.JobLog._base_manager" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.JobLog._default_manager">
-<tt class="descclassname">JobLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2b043d0&gt;</em><a class="headerlink" href="#lavaFlow.models.JobLog._default_manager" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.JobLog._meta">
-<tt class="descclassname">JobLog.</tt><tt class="descname">_meta</tt><em class="property"> = &lt;Options for JobLog&gt;</em><a class="headerlink" href="#lavaFlow.models.JobLog._meta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.JobLog.clusterlog_ptr">
-<tt class="descclassname">JobLog.</tt><tt class="descname">clusterlog_ptr</tt><a class="headerlink" href="#lavaFlow.models.JobLog.clusterlog_ptr" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.JobLog.job">
-<tt class="descclassname">JobLog.</tt><tt class="descname">job</tt><a class="headerlink" href="#lavaFlow.models.JobLog.job" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.JobLog.objects">
-<tt class="descclassname">JobLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2b043d0&gt;</em><a class="headerlink" href="#lavaFlow.models.JobLog.objects" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.JobLog.tasklog">
-<tt class="descclassname">JobLog.</tt><tt class="descname">tasklog</tt><a class="headerlink" href="#lavaFlow.models.JobLog.tasklog" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="class">
 <dt id="lavaFlow.models.Task">
 <em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Task</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Task" title="Permalink to this definition">¶</a></dt>
 <dd><p>Task(id, cluster_id, job_id, user_id, task_id)</p>
-<dl class="exception">
-<dt id="lavaFlow.models.Task.DoesNotExist">
-<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#lavaFlow.models.Task.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.Task.DoesNotExist.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.Task.DoesNotExist.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Task.DoesNotExist.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.Task.DoesNotExist.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Task.DoesNotExist.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.Task.DoesNotExist.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="exception">
-<dt id="lavaFlow.models.Task.MultipleObjectsReturned">
-<em class="property">exception </em><tt class="descclassname">Task.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#lavaFlow.models.Task.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.Task.MultipleObjectsReturned.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.Task.MultipleObjectsReturned.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Task.MultipleObjectsReturned.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.Task.MultipleObjectsReturned.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Task.MultipleObjectsReturned.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.Task.MultipleObjectsReturned.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Task.__module__">
-<tt class="descclassname">Task.</tt><tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.Task.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Task.__str__">
-<tt class="descclassname">Task.</tt><tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Task.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Task.__str__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Task.__unicode__">
-<tt class="descclassname">Task.</tt><tt class="descname">__unicode__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Task.__unicode__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Task.__unicode__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Task._base_manager">
-<tt class="descclassname">Task.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2b15d90&gt;</em><a class="headerlink" href="#lavaFlow.models.Task._base_manager" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Task._default_manager">
-<tt class="descclassname">Task.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2b15d90&gt;</em><a class="headerlink" href="#lavaFlow.models.Task._default_manager" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Task._meta">
-<tt class="descclassname">Task.</tt><tt class="descname">_meta</tt><em class="property"> = &lt;Options for Task&gt;</em><a class="headerlink" href="#lavaFlow.models.Task._meta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Task.attempt_set">
-<tt class="descclassname">Task.</tt><tt class="descname">attempt_set</tt><a class="headerlink" href="#lavaFlow.models.Task.attempt_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Task.cluster">
-<tt class="descclassname">Task.</tt><tt class="descname">cluster</tt><a class="headerlink" href="#lavaFlow.models.Task.cluster" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Task.exited_jobs">
-<tt class="descclassname">Task.</tt><tt class="descname">exited_jobs</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Task.exited_jobs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Task.exited_jobs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Task.get_absolute_url">
-<tt class="descclassname">Task.</tt><tt class="descname">get_absolute_url</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Task.get_absolute_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Task.get_absolute_url" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Task.job">
-<tt class="descclassname">Task.</tt><tt class="descname">job</tt><a class="headerlink" href="#lavaFlow.models.Task.job" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Task.objects">
-<tt class="descclassname">Task.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2b15d90&gt;</em><a class="headerlink" href="#lavaFlow.models.Task.objects" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Task.short_jobs">
-<tt class="descclassname">Task.</tt><tt class="descname">short_jobs</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Task.short_jobs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Task.short_jobs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Task.tasklog_set">
-<tt class="descclassname">Task.</tt><tt class="descname">tasklog_set</tt><a class="headerlink" href="#lavaFlow.models.Task.tasklog_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Task.user">
-<tt class="descclassname">Task.</tt><tt class="descname">user</tt><a class="headerlink" href="#lavaFlow.models.Task.user" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="class">
 <dt id="lavaFlow.models.Attempt">
 <em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Attempt</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Attempt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Attempt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Attempt(id, cluster_id, job_id, task_id, user_id, num_processors, submit_time, start_time, end_time, cpu_time, wall_time, pend_time, queue_id, status_id, command)</p>
-<dl class="exception">
-<dt id="lavaFlow.models.Attempt.DoesNotExist">
-<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#lavaFlow.models.Attempt.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.Attempt.DoesNotExist.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.Attempt.DoesNotExist.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.DoesNotExist.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.Attempt.DoesNotExist.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.DoesNotExist.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.Attempt.DoesNotExist.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="exception">
-<dt id="lavaFlow.models.Attempt.MultipleObjectsReturned">
-<em class="property">exception </em><tt class="descclassname">Attempt.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#lavaFlow.models.Attempt.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.Attempt.MultipleObjectsReturned.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.Attempt.MultipleObjectsReturned.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.MultipleObjectsReturned.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.Attempt.MultipleObjectsReturned.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.MultipleObjectsReturned.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.Attempt.MultipleObjectsReturned.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<dd><p>Each time a task is started on one or more compute nodes, it is called an attempt.  Tasks that fail and are
+restarted may have multiple attempts.</p>
 <dl class="attribute">
-<dt id="lavaFlow.models.Attempt.__module__">
-<tt class="descclassname">Attempt.</tt><tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.Attempt.__module__" title="Permalink to this definition">¶</a></dt>
+<dt id="Attempt.cluster">
+<tt class="descname">cluster</tt><a class="headerlink" href="#Attempt.cluster" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<p>Cluster object that this attempt is part of.</p>
 <dl class="attribute">
-<dt id="lavaFlow.models.Attempt._base_manager">
-<tt class="descclassname">Attempt.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2c46e50&gt;</em><a class="headerlink" href="#lavaFlow.models.Attempt._base_manager" title="Permalink to this definition">¶</a></dt>
+<dt id="Attempt.job">
+<tt class="descname">job</tt><a class="headerlink" href="#Attempt.job" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<p>Job object that this attempt is part of.</p>
 <dl class="attribute">
-<dt id="lavaFlow.models.Attempt._default_manager">
-<tt class="descclassname">Attempt.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2c46e50&gt;</em><a class="headerlink" href="#lavaFlow.models.Attempt._default_manager" title="Permalink to this definition">¶</a></dt>
+<dt id="Attempt.task">
+<tt class="descname">task</tt><a class="headerlink" href="#Attempt.task" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<p>Task object that this attempt is part of.</p>
 <dl class="attribute">
-<dt id="lavaFlow.models.Attempt._meta">
-<tt class="descclassname">Attempt.</tt><tt class="descname">_meta</tt><em class="property"> = &lt;Options for Attempt&gt;</em><a class="headerlink" href="#lavaFlow.models.Attempt._meta" title="Permalink to this definition">¶</a></dt>
+<dt id="Attempt.user">
+<tt class="descname">user</tt><a class="headerlink" href="#Attempt.user" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<p>User object that this attempt belongs to</p>
 <dl class="attribute">
-<dt id="lavaFlow.models.Attempt.attemptresourceusage">
-<tt class="descclassname">Attempt.</tt><tt class="descname">attemptresourceusage</tt><a class="headerlink" href="#lavaFlow.models.Attempt.attemptresourceusage" title="Permalink to this definition">¶</a></dt>
+<dt id="Attempt.num_processors">
+<tt class="descname">num_processors</tt><a class="headerlink" href="#Attempt.num_processors" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<p>Number of processors this attempt was dispatched to</p>
 <dl class="attribute">
-<dt id="lavaFlow.models.Attempt.cluster">
-<tt class="descclassname">Attempt.</tt><tt class="descname">cluster</tt><a class="headerlink" href="#lavaFlow.models.Attempt.cluster" title="Permalink to this definition">¶</a></dt>
+<dt id="Attempt.projects">
+<tt class="descname">projects</tt><a class="headerlink" href="#Attempt.projects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.cluster_avg_pend_time">
-<tt class="descclassname">Attempt.</tt><tt class="descname">cluster_avg_pend_time</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Attempt.cluster_avg_pend_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Attempt.cluster_avg_pend_time" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.cluster_avg_pend_time_timedelta">
-<tt class="descclassname">Attempt.</tt><tt class="descname">cluster_avg_pend_time_timedelta</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Attempt.cluster_avg_pend_time_timedelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Attempt.cluster_avg_pend_time_timedelta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.cpu_time_timedelta">
-<tt class="descclassname">Attempt.</tt><tt class="descname">cpu_time_timedelta</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Attempt.cpu_time_timedelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Attempt.cpu_time_timedelta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.end_time_datetime">
-<tt class="descclassname">Attempt.</tt><tt class="descname">end_time_datetime</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Attempt.end_time_datetime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Attempt.end_time_datetime" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<p>QuerySet containing all Project objects that this attempt is part of.  May be part of multiple projects
+where supported by the scheduling environment.</p>
 <dl class="attribute">
-<dt id="lavaFlow.models.Attempt.execution_hosts">
-<tt class="descclassname">Attempt.</tt><tt class="descname">execution_hosts</tt><a class="headerlink" href="#lavaFlow.models.Attempt.execution_hosts" title="Permalink to this definition">¶</a></dt>
+<dt id="Attempt.execution_hosts">
+<tt class="descname">execution_hosts</tt><a class="headerlink" href="#Attempt.execution_hosts" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.get_absolute_url">
-<tt class="descclassname">Attempt.</tt><tt class="descname">get_absolute_url</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Attempt.get_absolute_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Attempt.get_absolute_url" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.get_attempt_id">
-<tt class="descclassname">Attempt.</tt><tt class="descname">get_attempt_id</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Attempt.get_attempt_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Attempt.get_attempt_id" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.get_contending_jobs">
-<tt class="descclassname">Attempt.</tt><tt class="descname">get_contending_jobs</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Attempt.get_contending_jobs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Attempt.get_contending_jobs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.get_execution_host_count">
-<tt class="descclassname">Attempt.</tt><tt class="descname">get_execution_host_count</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Attempt.get_execution_host_count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Attempt.get_execution_host_count" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<p>QuerySet containing all Host objects that where assigned to this attempt.  Not all scheduling systems are able to
+report which hosts were used for a task.  In that case only the primary host will be given.</p>
 <dl class="attribute">
-<dt id="lavaFlow.models.Attempt.gridengineattemptinfo">
-<tt class="descclassname">Attempt.</tt><tt class="descname">gridengineattemptinfo</tt><a class="headerlink" href="#lavaFlow.models.Attempt.gridengineattemptinfo" title="Permalink to this definition">¶</a></dt>
+<dt id="Attempt.submit_time">
+<tt class="descname">submit_time</tt><a class="headerlink" href="#Attempt.submit_time" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="lavaFlow.models.Attempt.job">
-<tt class="descclassname">Attempt.</tt><tt class="descname">job</tt><a class="headerlink" href="#lavaFlow.models.Attempt.job" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Attempt.objects">
-<tt class="descclassname">Attempt.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2c46e50&gt;</em><a class="headerlink" href="#lavaFlow.models.Attempt.objects" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Attempt.openlavaexitinfo">
-<tt class="descclassname">Attempt.</tt><tt class="descname">openlavaexitinfo</tt><a class="headerlink" href="#lavaFlow.models.Attempt.openlavaexitinfo" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.pend_time_timedelta">
-<tt class="descclassname">Attempt.</tt><tt class="descname">pend_time_timedelta</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Attempt.pend_time_timedelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Attempt.pend_time_timedelta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.project_avg_pend_time">
-<tt class="descclassname">Attempt.</tt><tt class="descname">project_avg_pend_time</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Attempt.project_avg_pend_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Attempt.project_avg_pend_time" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.project_avg_pend_time_timedelta">
-<tt class="descclassname">Attempt.</tt><tt class="descname">project_avg_pend_time_timedelta</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Attempt.project_avg_pend_time_timedelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Attempt.project_avg_pend_time_timedelta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Attempt.projects">
-<tt class="descclassname">Attempt.</tt><tt class="descname">projects</tt><a class="headerlink" href="#lavaFlow.models.Attempt.projects" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Attempt.queue">
-<tt class="descclassname">Attempt.</tt><tt class="descname">queue</tt><a class="headerlink" href="#lavaFlow.models.Attempt.queue" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.queue_avg_pend_time">
-<tt class="descclassname">Attempt.</tt><tt class="descname">queue_avg_pend_time</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Attempt.queue_avg_pend_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Attempt.queue_avg_pend_time" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.queue_avg_pend_time_timedelta">
-<tt class="descclassname">Attempt.</tt><tt class="descname">queue_avg_pend_time_timedelta</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Attempt.queue_avg_pend_time_timedelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Attempt.queue_avg_pend_time_timedelta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.save">
-<tt class="descclassname">Attempt.</tt><tt class="descname">save</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#lavaFlow.models.Attempt.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.start_time_datetime">
-<tt class="descclassname">Attempt.</tt><tt class="descname">start_time_datetime</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Attempt.start_time_datetime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Attempt.start_time_datetime" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Attempt.status">
-<tt class="descclassname">Attempt.</tt><tt class="descname">status</tt><a class="headerlink" href="#lavaFlow.models.Attempt.status" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.submit_time_datetime">
-<tt class="descclassname">Attempt.</tt><tt class="descname">submit_time_datetime</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.Attempt.submit_time_datetime" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Attempt.task">
-<tt class="descclassname">Attempt.</tt><tt class="descname">task</tt><a class="headerlink" href="#lavaFlow.models.Attempt.task" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Attempt.user">
-<tt class="descclassname">Attempt.</tt><tt class="descname">user</tt><a class="headerlink" href="#lavaFlow.models.Attempt.user" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Attempt.wall_time_timedelta">
-<tt class="descclassname">Attempt.</tt><tt class="descname">wall_time_timedelta</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Attempt.wall_time_timedelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Attempt.wall_time_timedelta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<p>The time in seconds since epoch UTC that the  
+.. py:attribute:: start_time
+.. py:attribute:: end_time
+.. py:attribute:: cpu_time
+.. py:attribute:: wall_time
+.. py:attribute:: pend_time
+.. py:attribute:: queue
+.. py:attribute:: status
+.. py:attribute:: command</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="lavaFlow.models.Queue">
 <em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Queue</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Queue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Queue(id, cluster_id, name)</p>
-<dl class="exception">
-<dt id="lavaFlow.models.Queue.DoesNotExist">
-<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#lavaFlow.models.Queue.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.Queue.DoesNotExist.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.Queue.DoesNotExist.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Queue.DoesNotExist.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.Queue.DoesNotExist.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Queue.DoesNotExist.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.Queue.DoesNotExist.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="exception">
-<dt id="lavaFlow.models.Queue.MultipleObjectsReturned">
-<em class="property">exception </em><tt class="descclassname">Queue.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#lavaFlow.models.Queue.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.Queue.MultipleObjectsReturned.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.Queue.MultipleObjectsReturned.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Queue.MultipleObjectsReturned.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.Queue.MultipleObjectsReturned.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Queue.MultipleObjectsReturned.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.Queue.MultipleObjectsReturned.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Queue.__module__">
-<tt class="descclassname">Queue.</tt><tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.Queue.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Queue.__str__">
-<tt class="descclassname">Queue.</tt><tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Queue.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Queue.__str__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Queue.__unicode__">
-<tt class="descclassname">Queue.</tt><tt class="descname">__unicode__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Queue.__unicode__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Queue.__unicode__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Queue._base_manager">
-<tt class="descclassname">Queue.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2afab90&gt;</em><a class="headerlink" href="#lavaFlow.models.Queue._base_manager" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Queue._default_manager">
-<tt class="descclassname">Queue.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2afab90&gt;</em><a class="headerlink" href="#lavaFlow.models.Queue._default_manager" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Queue._meta">
-<tt class="descclassname">Queue.</tt><tt class="descname">_meta</tt><em class="property"> = &lt;Options for Queue&gt;</em><a class="headerlink" href="#lavaFlow.models.Queue._meta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Queue.attempt_set">
-<tt class="descclassname">Queue.</tt><tt class="descname">attempt_set</tt><a class="headerlink" href="#lavaFlow.models.Queue.attempt_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Queue.average_pend_time">
-<tt class="descclassname">Queue.</tt><tt class="descname">average_pend_time</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Queue.average_pend_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Queue.average_pend_time" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Queue.average_pend_time_percent">
-<tt class="descclassname">Queue.</tt><tt class="descname">average_pend_time_percent</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Queue.average_pend_time_percent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Queue.average_pend_time_percent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Queue.average_pend_time_timedelta">
-<tt class="descclassname">Queue.</tt><tt class="descname">average_pend_time_timedelta</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Queue.average_pend_time_timedelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Queue.average_pend_time_timedelta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Queue.average_wall_time">
-<tt class="descclassname">Queue.</tt><tt class="descname">average_wall_time</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Queue.average_wall_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Queue.average_wall_time" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Queue.average_wall_time_timedelta">
-<tt class="descclassname">Queue.</tt><tt class="descname">average_wall_time_timedelta</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Queue.average_wall_time_timedelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Queue.average_wall_time_timedelta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Queue.cluster">
-<tt class="descclassname">Queue.</tt><tt class="descname">cluster</tt><a class="headerlink" href="#lavaFlow.models.Queue.cluster" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Queue.first_task">
-<tt class="descclassname">Queue.</tt><tt class="descname">first_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Queue.first_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Queue.first_task" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Queue.get_absolute_url">
-<tt class="descclassname">Queue.</tt><tt class="descname">get_absolute_url</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Queue.get_absolute_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Queue.get_absolute_url" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Queue.jobsubmitopenlava_set">
-<tt class="descclassname">Queue.</tt><tt class="descname">jobsubmitopenlava_set</tt><a class="headerlink" href="#lavaFlow.models.Queue.jobsubmitopenlava_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Queue.last_failed_task">
-<tt class="descclassname">Queue.</tt><tt class="descname">last_failed_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Queue.last_failed_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Queue.last_failed_task" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Queue.last_task">
-<tt class="descclassname">Queue.</tt><tt class="descname">last_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Queue.last_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Queue.last_task" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Queue.objects">
-<tt class="descclassname">Queue.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2afab90&gt;</em><a class="headerlink" href="#lavaFlow.models.Queue.objects" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Queue.queuelog_set">
-<tt class="descclassname">Queue.</tt><tt class="descname">queuelog_set</tt><a class="headerlink" href="#lavaFlow.models.Queue.queuelog_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Queue.total_attempts">
-<tt class="descclassname">Queue.</tt><tt class="descname">total_attempts</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Queue.total_attempts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Queue.total_attempts" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Queue.total_jobs">
-<tt class="descclassname">Queue.</tt><tt class="descname">total_jobs</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Queue.total_jobs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Queue.total_jobs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Queue.total_tasks">
-<tt class="descclassname">Queue.</tt><tt class="descname">total_tasks</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Queue.total_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Queue.total_tasks" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="class">
@@ -1044,54 +552,9 @@ multiple projects, and this is also supported.  Projects are unique globally.</p
 <dd></dd></dl>
 
 <p>This is the name of the project, as reported by the scheduler.</p>
-<dl class="exception">
-<dt id="lavaFlow.models.Project.DoesNotExist">
-<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#lavaFlow.models.Project.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.Project.DoesNotExist.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.Project.DoesNotExist.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Project.DoesNotExist.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.Project.DoesNotExist.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Project.DoesNotExist.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.Project.DoesNotExist.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="exception">
-<dt id="lavaFlow.models.Project.MultipleObjectsReturned">
-<em class="property">exception </em><tt class="descclassname">Project.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#lavaFlow.models.Project.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.Project.MultipleObjectsReturned.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.Project.MultipleObjectsReturned.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Project.MultipleObjectsReturned.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.Project.MultipleObjectsReturned.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Project.MultipleObjectsReturned.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.Project.MultipleObjectsReturned.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Project.__module__">
-<tt class="descclassname">Project.</tt><tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.Project.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="lavaFlow.models.Project.__str__">
-<tt class="descclassname">Project.</tt><tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.__str__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.__str__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a  str containing the name of the project.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1105,7 +568,7 @@ multiple projects, and this is also supported.  Projects are unique globally.</p
 
 <dl class="method">
 <dt id="lavaFlow.models.Project.__unicode__">
-<tt class="descclassname">Project.</tt><tt class="descname">__unicode__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.__unicode__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.__unicode__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__unicode__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.__unicode__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.__unicode__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a unicode str containing the name of the project.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1117,29 +580,9 @@ multiple projects, and this is also supported.  Projects are unique globally.</p
 </table>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="lavaFlow.models.Project._base_manager">
-<tt class="descclassname">Project.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2af1f90&gt;</em><a class="headerlink" href="#lavaFlow.models.Project._base_manager" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Project._default_manager">
-<tt class="descclassname">Project.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2af1f90&gt;</em><a class="headerlink" href="#lavaFlow.models.Project._default_manager" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Project._meta">
-<tt class="descclassname">Project.</tt><tt class="descname">_meta</tt><em class="property"> = &lt;Options for Project&gt;</em><a class="headerlink" href="#lavaFlow.models.Project._meta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Project.attempt_set">
-<tt class="descclassname">Project.</tt><tt class="descname">attempt_set</tt><a class="headerlink" href="#lavaFlow.models.Project.attempt_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="lavaFlow.models.Project.average_pend_time">
-<tt class="descclassname">Project.</tt><tt class="descname">average_pend_time</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.average_pend_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.average_pend_time" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">average_pend_time</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.average_pend_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.average_pend_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the average pend time in seconds for all jobs that were submitted under this project.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1153,7 +596,7 @@ multiple projects, and this is also supported.  Projects are unique globally.</p
 
 <dl class="method">
 <dt id="lavaFlow.models.Project.average_pend_time_percent">
-<tt class="descclassname">Project.</tt><tt class="descname">average_pend_time_percent</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.average_pend_time_percent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.average_pend_time_percent" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">average_pend_time_percent</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.average_pend_time_percent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.average_pend_time_percent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the average pend time of jobs submitted under this project as a percent of their overall wall clock time.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1167,7 +610,7 @@ multiple projects, and this is also supported.  Projects are unique globally.</p
 
 <dl class="method">
 <dt id="lavaFlow.models.Project.average_pend_time_timedelta">
-<tt class="descclassname">Project.</tt><tt class="descname">average_pend_time_timedelta</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.average_pend_time_timedelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.average_pend_time_timedelta" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">average_pend_time_timedelta</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.average_pend_time_timedelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.average_pend_time_timedelta" title="Permalink to this definition">¶</a></dt>
 <dd><p>Timedelta object of the number of seconds that jobs pend for</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1181,7 +624,7 @@ multiple projects, and this is also supported.  Projects are unique globally.</p
 
 <dl class="method">
 <dt id="lavaFlow.models.Project.average_wall_time">
-<tt class="descclassname">Project.</tt><tt class="descname">average_wall_time</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.average_wall_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.average_wall_time" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">average_wall_time</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.average_wall_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.average_wall_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the average wall clock time in seconds for all jobs that were submitted under this project.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1195,7 +638,7 @@ multiple projects, and this is also supported.  Projects are unique globally.</p
 
 <dl class="method">
 <dt id="lavaFlow.models.Project.average_wall_time_timedelta">
-<tt class="descclassname">Project.</tt><tt class="descname">average_wall_time_timedelta</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.average_wall_time_timedelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.average_wall_time_timedelta" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">average_wall_time_timedelta</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.average_wall_time_timedelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.average_wall_time_timedelta" title="Permalink to this definition">¶</a></dt>
 <dd><p>Timedelta object of the number of seconds of the average wall clock time.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1209,7 +652,7 @@ multiple projects, and this is also supported.  Projects are unique globally.</p
 
 <dl class="method">
 <dt id="lavaFlow.models.Project.first_task">
-<tt class="descclassname">Project.</tt><tt class="descname">first_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.first_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.first_task" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">first_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.first_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.first_task" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the first task that was executed under this project.  If no tasks were executed, returns None.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1223,7 +666,7 @@ multiple projects, and this is also supported.  Projects are unique globally.</p
 
 <dl class="method">
 <dt id="lavaFlow.models.Project.get_absolute_url">
-<tt class="descclassname">Project.</tt><tt class="descname">get_absolute_url</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.get_absolute_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.get_absolute_url" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_absolute_url</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.get_absolute_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.get_absolute_url" title="Permalink to this definition">¶</a></dt>
 <dd><p>The absolute URL to the project view.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1235,24 +678,9 @@ multiple projects, and this is also supported.  Projects are unique globally.</p
 </table>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="lavaFlow.models.Project.gridengine_departments">
-<tt class="descclassname">Project.</tt><tt class="descname">gridengine_departments</tt><a class="headerlink" href="#lavaFlow.models.Project.gridengine_departments" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Project.gridengine_projects">
-<tt class="descclassname">Project.</tt><tt class="descname">gridengine_projects</tt><a class="headerlink" href="#lavaFlow.models.Project.gridengine_projects" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Project.jobsubmitopenlava_set">
-<tt class="descclassname">Project.</tt><tt class="descname">jobsubmitopenlava_set</tt><a class="headerlink" href="#lavaFlow.models.Project.jobsubmitopenlava_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="lavaFlow.models.Project.last_failed_task">
-<tt class="descclassname">Project.</tt><tt class="descname">last_failed_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.last_failed_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.last_failed_task" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">last_failed_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.last_failed_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.last_failed_task" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the last task that exited with a non-successful exit state under this project.  If no tasks have been
 executed under this project, or none of the tasks have exited with a failure, returns None.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1267,7 +695,7 @@ executed under this project, or none of the tasks have exited with a failure, re
 
 <dl class="method">
 <dt id="lavaFlow.models.Project.last_task">
-<tt class="descclassname">Project.</tt><tt class="descname">last_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.last_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.last_task" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">last_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.last_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.last_task" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the last task under this project that ended, regardless of exit status.  If no tasks have been executed
 on the under this project, returns None</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1280,19 +708,9 @@ on the under this project, returns None</p>
 </table>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="lavaFlow.models.Project.objects">
-<tt class="descclassname">Project.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2af1f90&gt;</em><a class="headerlink" href="#lavaFlow.models.Project.objects" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Project.openlavaexitinfo_set">
-<tt class="descclassname">Project.</tt><tt class="descname">openlavaexitinfo_set</tt><a class="headerlink" href="#lavaFlow.models.Project.openlavaexitinfo_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="lavaFlow.models.Project.total_attempts">
-<tt class="descclassname">Project.</tt><tt class="descname">total_attempts</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.total_attempts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.total_attempts" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">total_attempts</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.total_attempts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.total_attempts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an total number of tasks that have been executed under this project since time began.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1306,7 +724,7 @@ on the under this project, returns None</p>
 
 <dl class="method">
 <dt id="lavaFlow.models.Project.total_jobs">
-<tt class="descclassname">Project.</tt><tt class="descname">total_jobs</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.total_jobs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.total_jobs" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">total_jobs</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.total_jobs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.total_jobs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an total number of jobs that have been submitted to this project since time began.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1320,7 +738,7 @@ on the under this project, returns None</p>
 
 <dl class="method">
 <dt id="lavaFlow.models.Project.total_tasks">
-<tt class="descclassname">Project.</tt><tt class="descname">total_tasks</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.total_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.total_tasks" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">total_tasks</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.total_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.total_tasks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an total number of tasks that have been submitted to this project since time began.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1338,560 +756,30 @@ on the under this project, returns None</p>
 <dt id="lavaFlow.models.Host">
 <em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Host</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Host"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Host" title="Permalink to this definition">¶</a></dt>
 <dd><p>Host(id, name)</p>
-<dl class="exception">
-<dt id="lavaFlow.models.Host.DoesNotExist">
-<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#lavaFlow.models.Host.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.Host.DoesNotExist.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.Host.DoesNotExist.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Host.DoesNotExist.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.Host.DoesNotExist.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Host.DoesNotExist.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.Host.DoesNotExist.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="exception">
-<dt id="lavaFlow.models.Host.MultipleObjectsReturned">
-<em class="property">exception </em><tt class="descclassname">Host.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#lavaFlow.models.Host.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.Host.MultipleObjectsReturned.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.Host.MultipleObjectsReturned.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Host.MultipleObjectsReturned.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.Host.MultipleObjectsReturned.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Host.MultipleObjectsReturned.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.Host.MultipleObjectsReturned.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Host.__module__">
-<tt class="descclassname">Host.</tt><tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.Host.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Host.__str__">
-<tt class="descclassname">Host.</tt><tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Host.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Host.__str__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Host.__unicode__">
-<tt class="descclassname">Host.</tt><tt class="descname">__unicode__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Host.__unicode__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Host.__unicode__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Host._base_manager">
-<tt class="descclassname">Host.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2afa290&gt;</em><a class="headerlink" href="#lavaFlow.models.Host._base_manager" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Host._default_manager">
-<tt class="descclassname">Host.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2afa290&gt;</em><a class="headerlink" href="#lavaFlow.models.Host._default_manager" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Host._meta">
-<tt class="descclassname">Host.</tt><tt class="descname">_meta</tt><em class="property"> = &lt;Options for Host&gt;</em><a class="headerlink" href="#lavaFlow.models.Host._meta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Host.attempt_set">
-<tt class="descclassname">Host.</tt><tt class="descname">attempt_set</tt><a class="headerlink" href="#lavaFlow.models.Host.attempt_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Host.failure_rate">
-<tt class="descclassname">Host.</tt><tt class="descname">failure_rate</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Host.failure_rate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Host.failure_rate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Host.first_task">
-<tt class="descclassname">Host.</tt><tt class="descname">first_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Host.first_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Host.first_task" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Host.get_absolute_url">
-<tt class="descclassname">Host.</tt><tt class="descname">get_absolute_url</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Host.get_absolute_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Host.get_absolute_url" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Host.hostlog_set">
-<tt class="descclassname">Host.</tt><tt class="descname">hostlog_set</tt><a class="headerlink" href="#lavaFlow.models.Host.hostlog_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Host.job_set">
-<tt class="descclassname">Host.</tt><tt class="descname">job_set</tt><a class="headerlink" href="#lavaFlow.models.Host.job_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Host.last_task">
-<tt class="descclassname">Host.</tt><tt class="descname">last_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Host.last_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Host.last_task" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Host.objects">
-<tt class="descclassname">Host.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2afa290&gt;</em><a class="headerlink" href="#lavaFlow.models.Host.objects" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Host.openlavaexitinfo_set">
-<tt class="descclassname">Host.</tt><tt class="descname">openlavaexitinfo_set</tt><a class="headerlink" href="#lavaFlow.models.Host.openlavaexitinfo_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Host.requested_by_openlava_jobs">
-<tt class="descclassname">Host.</tt><tt class="descname">requested_by_openlava_jobs</tt><a class="headerlink" href="#lavaFlow.models.Host.requested_by_openlava_jobs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.Host.submitted_openlava_jobs">
-<tt class="descclassname">Host.</tt><tt class="descname">submitted_openlava_jobs</tt><a class="headerlink" href="#lavaFlow.models.Host.submitted_openlava_jobs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Host.total_failed_tasks">
-<tt class="descclassname">Host.</tt><tt class="descname">total_failed_tasks</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Host.total_failed_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Host.total_failed_tasks" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Host.total_submitted_jobs">
-<tt class="descclassname">Host.</tt><tt class="descname">total_submitted_jobs</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Host.total_submitted_jobs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Host.total_submitted_jobs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Host.total_successful_tasks">
-<tt class="descclassname">Host.</tt><tt class="descname">total_successful_tasks</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Host.total_successful_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Host.total_successful_tasks" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.Host.total_tasks">
-<tt class="descclassname">Host.</tt><tt class="descname">total_tasks</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Host.total_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Host.total_tasks" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="class">
 <dt id="lavaFlow.models.HostLog">
 <em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">HostLog</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#HostLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.HostLog" title="Permalink to this definition">¶</a></dt>
 <dd><p>HostLog(id, cluster_id, time, message, clusterlog_ptr_id, host_id)</p>
-<dl class="exception">
-<dt id="lavaFlow.models.HostLog.DoesNotExist">
-<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#lavaFlow.models.HostLog.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.HostLog.DoesNotExist.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.HostLog.DoesNotExist.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.HostLog.DoesNotExist.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.HostLog.DoesNotExist.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.HostLog.DoesNotExist.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.HostLog.DoesNotExist.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="exception">
-<dt id="lavaFlow.models.HostLog.MultipleObjectsReturned">
-<em class="property">exception </em><tt class="descclassname">HostLog.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#lavaFlow.models.HostLog.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.HostLog.MultipleObjectsReturned.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.HostLog.MultipleObjectsReturned.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.HostLog.MultipleObjectsReturned.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.HostLog.MultipleObjectsReturned.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.HostLog.MultipleObjectsReturned.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.HostLog.MultipleObjectsReturned.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.HostLog.__module__">
-<tt class="descclassname">HostLog.</tt><tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.HostLog.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.HostLog._base_manager">
-<tt class="descclassname">HostLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2afa750&gt;</em><a class="headerlink" href="#lavaFlow.models.HostLog._base_manager" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.HostLog._default_manager">
-<tt class="descclassname">HostLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2afa750&gt;</em><a class="headerlink" href="#lavaFlow.models.HostLog._default_manager" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.HostLog._meta">
-<tt class="descclassname">HostLog.</tt><tt class="descname">_meta</tt><em class="property"> = &lt;Options for HostLog&gt;</em><a class="headerlink" href="#lavaFlow.models.HostLog._meta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.HostLog.clusterlog_ptr">
-<tt class="descclassname">HostLog.</tt><tt class="descname">clusterlog_ptr</tt><a class="headerlink" href="#lavaFlow.models.HostLog.clusterlog_ptr" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.HostLog.host">
-<tt class="descclassname">HostLog.</tt><tt class="descname">host</tt><a class="headerlink" href="#lavaFlow.models.HostLog.host" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.HostLog.objects">
-<tt class="descclassname">HostLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2afa750&gt;</em><a class="headerlink" href="#lavaFlow.models.HostLog.objects" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="class">
 <dt id="lavaFlow.models.QueueLog">
 <em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">QueueLog</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#QueueLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.QueueLog" title="Permalink to this definition">¶</a></dt>
 <dd><p>QueueLog(id, cluster_id, time, message, clusterlog_ptr_id, queue_id)</p>
-<dl class="exception">
-<dt id="lavaFlow.models.QueueLog.DoesNotExist">
-<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#lavaFlow.models.QueueLog.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.QueueLog.DoesNotExist.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.QueueLog.DoesNotExist.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.QueueLog.DoesNotExist.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.QueueLog.DoesNotExist.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.QueueLog.DoesNotExist.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.QueueLog.DoesNotExist.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="exception">
-<dt id="lavaFlow.models.QueueLog.MultipleObjectsReturned">
-<em class="property">exception </em><tt class="descclassname">QueueLog.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#lavaFlow.models.QueueLog.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.QueueLog.MultipleObjectsReturned.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.QueueLog.MultipleObjectsReturned.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.QueueLog.MultipleObjectsReturned.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.QueueLog.MultipleObjectsReturned.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.QueueLog.MultipleObjectsReturned.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.QueueLog.MultipleObjectsReturned.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.QueueLog.__module__">
-<tt class="descclassname">QueueLog.</tt><tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.QueueLog.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.QueueLog._base_manager">
-<tt class="descclassname">QueueLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2afe090&gt;</em><a class="headerlink" href="#lavaFlow.models.QueueLog._base_manager" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.QueueLog._default_manager">
-<tt class="descclassname">QueueLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2afe090&gt;</em><a class="headerlink" href="#lavaFlow.models.QueueLog._default_manager" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.QueueLog._meta">
-<tt class="descclassname">QueueLog.</tt><tt class="descname">_meta</tt><em class="property"> = &lt;Options for QueueLog&gt;</em><a class="headerlink" href="#lavaFlow.models.QueueLog._meta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.QueueLog.clusterlog_ptr">
-<tt class="descclassname">QueueLog.</tt><tt class="descname">clusterlog_ptr</tt><a class="headerlink" href="#lavaFlow.models.QueueLog.clusterlog_ptr" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.QueueLog.objects">
-<tt class="descclassname">QueueLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2afe090&gt;</em><a class="headerlink" href="#lavaFlow.models.QueueLog.objects" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.QueueLog.queue">
-<tt class="descclassname">QueueLog.</tt><tt class="descname">queue</tt><a class="headerlink" href="#lavaFlow.models.QueueLog.queue" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="class">
 <dt id="lavaFlow.models.User">
 <em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">User</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#User"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.User" title="Permalink to this definition">¶</a></dt>
 <dd><p>User(id, name)</p>
-<dl class="exception">
-<dt id="lavaFlow.models.User.DoesNotExist">
-<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#lavaFlow.models.User.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.User.DoesNotExist.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.User.DoesNotExist.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.User.DoesNotExist.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.User.DoesNotExist.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.User.DoesNotExist.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.User.DoesNotExist.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="exception">
-<dt id="lavaFlow.models.User.MultipleObjectsReturned">
-<em class="property">exception </em><tt class="descclassname">User.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#lavaFlow.models.User.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.User.MultipleObjectsReturned.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.User.MultipleObjectsReturned.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.User.MultipleObjectsReturned.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.User.MultipleObjectsReturned.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.User.MultipleObjectsReturned.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.User.MultipleObjectsReturned.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.User.__module__">
-<tt class="descclassname">User.</tt><tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.User.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.User.__str__">
-<tt class="descclassname">User.</tt><tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#User.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.User.__str__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.User.__unicode__">
-<tt class="descclassname">User.</tt><tt class="descname">__unicode__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#User.__unicode__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.User.__unicode__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.User._base_manager">
-<tt class="descclassname">User.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2afe350&gt;</em><a class="headerlink" href="#lavaFlow.models.User._base_manager" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.User._default_manager">
-<tt class="descclassname">User.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2afe350&gt;</em><a class="headerlink" href="#lavaFlow.models.User._default_manager" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.User._meta">
-<tt class="descclassname">User.</tt><tt class="descname">_meta</tt><em class="property"> = &lt;Options for User&gt;</em><a class="headerlink" href="#lavaFlow.models.User._meta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.User.attempt_set">
-<tt class="descclassname">User.</tt><tt class="descname">attempt_set</tt><a class="headerlink" href="#lavaFlow.models.User.attempt_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.User.average_pend_time">
-<tt class="descclassname">User.</tt><tt class="descname">average_pend_time</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#User.average_pend_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.User.average_pend_time" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.User.average_pend_time_percent">
-<tt class="descclassname">User.</tt><tt class="descname">average_pend_time_percent</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#User.average_pend_time_percent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.User.average_pend_time_percent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.User.average_pend_time_timedelta">
-<tt class="descclassname">User.</tt><tt class="descname">average_pend_time_timedelta</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#User.average_pend_time_timedelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.User.average_pend_time_timedelta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.User.average_wall_time">
-<tt class="descclassname">User.</tt><tt class="descname">average_wall_time</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#User.average_wall_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.User.average_wall_time" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.User.average_wall_time_timedelta">
-<tt class="descclassname">User.</tt><tt class="descname">average_wall_time_timedelta</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#User.average_wall_time_timedelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.User.average_wall_time_timedelta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.User.first_task">
-<tt class="descclassname">User.</tt><tt class="descname">first_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#User.first_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.User.first_task" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.User.get_absolute_url">
-<tt class="descclassname">User.</tt><tt class="descname">get_absolute_url</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#User.get_absolute_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.User.get_absolute_url" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.User.job_set">
-<tt class="descclassname">User.</tt><tt class="descname">job_set</tt><a class="headerlink" href="#lavaFlow.models.User.job_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.User.last_failed_task">
-<tt class="descclassname">User.</tt><tt class="descname">last_failed_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#User.last_failed_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.User.last_failed_task" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.User.last_task">
-<tt class="descclassname">User.</tt><tt class="descname">last_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#User.last_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.User.last_task" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.User.objects">
-<tt class="descclassname">User.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2afe350&gt;</em><a class="headerlink" href="#lavaFlow.models.User.objects" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.User.openlavaexitinfo_set">
-<tt class="descclassname">User.</tt><tt class="descname">openlavaexitinfo_set</tt><a class="headerlink" href="#lavaFlow.models.User.openlavaexitinfo_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.User.task_set">
-<tt class="descclassname">User.</tt><tt class="descname">task_set</tt><a class="headerlink" href="#lavaFlow.models.User.task_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.User.total_attempts">
-<tt class="descclassname">User.</tt><tt class="descname">total_attempts</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#User.total_attempts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.User.total_attempts" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.User.total_jobs">
-<tt class="descclassname">User.</tt><tt class="descname">total_jobs</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#User.total_jobs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.User.total_jobs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.User.total_tasks">
-<tt class="descclassname">User.</tt><tt class="descname">total_tasks</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#User.total_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.User.total_tasks" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.User.userlog_set">
-<tt class="descclassname">User.</tt><tt class="descname">userlog_set</tt><a class="headerlink" href="#lavaFlow.models.User.userlog_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="class">
 <dt id="lavaFlow.models.UserLog">
 <em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">UserLog</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#UserLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.UserLog" title="Permalink to this definition">¶</a></dt>
 <dd><p>UserLog(id, cluster_id, time, message, clusterlog_ptr_id, user_id)</p>
-<dl class="exception">
-<dt id="lavaFlow.models.UserLog.DoesNotExist">
-<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#lavaFlow.models.UserLog.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.UserLog.DoesNotExist.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.UserLog.DoesNotExist.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.UserLog.DoesNotExist.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.UserLog.DoesNotExist.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.UserLog.DoesNotExist.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.UserLog.DoesNotExist.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="exception">
-<dt id="lavaFlow.models.UserLog.MultipleObjectsReturned">
-<em class="property">exception </em><tt class="descclassname">UserLog.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#lavaFlow.models.UserLog.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.UserLog.MultipleObjectsReturned.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.UserLog.MultipleObjectsReturned.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.UserLog.MultipleObjectsReturned.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.UserLog.MultipleObjectsReturned.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.UserLog.MultipleObjectsReturned.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.UserLog.MultipleObjectsReturned.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.UserLog.__module__">
-<tt class="descclassname">UserLog.</tt><tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.UserLog.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.UserLog._base_manager">
-<tt class="descclassname">UserLog.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2afe810&gt;</em><a class="headerlink" href="#lavaFlow.models.UserLog._base_manager" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.UserLog._default_manager">
-<tt class="descclassname">UserLog.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2afe810&gt;</em><a class="headerlink" href="#lavaFlow.models.UserLog._default_manager" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.UserLog._meta">
-<tt class="descclassname">UserLog.</tt><tt class="descname">_meta</tt><em class="property"> = &lt;Options for UserLog&gt;</em><a class="headerlink" href="#lavaFlow.models.UserLog._meta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.UserLog.clusterlog_ptr">
-<tt class="descclassname">UserLog.</tt><tt class="descname">clusterlog_ptr</tt><a class="headerlink" href="#lavaFlow.models.UserLog.clusterlog_ptr" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.UserLog.objects">
-<tt class="descclassname">UserLog.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2afe810&gt;</em><a class="headerlink" href="#lavaFlow.models.UserLog.objects" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.UserLog.user">
-<tt class="descclassname">UserLog.</tt><tt class="descname">user</tt><a class="headerlink" href="#lavaFlow.models.UserLog.user" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="class">
@@ -2022,76 +910,6 @@ the current process exceeded its time slice.</p>
 <dd></dd></dl>
 
 <p>Exact user time used.</p>
-<dl class="exception">
-<dt id="lavaFlow.models.AttemptResourceUsage.DoesNotExist">
-<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.AttemptResourceUsage.DoesNotExist.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage.DoesNotExist.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.AttemptResourceUsage.DoesNotExist.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage.DoesNotExist.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.AttemptResourceUsage.DoesNotExist.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage.DoesNotExist.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="exception">
-<dt id="lavaFlow.models.AttemptResourceUsage.MultipleObjectsReturned">
-<em class="property">exception </em><tt class="descclassname">AttemptResourceUsage.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="lavaFlow.models.AttemptResourceUsage.MultipleObjectsReturned.__module__">
-<tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage.MultipleObjectsReturned.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.AttemptResourceUsage.MultipleObjectsReturned.__reduce__">
-<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage.MultipleObjectsReturned.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="lavaFlow.models.AttemptResourceUsage.MultipleObjectsReturned.__setstate__">
-<tt class="descname">__setstate__</tt><big>(</big><em>args</em><big>)</big><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage.MultipleObjectsReturned.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.AttemptResourceUsage.__module__">
-<tt class="descclassname">AttemptResourceUsage.</tt><tt class="descname">__module__</tt><em class="property"> = 'lavaFlow.models'</em><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.AttemptResourceUsage._base_manager">
-<tt class="descclassname">AttemptResourceUsage.</tt><tt class="descname">_base_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2c4f310&gt;</em><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage._base_manager" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.AttemptResourceUsage._default_manager">
-<tt class="descclassname">AttemptResourceUsage.</tt><tt class="descname">_default_manager</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2c4f310&gt;</em><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage._default_manager" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.AttemptResourceUsage._meta">
-<tt class="descclassname">AttemptResourceUsage.</tt><tt class="descname">_meta</tt><em class="property"> = &lt;Options for AttemptResourceUsage&gt;</em><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage._meta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.AttemptResourceUsage.attempt">
-<tt class="descclassname">AttemptResourceUsage.</tt><tt class="descname">attempt</tt><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage.attempt" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="lavaFlow.models.AttemptResourceUsage.objects">
-<tt class="descclassname">AttemptResourceUsage.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x2c4f310&gt;</em><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage.objects" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 </div>
