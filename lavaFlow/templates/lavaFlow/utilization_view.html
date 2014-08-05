@@ -123,7 +123,7 @@
     // Add the resource usage chart
 	var resourceChart;
 	nv.addGraph(function() {
-		consumptionChart = nv.models.multiBarChart();
+		resourceChart = nv.models.multiBarChart();
 		d3.select('#chart_resources svg')
 			.datum([])
 			.transition().duration(500)
