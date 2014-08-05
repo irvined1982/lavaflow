@@ -921,46 +921,54 @@ def consumption_bar_data(request, start_time_js=0, end_time_js=0, exclude_string
     if len(group_args) > 0:
         attempts = attempts.values(*group_args)
         attempts = attempts.annotate(Sum('pend_time'), Sum('wall_time'), Sum('cpu_time'), Count('num_processors'))
+
+        data = {}
+        for row in attempts:
+            group_name = u""
+            for n in group_args:
+                if n == "status__exited_cleanly" and "status__name" in group_args:
+                    continue
+                if len(group_name) > 0:
+                    group_name += u" "
+                if n == "num_processors":
+                    group_name += u"%s Processors" % row[n]
+                elif n == "status__name":
+                    group_name += u"%s (%s)" % (row[n], "Clean" if row['status__exited_cleanly'] else "Failed")
+                group_name += u"%s" % row[n]
+            if len(group_name)<1:
+                group_name="Total"
+            if group_name not in data:
+                data[group_name]={
+                    'key': group_name,
+                    'values': {
+                        "Sum CPU":0,
+                        "Sum Wall":0,
+                        "Sum Pend":0,
+                        "Total Tasks":0
+                    }
+                }
+            data[group_name]['values']['Sum CPU'] += row['cpu_time__sum']
+            data[group_name]['values']['Sum Wall'] += row['wall_time__sum']
+            data[group_name]['values']['Sum Pend'] += row['pend_time__sum']
+            data[group_name]['values']['Total Tasks'] += row['num_processors__count']
+
     else:
         attempts = attempts.aggregate(Sum('pend_time'), Sum('wall_time'), Sum('cpu_time'), Count('num_processors'))
-
-    data = {}
-    for row in attempts:
-        group_name = u""
-        for n in group_args:
-            if n == "status__exited_cleanly" and "status__name" in group_args:
-                continue
-            if len(group_name) > 0:
-                group_name += u" "
-            if n == "num_processors":
-                group_name += u"%s Processors" % row[n]
-            elif n == "status__name":
-                group_name += u"%s (%s)" % (row[n], "Clean" if row['status__exited_cleanly'] else "Failed")
-            group_name += u"%s" % row[n]
-        if len(group_name)<1:
-            group_name="Total"
-        if group_name not in data:
-            data[group_name]={
-                'key': group_name,
+        data={
+            'Overall':{
+                'key':'Overall',
                 'values': {
-                    "Sum CPU":0,
-                    "Sum Wall":0,
-                    "Sum Pend":0,
-                    "Total Tasks":0
-                }
+                            "Sum CPU":attempts['cpu_time__sum'],
+                            "Sum Wall":attempts['wall_time__sum'],
+                            "Sum Pend":attempts['pend_time__sum'],
+                            "Total Tasks":attempts['num_processors__count'],
+                        }
             }
-        print data
-        d=data[group_name]
-        d=d['values']
-        d=d['Sum CPU']
-        print row
-        data[group_name]['values']['Sum CPU'] += row['cpu_time__sum']
-        data[group_name]['values']['Sum Wall'] += row['wall_time__sum']
-        data[group_name]['values']['Sum Pend'] += row['pend_time__sum']
-        data[group_name]['values']['Total Tasks'] += row['num_processors__count']
+        }
     data=sorted(data.values(),key=lambda v: v['key'])
     for series in data:
         series['values'] = [{'x':k, 'y':v} for k,v in series['values'].iteritems()]
+
     return create_js_success(data)
 
 
