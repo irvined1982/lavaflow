@@ -1,3 +1,6 @@
 [submodule "lavaFlow/static/lavaFlow/nvd3"]
 	path = lavaFlow/static/lavaFlow/nvd3
 	url = https://github.com/novus/nvd3.git
+[submodule "lavaFlow/static/lavaFlow/visjs"]
+	path = lavaFlow/static/lavaFlow/visjs
+	url = https://github.com/irvined1982/vis.git
