@@ -48,7 +48,7 @@ urlpatterns = patterns('',
 
                        url(
                            r'^consumption/(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$',
-                           'lavaFlow.views.utilization_bar_size', name='lf_consumption_chart'),
+                           'lavaFlow.views.consumption_bar_data', name='lf_consumption_chart'),
                        url(
                            r'^util_total_attempts/(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$',
                            'lavaFlow.views.util_total_attempts', name='lf_util_total_attempts'),
