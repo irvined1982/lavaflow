@@ -1099,7 +1099,7 @@ class Attempt(models.Model):
 
     .. py:attribute:: submit_time
 
-    The time in seconds since epoch UTC that the  
+    The time in seconds since epoch UTC that the
     .. py:attribute:: start_time
     .. py:attribute:: end_time
     .. py:attribute:: cpu_time
