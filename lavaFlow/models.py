@@ -642,6 +642,15 @@ class Project(models.Model):
 
 
 class Host(models.Model):
+    """
+    Hosts represent actual hosts, these may be any arbitrary host, but generally are hosts that are either execution
+    hosts or submission hosts.
+
+    .. py:attribute:: name
+
+    This is the name of the host. It is generally not the fully qualified domain name, but simply the local hostname.
+
+    """
     name = models.CharField(max_length=100, db_index=True, unique=True)
 
     def __unicode__(self):
