@@ -36,10 +36,10 @@ class ImportKey(models.Model):
 
     >>> from lavaFlow.models import ImportKey
     >>> try:
-    ...     key=ImportKey.objects.get(client_key="key_to_check")
-    ...     # Key is valid.
-    ... except ObjectDoesNotExist as e:
-    ...     # Key is invalid.
+    >>>         key=ImportKey.objects.get(client_key="key_to_check")
+    >>>         # Key is valid.
+    >>>    except ObjectDoesNotExist as e:
+    >>>         # Key is invalid.
 
     .. py:attribute:: client_key
 
