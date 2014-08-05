@@ -568,8 +568,8 @@
 		filterData.view='lf_util_bar_size';
 		filterData.groups=[];
         $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    consumption_report_data['overall']=data['data'];
 		    $.getJSON(data.url, function(data) {
+		        consumption_report_data['overall']=data['data'];
                 if ( current_consumption_report == 'overall' ){
                     $.getJSON(data.url, function(data) {
                         d3.select('#chart_consumption svg')
