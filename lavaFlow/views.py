@@ -28,13 +28,13 @@ from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.views.decorators.cache import cache_page
 from django.shortcuts import render
 from django.db.models import Avg, Count, Sum
-from django.views.generic import ListView
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.core.exceptions import ObjectDoesNotExist
 from django.middleware.csrf import get_token
 from scipy.interpolate import interp1d
 
 from lavaFlow.models import *
+
 
 OPENLAVA_JOB_STATES = {
     0x00: {
@@ -403,7 +403,7 @@ def gridengine_import(request, cluster_name):
         r.swaps = data['ru_nswap']
         r.input_block_ops = data['ru_inblock']
         r.output_block_ops = data['ru_oublock']
-        r.charecter_io_ops = -1
+        r.character_io_ops = -1
         r.messages_sent = data['ru_msgsnd']
         r.messages_received = data['ru_msgrcv']
         r.num_signals = data['ru_nsignals']
@@ -650,7 +650,7 @@ def openlava_import_job_finish(cluster, event):
             resource_usage.swaps = log['lsfRusage']['ru_nswap']
             resource_usage.input_block_ops = log['lsfRusage']['ru_inblock']
             resource_usage.output_block_ops = log['lsfRusage']['ru_oublock']
-            resource_usage.charecter_io_ops = log['lsfRusage']['ru_ioch']
+            resource_usage.character_io_ops = log['lsfRusage']['ru_ioch']
             resource_usage.messages_sent = log['lsfRusage']['ru_msgsnd']
             resource_usage.messages_received = log['lsfRusage']['ru_msgrcv']
             resource_usage.num_signals = log['lsfRusage']['ru_nsignals']
@@ -707,6 +707,127 @@ def openlava_import_job_finish(cluster, event):
             ol.save()
 
 
+def resource_data(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
+    """
+    Generates resource usage data for the resource chart, this is the average of each field that is available on linux
+    from AttemptResourceUsage.
+
+    :param request: Request object
+    :param start_time_js: Start time for the chart data, in milliseconds since epoch
+    :param end_time_js: End time for the chart data, in milliseconds since epoch
+    :param exclude_string: a string of options to exclude data
+    :param filter_string: s string of options to filter data
+    :param group_string: a string of fields to group by
+    :return: json data object.
+
+    """
+    # Start time in milliseconds, rounded to nearest minute.
+    start_time_js = int(int(start_time_js) / 60000) * 60000
+    # End time in milliseconds, rounded to nearest minute.
+    end_time_js = int(int(end_time_js) / 60000) * 60000
+
+    # Attempts now contains all attempts that were active in this time period, ie, submitted before
+    # the end and finished after the start time.
+    attempts = get_attempts(start_time_js, end_time_js, exclude_string, filter_string)
+    # From this point on, attempts is only used as part of the IN statement, it is essentially just a big list of
+    # IDs that must be compared.
+
+    # Group args is no amended so that all grouping is now relative to the AttemptResourceUsage table.
+    group_args = group_string_to_group_args(group_string)
+    group_args = ["attempt__%s" % a for a in group_args]
+
+    resources = AttemptResourceUsage.objects.filter(attempt__in=attempts)
+
+    if len(group_args) > 0:
+        resources = resources.values(*group_args)
+        resources = resources.annotate(
+            Avg('user_time'),
+            Avg('system_time'),
+            Avg('max_rss'),
+            Avg('page_reclaims'),
+            Avg('page_faults'),
+            Avg('input_block_ops'),
+            Avg('output_block_ops'),
+            Avg('voluntary_context_switches'),
+            Avg('involuntary_context_switches'),
+        )
+
+        data = {}
+        for row in resources:
+            group_name = u""
+            for n in group_args:
+                if n == "attempt__status__exited_cleanly" and "attempt__status__name" in group_args:
+                    continue
+                if len(group_name) > 0:
+                    group_name += u" "
+                if n == "attempt__num_processors":
+                    group_name += u"%s Processors" % row[n]
+                elif n == "attempt__status__name":
+                    group_name += u"%s (%s)" % (row[n], "Clean" if row['attempt__status__exited_cleanly'] else "Failed")
+                group_name += u"%s" % row[n]
+            if group_name not in data:
+                data[group_name] = {
+                    'key': group_name,
+                    'values': {
+                        'user_time':0,
+                        'system_time':0,
+                        'max_rss':0,
+                        'page_reclaims':0,
+                        'page_faults':0,
+                        'input_block_ops':0,
+                        'output_block_ops':0,
+                        'voluntary_context_switches':0,
+                        'involuntary_context_switches':0,
+                    }
+                }
+            data[group_name]['values']['user_time'] += row['user_time']
+            data[group_name]['values']['system_time'] += row['system_time']
+            data[group_name]['values']['max_rss'] += row['max_rss']
+            data[group_name]['values']['page_reclaims'] += row['page_reclaims']
+            data[group_name]['values']['page_faults'] += row['page_faults']
+            data[group_name]['values']['input_block_ops'] += row['input_block_ops']
+            data[group_name]['values']['output_block_ops'] += row['output_block_ops']
+            data[group_name]['values']['voluntary_context_switches'] += row['voluntary_context_switches']
+            data[group_name]['values']['involuntary_context_switches'] += row['involuntary_context_switches']
+    else:
+        resources = resources.aggregate(
+            Avg('user_time'),
+            Avg('system_time'),
+            Avg('max_rss'),
+            Avg('page_reclaims'),
+            Avg('page_faults'),
+            Avg('input_block_ops'),
+            Avg('output_block_ops'),
+            Avg('voluntary_context_switches'),
+            Avg('involuntary_context_switches'),
+        )
+
+        data = {
+            'Overall': {
+                'key': 'Overall',
+                'values': {
+                    "user_time": resources['user_time'],
+                    "system_time": resources['system_time'],
+                    "max_rss": resources['max_rss'],
+                    "page_reclaims": resources['page_reclaims'],
+                    "page_faults": resources['page_faults'],
+                    "input_block_ops": resources['input_block_ops'],
+                    "output_block_ops": resources['output_block_ops'],
+                    "voluntary_context_switches": resources['voluntary_context_switches'],
+                    "involuntary_context_switches": resources['involuntary_context_switches'],
+                }
+            }
+        }
+    data = sorted(data.values(), key=lambda v: v['key'])
+    for series in data:
+        series['values'] = [{'x': k, 'y': v} for k, v in series['values'].iteritems()]
+
+    return create_js_success(data)
+
+
+
+
+
 def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
     """
     Generates utilization data for the utilization chart, this is essentially number of processors requested, vs
@@ -723,12 +844,8 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
     """
     # Start time in milliseconds, rounded to nearest minute.
     start_time_js = int(int(start_time_js) / 60000) * 60000
-    # Start time in seconds
-    start_time_ep = int(start_time_js / 1000)
-    # end time in milliseconds
+    # End time in milliseconds, rounded to nearest minute.
     end_time_js = int(int(end_time_js) / 60000) * 60000
-    # end time in seconds
-    end_time_ep = int(end_time_js / 1000)
 
     # Attempts now contains all attempts that were active in this time period, ie, submitted before
     # the end and finished after the start time.
@@ -883,7 +1000,7 @@ def utilization_table(request, start_time_js=0, end_time_js=0, exclude_string=""
             'groups': []
         }
         for field in group_args:
-            f = {}
+            f = dict()
             f['name'] = field
             if field in nice_names:
                 f['nice_name'] = nice_names[field]
@@ -1002,9 +1119,9 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
 
     """
     #
-    if start_time_js == None:
+    if start_time_js is None:
         start_time_js = -1
-    if end_time_js == None:
+    if end_time_js is None:
         end_time_js = -1
 
     data = {
@@ -1091,7 +1208,7 @@ def filter_string_to_params(filter_string):
     return filter_args
 
 
-# data.filters{name:[values]
+
 
 @csrf_exempt
 def build_filter(request):

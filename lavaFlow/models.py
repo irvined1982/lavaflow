@@ -476,9 +476,24 @@ class ClusterLog(models.Model):
 
 
 class Project(models.Model):
+    """
+    Projects are used to store the project name that jobs were submitted to, jobs of course can be submitted to
+    multiple projects, and this is also supported.  Projects are unique globally.
+
+    .. py:attribute:: name
+
+    This is the name of the project, as reported by the scheduler.
+
+    """
     name = models.CharField(max_length=100, unique=True, db_index=True)
 
     def get_absolute_url(self):
+        """
+        The absolute URL to the project view.
+
+        :return: URL of the project view page for this instance.
+
+        """
         args = {
         'start_time_js': 0,
         'end_time_js': 0,
@@ -488,39 +503,95 @@ class Project(models.Model):
         }
 
     def __unicode__(self):
+        """
+        Returns a unicode str containing the name of the project.
+
+        :return: unicode(self.__str__())
+
+        """
         return u'%s' % self.name
 
     def __str__(self):
+        """
+        Returns a  str containing the name of the project.
+
+        :return: str(name)
+
+        """
         return self.name
 
     def total_jobs(self):
+        """
+        Returns an total number of jobs that have been submitted to this project since time began.
+
+        :return: Integer containing total number of jobs
+
+        """
         return Job.objects.filter(attempt__projects=self).distinct().count()
 
     def total_tasks(self):
+        """
+        Returns an total number of tasks that have been submitted to this project since time began.
+
+        :return: Integer containing total number of tasks
+
+        """
         return Task.objects.filter(attempt__projects=self).distinct().count()
 
     def total_attempts(self):
+        """
+        Returns an total number of tasks that have been executed under this project since time began.
+
+        :return: Integer containing total number of tasks
+
+        """
         return self.attempt_set.distinct().count()
 
     def first_task(self):
+        """
+        Gets the first task that was executed under this project.  If no tasks were executed, returns None.
+
+        :return: Attempt object of the first attempt executed.
+
+        """
         try:
             return self.attempt_set.order_by('start_time')[0]
         except:
             return None
 
     def last_task(self):
+        """
+        Gets the last task under this project that ended, regardless of exit status.  If no tasks have been executed
+        on the under this project, returns None
+
+        :return: Attempt object of the last attempt ended, returns None of no attempts.
+
+        """
         try:
             return self.attempt_set.order_by('-end_time')[0]
         except:
             return None
 
     def last_failed_task(self):
+        """
+        Gets the last task that exited with a non-successful exit state under this project.  If no tasks have been
+        executed under this project, or none of the tasks have exited with a failure, returns None.
+
+        :return: Attempt object of the last attempt that failed, returns None of no failed attempts.
+
+        """
         try:
             return self.attempt_set.exclude(status__exited_cleanly=True).order_by('-end_time')[0]
         except:
             return None
 
     def average_pend_time(self):
+        """
+        Calculates the average pend time in seconds for all jobs that were submitted under this project.
+
+        :return: Number of seconds on average that jobs pend for this project.
+
+        """
         name = "%s_project_average_pend_time" % self.id
         pend = cache.get(name)
         if not pend:
@@ -529,12 +600,30 @@ class Project(models.Model):
         return pend
 
     def average_pend_time_timedelta(self):
+        """
+        Timedelta object of the number of seconds that jobs pend for
+
+        :return: Average pend time as timedelta.
+
+        """
         return datetime.timedelta(seconds=self.average_pend_time())
 
     def average_pend_time_percent(self):
+        """
+        Gets the average pend time of jobs submitted under this project as a percent of their overall wall clock time.
+
+        :return: Average Pend Time as a percent
+
+        """
         return (float(self.average_pend_time()) / float(self.average_wall_time())) * 100
 
     def average_wall_time(self):
+        """
+        Calculates the average wall clock time in seconds for all jobs that were submitted under this project.
+
+        :return: Number of seconds on average that jobs take from submission to completion.
+
+        """
         name = "%s_project_average_wall_time" % self.id
         wall = cache.get(name)
         if not wall:
@@ -543,6 +632,12 @@ class Project(models.Model):
         return wall
 
     def average_wall_time_timedelta(self):
+        """
+        Timedelta object of the number of seconds of the average wall clock time.
+
+        :return: Average wall clock time as timedelta.
+
+        """
         return datetime.timedelta(seconds=self.average_wall_time())
 
 
@@ -1085,7 +1180,95 @@ class GridEngineAttemptInfo(models.Model):
 
 
 class AttemptResourceUsage(models.Model):
-    attempt = models.OneToOneField(Attempt)
+    """
+    Resource usage measures for the attempt, taken from the getrusage() system call.  Not all schedulers support
+    this operation, and where not supported, this will not be created.
+
+    .. py:attribute:: attempt
+
+    The attempt object that this instance refers to.
+
+    .. py:attribute:: user_time
+
+    This is the total amount of time spent executing in user mode, in seconds.
+
+    .. py:attribute:: system_time
+
+    This is the total amount of time spent executing in kernel mode, in seconds.
+
+    .. py:attribute:: max_rss
+
+    This is the maximum resident set size used (in kilobytes).
+
+    .. py:attribute:: integral_shared_text
+
+    Integral shared text size.
+
+    .. py:attribute:: integral_shared_memory
+
+    Integral shared memory size.
+
+    .. py:attribute:: integral_unshared_data
+
+    Integral unshared data.
+
+    .. py:attribute:: integral_unshared_stack
+
+    Integral unshared stack.
+
+    .. py:attribute:: page_reclaims
+
+    The number of page faults serviced without any I/O activity; Here I/O activity is avoided by "reclaiming" a page
+    frame from the list of pages awaiting reallocation.
+
+    .. py:attribute:: page_faults
+
+    The number of page faults serviced that required I/O activity.
+
+    .. py:attribute:: swaps
+
+    Swap Operations.
+
+    .. py:attribute:: input_block_ops
+
+    The number of times the filesystem had to perform input.
+
+    .. py:attribute:: output_block_ops
+
+    The number of times the filesystem had to perform output.
+
+    .. py:attribute:: character_io_ops
+
+    # of characters read/written.
+
+    .. py:attribute:: messages_sent
+
+    Messages sent.
+
+    .. py:attribute:: messages_received
+
+    Messages received.
+
+    .. py:attribute:: num_signals
+
+    Signals received.
+
+    .. py:attribute:: voluntary_context_switches
+
+    The number of times a context switch resulted due to a process voluntarily giving up the processor before its
+    time slice was completed (usually to await availability of a resource).
+
+    .. py:attribute:: involuntary_context_switches
+
+    The number of times a context switch resulted due to a higher priority process becoming runnable or because
+    the current process exceeded its time slice.
+
+    .. py:attribute:: exact_user_time
+
+    Exact user time used.
+
+    """
+    attempt = models.OneToOneField(Attempt, db_index=True)
     user_time = models.FloatField()
     system_time = models.FloatField()
     max_rss = models.FloatField()
@@ -1098,7 +1281,7 @@ class AttemptResourceUsage(models.Model):
     swaps = models.FloatField()
     input_block_ops = models.FloatField()
     output_block_ops = models.FloatField()
-    charecter_io_ops = models.FloatField()
+    character_io_ops = models.FloatField()
     messages_sent = models.FloatField()
     messages_received = models.FloatField()
     num_signals = models.FloatField()

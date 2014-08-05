@@ -120,6 +120,17 @@
 		return consumptionChart;
 	});
 
+    // Add the resource usage chart
+	var resourceChart;
+	nv.addGraph(function() {
+		consumptionChart = nv.models.multiBarChart();
+		d3.select('#chart_resources svg')
+			.datum([])
+			.transition().duration(500)
+			.call(resourceChart);
+		nv.utils.windowResize(resourceChart.update);
+		return resourceChart;
+	});
 
 	// Updates the RangeSlider widget, if there is data - loads data into charts.
 	function updateRangeSlider(){
@@ -256,7 +267,15 @@
 	}
 
 
-
+    var current_resource_report="overall";
+    var resource_report_data={
+        overall:[],
+        size:[],
+        cluster:[],
+        queue:[],
+        project:[],
+        user:[],
+    };
 
     var current_consumption_report="overall";
     var consumption_report_data={
@@ -364,6 +383,10 @@
 				id:"#chart_consumption svg",
 				container:consumptionChart
 			},
+			{
+			    id:"#chart_resources svg",
+			    container:resourceChart
+			}
 		];
 
 		charts.forEach(function(entry){
@@ -666,6 +689,92 @@
 		});
 
 
+
+
+
+		filterData.view='lf_resource_chart';
+		filterData.groups=[];
+        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+		        resource_report_data['overall']=data['data'];
+                if ( current_resource_report == 'overall' ){
+                        d3.select('#chart_consumption svg')
+                        .datum(resource_report_data['overall'])
+                        .transition().duration(500)
+                        .call(consumptionChart);
+                }
+            });
+		});
+
+		filterData.view='lf_resource_chart';
+		filterData.groups=['num_processors'];
+        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+                resource_report_data['size']=data['data'];
+                if ( current_resource_report == 'size' ){
+                        d3.select('#chart_consumption svg')
+                        .datum(resource_report_data['size'])
+                        .transition().duration(500)
+                        .call(consumptionChart);
+                }
+            });
+		});
+
+        filterData.view='lf_resource_chart';
+		filterData.groups=['cluster__name'];
+        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+                resource_report_data['cluster']=data['data'];
+                if ( current_resource_report == 'cluster' ){
+                        d3.select('#chart_consumption svg')
+                        .datum(resource_report_data['cluster'])
+                        .transition().duration(500)
+                        .call(consumptionChart);
+                }
+            });
+		});
+		filterData.view='lf_resource_chart';
+		filterData.groups=['queue__name'];
+        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+                resource_report_data['queue']=data['data'];
+                if ( current_resource_report == 'queue' ){
+                        d3.select('#chart_consumption svg')
+                        .datum(resource_report_data['queue'])
+                        .transition().duration(500)
+                        .call(consumptionChart);
+                }
+            });
+		});
+		filterData.view='lf_resource_chart';
+		filterData.groups=['user__name'];
+        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+                resource_report_data['user']=data['data'];
+                if ( current_resource_report == 'user' ){
+                        d3.select('#chart_consumption svg')
+                        .datum(resource_report_data['user'])
+                        .transition().duration(500)
+                        .call(consumptionChart);
+                }
+            });
+		});
+		filterData.view='lf_resource_chart';
+		filterData.groups=['projects__name'];
+        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+                resource_report_data['project']=data['data'];
+                if ( current_resource_report == 'project' ){
+                        d3.select('#chart_consumption svg')
+                        .datum(resource_report_data['user'])
+                        .transition().duration(500)
+                        .call(consumptionChart);
+                }
+            });
+		});
+
+
+
 	}
 
 
@@ -706,5 +815,23 @@
 </ul>
 
 <div id='chart_consumption'><svg style='height:500px'></svg></div>
+
+
+
+<h1>Resource Usage</h1>
+
+<ul id="chart_resources_nav" class="nav nav-tabs">
+    <li id="chart_resources_overall" class="active"><a href="#" onClick='set_active_consumption_chart("chart_resources", "overall"); return false;'>Overall</a></li>
+    <li id="chart_resources_size"><a href="#" onClick='set_active_consumption_chart("chart_resources", "size"); return false;'>By Job Size</a></li>
+    <li id="chart_resources_cluster"><a href="#" onClick='set_active_consumption_chart("chart_resources", "cluster"); return false;'>By Cluster</a></li>
+    <li id="chart_resources_project"><a href="#" onClick='set_active_consumption_chart("chart_resources", "project"); return false;'>By Project</a></li>
+    <li id="chart_resources_queue"><a href="#" onClick='set_active_consumption_chart("chart_resources", "queue"); return false;'>By Queue</a></li>
+    <li id="chart_resources_user"><a href="#" onClick='set_active_consumption_chart("chart_resources", "user"); return false;'>By User</a></li>
+</ul>
+
+<div id='chart_resources'><svg style='height:500px'></svg></div>
+
+
+
 
 {% endblock %}

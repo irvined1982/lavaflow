@@ -47,6 +47,9 @@ urlpatterns = patterns('',
                        url(r'^jobs/(?P<pk>\d+)$', DetailView.as_view(model=Job), name="lf_job_detail"),
 
                        url(
+                           r'^resource/(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$',
+                           'lavaFlow.views.resource_data', name='lf_resource_chart'),
+                       url(
                            r'^consumption/(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$',
                            'lavaFlow.views.consumption_bar_data', name='lf_consumption_chart'),
                        url(
