@@ -344,7 +344,7 @@
             .transition().duration(500)
             .call(consumptionChart);
         d3.select("#chart_consumption svg")
-            .datum(consumption_report_data[state]['chart'])
+            .datum(consumption_report_data[state])
             .transition().duration(500)
             .call(consumptionChart);
     }
