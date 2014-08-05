@@ -886,8 +886,21 @@ class Job(models.Model):
     user = models.ForeignKey(User)
     submit_host = models.ForeignKey(Host)
     submit_time = models.IntegerField()
+    submit_hour_of_day = models.IntegerField()
+    submit_day_of_week = models.IntegerField()
+    submit_day_of_month = models.IntegerField()
+    submit_week_of_year = models.IntegerField()
+    submit_month = models.IntegerField()
 
+    def save(self, *args, **kwargs):
+        d=self.submit_time_datetime()
+        self.submit_hour_of_day=d.hour
+        self.submit_day_of_week=d.weekday()
+        self.submit_day_of_month=d.day
+        self.submit_week_of_year=d.isocalendar()[1]
+        self.submit_month=d.month
 
+        super(Job, self).save(*args, **kwargs)
     def job_flow(self):
         edges=[]
         users={}
@@ -1101,6 +1114,15 @@ class Task(models.Model):
     job = models.ForeignKey(Job)
     user = models.ForeignKey(User)
     task_id = models.IntegerField()
+    submit_time = models.IntegerField()
+    submit_hour_of_day = models.IntegerField()
+    submit_day_of_week = models.IntegerField()
+    submit_day_of_month = models.IntegerField()
+    submit_week_of_year = models.IntegerField()
+    submit_month = models.IntegerField()
+
+    def submit_time_datetime(self):
+        return datetime.datetime.utcfromtimestamp(self.submit_time)
 
     def get_absolute_url(self):
         return reverse('lf_task_detail', args=[self.id])
@@ -1125,6 +1147,15 @@ class Task(models.Model):
             ['task_id'],
         ]
 
+    def save(self, *args, **kwargs):
+        self.submit_time = self.job.submit_time
+        d=self.submit_time_datetime()
+        self.submit_hour_of_day=d.hour
+        self.submit_day_of_week=d.weekday()
+        self.submit_day_of_month=d.day
+        self.submit_week_of_year=d.isocalendar()[1]
+        self.submit_month=d.month
+        super(Task, self).save(*args, **kwargs)
 
 class TaskLog(JobLog):
     task = models.ForeignKey(Task)
@@ -1211,12 +1242,44 @@ class Attempt(models.Model):
     projects = models.ManyToManyField(Project)
     execution_hosts = models.ManyToManyField(Host)
     submit_time = models.IntegerField()
-
+    submit_hour_of_day = models.IntegerField()
+    submit_day_of_week = models.IntegerField()
+    submit_day_of_month = models.IntegerField()
+    submit_week_of_year = models.IntegerField()
+    submit_month = models.IntegerField()
+    start_hour_of_day = models.IntegerField()
+    start_day_of_week = models.IntegerField()
+    start_day_of_month = models.IntegerField()
+    start_week_of_year = models.IntegerField()
+    start_month = models.IntegerField()
+    end_hour_of_day = models.IntegerField()
+    end_day_of_week = models.IntegerField()
+    end_day_of_month = models.IntegerField()
+    end_week_of_year = models.IntegerField()
+    end_month = models.IntegerField()
     def attempt_id(self):
         return Attempt.objects.filter(task_id=self.task_id, start_time__lt=self.start_time).count()
 
     def save(self, *args, **kwargs):
         self.submit_time = self.job.submit_time
+        d=self.submit_time_datetime()
+        self.submit_hour_of_day=d.hour
+        self.submit_day_of_week=d.weekday()
+        self.submit_day_of_month=d.day
+        self.submit_week_of_year=d.isocalendar()[1]
+        self.submit_month=d.month
+        d=self.start_time_datetime()
+        self.start_hour_of_day=d.hour
+        self.start_day_of_week=d.weekday()
+        self.start_day_of_month=d.day
+        self.start_week_of_year=d.isocalendar()[1]
+        self.start_month=d.month
+        d=self.end_time_datetime()
+        self.end_hour_of_day=d.hour
+        self.end_day_of_week=d.weekday()
+        self.end_day_of_month=d.day
+        self.end_week_of_year=d.isocalendar()[1]
+        self.end_month=d.month
         super(Attempt, self).save(*args, **kwargs)
 
     def submit_time_datetime(self):

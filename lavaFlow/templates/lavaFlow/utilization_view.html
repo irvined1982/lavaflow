@@ -132,6 +132,19 @@
 		return resourceChart;
 	});
 
+    // Add the resource usage chart
+	var submissionChart;
+	nv.addGraph(function() {
+		submissionChart = nv.models.multiBarChart();
+		d3.select('#chart_submission svg')
+			.datum([])
+			.transition().duration(500)
+			.call(resourceChart);
+		nv.utils.windowResize(submissionChart.update);
+		return submissionChart;
+	});
+
+
 	// Updates the RangeSlider widget, if there is data - loads data into charts.
 	function updateRangeSlider(){
 	$( "#slider" ).slider( "option", "disabled", true );
@@ -288,6 +301,17 @@
         user:[],
     };
 
+    var current_submission_report="overall";
+    var submission_report_data={
+        overall:[],
+        size:[],
+        cluster:[],
+        queue:[],
+        project:[],
+    };
+
+
+
     var current_util_report="overall";
     var util_report_data={
         overall:{
@@ -394,6 +418,29 @@
             .transition().duration(500)
             .call(consumptionChart);
     }
+    function set_active_submission_chart(selector, state){
+        current_util_report = state;
+        // Change the classes in the tabs...
+        var as=["overall", "cluster", "size", "queue", "project"];
+        var ws=selector+"_"+state;
+        $.each( as, function( index, value ){
+            var v = selector+"_"+value;
+            document.getElementById(v).className ="";
+            if (v.valueOf() === ws.valueOf()){
+                    document.getElementById(v).className ="active";
+            }
+        });
+
+        // Set the attributes for the active graph
+        d3.select("#chart_submission svg")
+            .datum(empty_chart)
+            .transition().duration(500)
+            .call(submissionChart);
+        d3.select("#chart_submission svg")
+            .datum(submission_report_data[state])
+            .transition().duration(500)
+            .call(submissionChart);
+    }
 
 	function clearWidgets(){
 		// Clears data from all widgets...
@@ -405,6 +452,10 @@
 			{
 				id:"#chart_consumption svg",
 				container:consumptionChart
+			},
+			{
+				id:"#chart_submission svg",
+				container:submissionChart
 			},
 			{
 			    id:"#chart_resources svg",
@@ -798,9 +849,73 @@
 
 
 
+        filterData.view='lf_submission_chart';
+		filterData.groups=[];
+        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+                submission_report_data['overall']=data['data'];
+                if ( current_submission_report == 'overall' ){
+                        d3.select('#chart_submission svg')
+                        .datum(submission_report_data['overall'])
+                        .transition().duration(500)
+                        .call(submissionChart);
+                }
+            });
+		});
+        filterData.view='lf_submission_chart';
+		filterData.groups=['num_processors'];
+        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+                submission_report_data['size']=data['data'];
+                if ( current_submission_report == 'size' ){
+                        d3.select('#chart_submission svg')
+                        .datum(submission_report_data['size'])
+                        .transition().duration(500)
+                        .call(submissionChart);
+                }
+            });
+		});
+        filterData.view='lf_submission_chart';
+		filterData.groups=['cluster__name'];
+        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+                submission_report_data['cluster']=data['data'];
+                if ( current_submission_report == 'cluster' ){
+                        d3.select('#chart_submission svg')
+                        .datum(submission_report_data['cluster'])
+                        .transition().duration(500)
+                        .call(submissionChart);
+                }
+            });
+		});
+
+        filterData.view='lf_submission_chart';
+		filterData.groups=['project__name'];
+        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+                submission_report_data['project']=data['data'];
+                if ( current_submission_report == 'project' ){
+                        d3.select('#chart_submission svg')
+                        .datum(submission_report_data['project'])
+                        .transition().duration(500)
+                        .call(submissionChart);
+                }
+            });
+		});
+        filterData.view='lf_submission_chart';
+		filterData.groups=['queue__name'];
+        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+		    $.getJSON(data.url, function(data) {
+                submission_report_data['queue']=data['data'];
+                if ( current_submission_report == 'queue' ){
+                        d3.select('#chart_submission svg')
+                        .datum(submission_report_data['queue'])
+                        .transition().duration(500)
+                        .call(submissionChart);
+                }
+            });
+		});
 	}
-
-
 	initializeReport();
 </script>
 
@@ -855,7 +970,19 @@ were pending at that time.  Pending tasks are those that have been submitted to 
 
 <div id='chart_resources'><svg style='height:500px'></svg></div>
 
+<h1>Job Submission</h1>
+<p>Shows data on when jobs were submitted to the cluster</p>
 
+<ul id="chart_submission_nav" class="nav nav-tabs">
+    <li id="chart_submission_overall" class="active"><a href="#" onClick='set_active_submission_chart("chart_submission", "overall"); return false;'>By Hour</a></li>
+    <li id="chart_submission_size"><a href="#" onClick='set_active_submission_chart("chart_submission", "size"); return false;'>By Day of Week</a></li>
+    <li id="chart_submission_project"><a href="#" onClick='set_active_submission_chart("chart_submission", "project"); return false;'>By Day of Month</a></li>
+    <li id="chart_submission_cluster"><a href="#" onClick='set_active_submission_chart("chart_submission", "cluster"); return false;'>By Week of Year</a></li>
+    <li id="chart_submission_queue"><a href="#" onClick='set_active_submission_chart("chart_submission", "queue"); return false;'>By Month</a></li>
+
+</ul>
+
+<div id='chart_submission'><svg style='height:500px'></svg></div>
 
 
 {% endblock %}

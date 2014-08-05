@@ -1102,6 +1102,101 @@ def consumption_bar_data(request, start_time_js=0, end_time_js=0, exclude_string
     return create_js_success(data)
 
 
+def submission_bar_data(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
+    """
+    Generates chart data for the submission chart, this shows when jobs are being submitted into the cluster.
+
+    :param request: Request object
+    :param start_time_js: Start time for the chart data, in milliseconds since epoch, this is converted to the nearest minute
+    :param end_time_js: End time for the chart data, in milliseconds since epoch, this is converted to the nearest minute
+    :param exclude_string: a string of options to exclude data
+    :param filter_string: s string of options to filter data
+    :param group_string: a string of fields to group by
+    :return: json data object.
+
+    """
+    # Start time in milliseconds, rounded to nearest minute.
+    start_time_js = int(int(start_time_js) / 60000) * 60000
+    # End time in milliseconds, rounded to nearest minute.
+    end_time_js = int(int(end_time_js) / 60000) * 60000
+
+    # Attempts now contains all attempts that were active in this time period, ie, submitted before
+    # the end and finished after the start time.
+    attempts = get_attempts(start_time_js, end_time_js, exclude_string, filter_string)
+    # From this point on, attempts is only used as part of the IN statement, it is essentially just a big list of
+    # IDs that must be compared.
+
+    # Group args is no amended so that all grouping is now relative to the AttemptResourceUsage table.
+    group_args = group_string_to_group_args(group_string)
+    group_args = ["attempt__%s" % a for a in group_args]
+
+    jobs = Job.objects.filter(attempt__pk__in=attempts).distinct()
+    vargs=group_args + ["submit_hour"]
+
+    jobs = jobs.values(*vargs)
+
+    jobs = jobs.annotate(
+        Count('job_id'),
+        )
+
+    data = {}
+    for row in jobs:
+        group_name = u""
+        for n in group_args:
+            if n == "attempt__status__exited_cleanly" and "attempt__status__name" in group_args:
+                continue
+            if len(group_name) > 0:
+                group_name += u" "
+            if n == "attempt__num_processors":
+                group_name += u"%s Processors" % row[n]
+            elif n == "attempt__status__name":
+                group_name += u"%s (%s)" % (row[n], "Clean" if row['attempt__status__exited_cleanly'] else "Failed")
+            group_name += u"%s" % row[n]
+        if len(group_name) <1:
+            group_name=u"Overall"
+        if group_name not in data:
+            data[group_name] = {
+                'key': group_name,
+                'values': {
+                    '0':0,
+                    '1':0,
+                    '2':0,
+                    '3':0,
+                    '4':0,
+                    '5':0,
+                    '6':0,
+                    '7':0,
+                    '8':0,
+                    '9':0,
+                    '10':0,
+                    '11':0,
+                    '12':0,
+                    '13':0,
+                    '14':0,
+                    '15':0,
+                    '16':0,
+                    '17':0,
+                    '18':0,
+                    '19':0,
+                    '20':0,
+                    '21':0,
+                    '22':0,
+                    '23':0,
+
+                }
+            }
+        data[group_name]['values'][row['submit_hour']] += row['job_id__count']
+    data = sorted(data.values(), key=lambda v: v['key'])
+    for series in data:
+        series['values'] = [{'x': k, 'y': v} for k, v in series['values'].iteritems()]
+
+    return create_js_success(data)
+
+
+
+
+
+
 @cache_page(60 * 60 * 2)
 def utilization_view(request, start_time_js=None, end_time_js=None, exclude_string="none", filter_string="none",
                      group_string=""):
