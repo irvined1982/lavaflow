@@ -721,7 +721,7 @@
 		    $.getJSON(data.url, function(data) {
 		        resource_report_data['overall']=data['data'];
                 if ( current_resource_report == 'overall' ){
-                        d3.select('#chart_consumption svg')
+                        d3.select('#chart_resources svg')
                         .datum(resource_report_data['overall'])
                         .transition().duration(500)
                         .call(consumptionChart);
@@ -735,7 +735,7 @@
 		    $.getJSON(data.url, function(data) {
                 resource_report_data['size']=data['data'];
                 if ( current_resource_report == 'size' ){
-                        d3.select('#chart_consumption svg')
+                        d3.select('#chart_resources svg')
                         .datum(resource_report_data['size'])
                         .transition().duration(500)
                         .call(consumptionChart);
@@ -749,7 +749,7 @@
 		    $.getJSON(data.url, function(data) {
                 resource_report_data['cluster']=data['data'];
                 if ( current_resource_report == 'cluster' ){
-                        d3.select('#chart_consumption svg')
+                        d3.select('#chart_resources svg')
                         .datum(resource_report_data['cluster'])
                         .transition().duration(500)
                         .call(consumptionChart);
@@ -762,7 +762,7 @@
 		    $.getJSON(data.url, function(data) {
                 resource_report_data['queue']=data['data'];
                 if ( current_resource_report == 'queue' ){
-                        d3.select('#chart_consumption svg')
+                        d3.select('#chart_resources svg')
                         .datum(resource_report_data['queue'])
                         .transition().duration(500)
                         .call(consumptionChart);
@@ -775,7 +775,7 @@
 		    $.getJSON(data.url, function(data) {
                 resource_report_data['user']=data['data'];
                 if ( current_resource_report == 'user' ){
-                        d3.select('#chart_consumption svg')
+                        d3.select('#chart_resources svg')
                         .datum(resource_report_data['user'])
                         .transition().duration(500)
                         .call(consumptionChart);
@@ -788,7 +788,7 @@
 		    $.getJSON(data.url, function(data) {
                 resource_report_data['project']=data['data'];
                 if ( current_resource_report == 'project' ){
-                        d3.select('#chart_consumption svg')
+                        d3.select('#chart_resources svg')
                         .datum(resource_report_data['user'])
                         .transition().duration(500)
                         .call(consumptionChart);
