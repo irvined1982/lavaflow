@@ -949,10 +949,11 @@ def consumption_bar_data(request, start_time_js=0, end_time_js=0, exclude_string
                     "Total Tasks":0
                 }
             }
-            data[group_name]['values']['Sum CPU'] += row['cpu_time__sum']
-            data[group_name]['values']['Sum Wall'] += row['wall_time__sum']
-            data[group_name]['values']['Sum Pend'] += row['pend_time__sum']
-            data[group_name]['values']['Total Tasks'] += row['num_processors__count']
+        print data
+        data[group_name]['values']['Sum CPU'] += row['cpu_time__sum']
+        data[group_name]['values']['Sum Wall'] += row['wall_time__sum']
+        data[group_name]['values']['Sum Pend'] += row['pend_time__sum']
+        data[group_name]['values']['Total Tasks'] += row['num_processors__count']
     data=sorted(data.values(),key=lambda v: v['key'])
     for series in data:
         series['values'] = [{'x':k, 'y':v} for k,v in series['values'].iteritems()]
