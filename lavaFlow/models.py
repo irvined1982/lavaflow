@@ -1062,6 +1062,53 @@ class TaskLog(JobLog):
 
 
 class Attempt(models.Model):
+    """
+
+    Each time a task is started on one or more compute nodes, it is called an attempt.  Tasks that fail and are
+    restarted may have multiple attempts.
+
+    .. py:attribute:: cluster
+
+    Cluster object that this attempt is part of.
+
+    .. py:attribute:: job
+
+    Job object that this attempt is part of.
+
+    .. py:attribute:: task
+
+    Task object that this attempt is part of.
+
+    .. py:attribute:: user
+
+    User object that this attempt belongs to
+
+    .. py:attribute:: num_processors
+
+    Number of processors this attempt was dispatched to
+
+    .. py:attribute:: projects
+
+    QuerySet containing all Project objects that this attempt is part of.  May be part of multiple projects
+    where supported by the scheduling environment.
+
+    .. py:attribute:: execution_hosts
+
+    QuerySet containing all Host objects that where assigned to this attempt.  Not all scheduling systems are able to
+    report which hosts were used for a task.  In that case only the primary host will be given.
+
+    .. py:attribute:: submit_time
+
+    The time in seconds since epoch UTC that the  
+    .. py:attribute:: start_time
+    .. py:attribute:: end_time
+    .. py:attribute:: cpu_time
+    .. py:attribute:: wall_time
+    .. py:attribute:: pend_time
+    .. py:attribute:: queue
+    .. py:attribute:: status
+    .. py:attribute:: command
+    """
     cluster = models.ForeignKey(Cluster)
     job = models.ForeignKey(Job)
     task = models.ForeignKey(Task)

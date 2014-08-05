@@ -804,9 +804,10 @@
 	initializeReport();
 </script>
 
-
-
 <h1>Utilization</h1>
+<p>The Utilization Chart shows the utilization of the cluster grouped by the selected field.  Utilization shows the number
+of processors that were in use at any given time, stacked on top of this are the corresponding number of processors that
+were pending at that time.  Pending tasks are those that have been submitted to the cluster but are not executing.</p>
 
 <ul id="chart_utilization_nav" class="nav nav-tabs">
     <li id="chart_utilization_overall" class="active"><a href="#" onClick='set_active_util_chart("chart_utilization", "overall"); return false;'>Overall</a></li>
@@ -821,12 +822,10 @@
 </div>
 <div id="table_utilization"></div>
 
-
-
-
-
 <h1>Consumption</h1>
-
+<p>The resource consumption chart shows the total amount of time (in seconds) and the number of tasks that were active
+    during this time.  Use this chart to see what the net consumption of the cluster is for a specific group of metrics.
+    For example to see which job sizes consume the most CPU time on the cluster.</p>
 <ul id="chart_consumption_nav" class="nav nav-tabs">
     <li id="chart_consumption_overall" class="active"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "overall"); return false;'>Overall</a></li>
     <li id="chart_consumption_size"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "size"); return false;'>By Job Size</a></li>
@@ -840,9 +839,11 @@
 <div id='chart_consumption'><svg style='height:500px'></svg></div>
 
 
-
 <h1>Resource Usage</h1>
-
+<p>Most schedulers gather resource usage information using the getrusage() system call. Not all schedulers support this
+    operation, data will not be available for those jobs.  Use this chart to understand the characteristics of the jobs,
+    how much RAM they use, if they are swapping, and if there are contention issues on the cluster for resources.
+</p>
 <ul id="chart_resources_nav" class="nav nav-tabs">
     <li id="chart_resources_overall" class="active"><a href="#" onClick='set_active_resource_chart("chart_resources", "overall"); return false;'>Overall</a></li>
     <li id="chart_resources_size"><a href="#" onClick='set_active_resource_chart("chart_resources", "size"); return false;'>By Job Size</a></li>
