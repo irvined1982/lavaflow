@@ -1099,15 +1099,40 @@ class Attempt(models.Model):
 
     .. py:attribute:: submit_time
 
-    The time in seconds since epoch UTC that the
+    The time in seconds since epoch UTC that the task was submitted to the cluster
+
     .. py:attribute:: start_time
+
+    The time in seconds since epoch UTC that the task was executed
+
     .. py:attribute:: end_time
+
+    The time in seconds since epoch UTC that the task ended
+
     .. py:attribute:: cpu_time
+
+    The cpu time in seconds for the job.
+
     .. py:attribute:: wall_time
+
+    The wall clock time in seconds for the job.
+
     .. py:attribute:: pend_time
+
+    The number of seconds the job was pending
+
     .. py:attribute:: queue
+
+    The Queue object the job was in
+
     .. py:attribute:: status
+
+    The Exit Status of the job
+
     .. py:attribute:: command
+
+    The command executed by the job
+
     """
     cluster = models.ForeignKey(Cluster)
     job = models.ForeignKey(Job)
