@@ -932,7 +932,8 @@ def utilization_bar_size(request, start_time_js=0, end_time_js=0, exclude_string
             ]
         })
 
-    return HttpResponse(json.dumps(data, indent=3, sort_keys=True), content_type="application/json")
+    return create_js_success(data)
+
 
 
 def utilization_bar_exit(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
@@ -970,7 +971,7 @@ def utilization_bar_exit(request, start_time_js=0, end_time_js=0, exclude_string
             ]
         })
 
-    return HttpResponse(json.dumps(data, indent=3, sort_keys=True), content_type="application/json")
+    return create_js_success(data)
 
 
 
