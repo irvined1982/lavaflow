@@ -333,9 +333,9 @@
         $.each( as, function( index, value ){
             var v = selector+"_"+value;
             document.getElementById(v).className ="";
-        if (v.valueOf() === ws.valueOf()){
-                document.getElementById(v).className ="active";
-        }
+            if (v.valueOf() === ws.valueOf()){
+                    document.getElementById(v).className ="active";
+            }
         });
 
         // Set the attributes for the active graph
