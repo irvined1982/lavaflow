@@ -571,10 +571,10 @@
 		    consumption_report_data['overall']=data['data'];
 		    if ( current_consumption_report == 'overall' ){
 			    $.getJSON(data.url, function(data) {
-                    d3.select('#consumption_chart svg')
+                    d3.select('#chart_consumption svg')
                     .datum(data)
                     .transition().duration(500)
-                    .call(consumption_chart);
+                    .call(chart_consumption);
                 });
             }
 		});
@@ -585,10 +585,10 @@
 		    consumption_report_data['exit']=data['data'];
 		    if ( current_consumption_report == 'exit' ){
 			    $.getJSON(data.url, function(data) {
-                    d3.select('#consumption_chart svg')
+                    d3.select('#chart_consumption svg')
                     .datum(data)
                     .transition().duration(500)
-                    .call(consumption_chart);
+                    .call(chart_consumption);
                 });
             }
 		});
@@ -600,10 +600,10 @@
 		    consumption_report_data['size']=data['data'];
 		    if ( current_consumption_report == 'size' ){
 			    $.getJSON(data.url, function(data) {
-                    d3.select('#consumption_chart svg')
+                    d3.select('#chart_consumption svg')
                     .datum(data)
                     .transition().duration(500)
-                    .call(consumption_chart);
+                    .call(chart_consumption);
                 });
             }
 		});
@@ -639,11 +639,11 @@
 <h1>Consumption</h1>
 
 <ul id="chart_utilization_nav" class="nav nav-tabs">
-    <li id="consumption_chart_overall" class="active"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "overall"); return false;'>Overall</a></li>
-    <li id="consumption_chart_size"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "size"); return false;'>By Job Size</a></li>
-    <li id="consumption_chart_exit"><a href="#" onClick='set_active_util_chart("chart_utilization", "exit"); return false;'>By Exit Status</a></li>
+    <li id="chart_consumption_overall" class="active"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "overall"); return false;'>Overall</a></li>
+    <li id="chart_consumption_size"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "size"); return false;'>By Job Size</a></li>
+    <li id="chart_consumption_exit"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "exit"); return false;'>By Exit Status</a></li>
 </ul>
 
-<div id='consumption_chart'><svg style='height:500px'></svg></div>
+<div id='chart_consumption'><svg style='height:500px'></svg></div>
 
 {% endblock %}
