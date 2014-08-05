@@ -1188,7 +1188,7 @@ def submission_bar_data(request, start_time_js=0, end_time_js=0, exclude_string=
         data[group_name]['values']["%02d:00" %row['submit_hour_of_day']] += row['job_id__count']
     data = sorted(data.values(), key=lambda v: v['key'])
     for series in data:
-        series['values'] = [{'x': k, 'y': v} for k, v in series['values'].iteritems()]
+        series['values'] = sorted( [{'x': k, 'y': v} for k, v in series['values'].iteritems()], key=lambda v: v['x'])
 
     return create_js_success(data)
 
