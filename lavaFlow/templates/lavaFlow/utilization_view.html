@@ -117,7 +117,7 @@ function create_chart(chart_name){
 function create_charts(){
     for (var chart_name in chart_data){
         create_chart(chart_name);
-     
+
     }
 }
 
@@ -467,7 +467,7 @@ function create_charts(){
 
     function load_chart(chart_name, view_name){
         var chart_selector="#" + chart_name + " svg";
-        var chart_selector="#" + chart_name + "_table";
+        var table_selector="#" + chart_name + "_table";
         var filterData={
 			filters:filters,
 			excludes:excludes,
