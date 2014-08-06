@@ -528,12 +528,12 @@ of processors that were in use at any given time, stacked on top of this are the
 were pending at that time.  Pending tasks are those that have been submitted to the cluster but are not executing.</p>
 
 <ul id="chart_utilization_nav" class="nav nav-tabs">
-    <li id="chart_utilization_overall" class="active"><a href="#" onClick='set_active_util_chart("chart_utilization", "overall"); return false;'>Overall</a></li>
-    <li id="chart_utilization_cluster"><a href="#" onClick='set_active_util_chart("chart_utilization", "cluster"); return false;'>By Cluster</a></li>
-    <li id="chart_utilization_queue"><a href="#" onClick='set_active_util_chart("chart_utilization", "queue"); return false;'>By Queue</a></li>
-    <li id="chart_utilization_project"><a href="#" onClick='set_active_util_chart("chart_utilization", "project"); return false;'>By Project</a></li>
-    <li id="chart_utilization_user"><a href="#" onClick='set_active_util_chart("chart_utilization", "user"); return false;'>By User</a></li>
-    <li id="chart_utilization_size"><a href="#" onClick='set_active_util_chart("chart_utilization", "size"); return false;'>By Size</a></li>
+    <li id="chart_utilization_overall" class="active"><a href="#" onClick='set_active_chart("chart_utilization", "overall"); return false;'>Overall</a></li>
+    <li id="chart_utilization_cluster"><a href="#" onClick='set_active_chart("chart_utilization", "cluster"); return false;'>By Cluster</a></li>
+    <li id="chart_utilization_queue"><a href="#" onClick='set_active_chart("chart_utilization", "queue"); return false;'>By Queue</a></li>
+    <li id="chart_utilization_project"><a href="#" onClick='set_active_chart("chart_utilization", "project"); return false;'>By Project</a></li>
+    <li id="chart_utilization_user"><a href="#" onClick='set_active_chart("chart_utilization", "user"); return false;'>By User</a></li>
+    <li id="chart_utilization_size"><a href="#" onClick='set_active_chart("chart_utilization", "size"); return false;'>By Size</a></li>
 </ul>
 <div id="chart_utilization">
     <svg height="400px"></svg>
@@ -545,13 +545,13 @@ were pending at that time.  Pending tasks are those that have been submitted to 
     during this time.  Use this chart to see what the net consumption of the cluster is for a specific group of metrics.
     For example to see which job sizes consume the most CPU time on the cluster.</p>
 <ul id="chart_consumption_nav" class="nav nav-tabs">
-    <li id="chart_consumption_overall" class="active"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "overall"); return false;'>Overall</a></li>
-    <li id="chart_consumption_size"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "size"); return false;'>By Job Size</a></li>
-    <li id="chart_consumption_exit"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "exit"); return false;'>By Exit Status</a></li>
-    <li id="chart_consumption_cluster"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "cluster"); return false;'>By Cluster</a></li>
-    <li id="chart_consumption_project"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "project"); return false;'>By Project</a></li>
-    <li id="chart_consumption_queue"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "queue"); return false;'>By Queue</a></li>
-    <li id="chart_consumption_user"><a href="#" onClick='set_active_consumption_chart("chart_consumption", "user"); return false;'>By User</a></li>
+    <li id="chart_consumption_overall" class="active"><a href="#" onClick='set_active_chart("chart_consumption", "overall"); return false;'>Overall</a></li>
+    <li id="chart_consumption_size"><a href="#" onClick='set_active_chart("chart_consumption", "size"); return false;'>By Job Size</a></li>
+    <li id="chart_consumption_exit"><a href="#" onClick='set_active_chart("chart_consumption", "exit"); return false;'>By Exit Status</a></li>
+    <li id="chart_consumption_cluster"><a href="#" onClick='set_active_chart("chart_consumption", "cluster"); return false;'>By Cluster</a></li>
+    <li id="chart_consumption_project"><a href="#" onClick='set_active_chart("chart_consumption", "project"); return false;'>By Project</a></li>
+    <li id="chart_consumption_queue"><a href="#" onClick='set_active_chart("chart_consumption", "queue"); return false;'>By Queue</a></li>
+    <li id="chart_consumption_user"><a href="#" onClick='set_active_chart("chart_consumption", "user"); return false;'>By User</a></li>
 </ul>
 
 <div id='chart_consumption'><svg style='height:500px'></svg></div>
@@ -563,12 +563,12 @@ were pending at that time.  Pending tasks are those that have been submitted to 
     how much RAM they use, if they are swapping, and if there are contention issues on the cluster for resources.
 </p>
 <ul id="chart_resources_nav" class="nav nav-tabs">
-    <li id="chart_resources_overall" class="active"><a href="#" onClick='set_active_resource_chart("chart_resources", "overall"); return false;'>Overall</a></li>
-    <li id="chart_resources_size"><a href="#" onClick='set_active_resource_chart("chart_resources", "size"); return false;'>By Job Size</a></li>
-    <li id="chart_resources_cluster"><a href="#" onClick='set_active_resource_chart("chart_resources", "cluster"); return false;'>By Cluster</a></li>
-    <li id="chart_resources_project"><a href="#" onClick='set_active_resource_chart("chart_resources", "project"); return false;'>By Project</a></li>
-    <li id="chart_resources_queue"><a href="#" onClick='set_active_resource_chart("chart_resources", "queue"); return false;'>By Queue</a></li>
-    <li id="chart_resources_user"><a href="#" onClick='set_active_resource_chart("chart_resources", "user"); return false;'>By User</a></li>
+    <li id="chart_resources_overall" class="active"><a href="#" onClick='set_active_chart("chart_resources", "overall"); return false;'>Overall</a></li>
+    <li id="chart_resources_size"><a href="#" onClick='set_active_chart("chart_resources", "size"); return false;'>By Job Size</a></li>
+    <li id="chart_resources_cluster"><a href="#" onClick='set_active_chart("chart_resources", "cluster"); return false;'>By Cluster</a></li>
+    <li id="chart_resources_project"><a href="#" onClick='set_active_chart("chart_resources", "project"); return false;'>By Project</a></li>
+    <li id="chart_resources_queue"><a href="#" onClick='set_active_chart("chart_resources", "queue"); return false;'>By Queue</a></li>
+    <li id="chart_resources_user"><a href="#" onClick='set_active_chart("chart_resources", "user"); return false;'>By User</a></li>
 </ul>
 
 <div id='chart_resources'><svg style='height:500px'></svg></div>
@@ -577,11 +577,11 @@ were pending at that time.  Pending tasks are those that have been submitted to 
 <p>Shows data on when jobs were submitted to the cluster</p>
 
 <ul id="chart_submission_nav" class="nav nav-tabs">
-    <li id="chart_submission_overall" class="active"><a href="#" onClick='set_active_submission_chart("chart_submission", "overall"); return false;'>Overall</a></li>
-    <li id="chart_submission_size"><a href="#" onClick='set_active_submission_chart("chart_submission", "size"); return false;'>By Job Size</a></li>
-    <li id="chart_submission_cluster"><a href="#" onClick='set_active_submission_chart("chart_submission", "cluster"); return false;'>By Cluster</a></li>
-    <li id="chart_submission_project"><a href="#" onClick='set_active_submission_chart("chart_submission", "project"); return false;'>By Project</a></li>
-    <li id="chart_submission_queue"><a href="#" onClick='set_active_submission_chart("chart_submission", "queue"); return false;'>By Queue</a></li>
+    <li id="chart_submission_overall" class="active"><a href="#" onClick='set_active_chart("chart_submission", "overall"); return false;'>Overall</a></li>
+    <li id="chart_submission_size"><a href="#" onClick='set_active_chart("chart_submission", "size"); return false;'>By Job Size</a></li>
+    <li id="chart_submission_cluster"><a href="#" onClick='set_active_chart("chart_submission", "cluster"); return false;'>By Cluster</a></li>
+    <li id="chart_submission_project"><a href="#" onClick='set_active_chart("chart_submission", "project"); return false;'>By Project</a></li>
+    <li id="chart_submission_queue"><a href="#" onClick='set_active_chart("chart_submission", "queue"); return false;'>By Queue</a></li>
 
 </ul>
 
