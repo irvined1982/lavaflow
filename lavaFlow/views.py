@@ -932,7 +932,7 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
             vs.append(total)
         f = interp1d(ts, vs, copy=False, bounds_error=False, fill_value=0)
         s['values'] = [{'x': time, 'y': float(f(time))} for time in times]
-    return create_js_success(serieses.values(), message="")
+    return create_js_success(sorted(serieses.values(), key=lambda a: a['key']), message="")
 
 
 def get_attempts(start_time_js, end_time_js, exclude_string, filter_string):
