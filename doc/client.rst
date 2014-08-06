@@ -1,24 +1,9 @@
+Client Tools Installation
+=========================
 
-Web Server Installation
-=======================
-
-LavaFlow is a django application. It is installed and configured just like any other Django application would be. The
-following steps are required to install LavaFlow.
-
-Install Django
---------------
-
-If you have not already done so, `Install Django <https://docs.djangoproject.com/en/1.6/intro/install/>`_.
-
-Django Project
---------------
-
-Create and configure a django project. This can be done by following `these steps <https://docs.djangoproject.com/en/1.6/intro/tutorial01/#creating-a-project>`_.
-
-Web Server Configuration
-------------------------
-
-Configure Lavaflow as a WSGI application as prescribed in the Django tutorial.
+LavaFlow comes with client tooling for various scheduling environments which enable the administator to import data from
+the cluster. This is typically done on the cluster front end, but it can be done on any machine that has access to the
+log files regardless if that machine is actually part of the  cluster environment.
 
 Download lavaFlow
 -----------------
@@ -35,21 +20,22 @@ Use setuptools to install the module.::
 
     $ sudo python setup.py install
 
-Activate lavaFlow
------------------
+This will install the lava-import-openlava script which is used to import data.
 
-Install lavaFlow as an application in your django project.::
+Openlava-python bindings
+------------------------
 
-    INSTALLED_APPS = (
-    ...
-        'lavaFlow',
-    ...
-    )
+In order to read and upload log files from openlava, you need to install the openlava python bindings.  These are used
+only by the upload tools for openlava.  If you are not using openlava, you do not need to install these.
 
-Configure the URLs for lavaFlow. Open urls.py in your django project, and include the url configuration for lavaFlow::
+The openlava import client does not need to communicate with the cluster, it does however require access to the openlava
+API, so openlava will need to be built even if it is not active.  This is in order to parse the log files.  Openlava
+installation and configuration is out of hte scope of this document.  It is however assumed that the openlava
+libraries are available.
 
-    urlpatterns = patterns('',
-        url(r'^', include('lavaFlow.urls')),
 
-You can now view lavaFlow by visiting your web server.
+Install the Openlava python bindings.::
 
+    $ git clone https://github.com/irvined1982/openlava-python.git
+    $ cd openlava-python/openlava/
+    $ python setup.py install
