@@ -455,11 +455,11 @@ function create_charts(){
 	        d3.select(selector)
                 .datum(empty_chart)
                 .transition().duration(500)
-                .call(chart_data[c].chart);
+                .call(chart_data[c_name].chart);
             d3.select(selector)
                 .datum([])
                 .transition().duration(500)
-                .call(chart_data[c].chart);
+                .call(chart_data[c_name].chart);
             $("#"+c_name+"_table").html('Updating.....');
 	    }
 
