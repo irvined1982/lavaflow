@@ -537,7 +537,11 @@ function create_charts(){
 		filterData.view=chart_data[chart_name].chart_view;
 
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-            $.getJSON(data.url, function(data) {
+		    var params="";
+		    if (field.length > 0){
+		        params="?" + $.param({field:field});
+		    }
+            $.getJSON(data.url + params, function(data) {
                 var chart=chart_data[chart_name];
 		        var view=chart.data[view_name];
 
