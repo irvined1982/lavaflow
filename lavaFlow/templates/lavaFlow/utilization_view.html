@@ -460,7 +460,9 @@ function create_charts(){
                 .datum([])
                 .transition().duration(500)
                 .call(chart_data[c_name].chart);
-            $("#"+c_name+"_table").html('Updating.....');
+            if (chart_data[c_name].hasOwnProperty( "table_view" )){
+                $("#"+c_name+"_table").html('Updating.....');
+            }
 	    }
 
 	}
