@@ -538,7 +538,7 @@ function create_charts(){
 
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 		    var params="";
-		    if (field.length > 0){
+		    if (field && field.length > 0){
 		        params="?" + $.param({field:field});
 		    }
             $.getJSON(data.url + params, function(data) {
