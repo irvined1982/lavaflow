@@ -81,68 +81,40 @@
 			}
 		},
 	});
-	
 
+    for (var chart_name in chart_data){
+        var this_chart=chart_data[chart_name];
+        var chart_selector="#" + chart_name + " svg";
 
-
-
-
-
-
-
-    // Add the utilization chart
-	var utilChart;
-	nv.addGraph(function() {
-		utilChart = nv.models.stackedAreaChart();
-		utilChart.clipEdge(true);
-		utilChart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d)) });
-		utilChart.xAxis.rotateLabels(-45);
-		utilChart.margin({bottom: 120, left:100});
-		utilChart.xAxis.axisLabel('Date');
-		utilChart.showControls(false);
-		d3.select('#chart_utilization svg')
-		.datum([])
-		.transition().duration(500)
-		.call(utilChart);
-		nv.utils.windowResize(utilChart.update);
-		return utilChart;
-	});
-
-    // Add the consumption chart
-	var consumptionChart;
-	nv.addGraph(function() {
-		consumptionChart = nv.models.multiBarChart();
-		d3.select('#chart_consumption svg')
-			.datum([])
-			.transition().duration(500)
-			.call(consumptionChart);
-		nv.utils.windowResize(consumptionChart.update);
-		return consumptionChart;
-	});
-
-    // Add the resource usage chart
-	var resourceChart;
-	nv.addGraph(function() {
-		resourceChart = nv.models.multiBarChart();
-		d3.select('#chart_resources svg')
-			.datum([])
-			.transition().duration(500)
-			.call(resourceChart);
-		nv.utils.windowResize(resourceChart.update);
-		return resourceChart;
-	});
-
-    // Add the resource usage chart
-	var submissionChart;
-	nv.addGraph(function() {
-		submissionChart = nv.models.multiBarChart();
-		d3.select('#chart_submission svg')
-			.datum([])
-			.transition().duration(500)
-			.call(resourceChart);
-		nv.utils.windowResize(submissionChart.update);
-		return submissionChart;
-	});
+        if (this_chart.chart_type=="area"){
+            nv.addGraph(function() {
+                this_chart.chart = nv.models.stackedAreaChart();
+                this_chart.chart.clipEdge(true);
+                this_chart.chart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d)) });
+                this_chart.chart.xAxis.rotateLabels(-45);
+                this_chart.chart.margin({bottom: 120, left:100});
+                this_chart.chart.xAxis.axisLabel('Date');
+                this_chart.chart.showControls(false);
+                d3.select(chart_selector)
+                .datum([])
+                .transition().duration(500)
+                .call(this_chart.chart);
+                nv.utils.windowResize(this_chart.chart.update);
+                return this_chart.chart;
+	        });
+        }
+        if (this_chart.chart_type=="bar"){
+            nv.addGraph(function() {
+                this_chart.chart = nv.models.multiBarChart();
+                d3.select(chart_selector)
+                    .datum([])
+                    .transition().duration(500)
+                    .call(this_chart.chart);
+                nv.utils.windowResize(this_chart.chart.update);
+                return this_chart.chart;
+        	});
+        }
+    }
 
 
 	// Updates the RangeSlider widget, if there is data - loads data into charts.
@@ -279,207 +251,213 @@
 		updateReport();
 	}
 
-
-    var current_resource_report="overall";
-    var resource_report_data={
-        overall:[],
-        size:[],
-        cluster:[],
-        queue:[],
-        project:[],
-        user:[],
-    };
-
-    var current_consumption_report="overall";
-    var consumption_report_data={
-        overall:[],
-        size:[],
-        exit:[],
-        cluster:[],
-        queue:[],
-        project:[],
-        user:[],
-    };
-
-    var current_submission_report="overall";
-    var submission_report_data={
-        overall:[],
-        size:[],
-        cluster:[],
-        queue:[],
-        project:[],
-    };
-
-
-
-    var current_util_report="overall";
-    var util_report_data={
-        overall:{
-            chart:[],
-            table:""
-        },
-        cluster:{
-                chart:[],
-                table:""
-            },
-        queue:{
-                chart:[],
-                table:""
-            },
-        user:{
-                chart:[],
-                table:""
-            },
-        size:{
-                chart:[],
-                table:""
-            },
-        project:{
-                chart:[],
-                table:""
+    var chart_data={
+        chart_resources:{
+            active: overall,
+            chart: null,
+            chart_type: "bar",
+            chart_view: "lf_resource_chart"
+            data:{
+                overall:{
+                    groups:[],
+                    chart_data:[],
+                    table_data:[]
+                },
+                cluster:{
+                    groups:["cluster__name],
+                    chart_data:[],
+                    table_data:[]
+                },
+                size:{
+                    groups:["num_processors],
+                    chart_data:[],
+                    table_data:[]
+                },
+                queue:{
+                    groups:["queue__name],
+                    chart_data:[],
+                    table_data:[]
+                },
+                user:{
+                    groups:["user__name],
+                    chart_data:[],
+                    table_data:[]
+                },
+                project:{
+                    groups:["projects__name],
+                    chart_data:[],
+                    table_data:[]
+                },
             }
-       };
+        },
+        chart_submission:{
+            active: overall,
+            chart: null,
+            chart_type: "bar",
+            chart_view: "lf_submission_chart"
+            data:{
+                overall:{
+                    groups:[],
+                    chart_data:[],
+                    table_data:[]
+                },
+                size:{
+                    groups:["num_processors"],
+                    chart_data:[],
+                    table_data:[]
+                },
+                cluster:{
+                    groups:["cluster__name"],
+                    chart_data:[],
+                    table_data:[]
+                },
+                project:{
+                    groups:["projects__name"],
+                    chart_data:[],
+                    table_data:[]
+                },
+                queue:{
+                    groups:["queue__name"],
+                    chart_data:[],
+                    table_data:[]
+                },
+            },
+        },
+        chart_consumption:{
+            active: overall,
+            chart: null,
+            chart_type: "bar",
+            chart_view: "lf_consumption_chart"
+            data:{
+                overall:{
+                    groups:[],
+                    chart_data:[],
+                    table_data:[]
+                },
+                exit:{
+                    groups:["status__name"],
+                    chart_data:[],
+                    table_data:[]
+                },
+                size:{
+                    groups:["num_processors"],
+                    chart_data:[],
+                    table_data:[]
+                },
+                cluster:{
+                    groups:["cluster__name"],
+                    chart_data:[],
+                    table_data:[]
+                },
+                queue:{
+                    groups:["queue__name"],
+                    chart_data:[],
+                    table_data:[]
+                },
+                user:{
+                    groups:["user__name"],
+                    chart_data:[],
+                    table_data:[]
+                },
+                project:{
+                    groups:["projects__name"],
+                    chart_data:[],
+                    table_data:[]
+                },
+            },
+        },
+        chart_utilization:{
+            active: overall,
+            chart: null,
+            chart_type: "area",
+            chart_view: "lf_util_chart_view"
+            table_view:"lf_utilization_table",
+            data:{
+                overall:{
+                    groups:[],
+                    chart_data:[],
+                    table_data:[]
+                },
+                cluster:{
+                    groups:["cluster__name"],
+                    chart_data:[],
+                    table_data:[]
+                },
+                queue:{
+                    groups:["queue__name"],
+                    chart_data:[],
+                    table_data:[]
+                },
+                user:{
+                    groups:["user__name"],
+                    chart_data:[],
+                    table_data:[]
+                },
+                size:{
+                    groups:["num_processors"],
+                    chart_data:[],
+                    table_data:[]
+                },
+                project:{
+                    groups:["projects__name"],
+                    chart_data:[],
+                    table_data:[]
+                },
+            },
+        },
+    };
+
 
     var empty_chart=[
-    {
-        key:"Loading...",
-        values:[
-        {x:0, y:0}, {x:1, y:0}
-        ]
-    }
-    ];
-    function set_active_util_chart(selector, state){
-        current_util_report = state;
-        // Change the classes in the tabs...
-        var as=["overall", "cluster", "queue", "user", "size","project"];
-        var ws=selector+"_"+state;
-        $.each( as, function( index, value ){
-            var v = selector+"_"+value;
-            document.getElementById(v).className ="";
-        if (v.valueOf() === ws.valueOf()){
-                document.getElementById(v).className ="active";
+        {
+            key:"Loading...",
+            values:[
+            {x:0, y:0}, {x:1, y:0}
+            ]
         }
-        });
-
-        // Set the attributes for the active graph
-        d3.select("#chart_utilization svg")
-            .datum(empty_chart)
-            .transition().duration(500)
-            .call(utilChart);
-        d3.select("#chart_utilization svg")
-            .datum(util_report_data[state]['chart'])
-            .transition().duration(500)
-            .call(utilChart);
-        $("#table_utilization").html(util_report_data[state]['table']);
-    }
-    function set_active_resource_chart(selector, state){
-        current_util_report = state;
+    ];
+    function set_active_chart(selector, state){
+        var c=chart_data[selector];
+        c.active = state;
         // Change the classes in the tabs...
-        var as=["overall", "size", "cluster", "queue", "project", "user"];
-        var ws=selector+"_"+state;
-        $.each( as, function( index, value ){
+        var wanted_selector=selector+"_"+state;
+        for (var value in c){
             var v = selector+"_"+value;
             document.getElementById(v).className ="";
-            if (v.valueOf() === ws.valueOf()){
-                    document.getElementById(v).className ="active";
+            if (v.valueOf() === wanted_selector.valueOf()){
+                document.getElementById(v).className ="active";
             }
-        });
+        }
 
         // Set the attributes for the active graph
-        d3.select("#chart_resources svg")
+        var chart_selector="#" + selector + " svg";
+        d3.select(chart_selector)
             .datum(empty_chart)
             .transition().duration(500)
-            .call(resourceChart);
-        d3.select("#chart_resources svg")
-            .datum(resource_report_data[state])
+            .call(c.chart);
+        d3.select(chart_selector)
+            .datum(c.data[state].chart_data)
             .transition().duration(500)
-            .call(resourceChart);
-    }
-    function set_active_consumption_chart(selector, state){
-        current_util_report = state;
-        // Change the classes in the tabs...
-        var as=["overall", "size", "exit", "cluster", "queue", "project", "user"];
-        var ws=selector+"_"+state;
-        $.each( as, function( index, value ){
-            var v = selector+"_"+value;
-            document.getElementById(v).className ="";
-            if (v.valueOf() === ws.valueOf()){
-                    document.getElementById(v).className ="active";
-            }
-        });
+            .call(c.chart);
 
-        // Set the attributes for the active graph
-        d3.select("#chart_consumption svg")
-            .datum(empty_chart)
-            .transition().duration(500)
-            .call(consumptionChart);
-        d3.select("#chart_consumption svg")
-            .datum(consumption_report_data[state])
-            .transition().duration(500)
-            .call(consumptionChart);
+        $(selector+"_table").html(c.data[state].table_data);
     }
-    function set_active_submission_chart(selector, state){
-        current_util_report = state;
-        // Change the classes in the tabs...
-        var as=["overall", "cluster", "size", "queue", "project"];
-        var ws=selector+"_"+state;
-        $.each( as, function( index, value ){
-            var v = selector+"_"+value;
-            document.getElementById(v).className ="";
-            if (v.valueOf() === ws.valueOf()){
-                    document.getElementById(v).className ="active";
-            }
-        });
 
-        // Set the attributes for the active graph
-        d3.select("#chart_submission svg")
-            .datum(empty_chart)
-            .transition().duration(500)
-            .call(submissionChart);
-        d3.select("#chart_submission svg")
-            .datum(submission_report_data[state])
-            .transition().duration(500)
-            .call(submissionChart);
-    }
 
 	function clearWidgets(){
-		// Clears data from all widgets...
-		charts=[
-			{
-				id:"#chart_utilization svg",
-				container:utilChart
-			},
-			{
-				id:"#chart_consumption svg",
-				container:consumptionChart
-			},
-			{
-				id:"#chart_submission svg",
-				container:submissionChart
-			},
-			{
-			    id:"#chart_resources svg",
-			    container:resourceChart
-			}
-		];
+	    for (var c_name in chart_data){
+	        var selector="#"+c_name+" svg";
+	        d3.select(selector)
+                .datum(empty_chart)
+                .transition().duration(500)
+                .call(chart_data[c].chart);
+            d3.select(selector)
+                .datum([])
+                .transition().duration(500)
+                .call(chart_data[c].chart);
+            $("#"+c_name+"_table").html('Updating.....');
+	    }
 
-		charts.forEach(function(entry){
-			d3.select(entry.id)
-			.datum(empty_chart)
-			.transition().duration(500)
-			.call(entry.container);
-			d3.select(entry.id)
-			.datum([])
-			.transition().duration(500)
-			.call(entry.container);
-		});
-
-		areas=[
-			'#table_utilization',
-			];
-		areas.forEach(function(entry){
-			$(entry).html('Updating.....');
-		});
 	}
 
 	function loadWidgets(){
@@ -503,419 +481,44 @@
 			$("#counterText").text(data.count);
 		});
 
+        for (var c_name in chart_data){
+            var this_chart = chart_data[c_name]
+            var chart_selector="#"+c_name+" svg";
+            var table_selector="#"+c_name+"_table";
 
-        // Load data for each of the widgets
-		filterData.view='lf_util_chart_view';
-		filterData.groups=[];
-		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-                util_report_data['overall']['chart']=data['data'];
-                // Check if selected, then display....
-                if (current_util_report == "overall"){
-                    d3.select("#chart_utilization svg")
-                    .datum(util_report_data['overall']['chart'])
-                    .transition().duration(500)
-                    .call(utilChart);
+            for (var view_name) in this_chart.data){
+                var this_view=this_chart.data[view_name];
+                filterData.groups=this_view.groups;
+                filterData.view=this_chart.chart_view;
+                $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+                    $.getJSON(data.url, function(data) {
+                        this_view.chart_data=data['data'];
+                        if (this_chart.active==view_name){
+                            d3.select(chart_selector)
+                            .datum(this_view.chart_data)
+                            .transition().duration(500)
+                            .call(this_chart.chart);
+                        }
+                    });
+                });
+                if (this_chart.hasOwnProperty( table_view )){
+                    filterData.view=this_chart.table_view;
+                    $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+                        $.get(data.url, function(data) {
+                            this_view.table_data=data;
+                            // Check if selected, then display....
+                            if (this_chart.active==view_name){
+                                $(table_selector).html(this_view.table_data);
+                            }
+                        });
+                    });
                 }
-		    });
-        });
-
-		filterData.view='lf_utilization_table'
-		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.get(data.url, function(data) {
-		        util_report_data['overall']['table']=data;
-    		    // Check if selected, then display....
-    		    if (current_util_report == "overall"){
-    		        $("#table_utilization").html(util_report_data['overall']['table']);
-    		    }
-	    	});
-        });
-
-
-		filterData.view='lf_util_chart_view';
-		filterData.groups=['cluster__name'];
-		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-			 $.getJSON(data.url, function(data) {
-				util_report_data['cluster']['chart']=data['data'];
-			    // Check if selected, then display....
-			    if (current_util_report == "cluster"){
-                    d3.select("#chart_utilization svg")
-                    .datum(util_report_data['cluster']['chart'])
-                    .transition().duration(500)
-                    .call(utilChart);
-	    		}
-			});
-		});
-
-		filterData.view='lf_utilization_table'
-		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.get(data.url, function(data) {
-		        util_report_data['cluster']['table']=data;
-		        // Check if selected, then display....
-		        if (current_util_report == "cluster"){
-    		        $("#table_utilization").html(util_report_data['cluster']['table']);
-    		    }
-		    });
-		});
-
-
-        filterData.view='lf_util_chart_view';
-		filterData.groups=['queue__name'];
-		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-                util_report_data['queue']['chart']=data['data'];
-                // Check if selected, then display....
-                if (current_util_report == "queue"){
-                    d3.select("#chart_utilization svg")
-                    .datum(util_report_data['queue']['chart'])
-                    .transition().duration(500)
-                    .call(utilChart);
-                }
-            });
-        });
-
-        filterData.view='lf_utilization_table'
-		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.get(data.url, function(data) {
-                util_report_data['queue']['table']=data;
-                // Check if selected, then display....
-                if (current_util_report == "queue"){
-    		        $("#table_utilization").html(util_report_data['queue']['table']);
-    		    }
-		    });
-        });
-
-
-        filterData.view='lf_util_chart_view';
-		filterData.groups=['user__name'];
-		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-           $.getJSON(data.url, function(data) {
-                util_report_data['user']['chart']=data['data'];
-			    // Check if selected, then display....
-			    if (current_util_report == "user"){
-                    d3.select("#chart_utilization svg")
-                    .datum(util_report_data['user']['chart'])
-                    .transition().duration(500)
-                    .call(utilChart);
-                }
-            });
-		});
-
-        filterData.view='lf_utilization_table'
-		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.get(data.url, function(data) {
-		        util_report_data['user']['table']=data;
-    		    // Check if selected, then display....
-    		    if (current_util_report == "user"){
-    		        $("#table_utilization").html(util_report_data['user']['table']);
-    		    }
-            });
-		});
-
-
-        filterData.view='lf_util_chart_view';
-		filterData.groups=['num_processors'];
-		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-                 util_report_data['size']['chart']=data['data'];
-                // Check if selected, then display....
-                if (current_util_report == "size"){
-                    d3.select("#chart_utilization svg")
-                    .datum(util_report_data['size']['chart'])
-                    .transition().duration(500)
-                    .call(utilChart);
-                }
-			});
-		});
-
-		filterData.view='lf_utilization_table'
-		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.get(data.url, function(data) {
-                util_report_data['overall']['size']=data;
-                // Check if selected, then display....
-                if (current_util_report == "size"){
-    		        $("#table_utilization").html(util_report_data['size']['table']);
-    		    }
-		    });
-		});
-
-
-        filterData.view='lf_util_chart_view';
-		filterData.groups=['projects__name'];
-		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-                util_report_data['project']['chart']=data['data'];
-                // Check if selected, then display....
-                if (current_util_report == "project"){
-                    d3.select("#chart_utilization svg")
-                    .datum(util_report_data['project']['chart'])
-                    .transition().duration(500)
-                    .call(utilChart);
-                }
-            });
-		});
-
-		filterData.view='lf_utilization_table'
-		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.get(data.url, function(data) {
-                util_report_data['project']['table']=data;
-                // Check if selected, then display....
-                if (current_util_report == "project"){
-    		        $("#table_utilization").html(util_report_data['project']['table']);
-    		    }
-		    });
-		});
-
-		filterData.view='lf_consumption_chart';
-		filterData.groups=[];
-        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-		        consumption_report_data['overall']=data['data'];
-                if ( current_consumption_report == 'overall' ){
-                        d3.select('#chart_consumption svg')
-                        .datum(consumption_report_data['overall'])
-                        .transition().duration(500)
-                        .call(consumptionChart);
-                }
-            });
-		});
-
-		filterData.view='lf_consumption_chart';
-		filterData.groups=['status__name'];
-		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-                consumption_report_data['exit']=data['data'];
-                if ( current_consumption_report == 'exit' ){
-                        d3.select('#chart_consumption svg')
-                        .datum(consumption_report_data['exit'])
-                        .transition().duration(500)
-                        .call(consumptionChart);
-                }
-            });
-		});
-
-
-		filterData.view='lf_consumption_chart';
-		filterData.groups=['num_processors'];
-        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-                consumption_report_data['size']=data['data'];
-                if ( current_consumption_report == 'size' ){
-                        d3.select('#chart_consumption svg')
-                        .datum(consumption_report_data['size'])
-                        .transition().duration(500)
-                        .call(consumptionChart);
-                }
-            });
-		});
-
-        filterData.view='lf_consumption_chart';
-		filterData.groups=['cluster__name'];
-        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-                consumption_report_data['cluster']=data['data'];
-                if ( current_consumption_report == 'cluster' ){
-                        d3.select('#chart_consumption svg')
-                        .datum(consumption_report_data['cluster'])
-                        .transition().duration(500)
-                        .call(consumptionChart);
-                }
-            });
-		});
-		filterData.view='lf_consumption_chart';
-		filterData.groups=['queue__name'];
-        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-                consumption_report_data['queue']=data['data'];
-                if ( current_consumption_report == 'queue' ){
-                        d3.select('#chart_consumption svg')
-                        .datum(consumption_report_data['queue'])
-                        .transition().duration(500)
-                        .call(consumptionChart);
-                }
-            });
-		});
-		filterData.view='lf_consumption_chart';
-		filterData.groups=['user__name'];
-        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-                consumption_report_data['user']=data['data'];
-                if ( current_consumption_report == 'user' ){
-                        d3.select('#chart_consumption svg')
-                        .datum(consumption_report_data['user'])
-                        .transition().duration(500)
-                        .call(consumptionChart);
-                }
-            });
-		});
-		filterData.view='lf_consumption_chart';
-		filterData.groups=['projects__name'];
-        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-                consumption_report_data['project']=data['data'];
-                if ( current_consumption_report == 'project' ){
-                        d3.select('#chart_consumption svg')
-                        .datum(consumption_report_data['user'])
-                        .transition().duration(500)
-                        .call(consumptionChart);
-                }
-            });
-		});
+            }
+        }
 
 
 
 
-
-		filterData.view='lf_resource_chart';
-		filterData.groups=[];
-        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-		        resource_report_data['overall']=data['data'];
-                if ( current_resource_report == 'overall' ){
-                        d3.select('#chart_resources svg')
-                        .datum(resource_report_data['overall'])
-                        .transition().duration(500)
-                        .call(consumptionChart);
-                }
-            });
-		});
-
-		filterData.view='lf_resource_chart';
-		filterData.groups=['num_processors'];
-        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-                resource_report_data['size']=data['data'];
-                if ( current_resource_report == 'size' ){
-                        d3.select('#chart_resources svg')
-                        .datum(resource_report_data['size'])
-                        .transition().duration(500)
-                        .call(consumptionChart);
-                }
-            });
-		});
-
-        filterData.view='lf_resource_chart';
-		filterData.groups=['cluster__name'];
-        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-                resource_report_data['cluster']=data['data'];
-                if ( current_resource_report == 'cluster' ){
-                        d3.select('#chart_resources svg')
-                        .datum(resource_report_data['cluster'])
-                        .transition().duration(500)
-                        .call(consumptionChart);
-                }
-            });
-		});
-		filterData.view='lf_resource_chart';
-		filterData.groups=['queue__name'];
-        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-                resource_report_data['queue']=data['data'];
-                if ( current_resource_report == 'queue' ){
-                        d3.select('#chart_resources svg')
-                        .datum(resource_report_data['queue'])
-                        .transition().duration(500)
-                        .call(consumptionChart);
-                }
-            });
-		});
-		filterData.view='lf_resource_chart';
-		filterData.groups=['user__name'];
-        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-                resource_report_data['user']=data['data'];
-                if ( current_resource_report == 'user' ){
-                        d3.select('#chart_resources svg')
-                        .datum(resource_report_data['user'])
-                        .transition().duration(500)
-                        .call(consumptionChart);
-                }
-            });
-		});
-		filterData.view='lf_resource_chart';
-		filterData.groups=['projects__name'];
-        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-                resource_report_data['project']=data['data'];
-                if ( current_resource_report == 'project' ){
-                        d3.select('#chart_resources svg')
-                        .datum(resource_report_data['user'])
-                        .transition().duration(500)
-                        .call(consumptionChart);
-                }
-            });
-		});
-
-
-
-        filterData.view='lf_submission_chart';
-		filterData.groups=[];
-        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-                submission_report_data['overall']=data['data'];
-                if ( current_submission_report == 'overall' ){
-                        d3.select('#chart_submission svg')
-                        .datum(submission_report_data['overall'])
-                        .transition().duration(500)
-                        .call(submissionChart);
-                }
-            });
-		});
-        filterData.view='lf_submission_chart';
-		filterData.groups=['num_processors'];
-        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-                submission_report_data['size']=data['data'];
-                if ( current_submission_report == 'size' ){
-                        d3.select('#chart_submission svg')
-                        .datum(submission_report_data['size'])
-                        .transition().duration(500)
-                        .call(submissionChart);
-                }
-            });
-		});
-        filterData.view='lf_submission_chart';
-		filterData.groups=['cluster__name'];
-        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-                submission_report_data['cluster']=data['data'];
-                if ( current_submission_report == 'cluster' ){
-                        d3.select('#chart_submission svg')
-                        .datum(submission_report_data['cluster'])
-                        .transition().duration(500)
-                        .call(submissionChart);
-                }
-            });
-		});
-
-        filterData.view='lf_submission_chart';
-		filterData.groups=['projects__name'];
-        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-                submission_report_data['project']=data['data'];
-                if ( current_submission_report == 'project' ){
-                        d3.select('#chart_submission svg')
-                        .datum(submission_report_data['project'])
-                        .transition().duration(500)
-                        .call(submissionChart);
-                }
-            });
-		});
-        filterData.view='lf_submission_chart';
-		filterData.groups=['queue__name'];
-        $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-		    $.getJSON(data.url, function(data) {
-                submission_report_data['queue']=data['data'];
-                if ( current_submission_report == 'queue' ){
-                        d3.select('#chart_submission svg')
-                        .datum(submission_report_data['queue'])
-                        .transition().duration(500)
-                        .call(submissionChart);
-                }
-            });
-		});
-	}
 	initializeReport();
 </script>
 
@@ -935,7 +538,7 @@ were pending at that time.  Pending tasks are those that have been submitted to 
 <div id="chart_utilization">
     <svg height="400px"></svg>
 </div>
-<div id="table_utilization"></div>
+<div id="chart_utilization_table"></div>
 
 <h1>Consumption</h1>
 <p>The resource consumption chart shows the total amount of time (in seconds) and the number of tasks that were active
@@ -952,7 +555,7 @@ were pending at that time.  Pending tasks are those that have been submitted to 
 </ul>
 
 <div id='chart_consumption'><svg style='height:500px'></svg></div>
-
+<div id="chart_consumption_table"></div>
 
 <h1>Resource Usage</h1>
 <p>Most schedulers gather resource usage information using the getrusage() system call. Not all schedulers support this
@@ -969,7 +572,7 @@ were pending at that time.  Pending tasks are those that have been submitted to 
 </ul>
 
 <div id='chart_resources'><svg style='height:500px'></svg></div>
-
+<div id="chart_resources_table"></div>
 <h1>Job Submission</h1>
 <p>Shows data on when jobs were submitted to the cluster</p>
 
@@ -983,6 +586,6 @@ were pending at that time.  Pending tasks are those that have been submitted to 
 </ul>
 
 <div id='chart_submission'><svg style='height:500px'></svg></div>
-
+<div id="chart_submission_table"></div>
 
 {% endblock %}
