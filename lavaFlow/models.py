@@ -499,7 +499,7 @@ class Project(models.Model):
         'start_time_js': 0,
         'end_time_js': 0,
         'exclude_string': "none",
-        'filter_string': "project__id__in.%s" % self.id,
+        'filter_string': "projects__id__in.%s" % self.id,
         'group_string': "none",
         }
         return reverse("lf_utilization_view", kwargs=args)
