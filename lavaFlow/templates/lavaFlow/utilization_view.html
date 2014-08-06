@@ -544,7 +544,7 @@ function create_charts(){
 
                 if ( chart.hasOwnProperty("active_field")){
                     view.chart_data[field]=data['data'];
-                    if (chart.active==view_name && chart_active_field == field){
+                    if (chart.active==view_name && chart.active_field == field){
                         d3.select(chart_selector)
                         .datum(view.chart_data[field])
                         .transition().duration(500)
