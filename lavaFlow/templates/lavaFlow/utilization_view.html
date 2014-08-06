@@ -452,7 +452,7 @@ function create_charts(){
             ]
         }
     ];
-    function set_active_chart(selector, state, field){
+    function set_active_chart(selector, state){
 
         chart_data[selector].active = state;
         // Change the classes in the tabs...
@@ -469,6 +469,7 @@ function create_charts(){
         var chart_selector="#" + selector + " svg";
         var data=[];
         if ( chart_data[selector].hasOwnProperty("active_field")){
+            var field = chart_data[selector].active_field;
             chart_data[selector].active_field = field;
             data=chart_data[selector].data[state].chart_data[field];
         }else{
@@ -498,7 +499,7 @@ function create_charts(){
                 document.getElementById(v).className ="active";
             }
         }
-        set_active_chart(selector, current_state, field);
+        set_active_chart(selector, current_state);
     }
 
 
@@ -539,8 +540,6 @@ function create_charts(){
             $.getJSON(data.url, function(data) {
                 var chart=chart_data[chart_name];
 		        var view=chart.data[view_name];
-
-
 
                 if ( chart.hasOwnProperty("active_field")){
                     view.chart_data[field]=data['data'];
