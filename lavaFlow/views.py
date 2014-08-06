@@ -1262,12 +1262,12 @@ def submission_bar_data(request, start_time_js=0, end_time_js=0, exclude_string=
     for series in data:
         vals=[]
         for entry in sorted( [{'x': k, 'y': v} for k, v in series['values'].iteritems()], key=lambda v: v['x']):
-            series['values'].append({
+            vals.append({
                 'x':fields_to_friendly[field][entry['x']],
                 'y':entry['y']
             })
         series['values']=vals
-        
+
     return create_js_success(data)
 
 
