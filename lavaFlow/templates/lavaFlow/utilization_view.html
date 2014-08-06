@@ -84,40 +84,39 @@
 
 function create_charts(){
     for (var chart_name in chart_data){
-        var this_chart=chart_data[chart_name];
+
         var chart_selector="#" + chart_name + " svg";
 
-        if (this_chart.chart_type=="area"){
+        if (chart_data[chart_name].chart_type=="area"){
             nv.addGraph(function() {
-                this_chart.chart = nv.models.stackedAreaChart();
-                this_chart.chart.clipEdge(true);
-                this_chart.chart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d)) });
-                this_chart.chart.xAxis.rotateLabels(-45);
-                this_chart.chart.margin({bottom: 120, left:100});
-                this_chart.chart.xAxis.axisLabel('Date');
-                this_chart.chart.showControls(false);
+                chart_data[chart_name].chart = nv.models.stackedAreaChart();
+                chart_data[chart_name].chart.clipEdge(true);
+                chart_data[chart_name].chart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d)) });
+                chart_data[chart_name].chart.xAxis.rotateLabels(-45);
+                chart_data[chart_name].chart.margin({bottom: 120, left:100});
+                chart_data[chart_name].chart.xAxis.axisLabel('Date');
+                chart_data[chart_name].chart.showControls(false);
                 d3.select(chart_selector)
                 .datum([])
                 .transition().duration(500)
-                .call(this_chart.chart);
-                nv.utils.windowResize(this_chart.chart.update);
-                return this_chart.chart;
+                .call(chart_data[chart_name].chart);
+                nv.utils.windowResize(chart_data[chart_name].chart.update);
+                return chart_data[chart_name].chart;
 	        });
         }
 
-        if (this_chart.chart_type=="bar"){
+        if (chart_data[chart_name].chart_type=="bar"){
 
-            console.log("fr");
+
             nv.addGraph(function() {
-                this_chart.chart = nv.models.multiBarChart();
+                chart_data[chart_name].chart = nv.models.multiBarChart();
                 d3.select(chart_selector)
                     .datum([])
                     .transition().duration(500)
-                    .call(this_chart.chart);
-                nv.utils.windowResize(this_chart.chart.update);
-                return this_chart.chart;
+                    .call(chart_data[chart_name].chart);
+                nv.utils.windowResize(chart_data[chart_name].chart.update);
+                return chart_data[chart_name].chart;
         	});
-        	console.log(this_chart);
         }
     }
 }
@@ -423,11 +422,11 @@ function create_charts(){
         }
     ];
     function set_active_chart(selector, state){
-        var c=chart_data[selector];
-        c.active = state;
+
+        chart_data[selector].active = state;
         // Change the classes in the tabs...
         var wanted_selector=selector+"_"+state;
-        for (var value in c.data){
+        for (var value in chart_data[selector].data){
             var v = selector+"_"+value;
             document.getElementById(v).className ="";
             if (v.valueOf() === wanted_selector.valueOf()){
@@ -440,13 +439,13 @@ function create_charts(){
         d3.select(chart_selector)
             .datum(empty_chart)
             .transition().duration(500)
-            .call(c.chart);
+            .call(chart_data[selector].chart);
         d3.select(chart_selector)
-            .datum(c.data[state].chart_data)
+            .datum(chart_data[selector].data[state].chart_data)
             .transition().duration(500)
-            .call(c.chart);
+            .call(chart_data[selector].chart);
 
-        $(selector+"_table").html(c.data[state].table_data);
+        $(selector+"_table").html(chart_data[selector].data[state].table_data);
     }
 
 
@@ -487,34 +486,34 @@ function create_charts(){
 			$("#counterText").text(data.count);
 		});
 
-        for (var c_name in chart_data){
-            var this_chart = chart_data[c_name]
-            var chart_selector="#"+c_name+" svg";
-            var table_selector="#"+c_name+"_table";
+        for (var chart_name in chart_data){
 
-            for (var view_name in this_chart.data){
-                var this_view=this_chart.data[view_name];
-                filterData.groups=this_view.groups;
-                filterData.view=this_chart.chart_view;
+            var chart_selector="#"+chart_name+" svg";
+            var table_selector="#"+chart_name+"_table";
+
+            for (var view_name in chart_data[chart_name].data){
+
+                filterData.groups=chart_data[chart_name].data[view_name].groups;
+                filterData.view=chart_data[chart_name].chart_view;
                 $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
                     $.getJSON(data.url, function(data) {
-                        this_view.chart_data=data['data'];
-                        if (this_chart.active==view_name){
+                        chart_data[chart_name].data[view_name].chart_data=data['data'];
+                        if (chart_data[chart_name].active==view_name){
                             d3.select(chart_selector)
-                            .datum(this_view.chart_data)
+                            .datum(chart_data[chart_name].data[view_name].chart_data)
                             .transition().duration(500)
-                            .call(this_chart.chart);
+                            .call(chart_data[chart_name].chart);
                         }
                     });
                 });
-                if (this_chart.hasOwnProperty( "table_view" )){
-                    filterData.view=this_chart.table_view;
+                if (chart_data[chart_name].hasOwnProperty( "table_view" )){
+                    filterData.view=chart_data[chart_name].table_view;
                     $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
                         $.get(data.url, function(data) {
-                            this_view.table_data=data;
+                            chart_data[chart_name].data[view_name].table_data=data;
                             // Check if selected, then display....
-                            if (this_chart.active==view_name){
-                                $(table_selector).html(this_view.table_data);
+                            if (chart_data[chart_name].active==view_name){
+                                $(table_selector).html(chart_data[chart_name].data[view_name].table_data);
                             }
                         });
                     });
