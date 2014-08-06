@@ -475,13 +475,14 @@ function create_charts(){
 			end_time_js:selectedMax
 		};
 
-		var chart=chart_data[chart_name];
-		var view=chart.data[view_name];
+
 		filterData.groups=view.groups;
 		filterData.view=chart.chart_view;
 
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
             $.getJSON(data.url, function(data) {
+                var chart=chart_data[chart_name];
+		        var view=chart.data[view_name];
                 view.chart_data=data['data'];
                 if (chart.active==view_name){
                     d3.select(chart_selector)
