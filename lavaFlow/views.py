@@ -872,6 +872,9 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
         times.add(submit_time)
         times.add(start_time)
         times.add(end_time)
+        times.add(submit_time-1)
+        times.add(start_time-1)
+        times.add(end_time-1)
         np = at['num_processors']
 
         group_name = u""
@@ -892,6 +895,7 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
 
         if submit_time-1 not in pend_series:
             pend_series[submit_time-1] = 0
+
         if submit_time in pend_series:
             pend_series[submit_time] += np
         else:
