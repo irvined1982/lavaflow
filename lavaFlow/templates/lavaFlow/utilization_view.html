@@ -445,7 +445,7 @@ function create_charts(){
             .transition().duration(500)
             .call(chart_data[selector].chart);
 
-        $(selector+"_table").html(chart_data[selector].data[state].table_data);
+        $("#" + selector+"_table").html(chart_data[selector].data[state].table_data);
     }
 
 
