@@ -502,6 +502,7 @@ class Project(models.Model):
         'filter_string': "project__id__in.%s" % self.id,
         'group_string': "none",
         }
+        return reverse("lf_utilization_view", kwargs=args)
 
     def __unicode__(self):
         """
