@@ -106,7 +106,7 @@ function create_charts(){
         }
 
         if (this_chart.chart_type=="bar"){
-            console.log(this_chart);
+
             console.log("fr");
             nv.addGraph(function() {
                 this_chart.chart = nv.models.multiBarChart();
@@ -117,6 +117,7 @@ function create_charts(){
                 nv.utils.windowResize(this_chart.chart.update);
                 return this_chart.chart;
         	});
+        	console.log(this_chart);
         }
     }
 }
