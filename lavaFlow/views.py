@@ -1149,6 +1149,67 @@ def submission_bar_data(request, start_time_js=0, end_time_js=0, exclude_string=
     :return: json data object.
 
     """
+    field=request.GET.get("field", "submit_hour_of_day")
+    fields_to_friendly={
+        "submit_hour_of_day":{
+            0:"00:00",
+            1:"01:00",
+            2:"02:00",
+            3:"03:00",
+            4:"04:00",
+            5:"05:00",
+            6:"06:00",
+            7:"07:00",
+            8:"08:00",
+            9:"09:00",
+            10:"10:00",
+            11:"11:00",
+            12:"12:00",
+            13:"13:00",
+            14:"14:00",
+            15:"15:00",
+            16:"16:00",
+            17:"17:00",
+            18:"18:00",
+            19:"19:00",
+            20:"20:00",
+            21:"21:00",
+            22:"22:00",
+            23:"23:00",
+        },
+        "submit_day_of_week":{
+            0:"Monday",
+            1:"Tuesday",
+            2:"Wednesday",
+            3:"Thursday",
+            4:"Friday",
+            5:"Saturday",
+            6:"Sunday"
+        },
+        "submit_day_of_month":{
+        },
+        "submit_week_of_year":{
+        },
+        "submit_month_of_year":{
+            1:"Jan",
+            2:"Feb",
+            3:"Mar",
+            4:"Apr",
+            5:"May",
+            6:"Jun",
+            7:"Jul",
+            8:"Aug",
+            9:"Sep",
+            10:"Oct",
+            11:"Nov",
+            12:"Dec",
+        }
+    }
+    for i in range(1,31):
+        fields_to_friendly["submit_day_of_month"][i]=i
+    for i in range(1,53):
+        fields_to_friendly["submit_week_of_year"][i]="Week: %s" % i
+
     # Start time in milliseconds, rounded to nearest minute.
     start_time_js = int(int(start_time_js) / 60000) * 60000
     # End time in milliseconds, rounded to nearest minute.
@@ -1165,7 +1226,7 @@ def submission_bar_data(request, start_time_js=0, end_time_js=0, exclude_string=
     group_args = ["attempt__%s" % a for a in group_args]
 
     jobs = Job.objects.filter(attempt__pk__in=attempts).distinct()
-    vargs=group_args + ["submit_hour_of_day"]
+    vargs=group_args + [field]
 
     jobs = jobs.values(*vargs)
 
@@ -1191,38 +1252,14 @@ def submission_bar_data(request, start_time_js=0, end_time_js=0, exclude_string=
         if group_name not in data:
             data[group_name] = {
                 'key': group_name,
-                'values': {
-                    '00:00':0,
-                    '01:00':0,
-                    '02:00':0,
-                    '03:00':0,
-                    '04:00':0,
-                    '05:00':0,
-                    '06:00':0,
-                    '07:00':0,
-                    '08:00':0,
-                    '09:00':0,
-                    '10:00':0,
-                    '11:00':0,
-                    '12:00':0,
-                    '13:00':0,
-                    '14:00':0,
-                    '15:00':0,
-                    '16:00':0,
-                    '17:00':0,
-                    '18:00':0,
-                    '19:00':0,
-                    '20:00':0,
-                    '21:00':0,
-                    '22:00':0,
-                    '23:00':0,
-
-                }
+                'values': {}
             }
-        data[group_name]['values']["%02d:00" %row['submit_hour_of_day']] += row['job_id__count']
+            for k in fields_to_friendly[field].keys():
+                data[group_name][k]=0
+        data[group_name]['values'][int(row[field])] += row['job_id__count']
     data = sorted(data.values(), key=lambda v: v['key'])
     for series in data:
-        series['values'] = sorted( [{'x': k, 'y': v} for k, v in series['values'].iteritems()], key=lambda v: v['x'])
+        series['values'] = sorted( [{'x': fields_to_friendly[field][k], 'y': v} for k, v in series['values'].iteritems()], key=lambda v: v['x'])
 
     return create_js_success(data)
 

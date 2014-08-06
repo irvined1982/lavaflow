@@ -297,33 +297,64 @@ function create_charts(){
         },
         chart_submission:{
             active: "overall",
+            active_field: "submit_hour_of_day",
             chart: null,
             chart_type: "bar",
             chart_view: "lf_submission_chart",
             data:{
                 overall:{
                     groups:[],
-                    chart_data:[],
+                    chart_data:{
+                        "submit_hour_of_day":[],
+                        "submit_day_of_week":[],
+                        "submit_day_of_month":[],
+                        "submit_week_of_year":[],
+                        "submit_month_of_year":[],
+                    },
                     table_data:[]
                 },
                 size:{
                     groups:["num_processors"],
-                    chart_data:[],
+                    chart_data:{
+                        "submit_hour_of_day":[],
+                        "submit_day_of_week":[],
+                        "submit_day_of_month":[],
+                        "submit_week_of_year":[],
+                        "submit_month_of_year":[],
+                    },
                     table_data:[]
                 },
                 cluster:{
                     groups:["cluster__name"],
-                    chart_data:[],
+                    chart_data:{
+                        "submit_hour_of_day":[],
+                        "submit_day_of_week":[],
+                        "submit_day_of_month":[],
+                        "submit_week_of_year":[],
+                        "submit_month_of_year":[],
+                    },
                     table_data:[]
                 },
                 project:{
                     groups:["projects__name"],
-                    chart_data:[],
+                    chart_data:{
+                        "submit_hour_of_day":[],
+                        "submit_day_of_week":[],
+                        "submit_day_of_month":[],
+                        "submit_week_of_year":[],
+                        "submit_month_of_year":[],
+                    },
                     table_data:[]
                 },
                 queue:{
                     groups:["queue__name"],
-                    chart_data:[],
+                    chart_data:{
+                        "submit_hour_of_day":[],
+                        "submit_day_of_week":[],
+                        "submit_day_of_month":[],
+                        "submit_week_of_year":[],
+                        "submit_month_of_year":[],
+                    },
                     table_data:[]
                 },
             },
@@ -421,7 +452,7 @@ function create_charts(){
             ]
         }
     ];
-    function set_active_chart(selector, state){
+    function set_active_chart(selector, state, field){
 
         chart_data[selector].active = state;
         // Change the classes in the tabs...
@@ -436,17 +467,40 @@ function create_charts(){
 
         // Set the attributes for the active graph
         var chart_selector="#" + selector + " svg";
+        var data=[];
+        if ( chart_data[selector].hasOwnProperty("active_field")){
+            chart_data[selector].field = field;
+            data=chart_data[selector].data[state].chart_data.field;
+        }else{
+            data=chart_data[selector].data[state].chart_data;
+        }
         d3.select(chart_selector)
             .datum(empty_chart)
             .transition().duration(500)
             .call(chart_data[selector].chart);
         d3.select(chart_selector)
-            .datum(chart_data[selector].data[state].chart_data)
+            .datum(data)
             .transition().duration(500)
             .call(chart_data[selector].chart);
 
         $("#" + selector+"_table").html(chart_data[selector].data[state].table_data);
     }
+
+    function set_active_field(selector, field){
+        var current_state = chart_data[selector].active;
+        chart_data[selector].active_field = field;
+        // Change the classes in the tabs...
+        var wanted_selector=selector+"_"+field;
+        for (var value in chart_data[selector].data[state].chart_data){
+            var v = selector+"_"+value;
+            document.getElementById(v).className ="";
+            if (v.valueOf() === wanted_selector.valueOf()){
+                document.getElementById(v).className ="active";
+            }
+        }
+        set_active_chart(selector, current_state, field);
+    }
+
 
 
 	function clearWidgets(){
@@ -467,7 +521,7 @@ function create_charts(){
 
 	}
 
-    function load_chart(chart_name, view_name){
+    function load_chart(chart_name, view_name, field){
         var chart_selector="#" + chart_name + " svg";
         var table_selector="#" + chart_name + "_table";
         var filterData={
@@ -486,9 +540,19 @@ function create_charts(){
                 var chart=chart_data[chart_name];
 		        var view=chart.data[view_name];
                 view.chart_data=data['data'];
+
+                var data=[];
+                if ( chart.hasOwnProperty("active_field")){
+                    view.chart_data[field]=data['data'];
+                    data=view.chart_data[field];
+                }else{
+                    view.chart_data=data['data'];
+                    data=view.chart_data;
+                }
+
                 if (chart.active==view_name){
                     d3.select(chart_selector)
-                    .datum(view.chart_data)
+                    .datum(data)
                     .transition().duration(500)
                     .call(chart.chart);
                 }
@@ -534,7 +598,13 @@ function create_charts(){
 
         for (var chart_name in chart_data){
             for (var view_name in chart_data[chart_name].data){
-                load_chart(chart_name, view_name);
+                if chart_data[chart_name].hasOwnProperty("active_field")){
+                    for (var field_name in chart_data[chart_name].data[view_name]){
+                        load_chart(chart_name, view_name, field_name);
+                    }
+                }else{
+                    load_chart(chart_name, view_name);
+                }
             }
         }
     }
@@ -604,7 +674,13 @@ were pending at that time.  Pending tasks are those that have been submitted to 
     <li id="chart_submission_cluster"><a href="#" onClick='set_active_chart("chart_submission", "cluster"); return false;'>By Cluster</a></li>
     <li id="chart_submission_project"><a href="#" onClick='set_active_chart("chart_submission", "project"); return false;'>By Project</a></li>
     <li id="chart_submission_queue"><a href="#" onClick='set_active_chart("chart_submission", "queue"); return false;'>By Queue</a></li>
-
+</ul>
+<ul class="nav nav-pills">
+  <li id="chart_submission_submit_hour_of_day" class="active"><a onClick='set_active_field("chart_submission", "submit_hour_of_day"); return false;' href="#">By Hour</a></li>
+  <li id="chart_submission_submit_day_of_week"><a onClick='set_active_field("chart_submission", "submit_day_of_week"); return false;' href="#">By Day of Week</a></li>
+  <li id="chart_submission_submit_day_of_month"><a onClick='set_active_field("chart_submission", "submit_day_of_month"); return false;' href="#">By Day of Month</a></li>
+  <li id="chart_submission_submit_week_of_year"><a onClick='set_active_field("chart_submission", "submit_week_of_year"); return false;' href="#">By Week of Year</a></li>
+  <li id="chart_submission_submit_month_of_year"><a onClick='set_active_field("chart_submission", "submit_month_of_year"); return false;' href="#">By Month of Year</a></li>
 </ul>
 
 <div id='chart_submission'><svg style='height:500px'></svg></div>
