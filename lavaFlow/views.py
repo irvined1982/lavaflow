@@ -966,12 +966,31 @@ def get_attempts(start_time_js, end_time_js, exclude_string, filter_string):
 
 @cache_page(60 * 60 * 2)
 def utilization_table(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
-    start_time_js = int(start_time_js)
-    end_time_js = int(end_time_js)
+    """
+    Generates utilization table for the utilization table
+
+    :param request: Request object
+    :param start_time_js: Start time for the chart data, in milliseconds since epoch, rounded to the nearest minute
+    :param end_time_js: End time for the chart data, in milliseconds since epoch, rounded to the nearest minute
+    :param exclude_string: a string of options to exclude data
+    :param filter_string: s string of options to filter data
+    :param group_string: a string of fields to group by
+    :return: json data object.
+
+    """
+    # Start time in milliseconds, rounded to nearest minute.
+    start_time_js = int(int(start_time_js) / 60000) * 60000
+    # End time in milliseconds, rounded to nearest minute.
+    end_time_js = int(int(end_time_js) / 60000) * 60000
+
+    # Attempts now contains all attempts that were active in this time period, ie, submitted before
+    # the end and finished after the start time.
     attempts = get_attempts(start_time_js, end_time_js, exclude_string, filter_string)
+
+    # Attempts now only contains the exact data needed to perform the query, no other data is retrieved.
+    # This should in the best case only require data from a single table.
+
     group_args = group_string_to_group_args(group_string)
-    if len(group_args) > 0:
-        attempts = attempts.values(*group_args)
     annotations = []
     aggs = ['pend_time', 'wall_time', 'cpu_time']
     for i in aggs:
@@ -979,43 +998,59 @@ def utilization_table(request, start_time_js=0, end_time_js=0, exclude_string=""
         annotations.append(Min(i))
         annotations.append(Max(i))
         annotations.append(Sum(i))
+
+
     rows = []
     header = []
-    nice_names = {
-        'num_processors': "Num Slots",
-        'cluster__name': "Cluster",
-        'status__name': "Exit Reason",
-    }
-    for a in group_args:
-        field = {}
-        field['name'] = a
-        if a in nice_names:
-            field['nice_name'] = nice_names[a]
-        else:
-            field['nice_name'] = a
-        header.append(field)
+    if len(group_args) > 0:
+        attempts = attempts.values(*group_args)
 
-    for r in attempts.annotate(*annotations):
-        row = {
-            'groups': []
+        nice_names = {
+            'num_processors': "Num Slots",
+            'cluster__name': "Cluster",
+            'status__name': "Exit Reason",
         }
-        for field in group_args:
-            f = dict()
-            f['name'] = field
-            if field in nice_names:
-                f['nice_name'] = nice_names[field]
+
+        for a in group_args:
+            field = {}
+            field['name'] = a
+            if a in nice_names:
+                field['nice_name'] = nice_names[a]
             else:
-                f['nice_name'] = field
+                field['nice_name'] = a
+            header.append(field)
 
-            f['value'] = r[field]
-            row['groups'].append(f)
+        for r in attempts.annotate(*annotations):
+            row = {
+                'groups': []
+            }
+            for field in group_args:
+                f = dict()
+                f['name'] = field
+                if field in nice_names:
+                    f['nice_name'] = nice_names[field]
+                else:
+                    f['nice_name'] = field
 
+                f['value'] = r[field]
+                row['groups'].append(f)
+
+            for a in aggs:
+                for i in ["avg", "min", "max", "sum"]:
+                    name = "%s__%s" % (a, i)
+                    row[name] = datetime.timedelta(seconds=int(r[name]))
+
+            rows.append(row)
+    else:
+        r = attempts.aggregate(*annotations)
+        row={
+            'groups':[]
+        }
         for a in aggs:
             for i in ["avg", "min", "max", "sum"]:
                 name = "%s__%s" % (a, i)
                 row[name] = datetime.timedelta(seconds=int(r[name]))
         rows.append(row)
-
     return render(request, "lavaFlow/widgets/utilization_chart.html", {'header': header, 'rows': rows})
 
 
