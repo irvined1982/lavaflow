@@ -126,7 +126,7 @@ def create_js_success(data=None, message=""):
         'data': data,
         'message': message,
     }
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    return HttpResponse(json.dumps(data, indent=3, sort_keys=True), content_type="application/json")
 
 
 @csrf_exempt
