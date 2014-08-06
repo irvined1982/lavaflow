@@ -541,20 +541,23 @@ function create_charts(){
 		        var view=chart.data[view_name];
 
 
-                var data=[];
+
                 if ( chart.hasOwnProperty("active_field")){
                     view.chart_data[field]=data['data'];
-                    data=view.chart_data[field];
+                    if (chart.active==view_name && chart_active_field == field){
+                        d3.select(chart_selector)
+                        .datum(view.chart_data[field])
+                        .transition().duration(500)
+                        .call(chart.chart);
+                    }
                 }else{
                     view.chart_data=data['data'];
-                    data=view.chart_data;
-                }
-                
-                if (chart.active==view_name){
-                    d3.select(chart_selector)
-                    .datum(data)
-                    .transition().duration(500)
-                    .call(chart.chart);
+                    if (chart.active==view_name){
+                        d3.select(chart_selector)
+                        .datum(view.chart_data)
+                        .transition().duration(500)
+                        .call(chart.chart);
+                    }
                 }
             });
         });
@@ -675,7 +678,7 @@ were pending at that time.  Pending tasks are those that have been submitted to 
     <li id="chart_submission_project"><a href="#" onClick='set_active_chart("chart_submission", "project"); return false;'>By Project</a></li>
     <li id="chart_submission_queue"><a href="#" onClick='set_active_chart("chart_submission", "queue"); return false;'>By Queue</a></li>
 </ul>
-<ul class="nav nav-pills">
+<ul class="nav nav-tabs">
   <li id="chart_submission_submit_hour_of_day" class="active"><a onClick='set_active_field("chart_submission", "submit_hour_of_day"); return false;' href="#">By Hour</a></li>
   <li id="chart_submission_submit_day_of_week"><a onClick='set_active_field("chart_submission", "submit_day_of_week"); return false;' href="#">By Day of Week</a></li>
   <li id="chart_submission_submit_day_of_month"><a onClick='set_active_field("chart_submission", "submit_day_of_month"); return false;' href="#">By Day of Month</a></li>
