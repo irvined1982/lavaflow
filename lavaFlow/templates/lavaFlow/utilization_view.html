@@ -104,8 +104,10 @@ function create_charts(){
                 return this_chart.chart;
 	        });
         }
-        console.log(this_chart.chart_type);
+
         if (this_chart.chart_type=="bar"){
+            console.log(this_chart);
+            console.log("fr");
             nv.addGraph(function() {
                 this_chart.chart = nv.models.multiBarChart();
                 d3.select(chart_selector)
