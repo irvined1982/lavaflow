@@ -82,6 +82,7 @@
 		},
 	});
 
+function create_charts(){
     for (var chart_name in chart_data){
         var this_chart=chart_data[chart_name];
         var chart_selector="#" + chart_name + " svg";
@@ -115,7 +116,7 @@
         	});
         }
     }
-
+}
 
 	// Updates the RangeSlider widget, if there is data - loads data into charts.
 	function updateRangeSlider(){
@@ -176,6 +177,7 @@
 
 
 	function initializeReport(){
+	    createCharts();
 		updateRangeSlider();
 	}
 	function updateReport(){
