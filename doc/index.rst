@@ -21,7 +21,6 @@ Contents:
    client
    import
    views
-   models
    core_models
    glossary
 
