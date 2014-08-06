@@ -1205,11 +1205,11 @@ def submission_bar_data(request, start_time_js=0, end_time_js=0, exclude_string=
             12:"Dec",
         }
     }
-    for i in range(1,31):
+    for i in range(1,32):
         fields_to_friendly["submit_day_of_month"][i]=i
-    for i in range(1,53):
+    for i in range(1,54):
         fields_to_friendly["submit_week_of_year"][i]="Week: %s" % i
-    print fields_to_friendly
+    
     # Start time in milliseconds, rounded to nearest minute.
     start_time_js = int(int(start_time_js) / 60000) * 60000
     # End time in milliseconds, rounded to nearest minute.
