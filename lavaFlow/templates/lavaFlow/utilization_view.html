@@ -599,7 +599,7 @@ function create_charts(){
         for (var chart_name in chart_data){
             for (var view_name in chart_data[chart_name].data){
                 if (chart_data[chart_name].hasOwnProperty("active_field")){
-                    for (var field_name in chart_data[chart_name].data[view_name]){
+                    for (var field_name in chart_data[chart_name].data[view_name].chart_data){
                         load_chart(chart_name, view_name, field_name);
                     }
                 }else{
