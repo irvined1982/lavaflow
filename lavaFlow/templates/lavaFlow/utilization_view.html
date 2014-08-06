@@ -421,7 +421,7 @@
         c.active = state;
         // Change the classes in the tabs...
         var wanted_selector=selector+"_"+state;
-        for (var value in c){
+        for (var value in c.data){
             var v = selector+"_"+value;
             document.getElementById(v).className ="";
             if (v.valueOf() === wanted_selector.valueOf()){
