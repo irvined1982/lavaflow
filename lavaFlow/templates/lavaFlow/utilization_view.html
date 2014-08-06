@@ -492,10 +492,12 @@ function create_charts(){
                 }
             });
         });
-        if (chart.hasOwnProperty( "table_view" )){
-            filterData.view=chart.table_view;
+        if (chart_data[chart_name].hasOwnProperty( "table_view" )){
+            filterData.view=chart_data[chart_name].table_view;
             $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
                 $.get(data.url, function(data) {
+                    var chart=chart_data[chart_name];
+                    var view=chart.data[view_name];
                     view.table_data=data;
                     // Check if selected, then display....
                     if (chart.active==view_name){
