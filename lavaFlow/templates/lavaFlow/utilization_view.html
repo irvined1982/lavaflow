@@ -82,42 +82,42 @@
 		},
 	});
 
-function create_charts(){
-    for (var chart_name in chart_data){
 
-        var chart_selector="#" + chart_name + " svg";
-
-        if (chart_data[chart_name].chart_type=="area"){
-            nv.addGraph(function() {
-                chart_data[chart_name].chart = nv.models.stackedAreaChart();
-                chart_data[chart_name].chart.clipEdge(true);
-                chart_data[chart_name].chart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d)) });
-                chart_data[chart_name].chart.xAxis.rotateLabels(-45);
-                chart_data[chart_name].chart.margin({bottom: 120, left:100});
-                chart_data[chart_name].chart.xAxis.axisLabel('Date');
-                chart_data[chart_name].chart.showControls(false);
-                d3.select(chart_selector)
+function create_chart(chart_name){
+    var chart_selector="#" + chart_name + " svg";
+    if (chart_data[chart_name].chart_type=="area"){
+        nv.addGraph(function() {
+            chart_data[chart_name].chart = nv.models.stackedAreaChart();
+            chart_data[chart_name].chart.clipEdge(true);
+            chart_data[chart_name].chart.xAxis.tickFormat(function(d) { return d3.time.format('%x %X')(new Date(d)) });
+            chart_data[chart_name].chart.xAxis.rotateLabels(-45);
+            chart_data[chart_name].chart.margin({bottom: 120, left:100});
+            chart_data[chart_name].chart.xAxis.axisLabel('Date');
+            chart_data[chart_name].chart.showControls(false);
+            d3.select(chart_selector)
+            .datum([])
+            .transition().duration(500)
+            .call(chart_data[chart_name].chart);
+            nv.utils.windowResize(chart_data[chart_name].chart.update);
+            return chart_data[chart_name].chart;
+        });
+    }
+    if (chart_data[chart_name].chart_type=="bar"){
+        nv.addGraph(function() {
+            chart_data[chart_name].chart = nv.models.multiBarChart();
+            d3.select(chart_selector)
                 .datum([])
                 .transition().duration(500)
                 .call(chart_data[chart_name].chart);
-                nv.utils.windowResize(chart_data[chart_name].chart.update);
-                return chart_data[chart_name].chart;
-	        });
-        }
-
-        if (chart_data[chart_name].chart_type=="bar"){
-
-
-            nv.addGraph(function() {
-                chart_data[chart_name].chart = nv.models.multiBarChart();
-                d3.select(chart_selector)
-                    .datum([])
-                    .transition().duration(500)
-                    .call(chart_data[chart_name].chart);
-                nv.utils.windowResize(chart_data[chart_name].chart.update);
-                return chart_data[chart_name].chart;
-        	});
-        }
+            nv.utils.windowResize(chart_data[chart_name].chart.update);
+            return chart_data[chart_name].chart;
+        });
+    }
+}
+function create_charts(){
+    for (var chart_name in chart_data){
+        create_chart(chart_name);
+     
     }
 }
 
@@ -509,6 +509,7 @@ function create_charts(){
 
 
     }
+
 	function loadWidgets(){
 		// Loads data into widgets
 		var filterData={
