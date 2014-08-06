@@ -491,7 +491,7 @@ function create_charts(){
         chart_data[selector].active_field = field;
         // Change the classes in the tabs...
         var wanted_selector=selector+"_"+field;
-        for (var value in chart_data[selector].data[state].chart_data){
+        for (var value in chart_data[selector].data[current_state].chart_data){
             var v = selector+"_"+value;
             document.getElementById(v).className ="";
             if (v.valueOf() === wanted_selector.valueOf()){
