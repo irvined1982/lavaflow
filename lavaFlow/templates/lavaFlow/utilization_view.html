@@ -469,8 +469,8 @@ function create_charts(){
         var chart_selector="#" + selector + " svg";
         var data=[];
         if ( chart_data[selector].hasOwnProperty("active_field")){
-            chart_data[selector].field = field;
-            data=chart_data[selector].data[state].chart_data.field;
+            chart_data[selector].active_field = field;
+            data=chart_data[selector].data[state].chart_data[field];
         }else{
             data=chart_data[selector].data[state].chart_data;
         }
