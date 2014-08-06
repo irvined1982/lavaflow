@@ -1190,7 +1190,7 @@ def submission_bar_data(request, start_time_js=0, end_time_js=0, exclude_string=
         },
         "submit_week_of_year":{
         },
-        "submit_month_of_year":{
+        "submit_month":{
             1:"Jan",
             2:"Feb",
             3:"Mar",
