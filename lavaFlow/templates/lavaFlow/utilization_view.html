@@ -476,8 +476,8 @@ function create_charts(){
 		};
 
 
-		filterData.groups=view.groups;
-		filterData.view=chart.chart_view;
+		filterData.groups=chart_data[chart_name].data[view_name].groups;
+		filterData.view=chart_data[chart_name].chart_view;
 
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
             $.getJSON(data.url, function(data) {
