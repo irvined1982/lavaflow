@@ -1255,9 +1255,8 @@ def submission_bar_data(request, start_time_js=0, end_time_js=0, exclude_string=
                 'values': {}
             }
             for k in fields_to_friendly[field].keys():
-                data[group_name][k]=0
-        print data[group_name]['values']
-        print row[field]
+                data[group_name]['values'][k]=0
+
         data[group_name]['values'][int(row[field])] += row['job_id__count']
     data = sorted(data.values(), key=lambda v: v['key'])
     for series in data:
