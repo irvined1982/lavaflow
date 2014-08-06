@@ -1260,9 +1260,14 @@ def submission_bar_data(request, start_time_js=0, end_time_js=0, exclude_string=
         data[group_name]['values'][int(row[field])] += row['job_id__count']
     data = sorted(data.values(), key=lambda v: v['key'])
     for series in data:
-        series['values'] = sorted( [{'x': k, 'y': v} for k, v in series['values'].iteritems()], key=lambda v: v['x'])
-        for i in series['values']:
-            i[0]=fields_to_friendly[field][i[0]]
+        vals=[]
+        for entry in sorted( [{'x': k, 'y': v} for k, v in series['values'].iteritems()], key=lambda v: v['x']):
+            series['values'].append({
+                'x':fields_to_friendly[field][entry['x']],
+                'y':entry['y']
+            })
+        series['values']=vals
+        
     return create_js_success(data)
 
 
