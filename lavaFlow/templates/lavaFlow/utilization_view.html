@@ -465,6 +465,47 @@ function create_charts(){
 
 	}
 
+    function load_chart(chart_name, view_name){
+        var chart_selector="#" + chart_name + " svg";
+        var chart_selector="#" + chart_name + "_table;
+        var filterData={
+			filters:filters,
+			excludes:excludes,
+			start_time_js:selectedMin,
+			end_time_js:selectedMax
+		};
+
+		chart=chart_data[chart_name];
+		view=chart.data[view_name];
+		filterData.groups=view.groups;
+		filterData.view=chart.chart_view;
+
+		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+            $.getJSON(data.url, function(data) {
+                view.chart_data=data['data'];
+                if (chart.active==view_name){
+                    d3.select(chart_selector)
+                    .datum(view.chart_data)
+                    .transition().duration(500)
+                    .call(chart.chart);
+                }
+            });
+        });
+        if (chart.hasOwnProperty( "table_view" )){
+            filterData.view=chart.table_view;
+            $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
+                $.get(data.url, function(data) {
+                    view.table_data=data;
+                    // Check if selected, then display....
+                    if (chart.active==view_name){
+                        $(table_selector).html(view.table_data);
+                    }
+                });
+            });
+        }
+
+
+    }
 	function loadWidgets(){
 		// Loads data into widgets
 		var filterData={
@@ -476,7 +517,6 @@ function create_charts(){
 			end_time_js:selectedMax
 		};
 
-
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 			$("#permalinkURL").attr("href", data.url);
 		});
@@ -487,37 +527,8 @@ function create_charts(){
 		});
 
         for (var chart_name in chart_data){
-
-            var chart_selector="#"+chart_name+" svg";
-            var table_selector="#"+chart_name+"_table";
-
             for (var view_name in chart_data[chart_name].data){
-
-                filterData.groups=chart_data[chart_name].data[view_name].groups;
-                filterData.view=chart_data[chart_name].chart_view;
-                $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-                    $.getJSON(data.url, function(data) {
-                        chart_data[chart_name].data[view_name].chart_data=data['data'];
-                        if (chart_data[chart_name].active==view_name){
-                            d3.select(chart_selector)
-                            .datum(chart_data[chart_name].data[view_name].chart_data)
-                            .transition().duration(500)
-                            .call(chart_data[chart_name].chart);
-                        }
-                    });
-                });
-                if (chart_data[chart_name].hasOwnProperty( "table_view" )){
-                    filterData.view=chart_data[chart_name].table_view;
-                    $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-                        $.get(data.url, function(data) {
-                            chart_data[chart_name].data[view_name].table_data=data;
-                            // Check if selected, then display....
-                            if (chart_data[chart_name].active==view_name){
-                                $(table_selector).html(chart_data[chart_name].data[view_name].table_data);
-                            }
-                        });
-                    });
-                }
+                load_chart(chart_name, view_name);
             }
         }
     }
