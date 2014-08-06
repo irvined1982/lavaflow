@@ -501,7 +501,7 @@
                         }
                     });
                 });
-                if (this_chart.hasOwnProperty( table_view )){
+                if (this_chart.hasOwnProperty( "table_view" )){
                     filterData.view=this_chart.table_view;
                     $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
                         $.get(data.url, function(data) {
