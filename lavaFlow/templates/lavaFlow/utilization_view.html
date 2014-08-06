@@ -539,7 +539,7 @@ function create_charts(){
             $.getJSON(data.url, function(data) {
                 var chart=chart_data[chart_name];
 		        var view=chart.data[view_name];
-                view.chart_data=data['data'];
+
 
                 var data=[];
                 if ( chart.hasOwnProperty("active_field")){
@@ -549,7 +549,7 @@ function create_charts(){
                     view.chart_data=data['data'];
                     data=view.chart_data;
                 }
-
+                
                 if (chart.active==view_name){
                     d3.select(chart_selector)
                     .datum(data)
