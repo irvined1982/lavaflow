@@ -3,7 +3,9 @@
 			  <tr>
 				  <th>Action</th>
 				  {% for field in header %}
-				  <th>{{ field.nice_name }}</th>
+				    <th>{{ field.nice_name }}</th>
+                  {% empty %}
+                    <th>&nbsp;</th>
 				  {% endfor %}
 				  <th>Sum Wall Time</th>
 				  <th>Avg Wall Time</th>
@@ -17,11 +19,17 @@
   			{% for row in rows %}
 			<tr>
 				<td>
-					<a href='#' onClick="{% for field in row.groups %}addFilter('{{ field.name }}__in','{{field.value}}');{% endfor %}return false;"><span class="glyphicon glyphicon-filter"></span></a>
-					<a href='#' onClick="{% for field in row.groups %}addExclude('{{ field.name }}__in','{{field.value}}');{% endfor %}return false;"><span class="glyphicon glyphicon-remove"></span></a>
+                    {% if row.groups %}
+                        <a href='#' onClick="{% for field in row.groups %}addFilter('{{ field.name }}__in','{{field.value}}');{% endfor %}return false;"><span class="glyphicon glyphicon-filter"></span></a>
+    					<a href='#' onClick="{% for field in row.groups %}addExclude('{{ field.name }}__in','{{field.value}}');{% endfor %}return false;"><span class="glyphicon glyphicon-remove"></span></a>
+                    {% else %}
+                        &nbsp;
+                    {% endif %}
 				</td>
 				{% for field in row.groups %}
-				<td>{{ field.value }}</td>
+				    <td>{{ field.value }}</td>
+                {% empty %}
+                    <td>Overall</td>
 				{% endfor %}
 				<td>{{ row.wall_time__sum }}</td>
 				<td title="Average: {{ row.wall_time__avg }}, Min: {{ row.wall_time__min }}, Max: {{ row.wall_time__max }}">{{ row.wall_time__avg }}</td>

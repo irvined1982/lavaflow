@@ -1044,7 +1044,6 @@ def utilization_table(request, start_time_js=0, end_time_js=0, exclude_string=""
     else:
         r = attempts.aggregate(*annotations)
         row={
-            'groups':[]
         }
         for a in aggs:
             for i in ["avg", "min", "max", "sum"]:
