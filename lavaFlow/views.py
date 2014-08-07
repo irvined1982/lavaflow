@@ -838,7 +838,7 @@ def consumption_bucket(attempts, group_args, req_start_time, req_end_time):
     select={
         "cpu_for_block":"SUM(num_processors*(%d-(%s)-(%s)))" % (duration, mins_after_start, mins_before_end)
     }
-    print select
+
     return attempts.extra(select=select).values(*group_args)
 
 def cpu_consumption(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
@@ -927,7 +927,7 @@ def cpu_consumption(request, start_time_js=0, end_time_js=0, exclude_string="", 
                     if len(group_name) > 0:
                         group_name += u" "
                     group_name += u"%s" % s[n]
-            serieses[group_name][start_time] += row['cpu_for_block']
+            serieses[group_name]['values'][start_time] += row['cpu_for_block']
 
     for s in serieses.itervalues():
         s['values']=sorted(s['values'].iteritems(), key=lambda x: x['x'])
