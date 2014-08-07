@@ -427,7 +427,11 @@ class Cluster(models.Model):
         :return: Average Pend Time as a percent
 
         """
-        return (float(self.average_pend_time()) / float(self.average_wall_time())) * 100
+        # Added try/except to catch cases where there all jobs were cancelled before execution
+        try:
+            return (float(self.average_pend_time()) / float(self.average_wall_time())) * 100
+        except ZeroDivisionError:
+            return 100
 
     def average_wall_time(self):
         """
@@ -617,7 +621,12 @@ class Project(models.Model):
         :return: Average Pend Time as a percent
 
         """
-        return (float(self.average_pend_time()) / float(self.average_wall_time())) * 100
+        # Added try/except to catch cases where there all jobs were cancelled before execution
+        try:
+            return (float(self.average_pend_time()) / float(self.average_wall_time())) * 100
+        except ZeroDivisionError:
+            return 100
+
 
     def average_wall_time(self):
         """
@@ -764,7 +773,12 @@ class Queue(models.Model):
         return datetime.timedelta(seconds=self.average_pend_time())
 
     def average_pend_time_percent(self):
-        return (float(self.average_pend_time()) / float(self.average_wall_time())) * 100
+        # Added try/except to catch cases where there all jobs were cancelled before execution
+        try:
+            return (float(self.average_pend_time()) / float(self.average_wall_time())) * 100
+        except ZeroDivisionError:
+            return 100
+
 
     def average_wall_time(self):
         name = "%s_queue_average_wall_time" % self.id
@@ -837,7 +851,12 @@ class User(models.Model):
         return datetime.timedelta(seconds=self.average_pend_time())
 
     def average_pend_time_percent(self):
-        return (float(self.average_pend_time()) / float(self.average_wall_time())) * 100
+        # Added try/except to catch cases where there all jobs were cancelled before execution
+        try:
+            return (float(self.average_pend_time()) / float(self.average_wall_time())) * 100
+        except ZeroDivisionError:
+            return 100
+
 
     def average_wall_time(self):
         name = "%s_user_average_wall_time" % self.id

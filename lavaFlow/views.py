@@ -909,8 +909,6 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
         else:
             pend_series[start_time] = -1 * np
 
-
-
         if start_time-1 not in run_series:
             run_series[start_time-1] = 0
 
