@@ -834,8 +834,8 @@ def consumption_bucket(attempts, group_args, req_start_time, req_end_time):
     SECS_IN_HOUR=60*60
     duration_hrs=float(duration/SECS_IN_HOUR)
 
-
-
+    print "Num Hrs: %s " % duration_hrs
+    print
 
     cpu_hours_per_block=duration_hrs
 
@@ -848,9 +848,12 @@ def consumption_bucket(attempts, group_args, req_start_time, req_end_time):
         "cpu_rate_for_block":"%f * (SUM(num_processors*(%d-(%s)-(%s)))/60/60)" % ( cpu_hours_per_block, duration, mins_after_start, mins_before_end),
         "cpu_for_block":"SUM(num_processors*(%d-(%s)-(%s)))" % (duration, mins_after_start, mins_before_end)
     }
-
-    return attempts.extra(select=select).values(*group_args)
-
+    group_args += ["cpu_for_block"]
+    a= attempts.extra(select=select).values(*group_args)
+    for r in a:
+        print "Rate: %s" % r['cpu_rate_for_block']
+        print "Total Secs: %s" %r['cpu_for_block']
+    return a
 def cpu_consumption(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
     """
     Generates CPU consumption data for the cpu usage chart.  CPU Usage is the cpu time for the given time period.
