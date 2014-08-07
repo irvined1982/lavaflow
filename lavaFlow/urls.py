@@ -45,7 +45,9 @@ urlpatterns = patterns('',
                        url(r'^tasks/(?P<pk>\d+)$', DetailView.as_view(model=Task), name="lf_task_detail"),
                        url(r'^jobs/$', ListView.as_view(model=Job, paginate_by=20), name="lf_job_list"),
                        url(r'^jobs/(?P<pk>\d+)$', DetailView.as_view(model=Job), name="lf_job_detail"),
-
+                       url(
+                           r'^cpu/(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$',
+                           'lavaFlow.views.cpu_consumption', name='lf_cpu_consumption_chart'),
                        url(
                            r'^submissions/(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$',
                            'lavaFlow.views.submission_bar_data', name='lf_submission_chart'),

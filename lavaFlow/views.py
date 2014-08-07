@@ -826,6 +826,111 @@ def resource_data(request, start_time_js=0, end_time_js=0, exclude_string="", fi
 
 
 
+def consumption_bucket(attempts, group_args, req_start_time, req_end_time):
+    # Where jobs start on or before, and end on or after, select sum_num_procs
+    attempts=attempts.filter(start_time__lte=req_end_time, end_time__gte=req_start_time)
+
+    duration = req_end_time - req_start_time
+
+    mins_after_start="CASE WHEN (start_time > %d) THEN %d - start_time ELSE 0" % (req_start_time,req_start_time)
+    mins_before_end="CASE WHEN (end_time < %d) THEN %d - end_time ELSE 0" % (req_end_time,req_end_time)
+
+    select={
+        "cpu_for_block":"SUM(num_processors*(%s-(mins_after_start)-(mins_after_end)))" % duration
+    }
+    return attempts.extra(select=select).values(*group_args)
+
+def cpu_consumption(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
+    """
+    Generates CPU consumption data for the cpu usage chart.  CPU Usage is the cpu time for the given time period.
+
+    :param request: Request object
+    :param start_time_js: Start time for the chart data, in milliseconds since epoch
+    :param end_time_js: End time for the chart data, in milliseconds since epoch
+    :param exclude_string: a string of options to exclude data
+    :param filter_string: s string of options to filter data
+    :param group_string: a string of fields to group by
+    :return: json data object.
+
+    """
+    # Start time in milliseconds, rounded to nearest minute.
+    start_time_js = int(int(start_time_js) / 60000) * 60000
+    start_time_ep=start_time_js/1000
+    # End time in milliseconds, rounded to nearest minute.
+    end_time_js = int(int(end_time_js) / 60000) * 60000
+    end_time_ep=end_time_js/1000
+    # Attempts now contains all attempts that were active in this time period, ie, submitted before
+    # the end and finished after the start time.
+    attempts = get_attempts(start_time_js, end_time_js, exclude_string, filter_string)
+
+    # Attempts now only contains the exact data needed to perform the query, no other data is retrieved.
+    # This should in the best case only require data from a single table.
+    group_args = group_string_to_group_args(group_string)
+
+    # we want about 500 data points...
+
+    duration = end_time_ep-start_time_ep
+    timestep=duration/600
+    nice_timesteps=[
+        1, # Per Second
+        60, # One Minute Intervals
+        120,# Two Minute Intervals
+        1200, # Twenty Minute Intervals
+        3600, # Hourly
+        7200, # 2 Hours
+        14400, # 4 Hours
+        28800, # 8 Hours
+        86400, # 1 day
+        172800, # 2 day
+        345600, # 4 day
+        604800, # week
+        20160*60, # 2 weeks.
+        ]
+    for possible_timestep in nice_timesteps:
+        if duration / possible_timestep < 600:
+            timestep=possible_timestep
+            break
+
+    times = range(start_time_ep, end_time_ep, timestep)
+    rows=[]
+
+    # Populate serieses with all possible series names
+    series_names=["Overall"]
+    if len(group_args>0):
+        series_names=[]
+        for s in attempts.values(*group_args).distinct():
+            group_name = u""
+            for n in group_args:
+                if len(group_name) > 0:
+                    group_name += u" "
+                group_name += u"%s" % s[n]
+            series_names.append(group_name)
+
+    serieses = {}
+    for name in series_names:
+        serieses[name]={
+            'key':name,
+            'values':{}
+        }
+        for time in times:
+            serieses[name]['values'][time]={'x':time,'y':0}
+
+    for start_time in times:
+        end_time = start_time + timestep
+        args=group_args + "cpu_for_block"
+        for row in consumption_bucket(attempts, args, start_time, end_time):
+            group_name = u"Overall"
+            if len(group_args) > 0:
+                group_name = u""
+                for n in group_args:
+                    if len(group_name) > 0:
+                        group_name += u" "
+                    group_name += u"%s" % s[n]
+            serieses[group_name][start_time] += row['cpu_for_block']
+
+    for s in serieses.itervalues():
+        s['values']=sorted(s['values'].iteritems(), key=lambda x: x['x'])
+    return create_js_success(sorted(serieses.values(), key=lambda a: a['key']), message="")
 
 
 def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
