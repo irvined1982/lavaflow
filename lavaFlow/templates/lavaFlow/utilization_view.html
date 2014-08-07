@@ -755,6 +755,16 @@ were pending at that time.  Pending tasks are those that have been submitted to 
 <div id='chart_submission'><svg style='height:500px'></svg></div>
 <div id="chart_submission_table"></div>
 
+<h1>CPU Consumption Rate</h1>
+    <p>
+        This chart shows the CPU Consumption rate grouped accordingly, this is the rate at which CPU hours are being
+        consumed.  The table below shows the total amount of CPU hours consumed.  This is similar to an energy meter and
+        an energy bill respectively.  The graph shows how much was being used at a moment in time, and the table shows
+        how much was being used.  The rates CPU Hours per Hour used for the rate, and CPU Hours for the total.  A
+        single cpu hour is the base unit of measurement and donates a CPU core that was occupied by a task for a total
+        of one hour.  Example:  A job running on ten CPUs is consuming CPU time at a rate of ten cpu hours per hour, if
+        the job runs for half an hour, it will consume 5 CPU Hours of resource.
+    </p>
 <ul id="chart_cpu_nav" class="nav nav-tabs">
     <li id="chart_cpu_overall" class="active"><a href="#" onClick='set_active_chart("chart_cpu", "overall"); return false;'>Overall</a></li>
     <li id="chart_cpu_size"><a href="#" onClick='set_active_chart("chart_cpu", "size"); return false;'>By Job Size</a></li>
@@ -765,5 +775,6 @@ were pending at that time.  Pending tasks are those that have been submitted to 
 </ul>
 <div id='chart_cpu'><svg style='height:500px'></svg></div>
 <div id="chart_cpu_table"></div>
+<br /><br /><br /><br /><br />
 
 {% endblock %}

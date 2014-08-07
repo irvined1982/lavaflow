@@ -830,13 +830,16 @@ def consumption_bucket(attempts, group_args, req_start_time, req_end_time):
     # Where jobs start on or before, and end on or after, select sum_num_procs
     attempts=attempts.filter(start_time__lte=req_end_time, end_time__gte=req_start_time)
 
-    duration = req_end_time - req_start_time
+    duration = float(req_end_time - req_start_time)
+
+    cpu_hours_per_block=float(duration/(60*60)) # 60 seconds * 60 minutes = 1hr
 
     mins_after_start="IF((start_time > %d), (%d - start_time), 0)" % (req_start_time,req_start_time)
     mins_before_end="if( (end_time < %d) , (%d - end_time) , 0)" % (req_end_time,req_end_time)
 
     select={
-        "cpu_for_block":"SUM(num_processors*(%d-(%s)-(%s)))" % (duration, mins_after_start, mins_before_end)
+        "cpu_rate_for_block":"(%f * SUM(num_processors*(%d-(%s)-(%s)))" % ( cpu_hours_per_block, duration, mins_after_start, mins_before_end)
+        "cpu_for_block":"SUM(num_processors*(%d-(%s)-(%s))" % (duration, mins_after_start, mins_before_end)
     }
 
     return attempts.extra(select=select).values(*group_args)
@@ -918,7 +921,7 @@ def cpu_consumption(request, start_time_js=0, end_time_js=0, exclude_string="", 
 
     for start_time in times:
         end_time = start_time + timestep
-        args=group_args + ["cpu_for_block"]
+        args=group_args + ["cpu_rate_for_block"]
         for row in consumption_bucket(attempts, args, start_time, end_time):
             group_name = u"Overall"
             if len(group_args) > 0:
