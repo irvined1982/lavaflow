@@ -269,7 +269,7 @@ function create_charts(){
 
     var chart_data={
         chart_cpu:{
-            chart_attributes:{
+            chart_attributes:[
                 {
                     key:"xAxis.tickFormat",
                     value:function(d) { return d3.time.format('%x %X')(new Date(d)) }
