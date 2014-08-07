@@ -928,11 +928,12 @@ def cpu_consumption(request, start_time_js=0, end_time_js=0, exclude_string="", 
                 for n in group_args:
                     if len(group_name) > 0:
                         group_name += u" "
-                    group_name += u"%s" % s[n]
+                    group_name += u"%s" % row[n]
 
             if row['cpu_rate_for_block']:
                 serieses[group_name]['values'][start_time]['y'] += int(row['cpu_rate_for_block'])
-                print group_name
+
+
     for s in serieses.itervalues():
         s['values']=sorted(s['values'].values(), key=lambda x: x['x'])
     return create_js_success(sorted(serieses.values(), key=lambda a: a['key']), message="")
