@@ -932,8 +932,8 @@ def cpu_consumption(request, start_time_js=0, end_time_js=0, exclude_string="", 
                         group_name += u" "
                     group_name += u"%s" % s[n]
 
-            if row['cpu_for_block']:
-                serieses[group_name]['values'][start_time]['y'] += int(row['cpu_for_block'])
+            if row['cpu_rate_for_block']:
+                serieses[group_name]['values'][start_time]['y'] += int(row['cpu_rate_for_block'])
 
     for s in serieses.itervalues():
         s['values']=sorted(s['values'].values(), key=lambda x: x['x'])
