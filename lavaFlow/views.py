@@ -833,7 +833,8 @@ def consumption_bucket(attempts, group_args, req_start_time, req_end_time):
     duration = float(req_end_time - req_start_time)
 
     cpu_hours_per_block=float(duration/(60*60)) # 60 seconds * 60 minutes = 1hr
-
+    print cpu_hours_per_block
+    
     mins_after_start="IF((start_time > %d), (%d - start_time), 0)" % (req_start_time,req_start_time)
     mins_before_end="if( (end_time < %d) , (%d - end_time) , 0)" % (req_end_time,req_end_time)
 
