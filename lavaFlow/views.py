@@ -927,6 +927,8 @@ def cpu_consumption(request, start_time_js=0, end_time_js=0, exclude_string="", 
                     if len(group_name) > 0:
                         group_name += u" "
                     group_name += u"%s" % s[n]
+            print row
+            print serieses[group_name]['values'][start_time]
             serieses[group_name]['values'][start_time]['y'] += row['cpu_for_block']
 
     for s in serieses.itervalues():
