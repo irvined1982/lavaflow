@@ -916,7 +916,7 @@ def cpu_consumption(request, start_time_js=0, end_time_js=0, exclude_string="", 
             'values':{}
         }
         for time in times:
-            serieses[name]['values'][time]={'x':time,'y':0}
+            serieses[name]['values'][time]={'x':time*1000,'y':0}
 
     for start_time in times:
         end_time = start_time + timestep
