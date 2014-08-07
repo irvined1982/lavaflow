@@ -257,6 +257,44 @@ function create_charts(){
 	}
 
     var chart_data={
+        chart_cpu:{
+            active: "overall",
+            chart: null,
+            chart_type: "bar",
+            chart_view: "lf_cpu_consumption_chart",
+            data:{
+                overall:{
+                    groups:[],
+                    chart_data:[],
+                    table_data:[]
+                },
+                cluster:{
+                    groups:["cluster__name"],
+                    chart_data:[],
+                    table_data:[]
+                },
+                size:{
+                    groups:["num_processors"],
+                    chart_data:[],
+                    table_data:[]
+                },
+                queue:{
+                    groups:["queue__name"],
+                    chart_data:[],
+                    table_data:[]
+                },
+                user:{
+                    groups:["user__name"],
+                    chart_data:[],
+                    table_data:[]
+                },
+                project:{
+                    groups:["projects__name"],
+                    chart_data:[],
+                    table_data:[]
+                },
+            }
+        },
         chart_resources:{
             active: "overall",
             chart: null,
@@ -691,5 +729,15 @@ were pending at that time.  Pending tasks are those that have been submitted to 
 
 <div id='chart_submission'><svg style='height:500px'></svg></div>
 <div id="chart_submission_table"></div>
+
+<ul id="chart_cpu_nav" class="nav nav-tabs">
+    <li id="chart_cpu_overall" class="active"><a href="#" onClick='set_active_chart("chart_cpu", "overall"); return false;'>Overall</a></li>
+    <li id="chart_cpu_size"><a href="#" onClick='set_active_chart("chart_cpu", "size"); return false;'>By Job Size</a></li>
+    <li id="chart_cpu_cluster"><a href="#" onClick='set_active_chart("chart_cpu", "cluster"); return false;'>By Cluster</a></li>
+    <li id="chart_cpu_project"><a href="#" onClick='set_active_chart("chart_cpu", "project"); return false;'>By Project</a></li>
+    <li id="chart_cpu_queue"><a href="#" onClick='set_active_chart("chart_cpu", "queue"); return false;'>By Queue</a></li>
+</ul>
+<div id='chart_cpu'><svg style='height:500px'></svg></div>
+<div id="chart_cpu_table"></div>
 
 {% endblock %}
