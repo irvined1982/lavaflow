@@ -932,7 +932,7 @@ def cpu_consumption(request, start_time_js=0, end_time_js=0, exclude_string="", 
                 serieses[group_name]['values'][start_time]['y'] += int(row['cpu_for_block'])
 
     for s in serieses.itervalues():
-        s['values']=sorted(s['values'].iteritems(), key=lambda x: x['x'])
+        s['values']=sorted(s['values'].values(), key=lambda x: x['x'])
     return create_js_success(sorted(serieses.values(), key=lambda a: a['key']), message="")
 
 
