@@ -174,6 +174,36 @@ when the user requests num_processors, or exit state, these are made human reada
 </dd></dl>
 
 <dl class="function">
+<dt id="lavaFlow.views.consumption_bucket">
+<tt class="descclassname">lavaFlow.views.</tt><tt class="descname">consumption_bucket</tt><big>(</big><em>attempts</em>, <em>group_args</em>, <em>req_start_time</em>, <em>req_end_time</em><big>)</big><a class="headerlink" href="#lavaFlow.views.consumption_bucket" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="lavaFlow.views.cpu_consumption">
+<tt class="descclassname">lavaFlow.views.</tt><tt class="descname">cpu_consumption</tt><big>(</big><em>request</em>, <em>start_time_js=0</em>, <em>end_time_js=0</em>, <em>exclude_string=''</em>, <em>filter_string=''</em>, <em>group_string=''</em><big>)</big><a class="headerlink" href="#lavaFlow.views.cpu_consumption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates CPU consumption data for the cpu usage chart.  CPU Usage is the cpu time for the given time period.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>request</strong> &#8211; Request object</li>
+<li><strong>start_time_js</strong> &#8211; Start time for the chart data, in milliseconds since epoch</li>
+<li><strong>end_time_js</strong> &#8211; End time for the chart data, in milliseconds since epoch</li>
+<li><strong>exclude_string</strong> &#8211; a string of options to exclude data</li>
+<li><strong>filter_string</strong> &#8211; s string of options to filter data</li>
+<li><strong>group_string</strong> &#8211; a string of fields to group by</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">json data object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="lavaFlow.views.create_js_success">
 <tt class="descclassname">lavaFlow.views.</tt><tt class="descname">create_js_success</tt><big>(</big><em>data=None</em>, <em>message=''</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#create_js_success"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.create_js_success" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes a json serializable object, and an optional message, and creates a standard json response document.</p>
