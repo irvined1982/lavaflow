@@ -917,7 +917,7 @@ def cpu_consumption(request, start_time_js=0, end_time_js=0, exclude_string="", 
 
     for start_time in times:
         end_time = start_time + timestep
-        args=group_args + "cpu_for_block"
+        args=group_args + ["cpu_for_block"]
         for row in consumption_bucket(attempts, args, start_time, end_time):
             group_name = u"Overall"
             if len(group_args) > 0:
