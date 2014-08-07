@@ -843,12 +843,8 @@ def consumption_bucket(attempts, group_args, req_start_time, req_end_time):
         "cpu_for_block":"SUM(num_processors*(%d-(%s)-(%s)))" % (duration, mins_after_start, mins_before_end)
     }
     group_args += ["cpu_for_block"]
-    a= attempts.extra(select=select).values(*group_args)
-    for r in a:
-        print req_start_time, req_end_time
-        print "Rate: %s" % r['cpu_rate_for_block']
-        print "Total Secs: %s" %r['cpu_for_block']
-    return a
+    return attempts.extra(select=select).values(*group_args)
+
 def cpu_consumption(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
     """
     Generates CPU consumption data for the cpu usage chart.  CPU Usage is the cpu time for the given time period.
@@ -938,7 +934,7 @@ def cpu_consumption(request, start_time_js=0, end_time_js=0, exclude_string="", 
 
             if row['cpu_rate_for_block']:
                 serieses[group_name]['values'][start_time]['y'] += int(row['cpu_rate_for_block'])
-
+                print group_name
     for s in serieses.itervalues():
         s['values']=sorted(s['values'].values(), key=lambda x: x['x'])
     return create_js_success(sorted(serieses.values(), key=lambda a: a['key']), message="")
