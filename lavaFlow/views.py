@@ -845,6 +845,7 @@ def consumption_bucket(attempts, group_args, req_start_time, req_end_time):
     group_args += ["cpu_for_block"]
     a= attempts.extra(select=select).values(*group_args)
     for r in a:
+        print req_start_time, req_end_time
         print "Rate: %s" % r['cpu_rate_for_block']
         print "Total Secs: %s" %r['cpu_for_block']
     return a
