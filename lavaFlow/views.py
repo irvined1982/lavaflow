@@ -839,7 +839,7 @@ def consumption_bucket(attempts, group_args, req_start_time, req_end_time):
 
     select={
 
-        "cpu_rate_for_block":"(SUM(num_processors*(%d-(%s)-(%s)))/%f/3600)" % (duration, mins_after_start, mins_before_end,cpu_hours_per_block),
+        "cpu_rate_for_block":"(SUM(num_processors*(%d+(%s)-(%s)))/%f/3600)" % (duration, mins_after_start, mins_before_end,cpu_hours_per_block),
         "cpu_for_block":"SUM(num_processors*(%d-(%s)-(%s)))" % (duration, mins_after_start, mins_before_end)
     }
     group_args += ["cpu_for_block"]
