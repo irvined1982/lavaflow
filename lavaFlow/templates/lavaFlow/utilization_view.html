@@ -62,7 +62,7 @@
 		}
 		h+="</dl>";
 		return h;
-	}	
+	}
 
 	// Add the slider
 	$( "#slider" ).slider({
@@ -105,6 +105,17 @@ function create_chart(chart_name){
     if (chart_data[chart_name].chart_type=="bar"){
         nv.addGraph(function() {
             chart_data[chart_name].chart = nv.models.multiBarChart();
+
+            if (chart_data[chart_name].hasOwnProperty("chart_attributes")){
+                $.each(chart_data[chart_name].hasOwnProperty("chart_attributes"), function( index, value ) {
+                    var c=chart_data[chart_name].chart;
+                    var fields = value.key.split(".");
+                    while(fields.length > 1){
+                        c=c[fields.shift()];
+                    }
+                    c[fields.shift()](value.value);
+                });
+            }
             d3.select(chart_selector)
                 .datum([])
                 .transition().duration(500)
@@ -136,7 +147,7 @@ function create_charts(){
 			$.getJSON(data.url, function(data) {
 				if (data.count>0){
 					count=data.count;
-					// If using default values, populate them 
+					// If using default values, populate them
 					if ( selectedMin < data.start_time ){
 						selectedMin=data.suggested_start_time;
 					}
@@ -162,7 +173,7 @@ function create_charts(){
 
 					// Set the selection
 					$( "#slider" ).slider( "option", "values", [ selectedMin, selectedMax ]);
-					
+
 					// Enable the slider
 					$( "#slider" ).slider( "option", "disabled", false );
 
@@ -258,6 +269,20 @@ function create_charts(){
 
     var chart_data={
         chart_cpu:{
+            chart_attributes={
+                {
+                    key:"xAxis.tickFormat",
+                    value:function(d) { return d3.time.format('%x %X')(new Date(d)) }
+                },
+                {
+                    key:"xAxis.rotateLabels",
+                    value:-45,
+                },
+                {
+                    key:"xAxis.axisLabel",
+                    value:"Date",
+                }
+            ],
             active: "overall",
             chart: null,
             chart_type: "bar",
@@ -634,7 +659,7 @@ function create_charts(){
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 			$("#permalinkURL").attr("href", data.url);
 		});
-		
+
 		filterData.view='lf_util_total_attempts';
 		$.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
 			$("#counterText").text(data.count);
