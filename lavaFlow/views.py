@@ -836,7 +836,7 @@ def consumption_bucket(attempts, group_args, req_start_time, req_end_time):
     mins_before_end="CASE WHEN (end_time < %d) THEN %d - end_time ELSE 0" % (req_end_time,req_end_time)
 
     select={
-        "cpu_for_block":"SUM(num_processors*(%s-(mins_after_start)-(mins_after_end)))" % duration
+        "cpu_for_block":"SUM(num_processors*(%d-(%s)-(%s)))" % (duration, mins_after_start, mins_before_end)
     }
     return attempts.extra(select=select).values(*group_args)
 
