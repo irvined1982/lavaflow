@@ -831,10 +831,12 @@ def consumption_bucket(attempts, group_args, req_start_time, req_end_time):
     attempts=attempts.filter(start_time__lte=req_end_time, end_time__gte=req_start_time)
 
     duration = float(req_end_time - req_start_time)
-
-    cpu_hours_per_block=float(duration/(60*60)) # 60 seconds * 60 minutes = 1hr
-    print cpu_hours_per_block
+    SECS_IN_HOUR=60*60
     
+
+    cpu_hours_per_block=float(  (duration/(SECS_IN_HOUR))/SECS_IN_HOUR    ) # 60 seconds * 60 minutes = 1hr
+
+
     mins_after_start="IF((start_time > %d), (%d - start_time), 0)" % (req_start_time,req_start_time)
     mins_before_end="if( (end_time < %d) , (%d - end_time) , 0)" % (req_end_time,req_end_time)
 
