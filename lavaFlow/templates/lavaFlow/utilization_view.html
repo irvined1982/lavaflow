@@ -107,7 +107,7 @@ function create_chart(chart_name){
             chart_data[chart_name].chart = nv.models.multiBarChart();
 
             if (chart_data[chart_name].hasOwnProperty("chart_attributes")){
-                $.each(chart_data[chart_name].hasOwnProperty("chart_attributes"), function( index, value ) {
+                $.each(chart_data[chart_name].chart_attributes, function( index, value ) {
                     var c=chart_data[chart_name].chart;
                     var fields = value.key.split(".");
                     while(fields.length > 1){
