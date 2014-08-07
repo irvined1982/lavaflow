@@ -896,7 +896,7 @@ def cpu_consumption(request, start_time_js=0, end_time_js=0, exclude_string="", 
 
     # Populate serieses with all possible series names
     series_names=["Overall"]
-    if len(group_args>0):
+    if len(group_args)>0:
         series_names=[]
         for s in attempts.values(*group_args).distinct():
             group_name = u""
