@@ -1566,24 +1566,25 @@ def build_model_filter(request):
         except AttributeError:
             continue
         name=model._meta.verbose_name.title()
-        tree[name]=build_filter_tree(model)
+        path=[]
+        tree[name]=build_filter_tree(model, path)
     return create_js_success(data=tree)
 
-def build_filter_tree(model):
+def build_filter_tree(model, path):
     node={}
     name=model._meta.verbose_name.title()
     node['name']=name
     for field_name in model._meta.get_all_field_names():
-    
+
         try:
             if field_name in model.no_filter_fields:
                 continue
         except AttributeError:
             pass
         # if normal field
-        print field_name
+        print type(field_name)
         # else
-            #recurse on model.....
+            #recurse on model if not in path.......
     return node
 
 
