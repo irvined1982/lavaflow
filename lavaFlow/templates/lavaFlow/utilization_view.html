@@ -799,8 +799,8 @@ is most needed.</p>
                           <ul>
                               {% for field in model.fields %}
                                 <li>
-                                    {{ field.display_name }}
-                                    <a href="#" onClick="update_value_list('{{ model.name }}', '{{ field.name }}'); return false;" class="popover_help" data-toggle="popover" title="{{ field.display_name }}" data-content="{{ field.help_text }}"><span class="glyphicon question-sign"></span></a>
+                                    <a href="#" onClick="update_value_list('{{ model.name }}', '{{ field.name }}'); return false;">{{ field.display_name }}</a>
+                                    <a href="#" class="popover_help" data-toggle="popover" title="{{ field.display_name }}" data-content="{{ field.help_text }}"><span class="glyphicon question-sign"></span></a>
                                 </li>
                               {% endfor %}
                           </ul>
