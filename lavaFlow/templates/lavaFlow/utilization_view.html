@@ -797,7 +797,7 @@ is most needed.</p>
               {% for field in model.fields %}
                 <li>
                     {{ field.display_name }}
-                    <a href="#"  data-toggle="popover" title="{{ field.display_name }}" data-content="{{ field.help_text }}"><span class="glyphicon question-sign"></span>Help</a>
+                    <a href="#" class="popover_help" data-toggle="popover" title="{{ field.display_name }}" data-content="{{ field.help_text }}"><span class="glyphicon question-sign"></span>Help</a>
                 </li>
               {% endfor %}
           </ul>
@@ -810,6 +810,6 @@ is most needed.</p>
     </div>
   </div>
 </div>
-
+<script>$('.popover_help').popover();</script>
 
 {% endblock %}
