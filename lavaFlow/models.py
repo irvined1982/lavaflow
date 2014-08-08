@@ -297,6 +297,12 @@ class Cluster(models.Model):
         help_text='The name of the cluster',
     )
 
+    top_level_filter=True
+    relation_to_attempts="cluster"
+
+    class Meta:
+        ordering=['name'],
+
     def get_absolute_url(self):
         """
         The absolute URL to the cluster view.
@@ -1386,6 +1392,10 @@ class Attempt(models.Model):
             ['cluster', 'job', 'task', 'start_time', ],
             ['job', 'end_time']
         ]
+
+    top_level_filter=True
+    relation_to_attempts=""
+
 
 
 class GridEngineAttemptInfo(models.Model):

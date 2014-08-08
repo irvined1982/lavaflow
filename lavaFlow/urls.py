@@ -27,6 +27,7 @@ from lavaFlow.models import *
 urlpatterns = patterns('',
                        url(r'^$', 'lavaFlow.views.utilization_view', name="lf_utilization_view_default"),
                        url(r'^get_token$', 'lavaFlow.views.get_csrf_token', name="get_token"),
+                       url(r'^build_model_filter$', 'lavaFlow.views.build_model_filter', name="lf_build_model_filter"),
                        url(
                            r'^(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$',
                            'lavaFlow.views.utilization_view', name="lf_utilization_view"),
@@ -35,6 +36,7 @@ urlpatterns = patterns('',
                            name='lf_openlava_import'),
                        url(r'^clusters/(.*?)/import/gridengine$', 'lavaFlow.views.gridengine_import',
                            name='lf_gridengine_import'),
+
                        url(r'^hosts/$', ListView.as_view(model=Host, paginate_by=20), name="lf_host_list"),
                        url(r'^users/$', ListView.as_view(model=User, paginate_by=20), name="lf_user_list"),
                        url(r'^queues/$', ListView.as_view(model=Queue, paginate_by=20), name="lf_queue_list"),

@@ -34,7 +34,7 @@ from django.middleware.csrf import get_token
 from scipy.interpolate import interp1d
 
 from lavaFlow.models import *
-
+from django.db.models import get_app, get_models
 
 OPENLAVA_JOB_STATES = {
     0x00: {
@@ -1554,7 +1554,25 @@ def build_filter(request):
 
     return HttpResponse(json.dumps({'url': url}), content_type="application/json")
 
+def build_filter_tree(request):
+    tree={}
+    for model in get_models('lavaFlow'):
+        if not model.top_level_filter:
+            continue
+        name=model._meta.verbose_name.title()
+        tree[name]=build_model_filter(model)
 
+def build_model_filter(model):
+    node={}
+    name=model._meta.verbose_name.title()
+    node['name']=name
+    for field_name in model._meta.get_all_field_names():
+        if field_name in model.no_filter_fields:
+            continue
+        # if normal field
+        print field_name
+        # else
+            #recurse on model.....
 
 
 
