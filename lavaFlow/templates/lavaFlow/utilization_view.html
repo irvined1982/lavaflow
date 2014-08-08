@@ -792,7 +792,7 @@ is most needed.</p>
       </div>
       <div class="modal-body">
         {% for model in filter_tree.objects %}
-          <h2>{{ model.display_name }}</h2>
+          <h2>{{ model }}</h2>
           <ul>
               {% for field in model.fields %}
                 <li>
