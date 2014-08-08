@@ -1556,9 +1556,9 @@ def build_filter(request):
 
 def build_model_filter(request):
     tree={}
-    
-    print get_app("lavaFlow")
-    for model in get_models('lavaFlow'):
+
+
+    for model in get_models(get_app("lavaFlow")):
         print model
         if not model.top_level_filter:
             continue
