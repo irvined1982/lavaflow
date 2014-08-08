@@ -1560,7 +1560,10 @@ def build_model_filter(request):
 
     for model in get_models(get_app("lavaFlow")):
         print model
-        if not model.top_level_filter:
+        try:
+            if not model.top_level_filter:
+            continue
+        except AttributeError:
             continue
         name=model._meta.verbose_name.title()
         tree[name]=build_model_filter(model)
