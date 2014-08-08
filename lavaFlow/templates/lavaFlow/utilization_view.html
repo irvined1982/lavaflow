@@ -827,7 +827,7 @@ is most needed.</p>
 <script>$('.popover_help').popover();</script>
 <script>
     function update_value_list(model, field){
-        $.getJSON('{% url "lf_value_list" %}' + $.param({model:mode, field:field}), function(data){
+        $.getJSON('{% url "lf_value_list" %}' + $.param({model:model, field:field}), function(data){
             var html="";
             $.each(data['data']['values'], function(index, value){
                 html+='<option value='+value.value+'>'+value.display_value+'</option>';
