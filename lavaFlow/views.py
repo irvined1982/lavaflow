@@ -1599,7 +1599,7 @@ def build_filter_tree(model):
             pass
 
 
-        (field, model, direct, m2m) = model._meta.get_field_by_name(field_name)
+        (field, rmodel, direct, m2m) = model._meta.get_field_by_name(field_name)
         if type(field) == ForeignKey:
             # downstream relation 1-n
             pass
