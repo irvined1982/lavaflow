@@ -1570,6 +1570,7 @@ def build_model_filter(request):
             continue
         try:
             model.relation_to_attempts
+            print "model"
             objects[model.__name__]=build_filter_tree(model)
         except AttributeError:
             pass
