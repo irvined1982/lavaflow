@@ -1557,6 +1557,7 @@ def build_filter(request):
 def build_model_filter(request):
     tree={}
     for model in get_models('lavaFlow'):
+        print model
         if not model.top_level_filter:
             continue
         name=model._meta.verbose_name.title()
