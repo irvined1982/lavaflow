@@ -20,6 +20,7 @@
 # $Date: 2012-10-31 23:42:17 +0100 (Wed, 31 Oct 2012) $:
 #
 # Create your views here.
+
 import datetime
 import json
 import logging
@@ -27,11 +28,13 @@ import logging
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.views.decorators.cache import cache_page
 from django.shortcuts import render
-from django.db.models import Avg, Count, Sum
+
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.core.exceptions import ObjectDoesNotExist
 from django.middleware.csrf import get_token
 from scipy.interpolate import interp1d
+from django.db.models.related import RelatedObject
+from django.db.models.fields.related import ForeignKey
 
 from lavaFlow.models import *
 from django.db.models import get_app, get_models
@@ -1555,36 +1558,63 @@ def build_filter(request):
     return HttpResponse(json.dumps({'url': url}), content_type="application/json")
 
 def build_model_filter(request):
-    tree={}
-
+    objects={}
+    roots=[]
+    data={'objects':objects, "roots":roots}
 
     for model in get_models(get_app("lavaFlow")):
-        print model
         try:
-            if not model.top_level_filter:
-                continue
+            if model.top_level_filter:
+                roots.append(model.__name__)
         except AttributeError:
             continue
-        name=model._meta.verbose_name.title()
-        path=[]
-        tree[name]=build_filter_tree(model, path)
-    return create_js_success(data=tree)
+        try:
+            model.relation_to_attempts
+            objects[model.__name__]=build_filter_tree(model)
+        except AttributeError:
+            pass
 
-def build_filter_tree(model, path):
-    node={}
-    name=model._meta.verbose_name.title()
-    node['name']=name
+    return create_js_success(data=data)
+
+
+def build_filter_tree(model):
+
+    node={
+        'display_name':model._meta.verbose_name.title(),
+        'name':model.__name__,
+        'fields':[],
+        'relations':[],
+        'relation_to_attempts':model.relation_to_attempts,
+    }
+    relation=model.relation_to_attempts
+    if len(relation) > 0:
+        relation += "_"
+
     for field_name in model._meta.get_all_field_names():
-
         try:
             if field_name in model.no_filter_fields:
                 continue
         except AttributeError:
             pass
-        # if normal field
-        print type(field_name)
-        # else
-            #recurse on model if not in path.......
+
+
+        (field, model, direct, m2m) = model.get_field_by_name(field_name)
+        if type(field) == ForeignKey:
+            # downstream relation 1-n
+            pass
+        elif type(field) == RelatedObject:
+            # Upstream relation
+            pass
+        elif m2m:
+            # many to many
+            pass
+        else:
+            node['fields'].append({
+                'name':field_name,
+                'display_name':field.verbose_name.title(),
+                'filter':relation + field_name,
+            })
+
     return node
 
 
