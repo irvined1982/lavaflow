@@ -1433,6 +1433,7 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
         'build_filter_url': reverse('lf_build_filter'),
         'start_time': start_time_js,
         'end_time': end_time_js,
+        'filter_tree':build_model_filter(request),
     }
     return render(request, "lavaFlow/utilization_view.html", data)
 
@@ -1575,7 +1576,7 @@ def build_model_filter(request):
 
         objects[model.__name__]=build_filter_tree(model)
 
-    return create_js_success(data=data)
+    return data
 
 
 def build_filter_tree(model):
