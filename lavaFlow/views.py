@@ -1554,15 +1554,16 @@ def build_filter(request):
 
     return HttpResponse(json.dumps({'url': url}), content_type="application/json")
 
-def build_filter_tree(request):
+def build_model_filter(request):
     tree={}
     for model in get_models('lavaFlow'):
         if not model.top_level_filter:
             continue
         name=model._meta.verbose_name.title()
         tree[name]=build_model_filter(model)
+    return create_js_success(data=tree)
 
-def build_model_filter(model):
+def build_filter_tree(model):
     node={}
     name=model._meta.verbose_name.title()
     node['name']=name
