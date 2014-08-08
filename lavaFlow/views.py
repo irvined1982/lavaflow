@@ -1648,7 +1648,7 @@ def get_field_values(request):
     if field not in model._meta.get_all_field_names():
         return create_js_bad_request(message="Field does not exist")
     data=[]
-    for row in model.objects.values([field]).distinct():
+    for row in model.objects.values(field).distinct():
         data.append({
             'value':row[field],
             'display_value':row[field],
