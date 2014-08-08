@@ -301,7 +301,7 @@ class Cluster(models.Model):
     relation_to_attempts="cluster"
 
     class Meta:
-        ordering=['name'],
+        ordering=['name']
 
     def get_absolute_url(self):
         """
