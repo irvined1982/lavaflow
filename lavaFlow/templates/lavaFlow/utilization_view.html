@@ -791,17 +791,31 @@ is most needed.</p>
         <h4 class="modal-title" id="filterModalLabel">Modify Filters</h4>
       </div>
       <div class="modal-body">
-        {% for model in filter_tree.objects.itervalues %}
-          <h2>{{ model.display_name }}</h2>
-          <ul>
-              {% for field in model.fields %}
-                <li>
-                    {{ field.display_name }}
-                    <a href="#" class="popover_help" data-toggle="popover" title="{{ field.display_name }}" data-content="{{ field.help_text }}"><span class="glyphicon question-sign"></span>Help</a>
-                </li>
-              {% endfor %}
-          </ul>
-        {% endfor %}
+          <div class="container-fluid">
+              <div class="row">
+                  <div class=".col-xs-6">
+                      {% for model in filter_tree.objects.itervalues %}
+                          <h2>{{ model.display_name }}</h2>
+                          <ul>
+                              {% for field in model.fields %}
+                                <li>
+                                    {{ field.display_name }}
+                                    <a href="#" class="popover_help" data-toggle="popover" title="{{ field.display_name }}" data-content="{{ field.help_text }}"><span class="glyphicon question-sign"></span></a>
+                                </li>
+                              {% endfor %}
+                          </ul>
+                      {% endfor %}
+                  </div>
+                  <div class=".col-xs-6">
+                      <div id="valueList">
+                          <input type="text" class="form-control" id="manual_value" placeholder="Manual Value">
+                          <select id="selected_values" class="form-control" name="selected_values" multiple="multiple">
+                          </select>
+                      </div>
+                      <div id="options"></div>
+                  </div>
+              </div>
+          </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -811,5 +825,15 @@ is most needed.</p>
   </div>
 </div>
 <script>$('.popover_help').popover();</script>
-
+<script>
+    function update_value_list(model, field){
+        $.getJSON({% url "lf_value_list" %} + $.param({model:mode, field:field}), function(data){
+            var html="";
+            $.each(data['data']['values'], function(index, value){
+                html+='<option value='+value.value+'>'+value.display_value+'</option>';
+            });
+            $("#selected_values").html(html);
+        });
+    }
+</script>
 {% endblock %}

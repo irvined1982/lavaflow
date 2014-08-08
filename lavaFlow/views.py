@@ -37,7 +37,7 @@ from django.db.models.related import RelatedObject
 from django.db.models.fields.related import ForeignKey
 
 from lavaFlow.models import *
-from django.db.models import get_app, get_models
+from django.db.models import get_app, get_models, get_model
 
 OPENLAVA_JOB_STATES = {
     0x00: {
@@ -131,6 +131,22 @@ def create_js_success(data=None, message=""):
     }
     return HttpResponse(json.dumps(data, indent=3, sort_keys=True), content_type="application/json")
 
+
+def create_js_bad_request(data=None, message=""):
+    """Takes an optional json serializable object, and an optional message, and creates a standard json
+     response using a HttpResponseBadRequest class.
+
+    :param data: json serializable object
+    :param message: Optional message to include with response
+    :return: HttpResponse object
+
+    """
+    data = {
+        'status': "OK",
+        'data': data,
+        'message': message,
+    }
+    return HttpResponseBadRequest(json.dumps(data, indent=3, sort_keys=True), content_type="application/json")
 
 @csrf_exempt
 def gridengine_import(request, cluster_name):
@@ -1619,6 +1635,22 @@ def build_filter_tree(model):
 
     return node
 
+def value_list(request):
+    field=request.GET.get("field", None)
+    model=request.GET.get("model", None)
+    if not (field and model):
+        return create_js_bad_request(message="field and model parameters must be present")
 
+    model=get_model('lavaFlow',model)
+    if not model:
+        return create_js_bad_request(message="Model does not exist")
 
-
+    if field not in model._meta.get_all_field_names():
+        return create_js_bad_request(message="Field does not exist")
+    data=[]
+    for row in model.objects.values([field]).distinct():
+        data.append({
+            'value':row[field],
+            'display_value':row[field],
+        })
+    return create_js_success(data)
