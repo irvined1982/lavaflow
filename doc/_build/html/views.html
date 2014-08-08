@@ -214,6 +214,28 @@ when the user requests num_processors, or exit state, these are made human reada
 </dd></dl>
 
 <dl class="function">
+<dt id="lavaFlow.views.create_js_bad_request">
+<tt class="descclassname">lavaFlow.views.</tt><tt class="descname">create_js_bad_request</tt><big>(</big><em>data=None</em>, <em>message=''</em><big>)</big><a class="headerlink" href="#lavaFlow.views.create_js_bad_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes an optional json serializable object, and an optional message, and creates a standard json
+response using a HttpResponseBadRequest class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> &#8211; json serializable object</li>
+<li><strong>message</strong> &#8211; Optional message to include with response</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">HttpResponse object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="lavaFlow.views.create_js_success">
 <tt class="descclassname">lavaFlow.views.</tt><tt class="descname">create_js_success</tt><big>(</big><em>data=None</em>, <em>message=''</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#create_js_success"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.create_js_success" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes a json serializable object, and an optional message, and creates a standard json response document.</p>
@@ -488,6 +510,11 @@ number of processors that are in use, for the given time period. Grouped by zero
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="function">
+<dt id="lavaFlow.views.value_list">
+<tt class="descclassname">lavaFlow.views.</tt><tt class="descname">value_list</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#lavaFlow.views.value_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 
