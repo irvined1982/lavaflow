@@ -1566,7 +1566,7 @@ def build_model_filter(request):
         except AttributeError:
             continue
         name=model._meta.verbose_name.title()
-        tree[name]=build_model_filter(model)
+        tree[name]=build_filter_tree(model)
     return create_js_success(data=tree)
 
 def build_filter_tree(model):
