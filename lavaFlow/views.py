@@ -1570,11 +1570,11 @@ def build_model_filter(request):
             continue
         try:
             model.relation_to_attempts
-            print "model"
-            objects[model.__name__]=build_filter_tree(model)
         except AttributeError:
-            pass
+            continue
 
+        objects[model.__name__]=build_filter_tree(model)
+        
     return create_js_success(data=data)
 
 
@@ -1615,7 +1615,7 @@ def build_filter_tree(model):
                 'display_name':field.verbose_name.title(),
                 'filter':relation + field_name,
             })
-    print node
+
     return node
 
 
