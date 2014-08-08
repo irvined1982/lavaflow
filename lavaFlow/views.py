@@ -1635,7 +1635,7 @@ def build_filter_tree(model):
 
     return node
 
-def value_list(request):
+def get_field_values(request):
     field=request.GET.get("field", None)
     model=request.GET.get("model", None)
     if not (field and model):
