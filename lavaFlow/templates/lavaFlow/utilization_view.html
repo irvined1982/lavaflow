@@ -791,8 +791,8 @@ is most needed.</p>
         <h4 class="modal-title" id="filterModalLabel">Modify Filters</h4>
       </div>
       <div class="modal-body">
-        {% for model in filter_tree.objects.itervalues() %}
-          <h2>{{ model }}</h2>
+        {% for model in filter_tree.objects.itervalues %}
+          <h2>{{ model.display_name }}</h2>
           <ul>
               {% for field in model.fields %}
                 <li>
