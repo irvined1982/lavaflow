@@ -829,6 +829,7 @@ is most needed.</p>
     function update_value_list(model, field){
         $.getJSON('{% url "lf_value_list" %}?' + $.param({model:model, field:field}), function(data){
             var html="";
+            console.log(data['data']);
             $.each(data['data']['values'], function(index, value){
                 html+='<option value='+value.value+'>'+value.display_value+'</option>';
             });
