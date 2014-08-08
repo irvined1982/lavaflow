@@ -735,7 +735,10 @@ were pending at that time.  Pending tasks are those that have been submitted to 
 <div id='chart_resources'><svg style='height:500px'></svg></div>
 <div id="chart_resources_table"></div>
 <h1>Job Submission</h1>
-<p>Shows data on when jobs were submitted to the cluster</p>
+<p>The job submission chart shows how many jobs were submitted to the scheduling system at a given time period.  Use
+this chart to see when the cluster is being used the most, and by which group.  This chart helps you understand usage
+patterns of the cluster, along with the utilization and CPU consumption chart, it can help understand when capacity
+is most needed.</p>
 
 <ul id="chart_submission_nav" class="nav nav-tabs">
     <li id="chart_submission_overall" class="active"><a href="#" onClick='set_active_chart("chart_submission", "overall"); return false;'>Overall</a></li>
@@ -759,12 +762,16 @@ were pending at that time.  Pending tasks are those that have been submitted to 
     <p>
         This chart shows the CPU Consumption rate grouped accordingly, this is the rate at which CPU hours are being
         consumed.  The table below shows the total amount of CPU hours consumed.  This is similar to an energy meter and
-        an energy bill respectively.  The graph shows how much was being used at a moment in time, and the table shows
-        how much was being used.  The rates CPU Hours per Hour used for the rate, and CPU Hours for the total.  A
+        an energy bill respectively.  The graph shows how much was being used on average over for that period, and the
+        table shows how much was being used.  The rates CPU Hours per Hour used for the rate, and CPU Hours for the total.  A
         single cpu hour is the base unit of measurement and donates a CPU core that was occupied by a task for a total
         of one hour.  Example:  A job running on ten CPUs is consuming CPU time at a rate of ten cpu hours per hour, if
         the job runs for half an hour, it will consume 5 CPU Hours of resource.
     </p>
+    <p>How does this char differ from utilization? First, the utilization is a snapshot of the cluster state at a given
+    moment in time, measuring the exact number of cores in use, and the exact number of cores pending.  This chart shows
+    an average value.  The utilization chart shows demand on the cluster, this chart shows average consumption.  A
+    subtle but important distinction.</p>
 <ul id="chart_cpu_nav" class="nav nav-tabs">
     <li id="chart_cpu_overall" class="active"><a href="#" onClick='set_active_chart("chart_cpu", "overall"); return false;'>Overall</a></li>
     <li id="chart_cpu_size"><a href="#" onClick='set_active_chart("chart_cpu", "size"); return false;'>By Job Size</a></li>
