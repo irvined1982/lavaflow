@@ -1562,7 +1562,7 @@ def build_model_filter(request):
         print model
         try:
             if not model.top_level_filter:
-            continue
+                continue
         except AttributeError:
             continue
         name=model._meta.verbose_name.title()
