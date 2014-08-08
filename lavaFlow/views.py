@@ -1615,7 +1615,7 @@ def build_filter_tree(model):
                 'display_name':field.verbose_name.title(),
                 'filter':relation + field_name,
             })
-
+    print node
     return node
 
 
