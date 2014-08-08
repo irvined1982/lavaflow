@@ -1556,7 +1556,7 @@ def build_filter(request):
 
 def build_model_filter(request):
     tree={}
-    print get_app()
+    
     print get_app("lavaFlow")
     for model in get_models('lavaFlow'):
         print model
