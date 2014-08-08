@@ -1604,7 +1604,7 @@ def build_filter_tree(model):
             # downstream relation 1-n
             pass
         elif type(field) == RelatedObject:
-            # Upstream relation
+            node['relations'].append({'name':field_name, 'display_name':field_name, 'relation':field.model.__name__})
             pass
         elif m2m:
             # many to many

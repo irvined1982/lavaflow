@@ -5,6 +5,7 @@
 	</li>
 	<li>
 	<a href="#"><span id="filterIcon" class="glyphicon glyphicon-filter"></a></span>
+    <a href="#" data-toggle="modal" data-target="#filterModal"><span id="filterModallinkIcon" class="glyphicon glyphicon-question-sign"></a></span>
 	</li>
 
 {% endblock %}
@@ -783,5 +784,37 @@ is most needed.</p>
 <div id='chart_cpu'><svg style='height:500px'></svg></div>
 <div id="chart_cpu_table"></div>
 <br /><br /><br /><br /><br />
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="filterModalLabel">Modify Filters</h4>
+      </div>
+      <div class="modal-body">
+        {% for model in filter_tree %}
+          <h2>{{ model.display_name }}</h2>
+          <ul>
+              {% for field in model.fields %}
+                <li>
+                    {{ field.display_name }}
+                    <span class="glyphicon question-sign help_popover" data-toggle="popover" title="{{ field.display_name }}" data-content="{{ field.help_text }}"></span>
+                </li>
+              {% endfor %}
+          </ul>
+        {% endfor %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 {% endblock %}
