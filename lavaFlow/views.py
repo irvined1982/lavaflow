@@ -1574,7 +1574,10 @@ def build_filter_tree(model):
     name=model._meta.verbose_name.title()
     node['name']=name
     for field_name in model._meta.get_all_field_names():
-        if field_name in model.no_filter_fields:
+        try:
+            if field_name in model.no_filter_fields:
+                continue
+        except AttributeError:
             continue
         # if normal field
         print field_name
