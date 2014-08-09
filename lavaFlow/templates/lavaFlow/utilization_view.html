@@ -877,9 +877,9 @@ is most needed.</p>
 </div>
 <script>
 function range_filter_add(action){
-    $("#range_filter_input").css.removeClass("has-error");
+    $("#range_filter_input").removeClass("has-error");
     if ($("#range_filter_value").val() == ""){
-        $("#range_filter_input").css.addClass("has-error");
+        $("#range_filter_input").addClass("has-error");
         return false;
     }
     filter_date[active_filter][action][$("#range_filter_operator").val()]=$("#range_filter_value").val();
