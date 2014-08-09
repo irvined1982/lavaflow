@@ -1,9 +1,10 @@
+{% with new_root as root|add:" ":|add:model_name %}
 {% for model in model_tree.itervalues %}
     {% if model.name == model_name %}
         {% for relation in model.relations %}
-            {{ relation }} {{ root.split }}
-            {% if relation.relation not in root.split %}
-                
+            {{ relation }} {{ new_root.split }}
+            {% if relation.relation not in new_root.split %}
+
             {% endif %}
         {% endfor %}
         {% for field in model.fields %}
@@ -18,3 +19,4 @@
         {% endfor %}
     {% endif %}
 {% endfor %}
+{% endwith %}
