@@ -986,25 +986,26 @@ is most needed.</p>
     function update_model_count(){
         var count;
         var total=0;
-        $.each(filter_data, function(index, value){
+        for(var propertyName in filter_data) {
             count = 0;
-            count += value.filter.in.length();
-            count += value.filter.lt ? 1 : 0;
-            count += value.filter.lte ? 1 : 0;
-            count += value.filter.gt ? 1 : 0;
-            count += value.filter.gte ? 1 : 0;
-            count += value.exclude.in.length();
-            count += value.exclude.lt ? 1 : 0;
-            count += value.exclude.lte ? 1 : 0;
-            count += value.exclude.gt ? 1 : 0;
-            count += value.exclude.gte ? 1 : 0;
+            count += filter_data[propertyName].filter.in.length();
+            count += filter_data[propertyName].filter.lt ? 1 : 0;
+            count += filter_data[propertyName].filter.lte ? 1 : 0;
+            count += filter_data[propertyName].filter.gt ? 1 : 0;
+            count += filter_data[propertyName].filter.gte ? 1 : 0;
+            count += filter_data[propertyName].exclude.in.length();
+            count += filter_data[propertyName].exclude.lt ? 1 : 0;
+            count += filter_data[propertyName].exclude.lte ? 1 : 0;
+            count += filter_data[propertyName].exclude.gt ? 1 : 0;
+            count += filter_data[propertyName].exclude.gte ? 1 : 0;
             if (count > 0){
-                $(value.filter_string + "_label").html("<b>"+ $(value.filter_string + "_label").text() +"</b>");
+                $(filter_data[propertyName].filter_string + "_label").html("<b>"+ $(filter_data[propertyName].filter_string + "_label").text() +"</b>");
             }else{
-                $(value.filter_string + "_label").text($(value.filter_string + "_label").text());
+                $(filter_data[propertyName].filter_string + "_label").text($(filter_data[propertyName].filter_string + "_label").text());
             }
             total+=count
-        });
+        }
+        
         if (total > 0){
             $("#filterCount").text(total);
         }else{
