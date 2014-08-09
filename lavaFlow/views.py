@@ -1574,7 +1574,7 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
         'end_time': end_time_js,
         'filter_tree':FILTER_FIELDS,
     }
-    print data
+
     return render(request, "lavaFlow/utilization_view.html", data)
 
 
