@@ -1,10 +1,10 @@
-{% with model_name|add:" "|add:root as new_root %}
+{% with model_name|add:" Attempt Cluster Task"|add:root as new_root %}
     {% for model in model_tree.itervalues %}
         {% if model.name == model_name %}
             {% for relation in model.relations %}
                 {% if relation.relation not in new_root.split %}
                     {{ relation.relation }} {{ new_root.split }}
-                    {% include "lavaFlow/widgets/filter_elements.html" with                        root=new_root                          previous_field=previous_field|add:"->"|add:relation.display_name                         model_tree=model_tree                         model_name=relation.relation only %}
+                    {% include "lavaFlow/widgets/filter_elements.html" with root=new_root previous_field=previous_field|add:"->"|add:relation.display_name model_tree=model_tree model_name=relation.relation only %}
                 {% endif %}
             {% endfor %}
             {% for field in model.fields %}
