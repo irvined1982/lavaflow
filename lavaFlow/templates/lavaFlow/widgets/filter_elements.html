@@ -1,8 +1,8 @@
 {% for model in filter_tree.itervalues %}
-        {{ model.name }} {{ model_name }}
     {% if model.name == model_name %}
         found model {{ model.name }}
         {% for field in model.fields %}
+        {{ field }}
             <li>
                 <a href="#" onClick="update_value_list('{{ field.filter }}'); return false;">
                     <span class="{{ field.filter }}_label">
@@ -19,4 +19,6 @@
             </li>
         {% endfor %}
     {% endif %}
+    Iterating {{ model.name }}
+    out of {{ filter_tree }}
 {% endfor %}
