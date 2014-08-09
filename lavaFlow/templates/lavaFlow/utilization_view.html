@@ -869,7 +869,7 @@ is most needed.</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button onClick="update_filter_count(); return false;" type="button" class="btn btn-primary">Update</button>
+        <button type="button" class="btn btn-primary">Update</button>
       </div>
     </div>
   </div>
@@ -962,26 +962,6 @@ is most needed.</p>
     // Initialize Modal Help Popovers.
     $('.popover_help').popover();
 
-    function update_filter_count(){
-        var count=0;
-        $.each(filter_data, function(index, value){
-            if (
-                value.filter.in.length >0 ||
-                value.filter.lt ||
-                value.filter.lte ||
-                value.filter.gt ||
-                value.filter.gte||
-                value.exclude.in.length > 0 ||
-                value.exclude.lt ||
-                value.exclude.lte ||
-                value.exclude.gt ||
-                value.exclude.gte
-                ){
-                count += 1;
-            }
-        });
-
-    }
 
     function update_model_count(){
         var count;
@@ -999,9 +979,9 @@ is most needed.</p>
             count += filter_data[propertyName].exclude.gt ? 1 : 0;
             count += filter_data[propertyName].exclude.gte ? 1 : 0;
             if (count > 0){
-                $(filter_data[propertyName].filter_string + "_label").html("<b>"+ $(filter_data[propertyName].filter_string + "_label").text() +"</b>");
+                $("."+filter_data[propertyName].filter_string + "_label").html("<b>"+ $(filter_data[propertyName].filter_string + "_label").text() +"</b>");
             }else{
-                $(filter_data[propertyName].filter_string + "_label").text($(filter_data[propertyName].filter_string + "_label").text());
+                $("."+filter_data[propertyName].filter_string + "_label").text($(filter_data[propertyName].filter_string + "_label").text());
             }
             total+=count
         }
