@@ -1591,7 +1591,7 @@ def build_model_filter(request):
             continue
 
         objects[model.__name__]=build_filter_tree(model)
-    print data
+
     return data
 
 

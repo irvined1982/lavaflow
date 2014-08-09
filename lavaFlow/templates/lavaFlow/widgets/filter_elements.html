@@ -1,7 +1,10 @@
 {% for model in model_tree.itervalues %}
     {% if model.name == model_name %}
+        {% for relation in model.relations %}
+        {% if relation not in root.split %}
+            {% include "lavaFlow/widgets/filter_elements.html" with root=root|add:" "|add:model.name model_tree=model_tree model_name=relation only%}
+        {% endif %}
         {% for field in model.fields %}
-        
             <li>
                 <a href="#" onClick="update_value_list('{{ field.filter }}'); return false;">
                     <span class="{{ field.filter }}_label">
