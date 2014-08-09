@@ -42,46 +42,57 @@ FILTER_FIELDS=[
         {
             'filter_string':'status__name',
             'display_name':'Exit Status',
+            'can_select_values':True,
         },
         {
             'filter_string':'status__exited_cleanly',
             'display_name':'Exited OK',
+            'can_select_values':True,
         },
         {
             'filter_string':'queue__name',
             'display_name':'Queue Name',
+            'can_select_values':True,
         },
         {
             'filter_string':'pend_time',
             'display_name':'Pend Time',
+            'can_enter_range':True,
         },
         {
             'filter_string':'wall_time',
             'display_name':'Wall Clock Time',
+            'can_enter_range':True,
         },
         {
             'filter_string':'cpu_time',
             'display_name':'CPU Time',
+            'can_enter_range':True,
         },
         {
             'filter_string':'start_hour_of_day',
             'display_name':'Start Hour',
+            'can_select_values':True,
         },
         {
             'filter_string':'start_month',
             'display_name':'Start Month',
+            'can_select_values':True,
         },
         {
             'filter_string':'start_week_of_year',
             'display_name':'Start Week Number',
+            'can_select_values':True,
         },
         {
             'filter_string':'start_day_of_week',
             'display_name':'Start Day of Week',
+            'can_select_values':True,
         },
         {
             'filter_string':'start_day_of_month',
             'display_name':'Start Day of Month',
+            'can_select_values':True,
         },
         {
             'filter_string':'start_time',
@@ -90,22 +101,27 @@ FILTER_FIELDS=[
         {
             'filter_string':'end_hour_of_day',
             'display_name':'End Hour',
+            'can_select_values':True,
         },
         {
             'filter_string':'end_month',
             'display_name':'End Month',
+            'can_select_values':True,
         },
         {
             'filter_string':'end_week_of_year',
             'display_name':'End Week Number',
+            'can_select_values':True,
         },
         {
             'filter_string':'end_day_of_week',
             'display_name':'End Day of Week',
+            'can_select_values':True,
         },
         {
             'filter_string':'end_day_of_month',
             'display_name':'End Day of Month',
+            'can_select_values':True,
         },
         {
             'filter_string':'end_time',
@@ -114,22 +130,27 @@ FILTER_FIELDS=[
         {
             'filter_string':'submit_hour_of_day',
             'display_name':'Submit Hour',
+            'can_select_values':True,
         },
         {
             'filter_string':'submit_month',
             'display_name':'Submit Month',
+            'can_select_values':True,
         },
         {
             'filter_string':'submit_week_of_year',
             'display_name':'Submit Week Number',
+            'can_select_values':True,
         },
         {
             'filter_string':'submit_day_of_week',
             'display_name':'Submit Day of Week',
+            'can_select_values':True,
         },
         {
             'filter_string':'submit_day_of_month',
             'display_name':'Submit Day of Month',
+            'can_select_values':True,
         },
         {
             'filter_string':'submit_time',
@@ -138,26 +159,32 @@ FILTER_FIELDS=[
         {
             'filter_string':'execution_hosts__name',
             'display_name':'Execution Host',
+            'can_select_values':True,
         },
         {
             'filter_string':'projects__name',
             'display_name':'Project',
+            'can_select_values':True,
         },
         {
             'filter_string':'user__name',
             'display_name':'Owner',
+            'can_select_values':True,
         },
         {
             'filter_string':'task__task_id',
             'display_name':'Task ID',
+            'can_enter_range':True,
         },
         {
             'filter_string':'job__job_id',
             'display_name':'Job ID',
+            'can_enter_range':True,
         },
         {
             'filter_string':'cluster__name',
             'display_name':'Cluster',
+            'can_select_values':True,
         },
     ]
 
