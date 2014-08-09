@@ -878,7 +878,7 @@ is most needed.</p>
     var filter_data=[];
     {% for model in filter_tree.objects.itervalues %}
         {% for field in model.fields %}
-            filter_data[{{field.filter}}] = {
+            filter_data['{{field.filter}}'] = {
                 field:'{{ field.name }}',
                 field_display:'{{ field.display_name }}',
                 model:'{{ model.name }}',

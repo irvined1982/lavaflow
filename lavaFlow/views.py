@@ -1606,7 +1606,7 @@ def build_filter_tree(model):
     }
     relation=model.relation_to_attempts
     if len(relation) > 0:
-        relation += "_"
+        relation += "__"
 
     for field_name in model._meta.get_all_field_names():
         try:
