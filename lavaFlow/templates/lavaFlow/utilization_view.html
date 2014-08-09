@@ -814,17 +814,27 @@ is most needed.</p>
                          </ul>
                   </div>
                   <div class="col-xs-8">
-                      <h2>Include</h2>
-                      <div id="includeValueList">
-                          <input type="text" class="form-control" id="include_search" placeholder="Search">
-                          <select id="selected_filters" class="form-control" name="selected_filters" multiple="multiple">
-                          </select>
+                      <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h3 class="panel-title">Include</h3>
+                          </div>
+
+                          <div class="panel-body">
+                              <input type="text" class="form-control" id="include_search" placeholder="Search">
+                              <select id="include_excludes" class="form-control" name="selected_excludes" multiple="multiple">
+                              </select>
+                          </div>
                       </div>
-                      <h2>Exclude</h2>
-                      <div id="valueList">
-                          <input type="text" class="form-control" id="exclude_search" placeholder="Search">
-                          <select id="selected_excludes" class="form-control" name="selected_excludes" multiple="multiple">
-                          </select>
+                      <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h3 class="panel-title">Exclude</h3>
+                          </div>
+
+                          <div class="panel-body">
+                              <input type="text" class="form-control" id="exclude_search" placeholder="Search">
+                              <select id="selected_excludes" class="form-control" name="selected_excludes" multiple="multiple">
+                              </select>
+                          </div>
                       </div>
                       <div class="panel panel-default">
                           <div class="panel-heading">
@@ -833,7 +843,7 @@ is most needed.</p>
                           <div class="panel-body">
                             <div id="ComplexFilterControl" class="row">
                                 <form class="form-inline" role="form">
-                                    <div class="form-group col-xs-2">
+                                    <div class="form-group col-xs-4">
                                         <div class="input-group">
                                             <label class="sr-only" for="filter_type">Filter or Exclude</label>
                                             <select id="filter_type" class="form-control" name="filter_type">
@@ -844,7 +854,7 @@ is most needed.</p>
                                     </div>
                                     <span id="field_name_label"></span>
                                     <div class="form-group">
-                                        <div class="input-group col-xs-2">
+                                        <div class="input-group">
                                             <label class="sr-only" for="filter_action">Email address</label>
                                             <select id="filter_action" class="form-control" name="filter_type">
                                                 <option value="lt">Less Than</option>
