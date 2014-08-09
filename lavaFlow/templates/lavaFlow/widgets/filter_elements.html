@@ -1,14 +1,12 @@
 Included. root: {{ root }}, model_name: {{ model_name }}
-{% for model in filter_tree %}
-        {{ model.name }}
+{% for model in filter_tree.itervalues %}
     {% if model.name == model_name %}
-        "found model: {{ model.name }}"
         {% for field in model.fields %}
             <li>
                 <a href="#" onClick="update_value_list('{{ field.filter }}'); return false;">
                     <span class="{{ field.filter }}_label">
                         {% for r in root.split %}
-                            {% for m in filter_tree.iteritems %}
+                            {% for m in filter_tree.itervalues %}
                                 {% if m.name == r %}
                                     {{ m.display_name }} >
                                 {% endif %}
