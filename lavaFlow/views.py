@@ -1648,9 +1648,10 @@ def get_field_values(request):
     if field not in model._meta.get_all_field_names():
         return create_js_bad_request(message="Field does not exist")
     data={'values':[]}
-    for row in model.objects.values(field).distinct().orderby(field):
+    for row in model.objects.values(field).distinct():
         data['values'].append({
             'value':row[field],
             'display_value':row[field],
         })
+        data['values'].sort(key=lambda x: x['value'])
     return create_js_success(data)

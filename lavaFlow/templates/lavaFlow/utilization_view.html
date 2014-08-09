@@ -18,6 +18,8 @@
 	var excludes={{ excludes|safe }};
 	var count=0;
 
+
+
 	$('#filterIcon').popover({
 		"animation":true,
 		"placement":"bottom",
@@ -799,7 +801,7 @@ is most needed.</p>
                           <ul>
                               {% for field in model.fields %}
                                 <li>
-                                    <a href="#" onClick="update_value_list('{{ model.name }}', '{{ field.name }}'); return false;">{{ field.display_name }}</a>
+                                    <a href="#" onClick="update_value_list('{{ field.filter }}'); return false;">{{ field.display_name }}</a>
                                     <a href="#" class="popover_help" data-toggle="popover" title="{{ field.display_name }}" data-content="{{ field.help_text }}"><span class="glyphicon question-sign"></span></a>
                                 </li>
                               {% endfor %}
@@ -840,10 +842,10 @@ is most needed.</p>
                                         <div class="input-group">
                                             <label class="sr-only" for="filter_action">Email address</label>
                                             <select id="filter_action" class="form-control" name="filter_type">
-                                                <option>Less Than</option>
-                                                <option>Less Than or Equal</option>
-                                                <option>Greater Than</option>
-                                                <option>Greater Than or Equal</option>
+                                                <option value="lt">Less Than</option>
+                                                <option value="lte">Less Than or Equal</option>
+                                                <option value="gt">Greater Than</option>
+                                                <option value="gte">Greater Than or Equal</option>
                                             </select>
                                         </div>
                                     </div>
@@ -872,16 +874,90 @@ is most needed.</p>
     </div>
   </div>
 </div>
-<script>$('.popover_help').popover();</script>
 <script>
-    function update_value_list(model, field){
-        $.getJSON('{% url "lf_value_list" %}?' + $.param({model:model, field:field}), function(data){
-            var html="";
-            $.each(data['data']['values'], function(index, value){
-                html+='<option value='+value.value+'>'+value.display_value+'</option>';
+    var filter_data=[];
+    {% for model in filter_tree.objects.itervalues %}
+        {% for field in model.fields %}
+            filter_data[{{field.filter}}] = {
+                field='{{ field }}',
+                field_display='{{ field.display_name }}',
+                model='{{ model }}',
+                model_display='{{ model.display_name }}',
+                values:[],
+                filter:{
+                    in:[],
+                    lt:null,
+                    gt:null,
+                    lte:null,
+                    gte:null,
+                },
+                exclude::{
+                    in:[],
+                    lt:null,
+                    gt:null,
+                    lte:null,
+                    gte:null,
+                }
+            };
+        {% endfor %}
+    {% endfor %}
+</script>
+
+
+<script>
+    var active_filter="";
+    function update_value_list(filter){
+        active_filter=filter;
+        if (filter_data[filter].values.length) < 1){
+            $.getJSON('{% url "lf_value_list" %}?' + $.param({model:filter_data[filter].model, field:filter_data[filter].field}), function(data){
+                filter_data[filter]=data.data.values;
+                if (active_filter == filter){
+                  update_filter_widgets();
+                }
             });
-            $("#selected_values").html(html);
-        });
+        }else{
+            update_filter_widgets();
+        }
     }
+    function update_filter_widgets(){
+        var filter_html="";
+        var exclude_html="";
+        $("#field_name_label").text(filter_data[active_filter].model_display + " " + filter_data[active_filter].field_display);
+
+        $.each(filter_data[active_filter][values], function (index, value){
+
+            var selected=""
+            if (filter_data[active_filter].filter.in.indexOf(value.value) == -1 ){
+                // not in active filters
+                selected = "";
+            }else{
+                selected = "selected"
+            }
+            filter_html += "<option value='"+value.value+"' "+ selected + ">"+value.display_value+"</option>";
+            if (filter_data[active_filter].exclude.in.indexOf(value.value) == -1 ){
+                // not in active filters
+                selected = "";
+            }else{
+                selected = "selected"
+            }
+            exclude_html += "<option value='"+value.value+"' "+ selected + ">"+value.display_value+"</option>";
+        });
+        $('#selected_filters').html(filter_html);
+        $('#selected_excludes').html(filter_html);
+    }
+
+    // Update the filters for active_filter
+    $('#selected_filters').change(function() {
+        filter_data[active_filter].filter.in = $("#selected_filters:selected").map(function(){ return this.value }).get()
+    });
+
+    // Update the excludes for active_filter
+    $('#selected_excludes').change(function() {
+        filter_data[active_filter].exclude.in = $("#selected_excludes:selected").map(function(){ return this.value }).get()
+    });
+
+    // Initialize Modal Help Popovers.
+    $('.popover_help').popover();
+
 </script>
 {% endblock %}
