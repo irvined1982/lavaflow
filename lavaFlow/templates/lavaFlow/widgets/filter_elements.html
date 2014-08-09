@@ -1,4 +1,4 @@
-{% with new_root as model_name|add:" "|add:root %}
+{% with model_name|add:" "|add:root new_root %}
     {% for model in model_tree.itervalues %}
         {% if model.name == model_name %}
             {% for relation in model.relations %}
