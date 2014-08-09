@@ -837,32 +837,33 @@ is most needed.</p>
                             <h3 class="panel-title">Filter by Range</h3>
                           </div>
                           <div class="panel-body">
-                            <div id="boundedFilterControl">
-                                <div class="form-horizontal">>
-                                    <span id="field_name_label"></span>
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <label class="sr-only" for="filter_action">Email address</label>
-                                            <select id="filter_action" class="form-control" name="filter_type">
-                                                <option value="lt">Less Than</option>
-                                                <option value="lte">Less Than or Equal</option>
-                                                <option value="gt">Greater Than</option>
-                                                <option value="gte">Greater Than or Equal</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <label class="sr-only" for="filter_value">Value</label>
-                                            <input type="text" id="filter_value" class="form-control" name="filter_type">
-                                        </div>
-                                    </div>
+                            <form class="form-inline" role="form">
+                              <span id="field_name_label"></span>
 
-
-                                  <button type="button" class="btn btn-default">Include</button>
-                                  <button type="button" class="btn btn-default">Exclude</button>
+                              <div class="form-group">
+                                <label class="sr-only" for="exampleInputEmail2">Email address</label>
+                                <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+                              </div>
+                              <div class="form-group">
+                                <div class="input-group">
+                                    <label class="sr-only" for="filter_action">Email address</label>
+                                    <select id="filter_action" class="form-control" name="filter_type">
+                                        <option value="lt">Less Than</option>
+                                        <option value="lte">Less Than or Equal</option>
+                                        <option value="gt">Greater Than</option>
+                                        <option value="gte">Greater Than or Equal</option>
+                                    </select>
                                 </div>
-                            </div>
+                              </div>
+                              <div class="form-group">
+                                    <div class="input-group">
+                                        <label class="sr-only" for="filter_value">Value</label>
+                                        <input type="text" id="filter_value" class="form-control" name="filter_type">
+                                    </div>
+                              </div>
+                              <button type="button" class="btn btn-default">Include</button>
+                              <button type="button" class="btn btn-default">Exclude</button>
+                            </form>
                           </div>
                           <div id="ActiveComplexFilters">
 
