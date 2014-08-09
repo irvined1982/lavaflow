@@ -979,10 +979,13 @@ is most needed.</p>
             count += filter_data[propertyName].exclude.gt ? 1 : 0;
             count += filter_data[propertyName].exclude.gte ? 1 : 0;
             if (count > 0){
-                $("."+filter_data[propertyName].filter_string + "_label").html("<b>"+ $(filter_data[propertyName].filter_string + "_label").text() +"</b>");
+                $("."+filter_data[propertyName].filter_string + "_label").each(function(obj){
+                    obj.html("<b>"+ obj.text() +"</b>");
+                });
             }else{
-                $("."+filter_data[propertyName].filter_string + "_label").text($(filter_data[propertyName].filter_string + "_label").text());
-            }
+                $("."+filter_data[propertyName].filter_string + "_label").each(function(obj){
+                    obj.text(obj.text());
+                });
             total+=count
         }
 
