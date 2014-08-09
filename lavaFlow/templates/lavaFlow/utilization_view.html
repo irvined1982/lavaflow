@@ -891,7 +891,7 @@ is most needed.</p>
                     lte:null,
                     gte:null,
                 },
-                exclude::{
+                exclude:{
                     in:[],
                     lt:null,
                     gt:null,
@@ -908,7 +908,7 @@ is most needed.</p>
     var active_filter="";
     function update_value_list(filter){
         active_filter=filter;
-        if (filter_data[filter].values.length) < 1){
+        if (filter_data[filter].values.length < 1){
             $.getJSON('{% url "lf_value_list" %}?' + $.param({model:filter_data[filter].model, field:filter_data[filter].field}), function(data){
                 filter_data[filter]=data.data.values;
                 if (active_filter == filter){
