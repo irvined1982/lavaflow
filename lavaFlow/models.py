@@ -1494,7 +1494,7 @@ class Attempt(models.Model):
             ['job', 'end_time']
         ]
 
-        filter_fields=[
+    filter_fields=[
         {
             'filter_name':'status__name',
             'display_name':'Exit Status',
