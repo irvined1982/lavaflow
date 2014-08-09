@@ -1,4 +1,5 @@
 {% for model in filter_tree.itervalues %}
+        {{ model.name }} {{ model_name }}
     {% if model.name == model_name %}
         found model {{ model.name }}
         {% for field in model.fields %}
