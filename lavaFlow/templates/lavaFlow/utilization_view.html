@@ -917,6 +917,12 @@ is most needed.</p>
     var active_filter="";
     function update_value_list(filter){
         active_filter=filter;
+        for(var propertyName in filter_data) {
+            $("#"+propertyName+"_label").removeClass("active");
+            if (propertyName == filter){
+                $("#"+propertyName+"_label").addClass("active");
+            }
+        }
         if (filter_data[filter].values.length < 1){
             $.getJSON('{% url "lf_value_list" %}?' + $.param({field:filter}), function(data){
                 filter_data[filter].values=data.data.values;
@@ -987,9 +993,7 @@ is most needed.</p>
             count += filter_data[propertyName].exclude.gt ? 1 : 0;
             count += filter_data[propertyName].exclude.gte ? 1 : 0;
             $("#"+propertyName + "_label").removeClass("active");
-            if (count > 0){
-                $("#"+propertyName + "_label").addClass("active");
-            }
+            $("#"+propertyName + "_badge").text(count);
             total+=count
         }
         if (total > 0){
