@@ -804,9 +804,8 @@ is most needed.</p>
                             {% for field in filter_tree %}
                                 <li id="{{ field.filter_string }}_label">
                                     <a href="#" onClick="update_value_list('{{ field.filter_string }}'); return false;">
-                                      <span class="{{ field.filter_string }}_label">{{ field.display_name }}</span>
+                                      <span>{{ field.display_name }}</span><span id="{{ field.filter_string }}_badge" class="badge pull-right"></span>
                                     </a>
-
                                 </li>
                             {% endfor %}
                          </ul>
@@ -818,7 +817,6 @@ is most needed.</p>
                           </div>
 
                           <div class="panel-body">
-
                               <select size="15" id="selected_filters" class="form-control" name="selected_filters" multiple="multiple">
                               </select>
                           </div>
@@ -993,7 +991,9 @@ is most needed.</p>
             count += filter_data[propertyName].exclude.gt ? 1 : 0;
             count += filter_data[propertyName].exclude.gte ? 1 : 0;
             $("#"+propertyName + "_label").removeClass("active");
-            $("#"+propertyName + "_badge").text(count);
+
+            $("#"+propertyName + "_badge").text((count > 0) ? count : "");
+            
             total+=count
         }
         if (total > 0){
