@@ -782,10 +782,15 @@ is most needed.</p>
 <div id="chart_cpu_table"></div>
 <br /><br /><br /><br /><br />
 
-
+<style>
+.bigModal{
+   width:660px;
+   margin-left: -300;
+}
+</style>
 
 <!-- Modal -->
-<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel" aria-hidden="true">
+<div class="bigModal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -802,7 +807,7 @@ is most needed.</p>
                                     <a href="#" onClick="update_value_list('{{ field.filter_string }}'); return false;">
                                       <span class="{{ field.filter_string }}_label">{{ field.display_name }}</span>
                                     </a>
-                                    
+
                                 </li>
                             {% endfor %}
                          </ul>
