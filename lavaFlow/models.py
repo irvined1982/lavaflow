@@ -297,9 +297,12 @@ class Cluster(models.Model):
         help_text='The name of the cluster',
     )
 
-    top_level_filter=True
-    relation_to_attempts="cluster"
-
+    filter_fields=[
+        {
+            'filter_name':"cluster__name",
+            'display_name':'Name',
+        },
+    ]
     class Meta:
         ordering=['name']
 
@@ -497,7 +500,12 @@ class Project(models.Model):
 
     """
     name = models.CharField(max_length=100, unique=True, db_index=True)
-
+    filter_fields=[
+        {
+            'filter_name':'projects__name',
+            'display_name':'Name',
+        },
+    ]
     def get_absolute_url(self):
         """
         The absolute URL to the project view.
@@ -724,7 +732,16 @@ class HostLog(ClusterLog):
 class Queue(models.Model):
     cluster = models.ForeignKey(Cluster, db_index=True)
     name = models.CharField(max_length=128)
-
+    filter_fields=[
+        {
+            'filter_name':'queue__name',
+            'display_name':'Name',
+        },
+        {
+            'filter_name':'cluster__name',
+            'display_name':'Cluster',
+        },
+    ]
     def get_absolute_url(self):
         args = {
         'start_time_js': 0,
@@ -917,7 +934,48 @@ class Job(models.Model):
     submit_day_of_month = models.IntegerField()
     submit_week_of_year = models.IntegerField()
     submit_month = models.IntegerField()
-
+    filter_fields=[
+        {
+            'filter_name':'submit_hour_of_day',
+            'display_name':'Submit Hour',
+        },
+        {
+            'filter_name':'submit_month',
+            'display_name':'Submit Month',
+        },
+        {
+            'filter_name':'submit_week_of_year',
+            'display_name':'Submit Week Number',
+        },
+        {
+            'filter_name':'submit_day_of_week',
+            'display_name':'Submit Day of Week',
+        },
+        {
+            'filter_name':'submit_day_of_month',
+            'display_name':'Submit Day of Month',
+        },
+        {
+            'filter_name':'submit_time',
+            'display_name':'Submit Time',
+        },
+        {
+            'filter_name':'job__submit_host__name',
+            'display_name':'Job ID',
+        },
+        {
+            'filter_name':'job__user__name',
+            'display_name':'Owner',
+        },
+        {
+            'filter_name':'job__job_id',
+            'display_name':'Job ID',
+        },
+        {
+            'filter_name':'cluster__name',
+            'display_name':'Cluster',
+        },
+    ]
     def save(self, *args, **kwargs):
         d=self.submit_time_datetime()
         self.submit_hour_of_day=d.hour
@@ -1134,7 +1192,6 @@ class JobSubmitOpenLava(models.Model):
     login_shell = models.CharField(max_length=1024)
     user_priority = models.IntegerField()
 
-
 class Task(models.Model):
     cluster = models.ForeignKey(Cluster)
     job = models.ForeignKey(Job)
@@ -1146,6 +1203,49 @@ class Task(models.Model):
     submit_day_of_month = models.IntegerField()
     submit_week_of_year = models.IntegerField()
     submit_month = models.IntegerField()
+    filter_fields=[
+        {
+            'filter_name':'submit_hour_of_day',
+            'display_name':'Submit Hour',
+        },
+        {
+            'filter_name':'submit_month',
+            'display_name':'Submit Month',
+        },
+        {
+            'filter_name':'submit_week_of_year',
+            'display_name':'Submit Week Number',
+        },
+        {
+            'filter_name':'submit_day_of_week',
+            'display_name':'Submit Day of Week',
+        },
+        {
+            'filter_name':'submit_day_of_month',
+            'display_name':'Submit Day of Month',
+        },
+        {
+            'filter_name':'submit_time',
+            'display_name':'Submit Time',
+        },
+
+        {
+            'filter_name':'task__user__name',
+            'display_name':'Owner',
+        },
+        {
+            'filter_name':'task__task_id',
+            'display_name':'Task ID',
+        },
+        {
+            'filter_name':'job__job_id',
+            'display_name':'Job ID',
+        },
+        {
+            'filter_name':'cluster__name',
+            'display_name':'Cluster',
+        },
+    ]
 
     def submit_time_datetime(self):
         return datetime.datetime.utcfromtimestamp(self.submit_time)
@@ -1273,6 +1373,7 @@ class Attempt(models.Model):
     submit_day_of_month = models.IntegerField()
     submit_week_of_year = models.IntegerField()
     submit_month = models.IntegerField()
+
     start_hour_of_day = models.IntegerField()
     start_day_of_week = models.IntegerField()
     start_day_of_month = models.IntegerField()
@@ -1393,8 +1494,132 @@ class Attempt(models.Model):
             ['job', 'end_time']
         ]
 
-    top_level_filter=True
-    relation_to_attempts=""
+        filter_fields=[
+        {
+            'filter_name':'status__name',
+            'display_name':'Exit Status',
+        },
+        {
+            'filter_name':'status__exited_cleanly',
+            'display_name':'Exited OK',
+        },
+        {
+            'filter_name':'queue__name',
+            'display_name':'Queue Name',
+        },
+        {
+            'filter_name':'pend_time',
+            'display_name':'Pend Time',
+        },
+        {
+            'filter_name':'wall_time',
+            'display_name':'Wall Clock Time',
+        },
+        {
+            'filter_name':'cpu_time',
+            'display_name':'CPU Time',
+        },
+        {
+            'filter_name':'start_hour_of_day',
+            'display_name':'Start Hour',
+        },
+        {
+            'filter_name':'start_month',
+            'display_name':'Start Month',
+        },
+        {
+            'filter_name':'start_week_of_year',
+            'display_name':'Start Week Number',
+        },
+        {
+            'filter_name':'start_day_of_week',
+            'display_name':'Start Day of Week',
+        },
+        {
+            'filter_name':'start_day_of_month',
+            'display_name':'Start Day of Month',
+        },
+        {
+            'filter_name':'start_time',
+            'display_name':'Start Time',
+        },
+
+        {
+            'filter_name':'end_hour_of_day',
+            'display_name':'End Hour',
+        },
+        {
+            'filter_name':'end_month',
+            'display_name':'End Month',
+        },
+        {
+            'filter_name':'end_week_of_year',
+            'display_name':'End Week Number',
+        },
+        {
+            'filter_name':'end_day_of_week',
+            'display_name':'End Day of Week',
+        },
+        {
+            'filter_name':'end_day_of_month',
+            'display_name':'End Day of Month',
+        },
+        {
+            'filter_name':'end_time',
+            'display_name':'End Time',
+        },
+
+
+
+        {
+            'filter_name':'submit_hour_of_day',
+            'display_name':'Submit Hour',
+        },
+        {
+            'filter_name':'submit_month',
+            'display_name':'Submit Month',
+        },
+        {
+            'filter_name':'submit_week_of_year',
+            'display_name':'Submit Week Number',
+        },
+        {
+            'filter_name':'submit_day_of_week',
+            'display_name':'Submit Day of Week',
+        },
+        {
+            'filter_name':'submit_day_of_month',
+            'display_name':'Submit Day of Month',
+        },
+        {
+            'filter_name':'submit_time',
+            'display_name':'Submit Time',
+        },
+        {
+            'filter_name':'execution_hosts__name',
+            'display_name':'Execution Host',
+        },
+        {
+            'filter_name':'projects__name',
+            'display_name':'Project',
+        },
+        {
+            'filter_name':'user__name',
+            'display_name':'Owner',
+        },
+        {
+            'filter_name':'task__task_id',
+            'display_name':'Task ID',
+        },
+        {
+            'filter_name':'job__job_id',
+            'display_name':'Job ID',
+        },
+        {
+            'filter_name':'cluster__name',
+            'display_name':'Cluster',
+        },
+    ]
 
 
 

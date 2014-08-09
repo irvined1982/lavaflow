@@ -796,16 +796,17 @@ is most needed.</p>
           <div class="container-fluid">
               <div class="row">
                   <div class="col-xs-6">
-                      {% for root_name in filter_tree.roots %}
-                        {% for model in filter_tree.objects.itervalues %}
-                          {% if model.name == root_name %}
-                              <h2>{{ model.display_name }}</h2>
-                              <ul>
-                                  {% include "lavaFlow/widgets/filter_elements.html" with root="" model_tree=filter_tree.objects model_name=model.name only%}
-                              </ul>
-                          {% endif %}
-                        {% endfor %}
-                      {% endfor %}
+                    {% for model in filter_tree.objects.itervalues %}
+                        <h2>{{ model.display_name }}</h2>
+                        <ul>
+                            <li>
+                                <a href="#" onClick="update_value_list('{{ field.filter }}'); return false;">
+                                  <span class="{{ field.filter }}_label"></span>
+                                </a>
+                                <a href="#" class="popover_help" data-toggle="popover" title="{{ field.display_name }}" data-content="{{ field.help_text }}"><span class="glyphicon question-sign"></span></a>
+                            </li>
+                         </ul>
+                    {% endfor %}
                   </div>
                   <div class="col-xs-6">
                       <h2>Include</h2>
@@ -879,9 +880,7 @@ is most needed.</p>
         {% for field in model.fields %}
             filter_data['{{field.filter}}'] = {
                 filter_string:'{{ field.filter }}',
-                field:'{{ field.name }}',
                 field_display:'{{ field.display_name }}',
-                model:'{{ model.name }}',
                 model_display:'{{ model.display_name }}',
                 values:[],
                 filter:{
@@ -909,7 +908,7 @@ is most needed.</p>
     function update_value_list(filter){
         active_filter=filter;
         if (filter_data[filter].values.length < 1){
-            $.getJSON('{% url "lf_value_list" %}?' + $.param({model:filter_data[filter].model, field:filter_data[filter].field}), function(data){
+            $.getJSON('{% url "lf_value_list" %}?' + $.param({field:filter}), function(data){
                 filter_data[filter].values=data.data.values;
                 if (active_filter == filter){
                   update_filter_widgets();

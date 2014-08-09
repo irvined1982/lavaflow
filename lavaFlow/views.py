@@ -1576,79 +1576,30 @@ def build_filter(request):
 
 def build_model_filter(request):
     objects={}
-    roots=[]
-    data={'objects':objects, "roots":roots}
+    data={'objects':objects, }
 
     for model in get_models(get_app("lavaFlow")):
         try:
-            if model.top_level_filter:
-                roots.append(model.__name__)
-        except AttributeError:
-            continue
-        try:
-            model.relation_to_attempts
+            model.filter_fields
         except AttributeError:
             continue
 
-        objects[model.__name__]=build_filter_tree(model)
+        objects[model.__name__]={
+            'display_name':model._meta.verbose_name.title(),
+            'name':model.__name__,
+            'fields':model.filter_fields,
+        }
 
     return data
 
 
-def build_filter_tree(model):
-
-    node={
-        'display_name':model._meta.verbose_name.title(),
-        'name':model.__name__,
-        'fields':[],
-        'relations':[],
-        'relation_to_attempts':model.relation_to_attempts,
-    }
-    relation=model.relation_to_attempts
-    if len(relation) > 0:
-        relation += "__"
-
-    for field_name in model._meta.get_all_field_names():
-        try:
-            if field_name in model.no_filter_fields:
-                continue
-        except AttributeError:
-            pass
-
-
-        (field, rmodel, direct, m2m) = model._meta.get_field_by_name(field_name)
-        if type(field) == ForeignKey:
-            # downstream relation 1-n
-            pass
-        elif type(field) == RelatedObject:
-            node['relations'].append({'name':field_name, 'display_name':field_name, 'relation':field.model.__name__})
-            pass
-        elif m2m:
-            # many to many
-            pass
-        else:
-            node['fields'].append({
-                'name':field_name,
-                'display_name':field.verbose_name.title(),
-                'filter':relation + field_name,
-            })
-
-    return node
-
 def get_field_values(request):
     field=request.GET.get("field", None)
-    model=request.GET.get("model", None)
-    if not (field and model):
+    if not (field):
         return create_js_bad_request(message="field and model parameters must be present")
 
-    model=get_model('lavaFlow',model)
-    if not model:
-        return create_js_bad_request(message="Model does not exist")
-
-    if field not in model._meta.get_all_field_names():
-        return create_js_bad_request(message="Field does not exist")
     data={'values':[]}
-    for row in model.objects.values(field).distinct():
+    for row in Attempt.objects.values(field).distinct():
         data['values'].append({
             'value':row[field],
             'display_value':row[field],
