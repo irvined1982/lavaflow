@@ -834,11 +834,11 @@ is most needed.</p>
                       </div>
                       <div class="panel panel-default">
                           <div class="panel-heading">
-                            <h3 class="panel-title">Filter by Range</h3>
+                            <h3 class="panel-title">Filter <span id="field_name_label"></span> by Range</h3>
                           </div>
                           <div class="panel-body">
                             <form class="form-inline" role="form">
-                              <span id="field_name_label"></span>
+
                               <div class="form-group">
                                 <div class="input-group">
                                     <label class="sr-only" for="filter_action">Email address</label>
@@ -908,9 +908,22 @@ is most needed.</p>
         for(var propertyName in filter_data) {
             $("#"+propertyName+"_label").removeClass("active");
             if (propertyName == filter){
+                $("#field_name_label").text(filter_data[filter].display_name);
                 $("#"+propertyName+"_label").addClass("active");
             }
         }
+        // Disable all panels
+        // Check if can select values, if so enable panels
+
+        // Check if can enter range
+        // If so, enable panel and set validation
+
+        // Check if can select datetime range
+        // If so, enable panel
+
+        // Update lists of filters
+        
+
         if (filter_data[filter].values.length < 1){
             $.getJSON('{% url "lf_value_list" %}?' + $.param({field:filter}), function(data){
                 filter_data[filter].values=data.data.values;
@@ -925,7 +938,7 @@ is most needed.</p>
     function update_filter_widgets(){
         var filter_html="";
         var exclude_html="";
-        $("#field_name_label").text(filter_data[active_filter].field_display);
+
 
         $.each(filter_data[active_filter].values, function (index, value){
 
