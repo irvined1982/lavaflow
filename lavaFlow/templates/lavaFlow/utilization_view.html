@@ -907,7 +907,10 @@ function update_range_lists(){
     var html="";
     $.each(operators, function(index, value){
         if (filter_data[active_filter].filter[value.operator]){
-            html += filter_data[active_filter].field_display + value.text + filter_data[active_filter].filter[value.operator] + "<br />";
+            html += "Include " + filter_data[active_filter].field_display + value.text + filter_data[active_filter].filter[value.operator] + "<br />";
+        }
+        if (filter_data[active_filter].filter[value.operator]){
+            html += "Exclude " + filter_data[active_filter].field_display + value.text + filter_data[active_filter].filter[value.operator] + "<br />";
         }
     });
     $("#active_range_filters").html(html);
