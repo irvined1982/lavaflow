@@ -908,7 +908,7 @@ is most needed.</p>
         for(var propertyName in filter_data) {
             $("#"+propertyName+"_label").removeClass("active");
             if (propertyName == filter){
-                $("#field_name_label").text(filter_data[filter].display_name);
+                $("#field_name_label").text(filter_data[filter].field_display);
                 $("#"+propertyName+"_label").addClass("active");
             }
         }
@@ -922,7 +922,7 @@ is most needed.</p>
         // If so, enable panel
 
         // Update lists of filters
-        
+
 
         if (filter_data[filter].values.length < 1){
             $.getJSON('{% url "lf_value_list" %}?' + $.param({field:filter}), function(data){
