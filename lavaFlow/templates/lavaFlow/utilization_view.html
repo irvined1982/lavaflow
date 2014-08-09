@@ -834,20 +834,11 @@ is most needed.</p>
                       </div>
                       <div class="panel panel-default">
                           <div class="panel-heading">
-                            <h3 class="panel-title">Bounds</h3>
+                            <h3 class="panel-title">Filter by Range</h3>
                           </div>
                           <div class="panel-body">
-                            <div id="ComplexFilterControl" class="row">
+                            <div id="ComplexFilterControl">
                                 <form class="form-inline" role="form">
-                                    <div class="form-group col-xs-4">
-                                        <div class="input-group">
-                                            <label class="sr-only" for="filter_type">Filter or Exclude</label>
-                                            <select id="filter_type" class="form-control" name="filter_type">
-                                                <option>Include</option>
-                                                <option>Exclude</option>
-                                            </select>
-                                        </div>
-                                    </div>
                                     <span id="field_name_label"></span>
                                     <div class="form-group">
                                         <div class="input-group">
@@ -867,7 +858,10 @@ is most needed.</p>
                                         </div>
                                     </div>
                                 </form>
-                                <a href="#" ><span class="glyphicon glyphicon-search"></span></a>
+                                <div class="btn-group">
+                                  <button type="button" class="btn btn-default">Include</button>
+                                  <button type="button" class="btn btn-default">Exclude</button>
+                                </div>
                             </div>
                           </div>
                           <div id="ActiveComplexFilters">
@@ -993,7 +987,7 @@ is most needed.</p>
             $("#"+propertyName + "_label").removeClass("active");
 
             $("#"+propertyName + "_badge").text((count > 0) ? count : "");
-            
+
             total+=count
         }
         if (total > 0){
