@@ -980,11 +980,11 @@ is most needed.</p>
             count += filter_data[propertyName].exclude.gte ? 1 : 0;
             if (count > 0){
                 $("."+filter_data[propertyName].filter_string + "_label").each(function(i, obj){
-                    obj.html("<b>"+ obj.text() +"</b>");
+                    $(obj).html("<b>"+ $(obj).text() +"</b>");
                 });
             }else{
                 $("."+filter_data[propertyName].filter_string + "_label").each(function(i, obj){
-                    obj.text(obj.text());
+                    $(obj).text($(obj).text());
                 });
             }
             total+=count
