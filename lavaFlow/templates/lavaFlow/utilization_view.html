@@ -879,9 +879,9 @@ is most needed.</p>
     {% for model in filter_tree.objects.itervalues %}
         {% for field in model.fields %}
             filter_data[{{field.filter}}] = {
-                field='{{ field }}',
+                field='{{ field.name }}',
                 field_display='{{ field.display_name }}',
-                model='{{ model }}',
+                model='{{ model.name }}',
                 model_display='{{ model.display_name }}',
                 values:[],
                 filter:{
