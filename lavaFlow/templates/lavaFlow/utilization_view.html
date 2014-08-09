@@ -798,12 +798,12 @@ is most needed.</p>
                   <div class="col-xs-5">
                         <ul class="nav nav-pills nav-stacked">
                             {% for field in filter_tree %}
-                            <li>
-                                <a href="#" onClick="update_value_list('{{ field.filter_string }}'); return false;">
-                                  <span class="{{ field.filter_string }}_label">{{ field.display_name }}</span>
-                                </a>
-                                <span class="popover_help" data-toggle="popover" title="{{ field.display_name }}" data-content="{{ field.help_text }}"><span class="glyphicon question-sign"></span></span>
-                            </li>
+                                <li>
+                                    <a href="#" onClick="update_value_list('{{ field.filter_string }}'); return false;">
+                                      <span class="{{ field.filter_string }}_label">{{ field.display_name }}</span>
+                                    </a>
+                                    
+                                </li>
                             {% endfor %}
                          </ul>
                   </div>
