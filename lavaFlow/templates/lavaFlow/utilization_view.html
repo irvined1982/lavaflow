@@ -803,7 +803,7 @@ is most needed.</p>
                         <ul class="nav nav-pills nav-stacked">
                             {% for field in filter_tree %}
                                 <li id="{{ field.filter_string }}_label">
-                                    <a href="#" onClick="update_value_list('{{ field.filter_string }}'); return false;">
+                                    <a href="#" onClick="update_selected_field('{{ field.filter_string }}'); return false;">
                                       <span>{{ field.display_name }}</span><span id="{{ field.filter_string }}_badge" class="badge pull-right"></span>
                                     </a>
                                 </li>
@@ -811,7 +811,7 @@ is most needed.</p>
                          </ul>
                   </div>
                   <div class="col-xs-9">
-                      <div class="panel panel-default">
+                      <div id="select_filter_panel" class="panel panel-default">
                           <div class="panel-heading">
                             <h3 class="panel-title">Include</h3>
                           </div>
@@ -821,7 +821,7 @@ is most needed.</p>
                               </select>
                           </div>
                       </div>
-                      <div class="panel panel-default">
+                      <div id="select_exclude_panel" class="panel panel-default">
                           <div class="panel-heading">
                             <h3 class="panel-title">Exclude</h3>
                           </div>
@@ -832,7 +832,7 @@ is most needed.</p>
                               </select>
                           </div>
                       </div>
-                      <div class="panel panel-default">
+                      <div id="enter_range_panel" class="panel panel-default">
                           <div class="panel-heading">
                             <h3 class="panel-title">Filter <span id="field_name_label"></span> by Range</h3>
                           </div>
@@ -920,6 +920,9 @@ function update_range_lists(){
 <script>
     var filter_data=[];
         {% for field in filter_tree %}
+            {% if forloop.first %}
+            activeFilter = '{{ field.filter_string }}';
+            {% endfor %}
             filter_data['{{field.filter_string}}'] = {
                 filter_string:'{{ field.filter_string }}',
                 field_display:'{{ field.display_name }}',
@@ -945,12 +948,16 @@ function update_range_lists(){
 
 <script>
     var active_filter="";
-    function update_value_list(filter){
+    var initialized_model=false;
+    function update_selected_field(filter){
         active_filter=filter;
+
+
+
         for(var propertyName in filter_data) {
             $("#"+propertyName+"_label").removeClass("active");
             if (propertyName == filter){
-                $("#field_name_label").text(filter_data[filter].field_display);
+
                 $("#"+propertyName+"_label").addClass("active");
             }
         }
@@ -959,24 +966,46 @@ function update_range_lists(){
 
         // Check if can enter range
         // If so, enable panel and set validation
+        if (filter_data[filter].hasOwnProperty("can_enter_range") && filter_data[filter].can_enter_range){
+            $("#field_name_label").text(filter_data[filter].field_display);
+            $("#enter_range_panel").show();
+        }else{
+            $("#enter_range_panel").hide();
+        }
+
 
         // Check if can select datetime range
         // If so, enable panel
 
-        // Update lists of filters
-
-
-        if (filter_data[filter].values.length < 1){
-            $.getJSON('{% url "lf_value_list" %}?' + $.param({field:filter}), function(data){
-                filter_data[filter].values=data.data.values;
-                if (active_filter == filter){
-                  update_filter_widgets();
-                }
-            });
+        if (filter_data[filter].hasOwnProperty("can_select_values") && filter_data[filter].can_select_values){
+            if (filter_data[filter].values.length < 1){
+                $.getJSON('{% url "lf_value_list" %}?' + $.param({field:filter}), function(data){
+                    filter_data[filter].values=data.data.values;
+                    if (active_filter == filter){
+                      update_filter_widgets();
+                    }
+                });
+            }else{
+                update_filter_widgets();
+            }
+            $("#select_exclude_panel").show();
+            $("#select_filter_panel").show();
         }else{
-            update_filter_widgets();
+            $("#select_exclude_panel").hide();
+            $("#select_filter_panel").hide();
         }
+
+
+
     }
+
+
+    $('#filterModal').on('show.bs.modal', function (e) {
+        if (!initialized_model){
+            update_selected_field(activeFilter);
+        }
+    })
+
     function update_filter_widgets(){
         var filter_html="";
         var exclude_html="";
