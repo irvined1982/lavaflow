@@ -988,12 +988,12 @@ is most needed.</p>
         var total=0;
         for(var propertyName in filter_data) {
             count = 0;
-            count += filter_data[propertyName].filter.in.length();
+            count += filter_data[propertyName].filter.in.length;
             count += filter_data[propertyName].filter.lt ? 1 : 0;
             count += filter_data[propertyName].filter.lte ? 1 : 0;
             count += filter_data[propertyName].filter.gt ? 1 : 0;
             count += filter_data[propertyName].filter.gte ? 1 : 0;
-            count += filter_data[propertyName].exclude.in.length();
+            count += filter_data[propertyName].exclude.in.length;
             count += filter_data[propertyName].exclude.lt ? 1 : 0;
             count += filter_data[propertyName].exclude.lte ? 1 : 0;
             count += filter_data[propertyName].exclude.gt ? 1 : 0;
@@ -1005,7 +1005,7 @@ is most needed.</p>
             }
             total+=count
         }
-        
+
         if (total > 0){
             $("#filterCount").text(total);
         }else{
