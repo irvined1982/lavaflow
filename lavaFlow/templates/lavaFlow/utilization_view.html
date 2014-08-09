@@ -801,7 +801,7 @@ is most needed.</p>
                           {% if model.name == root_name %}
                               <h2>{{ model.display_name }}</h2>
                               <ul>
-                                  {% include "lavaFlow/widgets/filter_elements.html" with root="" filter_tree=filter_tree model_name=model.name only%}
+                                  {% include "lavaFlow/widgets/filter_elements.html" with root="" model_tree=filter_tree.objects model_name=model.name only%}
                               </ul>
                           {% endif %}
                         {% endfor %}
