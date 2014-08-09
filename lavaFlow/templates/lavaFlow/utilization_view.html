@@ -797,7 +797,7 @@ is most needed.</p>
               <div class="row">
                   <div class="col-xs-6">
                         <ul>
-                            {% for field in filter_data %}
+                            {% for field in filter_tree %}
                             <li>
                                 <a href="#" onClick="update_value_list('{{ field.filter }}'); return false;">
                                   <span class="{{ field.filter }}_label"></span>
@@ -875,7 +875,7 @@ is most needed.</p>
 </div>
 <script>
     var filter_data=[];
-        {% for field in filter_data %}
+        {% for field in filter_tree %}
             filter_data['{{field.filter}}'] = {
                 filter_string:'{{ field.filter }}',
                 field_display:'{{ field.display_name }}',
