@@ -796,7 +796,7 @@ is most needed.</p>
           <div class="container-fluid">
               <div class="row">
                   <div class="col-xs-6">
-                      {% for root_name in filter_tree.roots.itervalues %}
+                      {% for root_name in filter_tree.roots %}
                         {% for model in filter_tree.objects.itervalues %}
                           {% if model.name == root_name %}
                               <h2>{{ model.display_name }}</h2>
