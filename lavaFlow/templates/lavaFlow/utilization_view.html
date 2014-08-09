@@ -796,7 +796,7 @@ is most needed.</p>
           <div class="container-fluid">
               <div class="row">
                   <div class="col-xs-6">
-                        <ul>
+                        <ul>{{filter_tree}}
                             {% for field in filter_tree %}
                             <li>
                                 <a href="#" onClick="update_value_list('{{ field.filter }}'); return false;">
