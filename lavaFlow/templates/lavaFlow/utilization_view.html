@@ -2,7 +2,7 @@
 {% block actions %} 
 	<li><a id="permalinkURL" href='#'><span class="glyphicon glyphicon-link"></span></a></li>
 	<li><a href="#"><span id="filterIcon" class="glyphicon glyphicon-filter"></span></a></li>
-    <li><a href="#" data-toggle="modal" data-target="#filterModal"><span id="filterModallinkIcon" class="glyphicon glyphicon-question-sign"></span></a></li>
+    <li><a href="#" data-toggle="modal" data-target="#filterModal"><span id="filterModallinkIcon" class="glyphicon glyphicon-question-sign"></span></a><span id="filterCount" class="badge">0</span></li>
 {% endblock %}
 {% block title %}Utilization View{% endblock %}
 {% block content %}
@@ -797,11 +797,11 @@ is most needed.</p>
               <div class="row">
                   <div class="col-xs-6">
                       {% for model in filter_tree.objects.itervalues %}
-                          <h2>{{ model.display_name }}</h2>
+                          <h2>{{ model.display_name }}<span id="{{model.name}}_count" class="badge">0</span></h2>
                           <ul>
                               {% for field in model.fields %}
                                 <li>
-                                    <a href="#" onClick="update_value_list('{{ field.filter }}'); return false;">{{ field.display_name }}</a>
+                                    <a href="#" onClick="update_value_list('{{ field.filter }}'); return false;"><span class="{{ field.filter }}_label">{{ field.display_name }}</span></a>
                                     <a href="#" class="popover_help" data-toggle="popover" title="{{ field.display_name }}" data-content="{{ field.help_text }}"><span class="glyphicon question-sign"></span></a>
                                 </li>
                               {% endfor %}
@@ -869,7 +869,7 @@ is most needed.</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary">Update</button>
+        <button onClick="update_filter_count(); return false;" type="button" class="btn btn-primary">Update</button>
       </div>
     </div>
   </div>
@@ -879,6 +879,7 @@ is most needed.</p>
     {% for model in filter_tree.objects.itervalues %}
         {% for field in model.fields %}
             filter_data['{{field.filter}}'] = {
+                filter_string:'{{ field.filter }}',
                 field:'{{ field.name }}',
                 field_display:'{{ field.display_name }}',
                 model:'{{ model.name }}',
@@ -948,16 +949,69 @@ is most needed.</p>
 
     // Update the filters for active_filter
     $('#selected_filters').change(function() {
-        filter_data[active_filter].filter.in = $("#selected_filters:selected").map(function(){ return this.value }).get()
+        filter_data[active_filter].filter.in = $("#selected_filters:selected").map(function(){ return this.value }).get();
+        update_model_count();
     });
 
     // Update the excludes for active_filter
     $('#selected_excludes').change(function() {
-        filter_data[active_filter].exclude.in = $("#selected_excludes:selected").map(function(){ return this.value }).get()
+        filter_data[active_filter].exclude.in = $("#selected_excludes:selected").map(function(){ return this.value }).get();
+        update_model_count();
     });
 
     // Initialize Modal Help Popovers.
     $('.popover_help').popover();
 
+    function update_filter_count(){
+        var count=0;
+        $.each(filter_data, function(index, value){
+            if (
+                value.filter.in.length >0 ||
+                value.filter.lt ||
+                value.filter.lte ||
+                value.filter.gt ||
+                value.filter.gte||
+                value.exclude.in.length > 0 ||
+                value.exclude.lt ||
+                value.exclude.lte ||
+                value.exclude.gt ||
+                value.exclude.gte
+                ){
+                count += 1;
+            }
+        });
+        $("#filterCount").text(count);
+    }
+    function update_model_count(){
+        var c={};
+        var count;
+        $.each(filter_data, function(index, value){
+            count = 0;
+            count += value.filter.in.length();
+            count += value.filter.lt ? 1 : 0;
+            count += value.filter.lte ? 1 : 0;
+            count += value.filter.gt ? 1 : 0;
+            count += value.filter.gte ? 1 : 0;
+            count += value.exclude.in.length();
+            count += value.exclude.lt ? 1 : 0;
+            count += value.exclude.lte ? 1 : 0;
+            count += value.exclude.gt ? 1 : 0;
+            count += value.exclude.gte ? 1 : 0;
+            if (c.hasOwnProperty(value.model) ){
+                c[value.model]+=c;
+            }else{
+                c[value.model]=c;
+            }
+            if (count > 0){
+                $(value.filter_string + "_label").html("<b>"+ $(value.filter_string + "_label").text() +"</b>");
+            }else{
+                $(value.filter_string + "_label").text($(value.filter_string + "_label").text());
+            }
+        });
+        $each(c, function(model_name, total){
+            $("#"+model_name + "_count").text(total);
+        });
+
+    }
 </script>
 {% endblock %}
