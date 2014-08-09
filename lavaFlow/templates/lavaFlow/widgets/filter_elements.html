@@ -1,4 +1,5 @@
-{% with model_name|add:" "|add:root as new_root %}
+{% with model_name|add:"Attempt "|add:root as new_root %}
+
     {% for model in model_tree.itervalues %}
         {% if model.name == model_name %}
             {% for relation in model.relations %}
