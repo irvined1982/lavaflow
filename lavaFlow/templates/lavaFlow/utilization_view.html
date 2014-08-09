@@ -842,7 +842,7 @@ is most needed.</p>
                               <div class="form-group">
                                 <div class="input-group">
                                     <label class="sr-only" for="filter_action">Email address</label>
-                                    <select id="filter_action" class="form-control" name="filter_type">
+                                    <select id="range_filter_operator" class="form-control" name="filter_type">
                                         <option value="lt">Less Than</option>
                                         <option value="lte">Less Than or Equal</option>
                                         <option value="gt">Greater Than</option>
@@ -850,17 +850,17 @@ is most needed.</p>
                                     </select>
                                 </div>
                               </div>
-                              <div class="form-group">
+                              <div id="range_filter_input" class="form-group">
                                     <div class="input-group">
                                         <label class="sr-only" for="filter_value">Value</label>
-                                        <input type="text" id="filter_value" class="form-control" name="filter_type">
+                                        <input type="text" id="range_filter_value" class="form-control" name="filter_type">
                                     </div>
                               </div>
-                              <button type="button" class="btn btn-default">Include</button>
-                              <button type="button" class="btn btn-default">Exclude</button>
+                              <button type="button" onlClick="range_filter_add('include');return false;" class="btn btn-default">Include</button>
+                              <button type="button" onlClick="range_filter_add('exclude');return false;" class="btn btn-default">Exclude</button>
                             </form>
                           </div>
-                          <div id="ActiveComplexFilters">
+                          <div id="active_range_filters">
 
                           </div>
                       </div>
@@ -875,6 +875,43 @@ is most needed.</p>
     </div>
   </div>
 </div>
+<script>
+function range_filter_add(action){
+    $("#range_filter_input").css.removeClass("has-error");
+    if ($("#range_filter_value").val() == ""){
+        $("#range_filter_input").css.addClass("has-error");
+        return false;
+    }
+    filter_date[active_filter][action][$("#range_filter_operator").val()]=$("#range_filter_value").val();
+    update_range_lists();
+}
+function update_range_lists(){
+    operators=[
+        {
+            operator:"lt",
+            text:"is less than",
+        },
+        {
+            operator:"lte",
+            text:"is less than or equal to",
+        },
+        {
+            operator:"gt",
+            text:"is greater than",
+        },
+        {
+            operator:"gte",
+            text:"is greater than or equal to",
+        },
+        ];
+    var html="";
+    $.each(operators, function(index, value){
+        if (filter_data[active_filter].filter[value.operator]){
+            html += filter_data[active_filter].field_display + value.text + filter_data[active_filter].filter[value.operator] + "<br />";
+        }
+    });
+    $("#active_range_filters").html(html);
+</script>
 <script>
     var filter_data=[];
         {% for field in filter_tree %}
