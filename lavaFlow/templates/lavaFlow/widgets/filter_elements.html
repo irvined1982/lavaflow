@@ -2,7 +2,8 @@
 {% for model in model_tree.itervalues %}
     {% if model.name == model_name %}
         {% for relation in model.relations %}
-            {{ relation }} {{ new_root.split }}
+            {{new_root}}
+            {{ new_root.split }}
             {% if relation.relation not in new_root.split %}
 
             {% endif %}
