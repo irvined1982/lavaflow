@@ -889,31 +889,32 @@ function update_range_lists(){
     operators=[
         {
             operator:"lt",
-            text:"is less than",
+            text:" is less than ",
         },
         {
             operator:"lte",
-            text:"is less than or equal to",
+            text:" is less than or equal to ",
         },
         {
             operator:"gt",
-            text:"is greater than",
+            text:" is greater than ",
         },
         {
             operator:"gte",
-            text:"is greater than or equal to",
+            text:" is greater than or equal to ",
         },
         ];
     var html="";
     $.each(operators, function(index, value){
         if (filter_data[active_filter].filter[value.operator]){
-            html += "Include " + filter_data[active_filter].field_display + value.text + filter_data[active_filter].filter[value.operator] + "<br />";
+            html += "Including data where: " + filter_data[active_filter].field_display + value.text + filter_data[active_filter].filter[value.operator] + "<br />";
         }
-        if (filter_data[active_filter].filter[value.operator]){
-            html += "Exclude " + filter_data[active_filter].field_display + value.text + filter_data[active_filter].filter[value.operator] + "<br />";
+        if (filter_data[active_filter].exclude[value.operator]){
+            html += "Excluding data where: " + filter_data[active_filter].field_display + value.text + filter_data[active_filter].filter[value.operator] + "<br />";
         }
     });
     $("#active_range_filters").html(html);
+    update_model_count();
     }
 </script>
 <script>
