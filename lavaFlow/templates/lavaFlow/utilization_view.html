@@ -922,7 +922,7 @@ function update_range_lists(){
         {% for field in filter_tree %}
             {% if forloop.first %}
             activeFilter = '{{ field.filter_string }}';
-            {% endfor %}
+            {% endif %}
             filter_data['{{field.filter_string}}'] = {
                 filter_string:'{{ field.filter_string }}',
                 field_display:'{{ field.display_name }}',
