@@ -882,7 +882,7 @@ function range_filter_add(action){
         $("#range_filter_input").addClass("has-error");
         return false;
     }
-    filter_date[active_filter][action][$("#range_filter_operator").val()]=$("#range_filter_value").val();
+    filter_data[active_filter][action][$("#range_filter_operator").val()]=$("#range_filter_value").val();
     update_range_lists();
 }
 function update_range_lists(){
