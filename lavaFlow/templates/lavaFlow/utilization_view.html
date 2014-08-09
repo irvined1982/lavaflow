@@ -926,6 +926,9 @@ function update_range_lists(){
             filter_data['{{field.filter_string}}'] = {
                 filter_string:'{{ field.filter_string }}',
                 field_display:'{{ field.display_name }}',
+                can_select_values:{% if field.can_select_values %} true{% else %} false{%endif%},
+                can_enter_range:{% if field.can_enter_range %} true{% else %} false{%endif%},
+                can_select_time:{% if field.can_select_time %} true{% else %} false{%endif%},
                 values:[],
                 filter:{
                     in:[],
