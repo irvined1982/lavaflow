@@ -1,19 +1,15 @@
 {% for model in model_tree.itervalues %}
     {% if model.name == model_name %}
         {% for relation in model.relations %}
-        {{ relation }}
-        {% endfor %}
+
+        {% if relation.relation not in root.split %}
+            {% include "lavaFlow/widgets/filter_elements.html" with previous_field=previous_field|add:"->"|add:relation.display_name root=root|add:" "|add:model.name model_tree=model_tree model_name=relation only%}
+        {% endif %}
         {% for field in model.fields %}
             <li>
                 <a href="#" onClick="update_value_list('{{ field.filter }}'); return false;">
                     <span class="{{ field.filter }}_label">
-                        {% for r in root.split %}
-                            {% for m in model_tree.itervalues %}
-                                {% if m.name == r %}
-                                    {{ m.display_name }} >
-                                {% endif %}
-                            {% endfor %}
-                        {% endfor %}{{ field.display_name }}
+                        {% if previous_field %}{{ previous_field }}->{%endif%}{{ field.display_name }}
                     </span>
                 </a>
                 <a href="#" class="popover_help" data-toggle="popover" title="{{ field.display_name }}" data-content="{{ field.help_text }}"><span class="glyphicon question-sign"></span></a>
