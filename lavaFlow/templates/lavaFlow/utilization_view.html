@@ -796,11 +796,11 @@ is most needed.</p>
           <div class="container-fluid">
               <div class="row">
                   <div class="col-xs-6">
-                        <ul>{{filter_tree}}
+                        <ul>
                             {% for field in filter_tree %}
                             <li>
-                                <a href="#" onClick="update_value_list('{{ field.filter }}'); return false;">
-                                  <span class="{{ field.filter }}_label"></span>
+                                <a href="#" onClick="update_value_list('{{ field.filter_string }}'); return false;">
+                                  <span class="{{ field.filter_string }}_label"></span>
                                 </a>
                                 <a href="#" class="popover_help" data-toggle="popover" title="{{ field.display_name }}" data-content="{{ field.help_text }}"><span class="glyphicon question-sign"></span></a>
                             </li>
@@ -877,7 +877,7 @@ is most needed.</p>
     var filter_data=[];
         {% for field in filter_tree %}
             filter_data['{{field.filter}}'] = {
-                filter_string:'{{ field.filter }}',
+                filter_string:'{{ field.filter_string }}',
                 field_display:'{{ field.display_name }}',
                 values:[],
                 filter:{
