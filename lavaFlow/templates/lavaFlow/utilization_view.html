@@ -876,7 +876,7 @@ is most needed.</p>
 <script>
     var filter_data=[];
         {% for field in filter_tree %}
-            filter_data['{{field.filter}}'] = {
+            filter_data['{{field.filter_string}}'] = {
                 filter_string:'{{ field.filter_string }}',
                 field_display:'{{ field.display_name }}',
                 values:[],
