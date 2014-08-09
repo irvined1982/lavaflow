@@ -1,0 +1,20 @@
+{% for model in filter_tree %}
+    {% if model.name == model_name %}
+        {% for field in model.fields %}
+            <li>
+                <a href="#" onClick="update_value_list('{{ field.filter }}'); return false;">
+                    <span class="{{ field.filter }}_label">
+                        {% for r in root.split %}
+                            {% for m in filter_tree.iteritems %}
+                                {% if m.name == r %}
+                                    {{ m.display_name }} >
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}{{ field.display_name }}
+                    </span>
+                </a>
+                <a href="#" class="popover_help" data-toggle="popover" title="{{ field.display_name }}" data-content="{{ field.help_text }}"><span class="glyphicon question-sign"></span></a>
+            </li>
+        %}
+    {% endif %}
+{% endfor %}
