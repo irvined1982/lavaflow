@@ -38,6 +38,129 @@ from django.db.models.fields.related import ForeignKey
 
 from lavaFlow.models import *
 from django.db.models import get_app, get_models, get_model
+FILTER_FIELDS=[
+        {
+            'filter_name':'status__name',
+            'display_name':'Exit Status',
+        },
+        {
+            'filter_name':'status__exited_cleanly',
+            'display_name':'Exited OK',
+        },
+        {
+            'filter_name':'queue__name',
+            'display_name':'Queue Name',
+        },
+        {
+            'filter_name':'pend_time',
+            'display_name':'Pend Time',
+        },
+        {
+            'filter_name':'wall_time',
+            'display_name':'Wall Clock Time',
+        },
+        {
+            'filter_name':'cpu_time',
+            'display_name':'CPU Time',
+        },
+        {
+            'filter_name':'start_hour_of_day',
+            'display_name':'Start Hour',
+        },
+        {
+            'filter_name':'start_month',
+            'display_name':'Start Month',
+        },
+        {
+            'filter_name':'start_week_of_year',
+            'display_name':'Start Week Number',
+        },
+        {
+            'filter_name':'start_day_of_week',
+            'display_name':'Start Day of Week',
+        },
+        {
+            'filter_name':'start_day_of_month',
+            'display_name':'Start Day of Month',
+        },
+        {
+            'filter_name':'start_time',
+            'display_name':'Start Time',
+        },
+        {
+            'filter_name':'end_hour_of_day',
+            'display_name':'End Hour',
+        },
+        {
+            'filter_name':'end_month',
+            'display_name':'End Month',
+        },
+        {
+            'filter_name':'end_week_of_year',
+            'display_name':'End Week Number',
+        },
+        {
+            'filter_name':'end_day_of_week',
+            'display_name':'End Day of Week',
+        },
+        {
+            'filter_name':'end_day_of_month',
+            'display_name':'End Day of Month',
+        },
+        {
+            'filter_name':'end_time',
+            'display_name':'End Time',
+        },
+        {
+            'filter_name':'submit_hour_of_day',
+            'display_name':'Submit Hour',
+        },
+        {
+            'filter_name':'submit_month',
+            'display_name':'Submit Month',
+        },
+        {
+            'filter_name':'submit_week_of_year',
+            'display_name':'Submit Week Number',
+        },
+        {
+            'filter_name':'submit_day_of_week',
+            'display_name':'Submit Day of Week',
+        },
+        {
+            'filter_name':'submit_day_of_month',
+            'display_name':'Submit Day of Month',
+        },
+        {
+            'filter_name':'submit_time',
+            'display_name':'Submit Time',
+        },
+        {
+            'filter_name':'execution_hosts__name',
+            'display_name':'Execution Host',
+        },
+        {
+            'filter_name':'projects__name',
+            'display_name':'Project',
+        },
+        {
+            'filter_name':'user__name',
+            'display_name':'Owner',
+        },
+        {
+            'filter_name':'task__task_id',
+            'display_name':'Task ID',
+        },
+        {
+            'filter_name':'job__job_id',
+            'display_name':'Job ID',
+        },
+        {
+            'filter_name':'cluster__name',
+            'display_name':'Cluster',
+        },
+    ]
+
 
 OPENLAVA_JOB_STATES = {
     0x00: {
@@ -1449,7 +1572,7 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
         'build_filter_url': reverse('lf_build_filter'),
         'start_time': start_time_js,
         'end_time': end_time_js,
-        'filter_tree':build_model_filter(request),
+        'filter_tree':FILTER_FIELDS,
     }
     return render(request, "lavaFlow/utilization_view.html", data)
 
@@ -1574,23 +1697,7 @@ def build_filter(request):
 
     return HttpResponse(json.dumps({'url': url}), content_type="application/json")
 
-def build_model_filter(request):
-    objects={}
-    data={'objects':objects, }
 
-    for model in get_models(get_app("lavaFlow")):
-        try:
-            model.filter_fields
-        except AttributeError:
-            continue
-
-        objects[model.__name__]={
-            'display_name':model._meta.verbose_name.title(),
-            'name':model.__name__,
-            'fields':model.filter_fields,
-        }
-
-    return data
 
 
 def get_field_values(request):

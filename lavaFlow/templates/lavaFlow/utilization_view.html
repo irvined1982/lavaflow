@@ -796,18 +796,16 @@ is most needed.</p>
           <div class="container-fluid">
               <div class="row">
                   <div class="col-xs-6">
-                    {% for model in filter_tree.objects.itervalues %}
-                        <h2>{{ model.display_name }}</h2>
                         <ul>
+                            {% for field in filter_data %}
                             <li>
                                 <a href="#" onClick="update_value_list('{{ field.filter }}'); return false;">
                                   <span class="{{ field.filter }}_label"></span>
                                 </a>
                                 <a href="#" class="popover_help" data-toggle="popover" title="{{ field.display_name }}" data-content="{{ field.help_text }}"><span class="glyphicon question-sign"></span></a>
                             </li>
+                            {% endfor %}
                          </ul>
-                    {% endfor %}
-                  </div>
                   <div class="col-xs-6">
                       <h2>Include</h2>
                       <div id="includeValueList">
@@ -876,12 +874,10 @@ is most needed.</p>
 </div>
 <script>
     var filter_data=[];
-    {% for model in filter_tree.objects.itervalues %}
-        {% for field in model.fields %}
+        {% for field in filter_data %}
             filter_data['{{field.filter}}'] = {
                 filter_string:'{{ field.filter }}',
                 field_display:'{{ field.display_name }}',
-                model_display:'{{ model.display_name }}',
                 values:[],
                 filter:{
                     in:[],
@@ -921,7 +917,7 @@ is most needed.</p>
     function update_filter_widgets(){
         var filter_html="";
         var exclude_html="";
-        $("#field_name_label").text(filter_data[active_filter].model_display + " " + filter_data[active_filter].field_display);
+        $("#field_name_label").text(filter_data[active_filter].field_display);
 
         $.each(filter_data[active_filter].values, function (index, value){
 
