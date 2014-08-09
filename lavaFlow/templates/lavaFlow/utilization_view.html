@@ -924,7 +924,7 @@ is most needed.</p>
         var exclude_html="";
         $("#field_name_label").text(filter_data[active_filter].model_display + " " + filter_data[active_filter].field_display);
 
-        $.each(filter_data[active_filter][values], function (index, value){
+        $.each(filter_data[active_filter].values, function (index, value){
 
             var selected=""
             if (filter_data[active_filter].filter.in.indexOf(value.value) == -1 ){
