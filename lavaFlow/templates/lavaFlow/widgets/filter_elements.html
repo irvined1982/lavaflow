@@ -1,23 +1,23 @@
-{% with new_root as root|add:" ":|add:model_name %}
-{% for model in model_tree.itervalues %}
-    {% if model.name == model_name %}
-        {% for relation in model.relations %}
-            {{new_root}}
-            {{ new_root.split }}
-            {% if relation.relation not in new_root.split %}
+{% with new_root as model_name|add:" "|add:root %}
+    {% for model in model_tree.itervalues %}
+        {% if model.name == model_name %}
+            {% for relation in model.relations %}
+                {{new_root}}
+                {{ new_root.split }}
+                {% if relation.relation not in new_root.split %}
 
-            {% endif %}
-        {% endfor %}
-        {% for field in model.fields %}
-            <li>
-                <a href="#" onClick="update_value_list('{{ field.filter }}'); return false;">
-                    <span class="{{ field.filter }}_label">
-                        {% if previous_field %}{{ previous_field }}->{%endif%}{{ field.display_name }}
-                    </span>
-                </a>
-                <a href="#" class="popover_help" data-toggle="popover" title="{{ field.display_name }}" data-content="{{ field.help_text }}"><span class="glyphicon question-sign"></span></a>
-            </li>
-        {% endfor %}
-    {% endif %}
-{% endfor %}
+                {% endif %}
+            {% endfor %}
+            {% for field in model.fields %}
+                <li>
+                    <a href="#" onClick="update_value_list('{{ field.filter }}'); return false;">
+                        <span class="{{ field.filter }}_label">
+                            {% if previous_field %}{{ previous_field }}->{%endif%}{{ field.display_name }}
+                        </span>
+                    </a>
+                    <a href="#" class="popover_help" data-toggle="popover" title="{{ field.display_name }}" data-content="{{ field.help_text }}"><span class="glyphicon question-sign"></span></a>
+                </li>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
 {% endwith %}
