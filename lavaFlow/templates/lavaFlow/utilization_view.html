@@ -949,13 +949,13 @@ is most needed.</p>
 
     // Update the filters for active_filter
     $('#selected_filters').change(function() {
-        filter_data[active_filter].filter.in = $("#selected_filters:selected").map(function(){ return this.value }).get();
+        filter_data[active_filter].filter.in = $("#selected_filters :selected").map(function(){ return this.value }).get();
         update_model_count();
     });
 
     // Update the excludes for active_filter
     $('#selected_excludes').change(function() {
-        filter_data[active_filter].exclude.in = $("#selected_excludes:selected").map(function(){ return this.value }).get();
+        filter_data[active_filter].exclude.in = $("#selected_excludes :selected").map(function(){ return this.value }).get();
         update_model_count();
     });
 
