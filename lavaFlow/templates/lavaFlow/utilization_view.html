@@ -791,7 +791,7 @@ is most needed.</p>
 </style>
 
 <!-- Modal -->
-<div class="modal bigModal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel" aria-hidden="true">
+<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -831,9 +831,9 @@ is most needed.</p>
                             <h3 class="panel-title">Bounds</h3>
                           </div>
                           <div class="panel-body">
-                            <div id="ComplexFilterControl">
+                            <div id="ComplexFilterControl" class="row">
                                 <form class="form-inline" role="form">
-                                    <div class="form-group">
+                                    <div class="form-group col-xs-2">
                                         <div class="input-group">
                                             <label class="sr-only" for="filter_type">Filter or Exclude</label>
                                             <select id="filter_type" class="form-control" name="filter_type">
@@ -844,7 +844,7 @@ is most needed.</p>
                                     </div>
                                     <span id="field_name_label"></span>
                                     <div class="form-group">
-                                        <div class="input-group">
+                                        <div class="input-group col-xs-2">
                                             <label class="sr-only" for="filter_action">Email address</label>
                                             <select id="filter_action" class="form-control" name="filter_type">
                                                 <option value="lt">Less Than</option>

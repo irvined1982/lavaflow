@@ -1703,8 +1703,12 @@ def build_filter(request):
 
 def get_field_values(request):
     field=request.GET.get("field", None)
+
+
     if not (field):
         return create_js_bad_request(message="field and model parameters must be present")
+    if field not in [f['filter_string'] for f in FILTER_FIELDS]:
+        return create_js_bad_request(message="Field not in filter_fields")
 
     data={'values':[]}
     for row in Attempt.objects.values(field).distinct():
