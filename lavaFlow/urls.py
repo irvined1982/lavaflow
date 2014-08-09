@@ -28,7 +28,7 @@ urlpatterns = patterns('',
                        url(r'^$', 'lavaFlow.views.utilization_view', name="lf_utilization_view_default"),
                        url(r'^get_token$', 'lavaFlow.views.get_csrf_token', name="get_token"),
                        url(r'^value_list$', 'lavaFlow.views.get_field_values', name="lf_value_list"),
-                       url(r'^build_model_filter$', 'lavaFlow.views.build_model_filter', name="lf_build_model_filter"),
+                       
                        url(
                            r'^(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$',
                            'lavaFlow.views.utilization_view', name="lf_utilization_view"),
