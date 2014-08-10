@@ -548,7 +548,7 @@ function create_chart(chart_name){
         nv.addGraph(function() {
             chart_data[chart_name].chart = nv.models.stackedAreaChart();
             chart_data[chart_name].chart.clipEdge(true);
-            chart_data[chart_name].chart.xAxis.tickFormat(function(d) { function(v) {
+            chart_data[chart_name].chart.xAxis.tickFormat( function(v) {
                         var d=new Date(0);
                         d.setUTCSeconds(v/1000);
                         return d3.time.format('%x %X')(d);
