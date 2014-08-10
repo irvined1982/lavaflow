@@ -1673,21 +1673,24 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
     """
 
     times=Attempt.objects.aggregate(last_end_time=Max('end_time'), first_start_time=Min('start_time'))
-    first_start_time_js=times['first_start_time']*1000
-    if not first_start_time_js:
-        first_start_time_js=0
 
-    last_end_time_js=times['last_end_time']*1000
-    if not last_end_time_js:
-        last_end_time_js=0
+    first_start_time_js=0
+    if times['first_start_time']:
+        first_start_time_js=times['first_start_time']*1000
+
+    last_end_time_js=0
+    if times['last_end_time']:
+        last_end_time_js=times['last_end_time']*1000
+
 
     if end_time_js is None:
         end_time_js = last_end_time_js
 
     if start_time_js is None:
-        start_time_js=(end_time_js-(7*86400))*1000
+        start_time_js=end_time_js-(7*86400*1000)
         if start_time_js < first_start_time_js:
             start_time_js=first_start_time_js
+
 
     fs={
 
