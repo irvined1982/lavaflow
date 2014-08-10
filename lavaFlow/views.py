@@ -1585,13 +1585,13 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
     :return: Rendered HTML page.
 
     """
-    
+
     if start_time_js is None:
         start_time_js=int(time.time())-(7*86400)
     if end_time_js is None:
         end_time_js = int(time.time())
 
-    for f in FILTER_FIELDS.itervalues():
+    for f in FILTER_FIELDS:
         f['values']=[]
         f['filter']={
             'in':[],
