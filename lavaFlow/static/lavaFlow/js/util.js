@@ -87,32 +87,62 @@ $(function() {
         }
     });
 
-    // Today
-    //$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth(), new Date().getDate()) ); $("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth(), new Date().getDate()+1) );
+    $("#sdToday").click(function() {
+        $("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()) );
+        $("#report_end_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getDate()+1)) );
+        timeModalCancelled=false;
+        $("#timeSelectModal").modal("show"); return false;
+    });
+    $("#sdThisWeek").click(function() {
+       $("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getDate() - (new Date().getDate().getDay-1))  ) );
+       $("#report_end_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getDate() - (new Date().getDate().getDay+6))  ) );
+        timeModalCancelled=false;
+        $("#timeSelectModal").modal("show"); return false;
+    });
+    $("#sdThisMonth").click(function() {
+        $("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), 1) );
+        $("#report_end_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth()+1,1 );
+        timeModalCancelled=false;
+        $("#timeSelectModal").modal("show"); return false;
+    });
+    $("#sdPrevDay").click(function() {
+        $("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()-1) );
+        $("#report_end_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()) );
+        timeModalCancelled=false;
+        $("#timeSelectModal").modal("show"); return false;
+    });
+    $("#sdPrevWeek").click(function() {
+        $("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getDate() - (new Date().getDate().getDay-8))  ) );
+        $("#report_end_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getDate() - (new Date().getDate().getDay-1))  ) );
+        timeModalCancelled=false;
+        $("#timeSelectModal").modal("show"); return false;
+    });
+    $("#sdPrevMonth").click(function() {
+        $("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth()-1, 1) );
+        $("#report_end_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(),1 );
+        timeModalCancelled=false;
+        $("#timeSelectModal").modal("show"); return false;
+    });
+    $("#sd24").click(function() {
+        $("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getTime() - (24 * 60 * 60 * 1000)) );
+        $("#report_end_datetime").datetimepicker("setDate", new Date());
+        timeModalCancelled=false;
+        $("#timeSelectModal").modal("show"); return false;
+    });
+    $("#sd7d").click(function() {
+        $("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000)) );
+        $("#report_end_datetime").datetimepicker("setDate", new Date());
+        timeModalCancelled=false;
+        $("#timeSelectModal").modal("show"); return false;
+    });
+    $("#sd30d").click(function() {
+        $("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000)) );
+        $("#report_end_datetime").datetimepicker("setDate", new Date());
+        timeModalCancelled=false;
+        $("#timeSelectModal").modal("show"); return false;
+    });
 
-    // This Week
-    //$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth(), (new Date().getDate() - (new Date().getDate().getDay-1))  ) );$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth(), (new Date().getDate() - (new Date().getDate().getDay+6))  ) );
 
-    // This Month
-    //$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth(), 1) );$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth()+1,1 );
-
-    // Previous Day
-   //$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth(), new Date().getDate()-1) );$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth(), new Date().getDate()) );
-
-    // Previous Week
-    //$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth(), (new Date().getDate() - (new Date().getDate().getDay-8))  ) );$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth(), (new Date().getDate() - (new Date().getDate().getDay-1))  ) );
-
-    // Previous Month
-    //$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth()-1, 1) );$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth(),1 );
-
-    // Last 24 Hours
-    //$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getTime() - (24 * 60 * 60 * 1000)) );$("#report_start_datetime").datetimepicker("setDate", new Date());
-
-    // Last 7 Days
-    //$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000)) );$("#report_start_datetime").datetimepicker("setDate", new Date());
-
-    // Last 30 Days
-    //$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000)) );$("#report_start_datetime").datetimepicker("setDate", new Date());
 
 
     $("#timeSelectModal").on("show.bs.modal", function(e){

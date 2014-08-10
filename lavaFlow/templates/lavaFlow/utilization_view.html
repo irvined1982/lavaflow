@@ -526,19 +526,19 @@ is most needed.</p>
             <h2>Select Report</h2>
             <p>Use the buttons below to set the start and end times to common reporting scales.</p>
             <div class="btn-group btn-group-justified">
-                <a onClick='$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()) ); $("#report_end_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getDate()+1)) ); timeModalCancelled=false; $("#timeSelectModal").modal("show"); return false;'  class="btn btn-default" role="button">Today</a>
-                <a onClick='$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getDate() - (new Date().getDate().getDay-1))  ) );$("#report_end_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getDate() - (new Date().getDate().getDay+6))  ) );timeModalCancelled=false; $("#timeSelectModal").modal("show"); return false;'  class="btn btn-default" role="button">This Week</a>
-                <a onClick='$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), 1) );$("#report_end_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth()+1,1 );timeModalCancelled=false; $("#timeSelectModal").modal("show"); return false;'  class="btn btn-default" role="button">This Month</a>
+                <a id="sdToday" class="btn btn-default" role="button">Today</a>
+                <a id="sdThisWeek"  class="btn btn-default" role="button">This Week</a>
+                <a id="sdThisMonth" class="btn btn-default" role="button">This Month</a>
             </div>
             <div class="btn-group btn-group-justified">
-                <a onClick='$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()-1) );$("#report_end_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()) );timeModalCancelled=false; $("#timeSelectModal").modal("show"); return false;'  class="btn btn-default" role="button">Previous Day</a>
-                <a onClick='$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getDate() - (new Date().getDate().getDay-8))  ) );$("#report_end_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getDate() - (new Date().getDate().getDay-1))  ) );timeModalCancelled=false; $("#timeSelectModal").modal("show"); return false;'  class="btn btn-default" role="button">Previous Week</a>
-                <a onClick='$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth()-1, 1) );$("#report_end_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(),1 );timeModalCancelled=false; $("#timeSelectModal").modal("show"); return false;'  class="btn btn-default" role="button">Previous Month</a>
+                <a id="sdPrevDay" class="btn btn-default" role="button">Previous Day</a>
+                <a id="sdPrevWeek" class="btn btn-default" role="button">Previous Week</a>
+                <a id="sdPrevMonth" class="btn btn-default" role="button">Previous Month</a>
             </div>
              <div class="btn-group btn-group-justified">
-                <a onClick='$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getTime() - (24 * 60 * 60 * 1000)) );$("#report_end_datetime").datetimepicker("setDate", new Date());timeModalCancelled=false; $("#timeSelectModal").modal("show"); return false;'  class="btn btn-default" role="button">Last 24 Hours</a>
-                <a onClick='$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000)) );$("#report_end_datetime").datetimepicker("setDate", new Date());timeModalCancelled=false; $("#timeSelectModal").modal("show"); return false;'  class="btn btn-default" role="button">Last 7 Days</a>
-                <a onClick='$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000)) );$("#report_end_datetime").datetimepicker("setDate", new Date());timeModalCancelled=false; $("#timeSelectModal").modal("show"); return false;'  class="btn btn-default" role="button">Last 30 Days</a>
+                <a id="sd24"  class="btn btn-default" role="button">Last 24 Hours</a>
+                <a id="sd7d" class="btn btn-default" role="button">Last 7 Days</a>
+                <a id="sd30d"  class="btn btn-default" role="button">Last 30 Days</a>
             </div>
           </div>
         </div>
