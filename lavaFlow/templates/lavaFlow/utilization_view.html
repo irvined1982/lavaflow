@@ -782,7 +782,11 @@ is most needed.</p>
 <div id="chart_cpu_table"></div>
 <br /><br /><br /><br /><br />
 
-
+<style>
+.modal-dialog {
+  width: 900px;
+}
+</style>
 
 <!-- Modal -->
 <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel" aria-hidden="true">
@@ -1017,7 +1021,7 @@ function update_range_lists(){
     $('#filterModal').on('hide.bs.modal', function (e) {
         if (filterModalCancelled){
             // revert the filters
-            current_filters=backup_filters;
+            // current_filters=backup_filters;
             update_model_count();
             return false;
         }
