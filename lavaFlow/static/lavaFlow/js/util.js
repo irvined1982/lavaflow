@@ -199,9 +199,7 @@ $('#filterModal').on('show.bs.modal', function (e) {
     filtersModified=false;
     backup_filters=[];
     $.extend(true, backup_filters, current_filters );
-    if (!initialized_model){
-        update_selected_field(activeFilter);
-    }
+    
 
 })
 
