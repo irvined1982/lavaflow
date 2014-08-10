@@ -1010,7 +1010,8 @@ function update_range_lists(){
     $('#filterModal').on('show.bs.modal', function (e) {
         filterModalCancelled=true;
         filtersModified=false;
-        backup_filters=JSON.parse(JSON.stringify(current_filters));
+        backup_filters=[];
+        $.extend(true, backup_filters, current_filters );
         if (!initialized_model){
             update_selected_field(activeFilter);
         }
