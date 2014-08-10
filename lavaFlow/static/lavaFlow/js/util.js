@@ -69,6 +69,10 @@ $(function() {
 
     })
 
+    $("#timeSelectModal").on("hide.bs.modal", function(e){
+        alert($("#report_start_datetime").datetimepicker('getDate').getTime());
+    });
+
     $("#timeSelectModal").on("show.bs.modal", function(e){
        var sst_dt = new Date(0); // The 0 there is the key, which sets the date to the epoch
        sst_dt.setUTCSeconds(report_start_time/1000);
