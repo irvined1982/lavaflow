@@ -68,7 +68,6 @@ urlpatterns = patterns('',
                            'lavaFlow.views.utilization_data', name='lf_util_chart_view'),
                        url(r'^utilization_table/(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$',
                            'lavaFlow.views.utilization_table', name='lf_utilization_table'),
-                       url(r'^util_report_range/(?P<filter_string>.*)/exclude/(?P<exclude_string>.*)$',
-                           'lavaFlow.views.util_report_range', name="lf_get_report_range"),
+
                        url(r'^util_build_filter$', 'lavaFlow.views.build_filter', name="lf_build_filter"),
 )
