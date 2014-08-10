@@ -3,8 +3,8 @@
 			  <tr>
 				  {% for field in header %}
 				    <th>{{ field.nice_name }}</th>
-                  {% empty %}
-                    <th>&nbsp;</th>
+
+
 				  {% endfor %}
 				  <th>Sum Wall Time</th>
 				  <th>Avg Wall Time</th>
@@ -19,8 +19,8 @@
 			<tr>
 				{% for field in row.groups %}
 				    <td>{{ field.value }}</td>
-                {% empty %}
-                    <td>Overall</td>
+                
+
 				{% endfor %}
 				<td>{{ row.wall_time__sum }}</td>
 				<td title="Average: {{ row.wall_time__avg }}, Min: {{ row.wall_time__min }}, Max: {{ row.wall_time__max }}">{{ row.wall_time__avg }}</td>
