@@ -1,10 +1,11 @@
 {% extends "lavaFlow/base.html" %}
 {% block head %}
         {% load staticfiles %}
-        <script src="{% static "lavaFlow/js/util.js" %}"></script>
+        <script src="{% static 'lavaFlow/js/util.js' %}"></script>
 {% endblock %}
 {% block actions %} 
 	<li><a id="permalinkURL" href='#'><span class="glyphicon glyphicon-link"></span></a></li>
+    <li><a href="#" data-toggle="modal" data-target="#timeSelectModal"><span class="glyphicon glyphicon-question-time"></span></a></li>
     <li><a href="#" data-toggle="modal" data-target="#filterModal"><span id="filterModallinkIcon" class="glyphicon glyphicon-question-sign"></span><span id="filterCount" class="badge"></span></a></li>
 {% endblock %}
 
@@ -459,15 +460,81 @@ is most needed.</p>
   </div>
 </div>
 
-<script>
-
-</script>
-
-
-<script>
 
 
 
+<!-- Modal -->
+<div class="modal fade" id="timeSelectModal" tabindex="-1" role="dialog" aria-labelledby="timeSelectModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="timeSelectModalLabel">Select Report Timespan</h4>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row">
+            <div>Keep the current length, but move the scope</div>
+            <div class="col-xs-6">
+                <div>Jump Backwards</div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default">1 Year</button>
+                  <button type="button" class="btn btn-default">1 Month</button>
+                  <button type="button" class="btn btn-default">1 Week</button>
+                  <button type="button" class="btn btn-default">1 Day</button>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div>Jump Backwards</div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default">1 Year</button>
+                  <button type="button" class="btn btn-default">1 Month</button>
+                  <button type="button" class="btn btn-default">1 Week</button>
+                  <button type="button" class="btn btn-default">1 Day</button>
+                </div>
+            </div>
+          </div>
+          <div class="row">
+              <div>Select specific start and end dates and times</div>
+              <div class="col-xs-6">
+                  <div class="form-group">
+                    <label for="report_start_datetime">Start Date and Time</label>
+                    <input type="text" class="form-control" placeholder="Select Date and Time" id="report_start_datetime" value="" />
+                  </div>
+              </div>
+              <div class="col-xs-6">
+                  <div class="form-group">
+                    <label for="report_end_datetime">End Date and Time</label>
+                    <input type="text" class="form-control" placeholder="Select Date and Time" id="report_end_datetime" value="" />
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+            <div>Select a report range</div>
 
-</script>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default">Today</button>
+                  <button type="button" class="btn btn-default">Yesterday</button>
+                  <button type="button" class="btn btn-default">This Week</button>
+                  <button type="button" class="btn btn-default">Last Week</button>
+                    <button type="button" class="btn btn-default">This Month</button>
+                  <button type="button" class="btn btn-default">Last Month</button>
+                      <button type="button" class="btn btn-default">This Year</button>
+                  <button type="button" class="btn btn-default">Last Year</button>
+                      <button type="button" class="btn btn-default">Year to Date</button>
+                  <button type="button" class="btn btn-default">Last Year</button>
+                </div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
