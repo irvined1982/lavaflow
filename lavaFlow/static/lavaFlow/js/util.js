@@ -20,6 +20,14 @@ var empty_chart=[
 $(function() {
     initializeReport();
 
+
+    var st_dt = new Date(0); // The 0 there is the key, which sets the date to the epoch
+    st_dt.setUTCSeconds(start_time_js/1000);
+    var et_dt = new Date(0); // The 0 there is the key, which sets the date to the epoch
+    et_dt.setUTCSeconds(end_time_js/1000);
+    $("#report_start_datetime").datetimepicker({minDate:st_dt, maxDate:et_dt});
+    $("#report_end_datetime").datetimepicker({minDate:st_dt, maxDate:et_dt});
+
     // Update the filters for active_filter
     $('#selected_filters').change(function() {
         current_filters[active_filter].filter.in = $("#selected_filters :selected").map(function(){ return this.value }).get();
