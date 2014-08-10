@@ -474,6 +474,21 @@ is most needed.</p>
       <div class="modal-body">
         <div class="container-fluid">
           <div class="row">
+              <div>Select specific start and end dates and times</div>
+              <div class="col-xs-6">
+                  <div class="form-group">
+                    <label for="report_start_datetime">Start Date and Time</label>
+                    <input type="text" class="form-control" placeholder="Select Date and Time" id="report_start_datetime" value="" />
+                  </div>
+              </div>
+              <div class="col-xs-6">
+                  <div class="form-group">
+                    <label for="report_end_datetime">End Date and Time</label>
+                    <input type="text" class="form-control" placeholder="Select Date and Time" id="report_end_datetime" value="" />
+                  </div>
+              </div>
+          </div>
+          <div class="row">
             <div>Keep the current length, but move the scope</div>
             <div class="col-xs-6">
                 <div>Jump Backwards</div>
@@ -495,37 +510,25 @@ is most needed.</p>
             </div>
           </div>
           <div class="row">
-              <div>Select specific start and end dates and times</div>
-              <div class="col-xs-6">
-                  <div class="form-group">
-                    <label for="report_start_datetime">Start Date and Time</label>
-                    <input type="text" class="form-control" placeholder="Select Date and Time" id="report_start_datetime" value="" />
-                  </div>
-              </div>
-              <div class="col-xs-6">
-                  <div class="form-group">
-                    <label for="report_end_datetime">End Date and Time</label>
-                    <input type="text" class="form-control" placeholder="Select Date and Time" id="report_end_datetime" value="" />
-                  </div>
-              </div>
-          </div>
-          <div class="row">
             <div>Select a report range</div>
-
-                <div class="btn-group">
-                  <button type="button" class="btn btn-default">Today</button>
-                  <button type="button" class="btn btn-default">Yesterday</button>
-                  <button type="button" class="btn btn-default">This Week</button>
-                  <button type="button" class="btn btn-default">Last Week</button>
-                    <button type="button" class="btn btn-default">This Month</button>
-                  <button type="button" class="btn btn-default">Last Month</button>
-                      <button type="button" class="btn btn-default">This Year</button>
-                  <button type="button" class="btn btn-default">Last Year</button>
-                      <button type="button" class="btn btn-default">Year to Date</button>
-                  <button type="button" class="btn btn-default">Last Year</button>
+                <div class="btn-group btn-group-justified">
+                    <a class="btn btn-default" role="button">Last 24 Hrs</a>
+                    <a class="btn btn-default" role="button">Last 7 Days</a>
+                    <a class="btn btn-default" role="button">Last Month</a>
+                    <a class="btn btn-default" role="button">Last Year</a>
                 </div>
-
-
+                <div class="btn-group btn-group-justified">
+                    <a class="btn btn-default" role="button">Today</a>
+                    <a class="btn btn-default" role="button">Week to Date</a>
+                    <a class="btn btn-default" role="button">Month to Date</a>
+                    <a class="btn btn-default" role="button">Year To Date</a>
+                </div>
+                <div class="btn-group btn-group-justified">
+                    <a class="btn btn-default" role="button">Yesterday</a>
+                    <a class="btn btn-default" role="button">Previous Week</a>
+                    <a class="btn btn-default" role="button">Previous Month</a>
+                    <a class="btn btn-default" role="button">Previous Year</a>
+                </div>
           </div>
         </div>
       </div>
