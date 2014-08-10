@@ -26,9 +26,9 @@ $(function() {
 
 
     var st_dt = new Date(0); // The 0 there is the key, which sets the date to the epoch
-    st_dt.setUTCSeconds(report_start_time/1000);
+    st_dt.setUTCSeconds(first_start_time_js/1000);
     var et_dt = new Date(0); // The 0 there is the key, which sets the date to the epoch
-    et_dt.setUTCSeconds(report_end_time/1000);
+    et_dt.setUTCSeconds(last_end_time_js/1000);
     $("#report_start_datetime").datetimepicker({minDate:st_dt, maxDate:et_dt});
     $("#report_end_datetime").datetimepicker({minDate:st_dt, maxDate:et_dt});
 

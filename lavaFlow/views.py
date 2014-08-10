@@ -1715,8 +1715,8 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
     set_filters('filter',filter_string, fs)
     set_filters('exclude',exclude_string, fs)
     data = {
-        'first_start_time':first_start_time_js,
-        'last_end_time':last_end_time_js,
+        'first_start_time_js':first_start_time_js,
+        'last_end_time_js':last_end_time_js,
         'build_filter_url': reverse('lf_build_filter'),
         'start_time': start_time_js,
         'end_time': end_time_js,
