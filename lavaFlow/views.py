@@ -1609,12 +1609,11 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
         }
 
     data = {
-#        'filters': json.dumps(filter_string_to_params(filter_string)),
-#        'excludes': json.dumps(filter_string_to_params(exclude_string)),
         'build_filter_url': reverse('lf_build_filter'),
         'start_time': start_time_js,
         'end_time': end_time_js,
         'current_filters':json.dumps(FILTER_FIELDS),
+        'filter_list':FILTER_FIELDS,
         'first_filter':FILTER_FIELDS[0]['filter_string']
     }
 

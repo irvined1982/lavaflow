@@ -380,7 +380,7 @@ is most needed.</p>
               <div class="row">
                   <div class="col-xs-3">
                         <ul class="nav nav-pills nav-stacked">
-                            {% for field in filter_tree %}
+                            {% for field in filter_list %}
                                 <li id="{{ field.filter_string }}_label">
                                     <a href="#" onClick="update_selected_field('{{ field.filter_string }}'); return false;">
                                       <span>{{ field.display_name }}</span><span id="{{ field.filter_string }}_badge" class="badge pull-right"></span>
