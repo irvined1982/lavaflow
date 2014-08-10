@@ -1021,9 +1021,9 @@ function update_range_lists(){
     $('#filterModal').on('hide.bs.modal', function (e) {
         if (filterModalCancelled){
             // revert the filters
-            // current_filters=backup_filters;
+            current_filters=backup_filters;
             update_model_count();
-            return false;
+            return true;
         }
         if (filtersModified){
             updateReport();
