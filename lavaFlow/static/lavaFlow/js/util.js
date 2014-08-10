@@ -247,7 +247,7 @@ function build_filter_list(name) {
                 filters.push({
                     field: [propertyName],
                     operator: operator,
-                    values: current_filters[propertyName][name][operator]
+                    value: current_filters[propertyName][name][operator]
                 });
             }
         }
