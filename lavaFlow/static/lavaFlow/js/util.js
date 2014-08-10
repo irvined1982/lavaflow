@@ -146,7 +146,7 @@ function update_range_lists() {
             html += '<li>';
             html += "Including data where: " + current_filters[active_filter].display_name + value.text + current_filters[active_filter].filter[value.operator];
             html += '<a href="#" onClick=\'';
-            html += 'remove_bound("' + active_filter + '", "include", "'+value.operator+'"); return false;\'>';
+            html += 'remove_bound("' + active_filter + '", "filter", "'+value.operator+'"); return false;\'>';
             html += '<span class="glyphicon glyphicon-remove"></span></a>';
             html += "</li>";
         }
