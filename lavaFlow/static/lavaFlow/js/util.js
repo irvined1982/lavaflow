@@ -370,7 +370,7 @@ function loadWidgets(){
         end_time_js:report_end_time
     };
     $("#startText").text=(new Date(report_start_time).toLocaleString());
-    $("#endText").text=(new Date(report_end_time)toLocaleString());
+    $("#endText").text=(new Date(report_end_time).toLocaleString());
 
 
     // Sets the permenant link to this report
