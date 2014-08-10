@@ -1590,7 +1590,9 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
         start_time_js=int((time.time())-(7*86400))*1000
     if end_time_js is None:
         end_time_js = int(time.time())*1000
+    fs={
 
+    }
     for f in FILTER_FIELDS:
         f['values']=[]
         f['filter']={
@@ -1607,12 +1609,12 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
             'lte':None,
             'gte':None,
         }
-
+        fs[f['filter_string']]=f
     data = {
         'build_filter_url': reverse('lf_build_filter'),
         'start_time': start_time_js,
         'end_time': end_time_js,
-        'current_filters':json.dumps(FILTER_FIELDS),
+        'current_filters':json.dumps(fs),
         'filter_list':FILTER_FIELDS,
         'first_filter':FILTER_FIELDS[0]['filter_string']
     }
