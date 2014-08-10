@@ -25,7 +25,11 @@
             chart_attributes:[
                 {
                     key:"xAxis.tickFormat",
-                    value:function(d) { return d3.time.format('%x %X')(new Date(d)) }
+                    value:function(v) {
+                        var d=new Date(0);
+                        d.setUTCSeconds(v/1000);
+                        return d3.time.format('%x %X')(d);
+                    }
                 },
                 {
                     key:"xAxis.rotateLabels",
