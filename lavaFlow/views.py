@@ -1847,6 +1847,8 @@ def get_field_values(request):
             'value':row[field],
             'display_value':row[field],
         })
+        print conversions
+        
         if field in conversions:
             row['display_value'] = get_friendly_val(conversions[field], row[field])
 
