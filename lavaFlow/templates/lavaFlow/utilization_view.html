@@ -493,42 +493,39 @@ is most needed.</p>
             <div class="col-xs-6">
                 <div>Jump Backwards</div>
                 <div class="btn-group btn-group-justified">
-                    <a class="btn btn-default" role="button">1 Year</a>
-                    <a class="btn btn-default" role="button">1 Month</a>
-                    <a class="btn btn-default" role="button">1 Week</a>
-                    <a class="btn btn-default" role="button">1 Day</a>
+                    <a onClick="change_range(-31556952000);$('#timeSelectModal').modal('hide');return false;" class="btn btn-default" role="button">1 Year</a>
+                    <a onClick="change_range(-2592000000);$('#timeSelectModal').modal('hide');return false;" class="btn btn-default" role="button">1 Month</a>
+                    <a onClick="change_range(-604800000);$('#timeSelectModal').modal('hide');return false;" class="btn btn-default" role="button">1 Week</a>
+                    <a onClick="change_range(-86400000);$('#timeSelectModal').modal('hide');return false;" class="btn btn-default" role="button">1 Day</a>
                 </div>
             </div>
             <div class="col-xs-6">
                 <div>Jump Forwards</div>
                 <div class="btn-group btn-group-justified">
-                    <a class="btn btn-default" role="button">1 Year</a>
-                    <a class="btn btn-default" role="button">1 Month</a>
-                    <a class="btn btn-default" role="button">1 Week</a>
-                    <a class="btn btn-default" role="button">1 Day</a>
+                    <a onClick="change_range(31556952000);$('#timeSelectModal').modal('hide');return false;" class="btn btn-default" role="button">1 Year</a>
+                    <a onClick="change_range(2592000000);$('#timeSelectModal').modal('hide');return false;" class="btn btn-default" role="button">1 Month</a>
+                    <a onClick="change_range(604800000);$('#timeSelectModal').modal('hide');return false;" class="btn btn-default" role="button">1 Week</a>
+                    <a onClick="change_range(86400000);$('#timeSelectModal').modal('hide');return false;" class="btn btn-default" role="button">1 Day</a>
                 </div>
             </div>
           </div>
           <div class="row">
-            <div>Select a report range</div>
+            <div class="col-xs-6">
                 <div class="btn-group btn-group-justified">
-                    <a class="btn btn-default" role="button">Last 24 Hrs</a>
-                    <a class="btn btn-default" role="button">Last 7 Days</a>
-                    <a class="btn btn-default" role="button">Last Month</a>
-                    <a class="btn btn-default" role="button">Last Year</a>
+                    <a onClick="$('#report_start_datetime').datetimepicker('setDate', new Date(new Date() - (60*60000))); return false;"  class="btn btn-default" role="button">1 Hr ago</a>
+                    <a onClick="$('#report_start_datetime').datetimepicker('setDate', new Date(new Date() - (24*60*60000))); return false;" class="btn btn-default" role="button">24 Hrs Ago</a>
+                    <a onClick="$('#report_start_datetime').datetimepicker('setDate', new Date(new Date() - 604800000)); return false;" class="btn btn-default" role="button">1 Week Ago</a>
+                    <a onClick="$('#report_start_datetime').datetimepicker('setDate', new Date(new Date() - 2592000000)); return false;" class="btn btn-default" role="button">1 Month Ago</a>
+                    <a onClick="$('#report_start_datetime').datetimepicker('setDate', new Date(new Date() - 31556952000)); return false;" class="btn btn-default" role="button">1 Year Ago</a>
                 </div>
+            </div>
+
+            <div class="col-xs-6">
                 <div class="btn-group btn-group-justified">
-                    <a class="btn btn-default" role="button">Today</a>
-                    <a class="btn btn-default" role="button">Week to Date</a>
-                    <a class="btn btn-default" role="button">Month to Date</a>
-                    <a class="btn btn-default" role="button">Year To Date</a>
+                    <a onClick="$('#report_end_datetime').datetimepicker('setDate', new Date()); return false;" class="btn btn-default" role="button">Now</a>
                 </div>
-                <div class="btn-group btn-group-justified">
-                    <a class="btn btn-default" role="button">Yesterday</a>
-                    <a class="btn btn-default" role="button">Previous Week</a>
-                    <a class="btn btn-default" role="button">Previous Month</a>
-                    <a class="btn btn-default" role="button">Previous Year</a>
-                </div>
+            </div>
+
           </div>
         </div>
       </div>

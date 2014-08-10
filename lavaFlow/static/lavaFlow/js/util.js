@@ -4,6 +4,10 @@
 // Causes the page to be updated if filters have changed
 var filterModalCancelled;
 
+var timeModalCancelled;
+
+
+
 // True if the filters have been modified by the modal.
 var filtersModified;
 
@@ -70,11 +74,26 @@ $(function() {
     })
 
     $("#timeSelectModal").on("hide.bs.modal", function(e){
-        alert($("#report_start_datetime").datetimepicker('getDate').getTime());
+        if (!timeModalCancelled){
+            report_start_time=$("#report_start_datetime").datetimepicker('getDate');
+            report_end_time=$("#report_end_datetime").datetimepicker('getDate');
+            updateReport();
+        }
     });
+    function change_range(step){
+        var newDate = new Date(0);
+        newDate.setUTCSecods(report_start_time+step);
+        $("#report_start_datetime").datetimepicker('setDate', newDate );
+        newDate = new Date(0);
+        newDate.setUTCSecods(report_end_time+step);
+        $("#report_end_datetime").datetimepicker('setDate', newDate );
+        timeModalCancelled=false;
+    }
 
     $("#timeSelectModal").on("show.bs.modal", function(e){
-       var sst_dt = new Date(0); // The 0 there is the key, which sets the date to the epoch
+        timeModalCancelled=true;
+
+        var sst_dt = new Date(0); // The 0 there is the key, which sets the date to the epoch
        sst_dt.setUTCSeconds(report_start_time/1000);
         $("#report_start_datetime").datetimepicker('setDate', sst_dt );
 
@@ -84,6 +103,9 @@ $(function() {
     });
 });
 
+set_from_now(id, offset){
+    $(id).datetimepicker('setDate', new Date(new Date() + offset));
+}
 // Updates the badges on the modal, and the navbar.  Call after any modification to filters
 function update_model_count() {
     var count;
