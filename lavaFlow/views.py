@@ -1837,14 +1837,18 @@ def get_field_values(request):
     if field not in [f['filter_string'] for f in FILTER_FIELDS]:
         return create_js_bad_request(message="Field not in filter_fields")
 
+    conversions={}
+    for f in FILTER_FIELDS:
+        if 'conversion' in f:
+            conversions[f['filter_string']]=f['conversion']
     data={'values':[]}
     for row in Attempt.objects.values(field).distinct():
         data['values'].append({
             'value':row[field],
             'display_value':row[field],
         })
-        if 'conversion' in row:
-            row['display_value'] = get_friendly_val(row['conversion'], row[field])
-            
+        if field in conversions:
+            row['display_value'] = get_friendly_val(conversions[field], row[field])
+
         data['values'].sort(key=lambda x: x['value'])
     return create_js_success(data)
