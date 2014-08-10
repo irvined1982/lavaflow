@@ -97,8 +97,17 @@ $(function() {
         //$("#timeSelectModal").modal("show"); return false;
     });
     $("#sdThisWeek").click(function() {
-       $("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getDate() - (new Date().getDate().getDay-1))  ) );
-       $("#report_end_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getDate() - (new Date().getDate().getDay+6))  ) );
+        var n=new Date(); // Current time.
+        var dayOfMonth= n.getDate();
+        var daysIntoWeek = n.getDay()-1;
+        var startOfThisWeek= dayOfMonth-daysIntoWeek;
+        var endOfThisWeek = startOfThisWeek + 7;
+
+        var st=new Date(n.getFullYear(), n.getMonth(),startOfThisWeek );
+        var et=new Date(n.getFullYear(), n.getMonth(), endOfThisWeek );
+        $("#report_start_datetime").datetimepicker("setDate", st);
+        $("#report_end_datetime").datetimepicker("setDate", et);
+
         timeModalCancelled=false;
         //$("#timeSelectModal").modal("show"); return false;
     });
