@@ -867,10 +867,11 @@ is most needed.</p>
                   </div>
               </div>
           </div>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="button" onClick="filterModalCancelled=false;$('#filterModal').modal('hide');return false;" class="btn btn-primary">Update</button>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary">Update</button>
+
       </div>
     </div>
   </div>
@@ -882,7 +883,8 @@ function range_filter_add(action){
         $("#range_filter_input").addClass("has-error");
         return false;
     }
-    filter_data[active_filter][action][$("#range_filter_operator").val()]=$("#range_filter_value").val();
+    current_filters[active_filter][action][$("#range_filter_operator").val()]=$("#range_filter_value").val();
+    filtersModified=true;
     update_range_lists();
 }
 function update_range_lists(){
@@ -906,11 +908,11 @@ function update_range_lists(){
         ];
     var html="";
     $.each(operators, function(index, value){
-        if (filter_data[active_filter].filter[value.operator]){
-            html += "Including data where: " + filter_data[active_filter].field_display + value.text + filter_data[active_filter].filter[value.operator] + "<br />";
+        if (current_filters[active_filter].filter[value.operator]){
+            html += "Including data where: " + current_filters[active_filter].field_display + value.text + current_filters[active_filter].filter[value.operator] + "<br />";
         }
-        if (filter_data[active_filter].exclude[value.operator]){
-            html += "Excluding data where: " + filter_data[active_filter].field_display + value.text + filter_data[active_filter].filter[value.operator] + "<br />";
+        if (current_filters[active_filter].exclude[value.operator]){
+            html += "Excluding data where: " + current_filters[active_filter].field_display + value.text + current_filters[active_filter].filter[value.operator] + "<br />";
         }
     });
     $("#active_range_filters").html(html);
@@ -918,12 +920,13 @@ function update_range_lists(){
     }
 </script>
 <script>
-    var filter_data=[];
+    var backup_filters=[];
+    var current_filters=[];
         {% for field in filter_tree %}
             {% if forloop.first %}
             activeFilter = '{{ field.filter_string }}';
             {% endif %}
-            filter_data['{{field.filter_string}}'] = {
+            current_filters['{{field.filter_string}}'] = {
                 filter_string:'{{ field.filter_string }}',
                 field_display:'{{ field.display_name }}',
                 can_select_values:{% if field.can_select_values %} true{% else %} false{%endif%},
@@ -957,7 +960,7 @@ function update_range_lists(){
 
 
 
-        for(var propertyName in filter_data) {
+        for(var propertyName in current_filters) {
             $("#"+propertyName+"_label").removeClass("active");
             if (propertyName == filter){
 
@@ -969,8 +972,8 @@ function update_range_lists(){
 
         // Check if can enter range
         // If so, enable panel and set validation
-        if (filter_data[filter].hasOwnProperty("can_enter_range") && filter_data[filter].can_enter_range){
-            $("#field_name_label").text(filter_data[filter].field_display);
+        if (current_filters[filter].hasOwnProperty("can_enter_range") && current_filters[filter].can_enter_range){
+            $("#field_name_label").text(current_filters[filter].field_display);
             $("#enter_range_panel").show();
         }else{
             $("#enter_range_panel").hide();
@@ -980,10 +983,10 @@ function update_range_lists(){
         // Check if can select datetime range
         // If so, enable panel
 
-        if (filter_data[filter].hasOwnProperty("can_select_values") && filter_data[filter].can_select_values){
-            if (filter_data[filter].values.length < 1){
+        if (current_filters[filter].hasOwnProperty("can_select_values") && current_filters[filter].can_select_values){
+            if (current_filters[filter].values.length < 1){
                 $.getJSON('{% url "lf_value_list" %}?' + $.param({field:filter}), function(data){
-                    filter_data[filter].values=data.data.values;
+                    current_filters[filter].values=data.data.values;
                     if (active_filter == filter){
                       update_filter_widgets();
                     }
@@ -1002,29 +1005,52 @@ function update_range_lists(){
 
     }
 
-
+    var filterModalCancelled;
+    var filtersModified;
     $('#filterModal').on('show.bs.modal', function (e) {
+        filterModalCancelled=true;
+        filtersModified=false;
+        backup_filters=JSON.parse(JSON.stringify(current_filters));
         if (!initialized_model){
             update_selected_field(activeFilter);
         }
+
     })
+
+
+    $('#filterModal').on('hide.bs.modal', function (e) {
+        if (filterModalCancelled){
+            // revert the filters
+            current_filters=backup_filters;
+            update_model_count();
+            return false;
+        }
+        if (filtersModified){
+            updateReport();
+
+        }
+
+    })
+
+
+
 
     function update_filter_widgets(){
         var filter_html="";
         var exclude_html="";
 
 
-        $.each(filter_data[active_filter].values, function (index, value){
+        $.each(current_filters[active_filter].values, function (index, value){
 
             var selected=""
-            if (filter_data[active_filter].filter.in.indexOf(value.value) == -1 ){
+            if (current_filters[active_filter].filter.in.indexOf(value.value) == -1 ){
                 // not in active filters
                 selected = "";
             }else{
                 selected = "selected"
             }
             filter_html += "<option value='"+value.value+"' "+ selected + ">"+value.display_value+"</option>";
-            if (filter_data[active_filter].exclude.in.indexOf(value.value) == -1 ){
+            if (current_filters[active_filter].exclude.in.indexOf(value.value) == -1 ){
                 // not in active filters
                 selected = "";
             }else{
@@ -1038,14 +1064,16 @@ function update_range_lists(){
 
     // Update the filters for active_filter
     $('#selected_filters').change(function() {
-        filter_data[active_filter].filter.in = $("#selected_filters :selected").map(function(){ return this.value }).get();
+        current_filters[active_filter].filter.in = $("#selected_filters :selected").map(function(){ return this.value }).get();
         update_model_count();
+        filtersModified=true;
     });
 
     // Update the excludes for active_filter
     $('#selected_excludes').change(function() {
-        filter_data[active_filter].exclude.in = $("#selected_excludes :selected").map(function(){ return this.value }).get();
+        current_filters[active_filter].exclude.in = $("#selected_excludes :selected").map(function(){ return this.value }).get();
         update_model_count();
+        filtersModified=true;
     });
 
     // Initialize Modal Help Popovers.
@@ -1055,18 +1083,18 @@ function update_range_lists(){
     function update_model_count(){
         var count;
         var total=0;
-        for(var propertyName in filter_data) {
+        for(var propertyName in current_filters) {
             count = 0;
-            count += filter_data[propertyName].filter.in.length;
-            count += filter_data[propertyName].filter.lt ? 1 : 0;
-            count += filter_data[propertyName].filter.lte ? 1 : 0;
-            count += filter_data[propertyName].filter.gt ? 1 : 0;
-            count += filter_data[propertyName].filter.gte ? 1 : 0;
-            count += filter_data[propertyName].exclude.in.length;
-            count += filter_data[propertyName].exclude.lt ? 1 : 0;
-            count += filter_data[propertyName].exclude.lte ? 1 : 0;
-            count += filter_data[propertyName].exclude.gt ? 1 : 0;
-            count += filter_data[propertyName].exclude.gte ? 1 : 0;
+            count += current_filters[propertyName].filter.in.length;
+            count += current_filters[propertyName].filter.lt ? 1 : 0;
+            count += current_filters[propertyName].filter.lte ? 1 : 0;
+            count += current_filters[propertyName].filter.gt ? 1 : 0;
+            count += current_filters[propertyName].filter.gte ? 1 : 0;
+            count += current_filters[propertyName].exclude.in.length;
+            count += current_filters[propertyName].exclude.lt ? 1 : 0;
+            count += current_filters[propertyName].exclude.lte ? 1 : 0;
+            count += current_filters[propertyName].exclude.gt ? 1 : 0;
+            count += current_filters[propertyName].exclude.gte ? 1 : 0;
             $("#"+propertyName + "_label").removeClass("active");
 
             $("#"+propertyName + "_badge").text((count > 0) ? count : "");
