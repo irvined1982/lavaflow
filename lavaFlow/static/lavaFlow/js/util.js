@@ -143,18 +143,24 @@ function update_range_lists() {
     var html = "";
     $.each(operators, function (index, value) {
         if (current_filters[active_filter].filter[value.operator]) {
-            html += '<li class="list-group-item">';
-            html += "Including data where: " + current_filters[active_filter].display_name + value.text + current_filters[active_filter].filter[value.operator] + '<span class="glyphicon glyphicon-remove"></span>';
+            html += '<li>';
+            html += "Including data where: " + current_filters[active_filter].display_name + value.text + current_filters[active_filter].filter[value.operator] + '<a href="#" onClick=\'remove_bound("'+active_filter+'", "include", "'+operator+'");return false;\'"><span class="glyphicon glyphicon-remove"></span></a>';
             html += "</li>";
         }
         if (current_filters[active_filter].exclude[value.operator]) {
-            html += '<li class="list-group-item">';
-            html += "Excluding data where: " + current_filters[active_filter].display_name + value.text + current_filters[active_filter].filter[value.operator] + '<span class="glyphicon glyphicon-remove"></span>';
+            html += '<li>';
+            html += "Excluding data where: " + current_filters[active_filter].display_name + value.text + current_filters[active_filter].filter[value.operator] + '<a href="#" onClick=\'remove_bound("'+active_filter+'", "exclude", "'+operator+'");return false;\'"><span class="glyphicon glyphicon-remove"></span></a>';
             html += "</li>";
         }
     });
     $("#active_range_filters").html(html);
     update_model_count();
+}
+remove_bound(filter_name, action, operator){
+    current_filters[filter_name][action][operator]=null;
+    update_filter_widgets();
+    filtersModified=true;
+    update_range_lists();
 }
 
 
