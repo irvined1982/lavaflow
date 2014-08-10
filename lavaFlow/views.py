@@ -73,26 +73,31 @@ FILTER_FIELDS=[
             'filter_string':'start_hour_of_day',
             'display_name':'Start Hour',
             'can_select_values':True,
+            'conversion':'hour_of_day'
         },
         {
             'filter_string':'start_month',
             'display_name':'Start Month',
             'can_select_values':True,
+            'conversion':'month'
         },
         {
             'filter_string':'start_week_of_year',
             'display_name':'Start Week Number',
             'can_select_values':True,
+            'conversion':'week'
         },
         {
             'filter_string':'start_day_of_week',
             'display_name':'Start Day of Week',
             'can_select_values':True,
+            'conversion':"day_of_week"
         },
         {
             'filter_string':'start_day_of_month',
             'display_name':'Start Day of Month',
             'can_select_values':True,
+            'conversion':"day_of_month"
         },
         {
             'filter_string':'start_time',
@@ -102,26 +107,31 @@ FILTER_FIELDS=[
             'filter_string':'end_hour_of_day',
             'display_name':'End Hour',
             'can_select_values':True,
+            'conversion':"hour_of_day"
         },
         {
             'filter_string':'end_month',
             'display_name':'End Month',
             'can_select_values':True,
+            'conversion':"month"
         },
         {
             'filter_string':'end_week_of_year',
             'display_name':'End Week Number',
             'can_select_values':True,
+            'conversion':"week",
         },
         {
             'filter_string':'end_day_of_week',
             'display_name':'End Day of Week',
             'can_select_values':True,
+            'conversion':"day_of_week"
         },
         {
             'filter_string':'end_day_of_month',
             'display_name':'End Day of Month',
             'can_select_values':True,
+            'conversion':"day_of_month"
         },
         {
             'filter_string':'end_time',
@@ -131,26 +141,31 @@ FILTER_FIELDS=[
             'filter_string':'submit_hour_of_day',
             'display_name':'Submit Hour',
             'can_select_values':True,
+            'conversion':"hour_of_day",
         },
         {
             'filter_string':'submit_month',
             'display_name':'Submit Month',
             'can_select_values':True,
+            'conversion':"month"
         },
         {
             'filter_string':'submit_week_of_year',
             'display_name':'Submit Week Number',
             'can_select_values':True,
+            'conversion':"week_of_year"
         },
         {
             'filter_string':'submit_day_of_week',
             'display_name':'Submit Day of Week',
             'can_select_values':True,
+            'conversion':"day_of_week"
         },
         {
             'filter_string':'submit_day_of_month',
             'display_name':'Submit Day of Month',
             'can_select_values':True,
+            'conversion':"day_of_month"
         },
         {
             'filter_string':'submit_time',
@@ -187,6 +202,74 @@ FILTER_FIELDS=[
             'can_select_values':True,
         },
     ]
+
+
+def get_friendly_val(field, value):
+    hour_of_day={
+            0:"00:00",
+            1:"01:00",
+            2:"02:00",
+            3:"03:00",
+            4:"04:00",
+            5:"05:00",
+            6:"06:00",
+            7:"07:00",
+            8:"08:00",
+            9:"09:00",
+            10:"10:00",
+            11:"11:00",
+            12:"12:00",
+            13:"13:00",
+            14:"14:00",
+            15:"15:00",
+            16:"16:00",
+            17:"17:00",
+            18:"18:00",
+            19:"19:00",
+            20:"20:00",
+            21:"21:00",
+            22:"22:00",
+            23:"23:00",
+            }
+    months={
+            1:"Jan",
+            2:"Feb",
+            3:"Mar",
+            4:"Apr",
+            5:"May",
+            6:"Jun",
+            7:"Jul",
+            8:"Aug",
+            9:"Sep",
+            10:"Oct",
+            11:"Nov",
+            12:"Dec",
+        }
+    days={
+            0:"Monday",
+            1:"Tuesday",
+            2:"Wednesday",
+            3:"Thursday",
+            4:"Friday",
+            5:"Saturday",
+            6:"Sunday"
+    }
+    lookups={
+        'hour_of_day': lambda n: hour_of_day[n],
+        'month':lambda n: months[n],
+        'week':lambda n: "Week %s" % n,
+        'day_of_week':lambda n: days[n],
+        'day_of_month':format_month_day,
+    }
+    return lookups[field](value)
+def format_month_day(day):
+    if str(day).endswith(1):
+        return "%sst" % day
+    if str(day).endswith(2):
+        return "%snd" % day
+    if str(day).endswith(3):
+        return "%srd" % day
+    return "%sth" % day
 
 
 OPENLAVA_JOB_STATES = {
@@ -1760,5 +1843,8 @@ def get_field_values(request):
             'value':row[field],
             'display_value':row[field],
         })
+        if 'conversion' in row:
+            row['display_value'] = get_friendly_val(row['conversion'], row[field])
+            
         data['values'].sort(key=lambda x: x['value'])
     return create_js_success(data)
