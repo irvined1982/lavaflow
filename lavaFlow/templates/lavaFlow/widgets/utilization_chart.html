@@ -1,7 +1,6 @@
 	  <table class="table table-striped table-condensed">
 		  <thead>
 			  <tr>
-				  <th>Action</th>
 				  {% for field in header %}
 				    <th>{{ field.nice_name }}</th>
                   {% empty %}
@@ -18,14 +17,7 @@
 		<tbody>
   			{% for row in rows %}
 			<tr>
-				<td>
-                    {% if row.groups %}
-                        <a href='#' onClick="{% for field in row.groups %}addFilter('{{ field.name }}__in','{{field.value}}');{% endfor %}return false;"><span class="glyphicon glyphicon-filter"></span></a>
-    					<a href='#' onClick="{% for field in row.groups %}addExclude('{{ field.name }}__in','{{field.value}}');{% endfor %}return false;"><span class="glyphicon glyphicon-remove"></span></a>
-                    {% else %}
-                        &nbsp;
-                    {% endif %}
-				</td>
+
 				{% for field in row.groups %}
 				    <td>{{ field.value }}</td>
                 {% empty %}
