@@ -1676,7 +1676,7 @@ def build_filter(request):
         end_time_js = 0
 
     values = []
-    for value in data['excludes'].itervalues():
+    for value in data['excludes']:
         field=value['field']
         operator=value['operator']
         value=value['value']
@@ -1690,7 +1690,7 @@ def build_filter(request):
         filter_string = "none"
 
     values = []
-    for value in data['excludes'].itervalues():
+    for value in data['excludes']:
         field=value['field']
         operator=value['operator']
         value=value['value']
