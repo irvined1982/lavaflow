@@ -144,19 +144,26 @@ function update_range_lists() {
     $.each(operators, function (index, value) {
         if (current_filters[active_filter].filter[value.operator]) {
             html += '<li>';
-            html += "Including data where: " + current_filters[active_filter].display_name + value.text + current_filters[active_filter].filter[value.operator] + '<a href="#" onClick=\'remove_bound("'+active_filter+'", "include", "'+operator+'");return false;\'"><span class="glyphicon glyphicon-remove"></span></a>';
+            html += "Including data where: " + current_filters[active_filter].display_name + value.text + current_filters[active_filter].filter[value.operator];
+            html += '<a href="#" onClick=\"';
+            html += 'remove_bound("' + active_filter + '", "include", "'+operator+'"); return false\'>';
+            html += '<span class="glyphicon glyphicon-remove"></span></a>';
             html += "</li>";
         }
         if (current_filters[active_filter].exclude[value.operator]) {
             html += '<li>';
-            html += "Excluding data where: " + current_filters[active_filter].display_name + value.text + current_filters[active_filter].filter[value.operator] + '<a href="#" onClick=\'remove_bound("'+active_filter+'", "exclude", "'+operator+'");return false;\'"><span class="glyphicon glyphicon-remove"></span></a>';
+            html += "Excluding data where: " + current_filters[active_filter].display_name + value.text + current_filters[active_filter].filter[value.operator];
+            html += '<a href="#" onClick=\"';
+            html += 'remove_bound("' + active_filter + '", "include", "'+operator+'"); return false\'>';
+            html += '<span class="glyphicon glyphicon-remove"></span></a>';
             html += "</li>";
         }
     });
     $("#active_range_filters").html(html);
     update_model_count();
 }
-remove_bound(filter_name, action, operator){
+
+function remove_bound(filter_name, action, operator){
     current_filters[filter_name][action][operator]=null;
     update_filter_widgets();
     filtersModified=true;
