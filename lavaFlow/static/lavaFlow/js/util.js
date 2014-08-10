@@ -143,10 +143,14 @@ function update_range_lists() {
     var html = "";
     $.each(operators, function (index, value) {
         if (current_filters[active_filter].filter[value.operator]) {
-            html += "Including data where: " + current_filters[active_filter].display_name + value.text + current_filters[active_filter].filter[value.operator] + "<br />";
+            html += '<li class="list-group-item">';
+            html += "Including data where: " + current_filters[active_filter].display_name + value.text + current_filters[active_filter].filter[value.operator] + '<span class="glyphicon glyphicon-remove"></span>';
+            html += "</li>";
         }
         if (current_filters[active_filter].exclude[value.operator]) {
-            html += "Excluding data where: " + current_filters[active_filter].display_name + value.text + current_filters[active_filter].filter[value.operator] + "<br />";
+            html += '<li class="list-group-item">';
+            html += "Excluding data where: " + current_filters[active_filter].display_name + value.text + current_filters[active_filter].filter[value.operator] + '<span class="glyphicon glyphicon-remove"></span>';
+            html += "</li>";
         }
     });
     $("#active_range_filters").html(html);
