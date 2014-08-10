@@ -1847,9 +1847,10 @@ def get_field_values(request):
             'value':row[field],
             'display_value':row[field],
         })
-        print conversions
-        
+
+
         if field in conversions:
+            print "Found"
             row['display_value'] = get_friendly_val(conversions[field], row[field])
 
         data['values'].sort(key=lambda x: x['value'])
