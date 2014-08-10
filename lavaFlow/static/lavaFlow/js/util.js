@@ -312,7 +312,15 @@ function load_chart(chart_name, view_name, field){
     filterData.groups=chart_data[chart_name].data[view_name].groups;
     filterData.view=chart_data[chart_name].chart_view;
     // Block the chart.....
-    $("#"+chart_name).block({ message: null });
+    $("#"+chart_name).block({ message: null,css: {
+            border: 'none',
+            padding: '15px',
+            backgroundColor: '#000',
+            '-webkit-border-radius': '10px',
+            '-moz-border-radius': '10px',
+            opacity: .5,
+            color: '#fff'
+        } });
     $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
         var params="";
         if (field && field.length > 0){
@@ -343,7 +351,15 @@ function load_chart(chart_name, view_name, field){
         });
     });
     if (chart_data[chart_name].hasOwnProperty( "table_view" )){
-        $(table_selector).block({ message: null });
+        $(table_selector).block({ message: null,css: {
+            border: 'none',
+            padding: '15px',
+            backgroundColor: '#000',
+            '-webkit-border-radius': '10px',
+            '-moz-border-radius': '10px',
+            opacity: .5,
+            color: '#fff'
+        } });
         filterData.view=chart_data[chart_name].table_view;
         $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
             $.get(data.url, function(data) {
