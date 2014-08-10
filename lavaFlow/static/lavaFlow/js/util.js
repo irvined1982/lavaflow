@@ -183,14 +183,20 @@ function update_selected_field(filter) {
     // If so, enable panel
 
     if (current_filters[filter].hasOwnProperty("can_select_values") && current_filters[filter].can_select_values) {
+        $("#select_exclude_panel").block({ message: null });
+        $("#select_filter_panel").block({ message: null });
         if (current_filters[filter].values.length < 1) {
             $.getJSON(value_list_url+'?' + $.param({field: filter}), function (data) {
                 current_filters[filter].values = data.data.values;
                 if (active_filter == filter) {
+                    $("#select_exclude_panel").unblock();
+                    $("#select_filter_panel").unblock();
                     update_filter_widgets();
                 }
             });
         } else {
+            $("#select_exclude_panel").unblock();
+            $("#select_filter_panel").unblock();      
             update_filter_widgets();
         }
         $("#select_exclude_panel").show();
@@ -305,7 +311,8 @@ function load_chart(chart_name, view_name, field){
 
     filterData.groups=chart_data[chart_name].data[view_name].groups;
     filterData.view=chart_data[chart_name].chart_view;
-
+    // Block the chart.....
+    $(chart_selector).block({ message: null });
     $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
         var params="";
         if (field && field.length > 0){
@@ -314,10 +321,10 @@ function load_chart(chart_name, view_name, field){
         $.getJSON(data.url + params, function(data) {
             var chart=chart_data[chart_name];
             var view=chart.data[view_name];
-
             if ( chart.hasOwnProperty("active_field")){
                 view.chart_data[field]=data['data'];
                 if (chart.active==view_name && chart.active_field == field){
+                    $(chart_selector).unblock();
                     d3.select(chart_selector)
                     .datum(view.chart_data[field])
                     .transition().duration(500)
@@ -326,6 +333,7 @@ function load_chart(chart_name, view_name, field){
             }else{
                 view.chart_data=data['data'];
                 if (chart.active==view_name){
+                    $(chart_selector).unblock();
                     d3.select(chart_selector)
                     .datum(view.chart_data)
                     .transition().duration(500)
@@ -335,6 +343,7 @@ function load_chart(chart_name, view_name, field){
         });
     });
     if (chart_data[chart_name].hasOwnProperty( "table_view" )){
+        $(table_selector).block({ message: null });
         filterData.view=chart_data[chart_name].table_view;
         $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
             $.get(data.url, function(data) {
@@ -344,12 +353,11 @@ function load_chart(chart_name, view_name, field){
                 // Check if selected, then display....
                 if (chart.active==view_name){
                     $(table_selector).html(view.table_data);
+                    $(table_selector).block();
                 }
             });
         });
     }
-
-
 }
 
 

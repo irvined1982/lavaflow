@@ -933,7 +933,8 @@ def resource_data(request, start_time_js=0, end_time_js=0, exclude_string="", fi
                     group_name += u"%s Processors" % row[n]
                 elif n == "attempt__status__name":
                     group_name += u"%s (%s)" % (row[n], "Clean" if row['attempt__status__exited_cleanly'] else "Failed")
-                group_name += u"%s" % row[n]
+                else:
+                    group_name += u"%s" % row[n]
             if group_name not in data:
                 data[group_name] = {
                     'key': group_name,
@@ -1392,7 +1393,8 @@ def consumption_bar_data(request, start_time_js=0, end_time_js=0, exclude_string
                     group_name += u"%s Processors" % row[n]
                 elif n == "status__name":
                     group_name += u"%s (%s)" % (row[n], "Clean" if row['status__exited_cleanly'] else "Failed")
-                group_name += u"%s" % row[n]
+                else:
+                    group_name += u"%s" % row[n]
             if len(group_name) < 1:
                 group_name = "Total"
             if group_name not in data:
@@ -1540,7 +1542,8 @@ def submission_bar_data(request, start_time_js=0, end_time_js=0, exclude_string=
                 group_name += u"%s Processors" % row[n]
             elif n == "attempt__status__name":
                 group_name += u"%s (%s)" % (row[n], "Clean" if row['attempt__status__exited_cleanly'] else "Failed")
-            group_name += u"%s" % row[n]
+            else:
+                group_name += u"%s" % row[n]
         if len(group_name) <1:
             group_name=u"Overall"
         if group_name not in data:
@@ -1670,10 +1673,8 @@ def set_filters(field, filter_string, structure):
         (filter, dot, value) = f.partition(".")
         (filter, uu, operator) = filter.rpartition("__")
 
-        print "Value ", value
+
         if operator == "in" and value not in structure[filter][field][operator]:
-            print "Value ", value
-            print "array: ", structure[filter][field][operator]
             structure[filter][field][operator].append(value)
         else:
             structure[filter][field][operator]=value
