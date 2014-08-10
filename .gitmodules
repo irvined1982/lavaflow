@@ -4,3 +4,6 @@
 [submodule "lavaFlow/static/lavaFlow/visjs"]
 	path = lavaFlow/static/lavaFlow/visjs
 	url = https://github.com/irvined1982/vis.git
+[submodule "lavaFlow/static/lavaFlow/blockUI"]
+	path = lavaFlow/static/lavaFlow/blockUI
+	url = https://github.com/malsup/blockui.git

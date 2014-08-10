@@ -2,22 +2,24 @@
 {% load staticfiles %}
 <html>
   <head>
-	  <title>{% block title %}{% endblock %} - LavaFlow Reporting</title>
+
+	<title>{% block title %}{% endblock %} - LavaFlow Reporting</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<link rel="stylesheet" href="{% static "lavaFlow/bootstrap/css/bootstrap.min.css" %}">
-	<link rel="stylesheet" href="{% static "lavaFlow/bootstrap/css/bootstrap-theme.min.css" %}">
-	<link rel="stylesheet" href="{% static "lavaFlow/nvd3/nv.d3.css" %}" >
-	<link rel="stylesheet" href="{% static "lavaFlow/jquery-ui/themes/base/jquery-ui.css" %}" >
-    <link rel="stylesheet" href="{% static "lavaFlow/visjs/dist/vis.css" %}" >
+	<link rel="stylesheet" href='{% static "lavaFlow/bootstrap/css/bootstrap.min.css" %}'>
+	<link rel="stylesheet" href='{% static "lavaFlow/bootstrap/css/bootstrap-theme.min.css" %}'>
+	<link rel="stylesheet" href='{% static "lavaFlow/nvd3/nv.d3.css" %}' >
+	<link rel="stylesheet" href='{% static "lavaFlow/jquery-ui/themes/base/jquery-ui.css" %}' >
+    <link rel="stylesheet" href='{% static "lavaFlow/visjs/dist/vis.css" %}' >
 
-	<script src="{% static "lavaFlow/jquery/jquery-2.0.3.js" %}"></script>
-	<script src="{% static "lavaFlow/nvd3/lib/d3.v3.js" %}"></script>
-	<script src="{% static "lavaFlow/nvd3/nv.d3.js" %}"></script>
-	<script src="{% static "lavaFlow/bootstrap/js/bootstrap.js" %}"></script>
-	<script src="{% static "lavaFlow/jquery-ui/ui/jquery-ui.js" %}"></script>
-	<script src="{% static "lavaFlow/visjs/dist/vis.js" %}"></script>
-    {% block head %}{% endblock %}
+	<script src='{% static "lavaFlow/jquery/jquery-2.0.3.js" %}'></script>
+	<script src='{% static "lavaFlow/nvd3/lib/d3.v3.js" %}'></script>
+	<script src='{% static "lavaFlow/nvd3/nv.d3.js" %}'></script>
+	<script src='{% static "lavaFlow/bootstrap/js/bootstrap.js" %}'></script>
+	<script src='{% static "lavaFlow/jquery-ui/ui/jquery-ui.js" %}'></script>
+	<script src='{% static "lavaFlow/visjs/dist/vis.js" %}'></script>
+    <script src='{% static "lavaFlow/blockUI/jquery.blockUI.js %}'></script>
+    {% block head %} {% endblock %}
   </head>
   <body>
 	  <nav class="navbar navbar-default" role="navigation">
@@ -28,7 +30,7 @@
 			  <span class="icon-bar"></span>
 			  <span class="icon-bar"></span>
 		  </button>
-		  <a class="navbar-brand" href="{% url "lf_utilization_view_default" %}">LavaFlow</a>
+		  <a class="navbar-brand" href='{% url "lf_utilization_view_default" %}'>LavaFlow</a>
 	  </div>
        <div class="collapse navbar-collapse">
 		   <ul class="nav navbar-nav">
@@ -42,7 +44,7 @@
 			   <li><a href="{% url 'lf_attempt_list' %}">Attempts</a></li>
 			   {% block actions %}{% endblock %}
 		   </ul>
-	   <form action="{% url "lf_job_list" %}" method="get" class="navbar-form navbar-right" role="search">
+	   <form action='{% url "lf_job_list" %}' method="get" class="navbar-form navbar-right" role="search">
 		   <div class="form-group">
 			   <input type="text" class="form-control" name="jobId" id="searchBox" placeholder="Search Job IDs">
 		   </div>

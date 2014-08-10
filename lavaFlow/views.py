@@ -1668,7 +1668,7 @@ def set_filters(field, filter_string, structure):
     for f in filter_string.split("/"):
         (filter, dot, value) = f.partition(".")
         (filter, uu, operator) = filter.rpartition("__")
-        if operator == "in":
+        if operator == "in" and value not in structure[filter][field][operator]:
             structure[filter][field][operator].append(value)
         else:
             structure[filter][field][operator]=value
