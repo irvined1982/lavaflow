@@ -1587,7 +1587,7 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
     """
 
     if start_time_js is None:
-        start_time_js=int(time.time())-(7*86400)*1000
+        start_time_js=int((time.time())-(7*86400))*1000
     if end_time_js is None:
         end_time_js = int(time.time())*1000
 
