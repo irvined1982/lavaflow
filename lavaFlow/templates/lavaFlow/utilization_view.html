@@ -476,7 +476,10 @@ is most needed.</p>
       <div class="modal-body">
         <div class="container-fluid">
           <div class="row">
-              <div>Select specific start and end dates and times</div>
+              <h2>Start and End Times</h2>
+              <p>Select date and time for the start and end of the report.  The report will use data from tasks that were
+                  active between the two times.  That is to say, all tasks that that
+                  finished after the start time and were submitted before the end time specified.</p>
               <div class="col-xs-6">
                   <div class="form-group">
                     <label for="report_start_datetime">Start Date and Time</label>
@@ -491,9 +494,11 @@ is most needed.</p>
               </div>
           </div>
           <div class="row">
-            <div>Keep the current length, but move the scope</div>
+            <h2>Move Forward and Backward</h2>
+            <p>Use the buttons below to move the report times back or forward as a whole.  Use this when you want to compare
+            two or more periods of time.</p>
             <div class="col-xs-6">
-                <div>Jump Backwards</div>
+                <div>Shift back in time</div>
                 <div class="btn-group btn-group-justified">
                     <a onClick="timeModalCancelled=false;change_range(-31556952);$('#timeSelectModal').modal('hide'); return false;" class="btn btn-default" role="button">1 Year</a>
                     <a onClick="timeModalCancelled=false;change_range(-2592000);$('#timeSelectModal').modal('hide'); return false;" class="btn btn-default" role="button">1 Month</a>
@@ -502,7 +507,7 @@ is most needed.</p>
                 </div>
             </div>
             <div class="col-xs-6">
-                <div>Jump Forwards</div>
+                <div>Shift forward in time</div>
                 <div class="btn-group btn-group-justified">
                     <a onClick="timeModalCancelled=false;change_range(31556952);$('#timeSelectModal').modal('hide'); return false;" class="btn btn-default" role="button">1 Year</a>
                     <a onClick="timeModalCancelled=false;change_range(2592000);$('#timeSelectModal').modal('hide'); return false;" class="btn btn-default" role="button">1 Month</a>
@@ -512,22 +517,23 @@ is most needed.</p>
             </div>
           </div>
           <div class="row">
-            <div class="col-xs-6">
-                <div class="btn-group btn-group-justified">
-                    <a onClick="$('#report_start_datetime').datetimepicker('setDate', new Date(new Date() - (60*60000))); return false;"  class="btn btn-default" role="button">1 Hr ago</a>
-                    <a onClick="$('#report_start_datetime').datetimepicker('setDate', new Date(new Date() - (24*60*60000))); return false;" class="btn btn-default" role="button">24 Hrs Ago</a>
-                    <a onClick="$('#report_start_datetime').datetimepicker('setDate', new Date(new Date() - 604800000)); return false;" class="btn btn-default" role="button">1 Week Ago</a>
-                    <a onClick="$('#report_start_datetime').datetimepicker('setDate', new Date(new Date() - 2592000000)); return false;" class="btn btn-default" role="button">1 Month Ago</a>
-                    <a onClick="$('#report_start_datetime').datetimepicker('setDate', new Date(new Date() - 31556952000)); return false;" class="btn btn-default" role="button">1 Year Ago</a>
-                </div>
+            <h2>Select Report</h2>
+            <p>Use the buttons below to set the start and end times to common reporting scales.</p>
+            <div class="btn-group btn-group-justified">
+                <a onClick='$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth(), new Date().getDate()) ); $("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth(), new Date().getDate()+1) ); timeModalCancelled=false; $("#timeSelectModal").modal("hide"); return false;'  class="btn btn-default" role="button">Today</a>
+                <a onClick='$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth(), (new Date().getDate() - (new Date().getDate().getDay-1))  ) );$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth(), (new Date().getDate() - (new Date().getDate().getDay+6))  ) );timeModalCancelled=false; $("#timeSelectModal").modal("hide"); return false;'  class="btn btn-default" role="button">This Week</a>
+                <a onClick='$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth(), 1) );$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth()+1,1 );timeModalCancelled=false; $("#timeSelectModal").modal("hide"); return false;'  class="btn btn-default" role="button">This Month</a>
             </div>
-
-            <div class="col-xs-6">
-                <div class="btn-group btn-group-justified">
-                    <a onClick="$('#report_end_datetime').datetimepicker('setDate', new Date()); return false;" class="btn btn-default" role="button">Now</a>
-                </div>
+            <div class="btn-group btn-group-justified">
+                <a onClick='$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth(), new Date().getDate()-1) );$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth(), new Date().getDate()) );timeModalCancelled=false; $("#timeSelectModal").modal("hide"); return false;'  class="btn btn-default" role="button">Previous Day</a>
+                <a onClick='$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth(), (new Date().getDate() - (new Date().getDate().getDay-8))  ) );$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth(), (new Date().getDate() - (new Date().getDate().getDay-1))  ) );timeModalCancelled=false; $("#timeSelectModal").modal("hide"); return false;'  class="btn btn-default" role="button">Previous Week</a>
+                <a onClick='$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth()-1, 1) );$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getYear(), new Date().getMonth(),1 );timeModalCancelled=false; $("#timeSelectModal").modal("hide"); return false;'  class="btn btn-default" role="button">Previous Month</a>
             </div>
-
+             <div class="btn-group btn-group-justified">
+                <a onClick='$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getTime() - (24 * 60 * 60 * 1000)) );$("#report_start_datetime").datetimepicker("setDate", new Date());timeModalCancelled=false; $("#timeSelectModal").modal("hide"); return false;'  class="btn btn-default" role="button">Last 24 Hours</a>
+                <a onClick='$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000)) );$("#report_start_datetime").datetimepicker("setDate", new Date());timeModalCancelled=false; $("#timeSelectModal").modal("hide"); return false;'  class="btn btn-default" role="button">Last 7 Days</a>
+                <a onClick='$("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000)) );$("#report_start_datetime").datetimepicker("setDate", new Date());timeModalCancelled=false; $("#timeSelectModal").modal("hide"); return false;'  class="btn btn-default" role="button">Last 30 Days</a>
+            </div>
           </div>
         </div>
       </div>
