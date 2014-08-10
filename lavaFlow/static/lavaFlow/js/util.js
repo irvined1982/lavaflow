@@ -1,5 +1,4 @@
 // True once the modal has been initialized
-var initialized_model=false;
 
 // False only when the user has clicked Update on the modal form,
 // Causes the page to be updated if filters have changed
@@ -34,6 +33,7 @@ $(function() {
         update_model_count();
         filtersModified=true;
     });
+    update_selected_field(active_filter)
 });
 
 // Updates the badges on the modal, and the navbar.  Call after any modification to filters
