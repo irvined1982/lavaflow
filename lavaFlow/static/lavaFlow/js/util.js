@@ -34,6 +34,32 @@ $(function() {
         filtersModified=true;
     });
     update_selected_field(active_filter)
+
+    // Initizalises the modal the first time it is shown
+    // Backs up the filters so they can be reverted later
+    $('#filterModal').on('show.bs.modal', function (e) {
+        filterModalCancelled=true;
+        filtersModified=false;
+        backup_filters=[];
+        $.extend(true, backup_filters, current_filters );
+
+
+    })
+
+    // Reverts the filters if cancelled,
+    // Updates the report if they have changed
+    $('#filterModal').on('hide.bs.modal', function (e) {
+        if (filterModalCancelled){
+            // revert the filters
+            current_filters=backup_filters;
+            update_model_count();
+            return true;
+        }
+        if (filtersModified){
+            updateReport();
+        }
+
+    })
 });
 
 // Updates the badges on the modal, and the navbar.  Call after any modification to filters
@@ -192,32 +218,7 @@ function range_filter_add(action){
 
 
 
-// Initizalises the modal the first time it is shown
-// Backs up the filters so they can be reverted later
-$('#filterModal').on('show.bs.modal', function (e) {
-    filterModalCancelled=true;
-    filtersModified=false;
-    backup_filters=[];
-    $.extend(true, backup_filters, current_filters );
 
-
-})
-
-// Reverts the filters if cancelled,
-// Updates the report if they have changed
-$('#filterModal').on('hide.bs.modal', function (e) {
-    if (filterModalCancelled){
-        // revert the filters
-        current_filters=backup_filters;
-        update_model_count();
-        return true;
-    }
-    if (filtersModified){
-        updateReport();
-
-    }
-
-})
 
 
 
