@@ -1291,6 +1291,8 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
     if len(times) > 2000:
         step_size = ( ( end_time_js - start_time_js ) / 1000)
         step_size = int(step_size / 30000)
+        if step_size < 0:
+            step_size = 1
         step_size *= 30000  # Multiple of 30 seconds....
         times = range(start_time_js, end_time_js, step_size)
     else:
