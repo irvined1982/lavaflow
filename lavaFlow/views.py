@@ -261,7 +261,6 @@ def get_friendly_val(field, value):
         'day_of_week':lambda n: days[n],
         'day_of_month':format_month_day,
     }
-    print lookups[field](value)
     return lookups[field](value)
 def format_month_day(day):
     if str(day).endswith(1):
@@ -1846,13 +1845,9 @@ def get_field_values(request):
     for row in Attempt.objects.values(field).distinct():
         data['values'].append({
             'value':row[field],
-            'display_value':row[field],
+            'display_value':get_friendly_val(conversions[field], row[field])  if field in conversions else row[field],
         })
-
-
-        if field in conversions:
-
-            row['display_value'] = get_friendly_val(conversions[field], row[field])
+        
 
         data['values'].sort(key=lambda x: x['value'])
     return create_js_success(data)
