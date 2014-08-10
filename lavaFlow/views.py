@@ -1384,13 +1384,9 @@ def utilization_table(request, start_time_js=0, end_time_js=0, exclude_string=""
     header = []
     if len(group_args) > 0:
         attempts = attempts.values(*group_args)
-
-        nice_names = {
-            'num_processors': "Num Slots",
-            'cluster__name': "Cluster",
-            'status__name': "Exit Reason",
-        }
-
+        nice_names={}
+        for val in FILTER_FIELDS:
+            nice_names[val['filter_string']]=val['display_name']
         for a in group_args:
             field = {}
             field['name'] = a
