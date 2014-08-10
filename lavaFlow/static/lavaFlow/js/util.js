@@ -68,6 +68,15 @@ $(function() {
         }
 
     })
+
+    $("#timeSelectModal").on("show.bs.modal", function(e){
+       var st_dt = new Date(0); // The 0 there is the key, which sets the date to the epoch
+       st_dt.setUTCSeconds(report_start_time/1000);
+        $("#report_start_datetime").datetimepicker('setDate', st_dt );
+        var et_dt = new Date(0); // The 0 there is the key, which sets the date to the epoch
+       et_dt.setUTCSeconds(report_end_time/1000);
+        $("#report_end_datetime").datetimepicker('setDate', et_dt );
+    });
 });
 
 // Updates the badges on the modal, and the navbar.  Call after any modification to filters
