@@ -1685,7 +1685,8 @@ def build_filter(request):
             values.extend(["%s__in.%s" % (field, val) for val in value])
         else:
             values.append("%s__%s.%s" % (field, operator, value))
-    print values
+
+
     filter_string = "/".join(values)
     if len(filter_string) < 1:
         filter_string = "none"
@@ -1699,7 +1700,7 @@ def build_filter(request):
             values.extend(["%s__in.%s" % (field, val) for val in value])
         else:
             values.append("%s__%s.%s" % (field, operator, value))
-    print values
+    
     exclude_string = "/".join(values)
     if len(exclude_string) < 1:
         exclude_string = "none"

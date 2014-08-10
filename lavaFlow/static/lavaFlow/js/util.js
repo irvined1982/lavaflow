@@ -245,7 +245,7 @@ function build_filter_list(name) {
             if( (operator == "in" && current_filters[propertyName][name][operator].length >0 )
                 || (operator != "in" && current_filters[propertyName][name][operator])){
                 filters.push({
-                    field: [propertyName],
+                    field: propertyName,
                     operator: operator,
                     value: current_filters[propertyName][name][operator]
                 });
