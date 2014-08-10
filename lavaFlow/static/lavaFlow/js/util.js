@@ -76,7 +76,7 @@ $(function() {
 
     })
 
-    $("#timeSelectModal").on("hiden.bs.modal", function(e){
+    $("#timeSelectModal").on("hidden.bs.modal", function(e){
         if (!timeModalCancelled){
             var different=false;
             if (!($("#report_start_datetime").datetimepicker('getDate').getTime() == report_start_time) || (!$("#report_end_datetime").datetimepicker('getDate').getTime() == report_end_time) ){
