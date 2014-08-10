@@ -80,15 +80,7 @@ $(function() {
             updateReport();
         }
     });
-    function change_range(step){
-        var newDate = new Date(0);
-        newDate.setUTCSecods(report_start_time+step);
-        $("#report_start_datetime").datetimepicker('setDate', newDate );
-        newDate = new Date(0);
-        newDate.setUTCSecods(report_end_time+step);
-        $("#report_end_datetime").datetimepicker('setDate', newDate );
-        timeModalCancelled=false;
-    }
+
 
     $("#timeSelectModal").on("show.bs.modal", function(e){
         timeModalCancelled=true;
@@ -102,6 +94,16 @@ $(function() {
         $("#report_end_datetime").datetimepicker('setDate', set_dt );
     });
 });
+
+function change_range(step){
+        var newDate = new Date(0);
+        newDate.setUTCSecods(report_start_time+step);
+        $("#report_start_datetime").datetimepicker('setDate', newDate );
+        newDate = new Date(0);
+        newDate.setUTCSecods(report_end_time+step);
+        $("#report_end_datetime").datetimepicker('setDate', newDate );
+        timeModalCancelled=false;
+    }
 
 // Updates the badges on the modal, and the navbar.  Call after any modification to filters
 function update_model_count() {
