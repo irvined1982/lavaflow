@@ -117,10 +117,10 @@ function update_range_lists() {
     var html = "";
     $.each(operators, function (index, value) {
         if (current_filters[active_filter].filter[value.operator]) {
-            html += "Including data where: " + current_filters[active_filter].field_display + value.text + current_filters[active_filter].filter[value.operator] + "<br />";
+            html += "Including data where: " + current_filters[active_filter].display_name + value.text + current_filters[active_filter].filter[value.operator] + "<br />";
         }
         if (current_filters[active_filter].exclude[value.operator]) {
-            html += "Excluding data where: " + current_filters[active_filter].field_display + value.text + current_filters[active_filter].filter[value.operator] + "<br />";
+            html += "Excluding data where: " + current_filters[active_filter].display_name + value.text + current_filters[active_filter].filter[value.operator] + "<br />";
         }
     });
     $("#active_range_filters").html(html);
@@ -146,7 +146,7 @@ function update_selected_field(filter) {
     // Check if can enter range
     // If so, enable panel and set validation
     if (current_filters[filter].hasOwnProperty("can_enter_range") && current_filters[filter].can_enter_range) {
-        $("#field_name_label").text(current_filters[filter].field_display);
+        $("#field_name_label").text(current_filters[filter].display_name);
         $("#enter_range_panel").show();
     } else {
         $("#enter_range_panel").hide();

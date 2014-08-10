@@ -1585,22 +1585,39 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
     :return: Rendered HTML page.
 
     """
-    #
+    
     if start_time_js is None:
-        start_time_js = -1
+        start_time_js=int(time.time())-(7*86400)
     if end_time_js is None:
-        end_time_js = -1
+        end_time_js = int(time.time())
+
+    for f in FILTER_FIELDS.itervalues():
+        f['values']=[]
+        f['filter']={
+            'in':[],
+            'lt':None,
+            'gt':None,
+            'lte':None,
+            'gte':None,
+        }
+        f['exclude']={
+            'in':[],
+            'lt':None,
+            'gt':None,
+            'lte':None,
+            'gte':None,
+        }
 
     data = {
-        'filters': json.dumps(filter_string_to_params(filter_string)),
-        'excludes': json.dumps(filter_string_to_params(exclude_string)),
-        'report_range_url': reverse('lf_get_report_range',
-                                    kwargs={'filter_string': filter_string, 'exclude_string': exclude_string}),
+#        'filters': json.dumps(filter_string_to_params(filter_string)),
+#        'excludes': json.dumps(filter_string_to_params(exclude_string)),
         'build_filter_url': reverse('lf_build_filter'),
         'start_time': start_time_js,
         'end_time': end_time_js,
-        'filter_tree':FILTER_FIELDS,
+        'current_filters':FILTER_FIELDS,
+        'first_filter':FILTER_FIELDS[0]['filter_string']
     }
+
 
     return render(request, "lavaFlow/utilization_view.html", data)
 
@@ -1617,39 +1634,6 @@ def util_total_attempts(request, start_time_js=None, end_time_js=None, exclude_s
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-def util_report_range(request, exclude_string="", filter_string=""):
-    ONE_DAY = 24 * 60 * 60 * 60  # 1 day in seconds
-    filter_args = filter_string_to_params(filter_string)
-    exclude_args = filter_string_to_params(exclude_string)
-    attempts = Attempt.objects.all()
-    for key, val in filter_args.items():
-        attempts = attempts.filter(**{key: val})
-    for key, val in exclude_args.items():
-        attempts = attempts.exclude(**{key: val})
-
-    count = attempts.count()
-    end_time = 0
-    start_time = 0
-    suggested_end_time = end_time
-    suggested_start_time = end_time
-
-    if count > 0:
-        start_time = attempts.order_by('submit_time')[0].submit_time
-        end_time = attempts.order_by('-end_time')[0].end_time
-        suggested_end_time = end_time
-        suggested_start_time = end_time - ONE_DAY
-        if suggested_start_time < start_time:
-            suggested_start_time = start_time
-
-    data = {
-        'count': count,
-        'end_time': end_time * 1000,
-        'start_time': start_time * 1000,
-        'suggested_end_time': suggested_end_time * 1000,
-        'suggested_start_time': suggested_start_time * 1000,
-    }
-
-    return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 def group_string_to_group_args(group_string):
@@ -1729,8 +1713,16 @@ def build_filter(request):
 
 
 def get_field_values(request):
-    field=request.GET.get("field", None)
+    """
+    Gets a distinct list of values for a single specified field.
 
+    If the field is not in FILTER_LIST then bad request is returned
+
+    :param request: Request Object
+    :return: JSON array of values
+
+    """
+    field=request.GET.get("field", None)
 
     if not (field):
         return create_js_bad_request(message="field and model parameters must be present")
