@@ -1676,21 +1676,28 @@ def build_filter(request):
         end_time_js = 0
 
     values = []
-    for name, value in data['filters'].iteritems():
-        if name.endswith('__in'):  # list context
-            values.extend(["%s.%s" % (name, val) for val in value])
+    for value in data['excludes'].itervalues():
+        field=value['field']
+        operator=value['operator']
+        value=value['value']
+        if operator=='in':
+            values.extend(["%s__in.%s" % (field, val) for val in value])
         else:
-            values.append("%s.%s" % (name, value))
+            values.append("%s__%s.%s" % (field, operator, value))
+
     filter_string = "/".join(values)
     if len(filter_string) < 1:
         filter_string = "none"
 
     values = []
-    for name, value in data['excludes'].iteritems():
-        if name.endswith('__in'):  # list context
-            values.extend(["%s.%s" % (name, val) for val in value])
+    for value in data['excludes'].itervalues():
+        field=value['field']
+        operator=value['operator']
+        value=value['value']
+        if operator=='in':
+            values.extend(["%s__in.%s" % (field, val) for val in value])
         else:
-            values.append("%s.%s" % (name, value))
+            values.append("%s__%s.%s" % (field, operator, value))
     exclude_string = "/".join(values)
     if len(exclude_string) < 1:
         exclude_string = "none"

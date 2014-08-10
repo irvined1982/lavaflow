@@ -230,6 +230,7 @@ function initializeReport(){
     for (var chart_name in chart_data){
         create_chart(chart_name);
     }
+    loadWidgets();
 }
 
 // Called when report needs to be reloaded due to data change
@@ -238,14 +239,30 @@ function updateReport(){
     loadWidgets();
 }
 
+function build_filter_list(name) {
+    var filters = [];
+    for (var propertyName in current_filters) {
+        for (var operator in current_filters[propertyName][name]){
+            if( (operator == "in" && current_filters[propertyName][name][operator].length >0 )
+                || (operator != "in" && current_filters[propertyName][name][operator])){
+                filters.push({
+                    field: [propertyName],
+                    operator: operator,
+                    values: current_filters[propertyName][name][operator]
+                });
+            }
+        }
+    }
+    return filters;
+}
 
 // Need Set filters and excludes....
 function loadWidgets(){
     // Loads data into widgets
     var filterData={
         view:'lf_utilization_view',
-        filters:filters,
-        excludes:excludes,
+        filters:build_filter_list('filter'),
+        excludes:build_filter_list('exclude'),
         groups:[],
         start_time_js:selectedMin,
         end_time_js:selectedMax
@@ -281,8 +298,8 @@ function load_chart(chart_name, view_name, field){
     var chart_selector="#" + chart_name + " svg";
     var table_selector="#" + chart_name + "_table";
     var filterData={
-        filters:filters,
-        excludes:excludes,
+        filters:build_filter_list('filter'),
+        excludes:build_filter_list('exclude'),
         start_time_js:selectedMin,
         end_time_js:selectedMax
     };
