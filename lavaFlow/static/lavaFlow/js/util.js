@@ -99,7 +99,7 @@ $(function() {
     $("#sdThisWeek").click(function() {
         var n=new Date(); // Current time.
         var dayOfMonth= n.getDate();
-        var daysIntoWeek = n.getDay()-1;
+        var daysIntoWeek = n.getDay();
         var startOfThisWeek= dayOfMonth-daysIntoWeek;
         var endOfThisWeek = startOfThisWeek + 7;
 
@@ -124,8 +124,17 @@ $(function() {
         //$("#timeSelectModal").modal("show"); return false;
     });
     $("#sdPrevWeek").click(function() {
-        $("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getDate() - (new Date().getDate().getDay-8))  ) );
-        $("#report_end_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getDate() - (new Date().getDate().getDay-1))  ) );
+        var n=new Date(); // Current time.
+        var dayOfMonth= n.getDate();
+        var daysIntoWeek = n.getDay();
+        var startOfThisWeek= dayOfMonth-daysIntoWeek-7;
+        var endOfThisWeek = startOfThisWeek + 7;
+
+        var st=new Date(n.getFullYear(), n.getMonth(),startOfThisWeek );
+        var et=new Date(n.getFullYear(), n.getMonth(), endOfThisWeek );
+        $("#report_start_datetime").datetimepicker("setDate", st);
+        $("#report_end_datetime").datetimepicker("setDate", et);
+
         timeModalCancelled=false;
         //$("#timeSelectModal").modal("show"); return false;
     });
