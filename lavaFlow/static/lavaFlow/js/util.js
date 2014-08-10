@@ -101,7 +101,7 @@ $(function() {
     });
     $("#sdThisMonth").click(function() {
         $("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), 1) );
-        $("#report_end_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth()+1,1 );
+        $("#report_end_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth()+1,1 ));
         timeModalCancelled=false;
         $("#timeSelectModal").modal("show"); return false;
     });
@@ -119,7 +119,7 @@ $(function() {
     });
     $("#sdPrevMonth").click(function() {
         $("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth()-1, 1) );
-        $("#report_end_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(),1 );
+        $("#report_end_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(),1 ));
         timeModalCancelled=false;
         $("#timeSelectModal").modal("show"); return false;
     });
