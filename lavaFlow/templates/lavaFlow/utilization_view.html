@@ -864,14 +864,15 @@ is most needed.</p>
 
                           </div>
                       </div>
+                      <div class="pull-right">
+        <button type="button" onClick="$('#filterModal').modal('hide');return false;" class="btn btn-default">Cancel</button>
+        <button type="button" onClick="filterModalCancelled=false;$('#filterModal').modal('hide');return false;" class="btn btn-primary">Update</button>
+      </div>
                   </div>
               </div>
           </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" onClick="$('#filterModal').modal('hide');return false;" class="btn btn-default">Cancel</button>
-        <button type="button" onClick="filterModalCancelled=false;$('#filterModal').modal('hide');return false;" class="btn btn-primary">Update</button>
-      </div>
+
     </div>
   </div>
 </div>
