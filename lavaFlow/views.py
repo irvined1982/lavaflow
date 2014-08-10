@@ -261,6 +261,7 @@ def get_friendly_val(field, value):
         'day_of_week':lambda n: days[n],
         'day_of_month':format_month_day,
     }
+    print lookups[field]
     return lookups[field](value)
 def format_month_day(day):
     if str(day).endswith(1):
@@ -1850,7 +1851,7 @@ def get_field_values(request):
 
 
         if field in conversions:
-            print "Found"
+
             row['display_value'] = get_friendly_val(conversions[field], row[field])
 
         data['values'].sort(key=lambda x: x['value'])
