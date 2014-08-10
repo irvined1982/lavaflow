@@ -264,8 +264,8 @@ function loadWidgets(){
         filters:build_filter_list('filter'),
         excludes:build_filter_list('exclude'),
         groups:[],
-        start_time_js:selectedMin,
-        end_time_js:selectedMax
+        start_time_js:report_start_time,
+        end_time_js:report_end_time
     };
 
     // Sets the permenant link to this report
@@ -300,8 +300,8 @@ function load_chart(chart_name, view_name, field){
     var filterData={
         filters:build_filter_list('filter'),
         excludes:build_filter_list('exclude'),
-        start_time_js:selectedMin,
-        end_time_js:selectedMax
+        start_time_js:report_start_time,
+        end_time_js:report_end_time
     };
 
     filterData.groups=chart_data[chart_name].data[view_name].groups;
