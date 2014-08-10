@@ -336,13 +336,10 @@ function initializeReport(){
 function updateReport(){
     // Clear all existing data to avoid confusion...
     loadWidgets();
-    updateDateLabels();
 }
 
-function updateDateLabels(){
-    $("#startText").text=(new Date(report_start_time));
-    $("#endText").text=(new Date(report_end_time));
-}
+
+
 
 function build_filter_list(name) {
     var filters = [];
@@ -372,6 +369,9 @@ function loadWidgets(){
         start_time_js:report_start_time,
         end_time_js:report_end_time
     };
+    $("#startText").text=(new Date(report_start_time).toLocaleString());
+    $("#endText").text=(new Date(report_end_time)toLocaleString());
+
 
     // Sets the permenant link to this report
     $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
