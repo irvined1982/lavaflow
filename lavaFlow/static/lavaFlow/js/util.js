@@ -88,8 +88,11 @@ $(function() {
     });
 
     $("#sdToday").click(function() {
-        $("#report_start_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()) );
-        $("#report_end_datetime").datetimepicker("setDate", new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getDate()+1)) );
+        var n=new Date(); // Current time.
+        var st=new Date(n.getFullYear(), n.getMonth(), n.getDate() );
+        var et=new Date(n.getFullYear(), n.getMonth(), (n.getDate()+1) );
+        $("#report_start_datetime").datetimepicker("setDate", st);
+        $("#report_end_datetime").datetimepicker("setDate", et);
         timeModalCancelled=false;
         $("#timeSelectModal").modal("show"); return false;
     });
