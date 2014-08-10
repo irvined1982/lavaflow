@@ -1677,7 +1677,7 @@ def build_filter(request):
         end_time_js = 0
 
     values = []
-    for value in data['excludes']:
+    for value in data['filters']:
         field=value['field']
         operator=value['operator']
         value=value['value']
@@ -1700,7 +1700,7 @@ def build_filter(request):
             values.extend(["%s__in.%s" % (field, val) for val in value])
         else:
             values.append("%s__%s.%s" % (field, operator, value))
-    
+
     exclude_string = "/".join(values)
     if len(exclude_string) < 1:
         exclude_string = "none"
