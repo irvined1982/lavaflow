@@ -1610,8 +1610,8 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
             'gte':None,
         }
         fs[f['filter_string']]=f
-        set_filters('filter',filter_string, fs)
-        set_filters('exclude',exclude_string, fs)
+    set_filters('filter',filter_string, fs)
+    set_filters('exclude',exclude_string, fs)
     data = {
         'build_filter_url': reverse('lf_build_filter'),
         'start_time': start_time_js,
@@ -1663,14 +1663,17 @@ def filter_string_to_params(filter_string):
 
 
 def set_filters(field, filter_string, structure):
+
     if len(filter_string) < 1 or filter_string == "none":
         return
     for f in filter_string.split("/"):
         (filter, dot, value) = f.partition(".")
         (filter, uu, operator) = filter.rpartition("__")
-        print "SEtting Filters"
+
         print "Value ", value
         if operator == "in" and value not in structure[filter][field][operator]:
+            print "Value ", value
+            print "array: ", structure[filter][field][operator]
             structure[filter][field][operator].append(value)
         else:
             structure[filter][field][operator]=value
