@@ -103,9 +103,6 @@ $(function() {
     });
 });
 
-set_from_now(id, offset){
-    $(id).datetimepicker('setDate', new Date(new Date() + offset));
-}
 // Updates the badges on the modal, and the navbar.  Call after any modification to filters
 function update_model_count() {
     var count;
