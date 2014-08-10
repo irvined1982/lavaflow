@@ -16,6 +16,7 @@
 	var report_start_time={{ start_time }};
 	var report_end_time={{ end_time }};
 	var buildFilterUrl='{{ build_filter_url|safe }}';
+    var value_list_url ='{% url "lf_value_list" %}';
     var chart_data={
         chart_cpu:{
             chart_attributes:[

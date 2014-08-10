@@ -158,7 +158,7 @@ function update_selected_field(filter) {
 
     if (current_filters[filter].hasOwnProperty("can_select_values") && current_filters[filter].can_select_values) {
         if (current_filters[filter].values.length < 1) {
-            $.getJSON('{% url "lf_value_list" %}?' + $.param({field: filter}), function (data) {
+            $.getJSON(value_list_url+'?' + $.param({field: filter}), function (data) {
                 current_filters[filter].values = data.data.values;
                 if (active_filter == filter) {
                     update_filter_widgets();
@@ -199,7 +199,7 @@ $('#filterModal').on('show.bs.modal', function (e) {
     filtersModified=false;
     backup_filters=[];
     $.extend(true, backup_filters, current_filters );
-    
+
 
 })
 
