@@ -196,7 +196,7 @@ function update_selected_field(filter) {
             });
         } else {
             $("#select_exclude_panel").unblock();
-            $("#select_filter_panel").unblock();      
+            $("#select_filter_panel").unblock();
             update_filter_widgets();
         }
         $("#select_exclude_panel").show();
@@ -312,7 +312,7 @@ function load_chart(chart_name, view_name, field){
     filterData.groups=chart_data[chart_name].data[view_name].groups;
     filterData.view=chart_data[chart_name].chart_view;
     // Block the chart.....
-    $(chart_selector).block({ message: null });
+    $("#"+chart_name).block({ message: null });
     $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
         var params="";
         if (field && field.length > 0){
@@ -324,7 +324,7 @@ function load_chart(chart_name, view_name, field){
             if ( chart.hasOwnProperty("active_field")){
                 view.chart_data[field]=data['data'];
                 if (chart.active==view_name && chart.active_field == field){
-                    $(chart_selector).unblock();
+                    $("#"+chart_name).unblock();
                     d3.select(chart_selector)
                     .datum(view.chart_data[field])
                     .transition().duration(500)
@@ -333,7 +333,7 @@ function load_chart(chart_name, view_name, field){
             }else{
                 view.chart_data=data['data'];
                 if (chart.active==view_name){
-                    $(chart_selector).unblock();
+                    $("#"+chart_name).unblock();
                     d3.select(chart_selector)
                     .datum(view.chart_data)
                     .transition().duration(500)
@@ -353,7 +353,7 @@ function load_chart(chart_name, view_name, field){
                 // Check if selected, then display....
                 if (chart.active==view_name){
                     $(table_selector).html(view.table_data);
-                    $(table_selector).block();
+                    $(table_selector).unblock();
                 }
             });
         });
