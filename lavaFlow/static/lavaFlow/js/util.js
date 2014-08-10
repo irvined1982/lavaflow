@@ -329,7 +329,6 @@ function initializeReport(){
         create_chart(chart_name);
     }
     loadWidgets();
-    updateDateLabels();
 }
 
 // Called when report needs to be reloaded due to data change
