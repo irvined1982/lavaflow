@@ -97,10 +97,10 @@ $(function() {
 
 function change_range(step){
         var newDate = new Date(0);
-        newDate.setUTCSeconds(report_start_time+step);
+        newDate.setUTCSeconds((report_start_time/1000)+step);
         $("#report_start_datetime").datetimepicker('setDate', newDate );
         newDate = new Date(0);
-        newDate.setUTCSeconds(report_end_time+step);
+        newDate.setUTCSeconds((report_end_time/1000)+step);
         $("#report_end_datetime").datetimepicker('setDate', newDate );
         timeModalCancelled=false;
     }
