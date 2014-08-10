@@ -7,3 +7,6 @@
 [submodule "lavaFlow/static/lavaFlow/blockUI"]
 	path = lavaFlow/static/lavaFlow/blockUI
 	url = https://github.com/malsup/blockui.git
+[submodule "lavaFlow/static/lavaFlow/timepicker"]
+	path = lavaFlow/static/lavaFlow/timepicker
+	url = https://github.com/trentrichardson/jQuery-Timepicker-Addon.git

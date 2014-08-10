@@ -1672,10 +1672,23 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
 
     """
 
-    if start_time_js is None:
-        start_time_js=int((time.time())-(7*86400))*1000
+    times=Attempt.objects.aggregate(last_end_time=Max('end_time'), first_start_time=Min('start_time'))
+    first_start_time_js=times['first_start_time']*1000
+    if not first_start_time_js:
+        first_start_time_js=0
+
+    last_end_time_js=times['last_end_time']*1000
+    if not last_end_time_js:
+        last_end_time_js=0
+
     if end_time_js is None:
-        end_time_js = int(time.time())*1000
+        end_time_js = last_end_time_js
+
+    if start_time_js is None:
+        start_time_js=(end_time_js-(7*86400))*1000
+        if start_time_js < first_start_time_js:
+            start_time_js=first_start_time_js
+
     fs={
 
     }
@@ -1699,6 +1712,8 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
     set_filters('filter',filter_string, fs)
     set_filters('exclude',exclude_string, fs)
     data = {
+        'first_start_time':first_start_time_js,
+        'last_end_time':last_end_time_js,
         'build_filter_url': reverse('lf_build_filter'),
         'start_time': start_time_js,
         'end_time': end_time_js,
@@ -1847,7 +1862,7 @@ def get_field_values(request):
             'value':row[field],
             'display_value':get_friendly_val(conversions[field], row[field])  if field in conversions else row[field],
         })
-        
+
 
         data['values'].sort(key=lambda x: x['value'])
     return create_js_success(data)
