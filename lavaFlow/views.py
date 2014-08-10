@@ -1418,6 +1418,7 @@ def utilization_table(request, start_time_js=0, end_time_js=0, exclude_string=""
 
             rows.append(row)
     else:
+        header=['Overall']
         r = attempts.aggregate(*annotations)
         row={
         }
