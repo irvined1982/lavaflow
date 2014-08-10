@@ -329,12 +329,19 @@ function initializeReport(){
         create_chart(chart_name);
     }
     loadWidgets();
+    updateDateLabels();
 }
 
 // Called when report needs to be reloaded due to data change
 function updateReport(){
     // Clear all existing data to avoid confusion...
     loadWidgets();
+    updateDateLabels();
+}
+
+function updateDateLabels(){
+    $("#startText").text=(new Date(report_start_time));
+    $("#endText").text=(new Date(report_end_time));
 }
 
 function build_filter_list(name) {
@@ -374,7 +381,12 @@ function loadWidgets(){
     // Gets the total number of attempts
     filterData.view='lf_util_total_attempts';
     $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
-        $("#counterText").text(data.count);
+        if (data.data.count < 0){
+            $("#noDataFound").show();
+        }else{
+            $("#noDataFound").hide();
+        }
+        $("#counterText").text(data.data.count);
     });
 
     // Load the data for this chart.

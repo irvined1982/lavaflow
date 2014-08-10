@@ -263,6 +263,12 @@
     var current_filters={{ current_filters|safe }};
 
 </script>
+<div class="alert alert-danger hidden" id="noDataFound" role="alert"><b>Warning!</b> No tasks match your criteria.  There may be no jobs
+during the time period specified, or your filters may be too restrictive.</div>
+
+<p>
+    Showing <span id="counterText"></span> data points between <span id="startText"></span> and <span id="endText"></span>
+</p>
 
 <h1>Utilization</h1>
 <p>The Utilization Chart shows the utilization of the cluster grouped by the selected field.  Utilization shows the number

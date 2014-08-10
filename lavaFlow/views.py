@@ -1736,7 +1736,7 @@ def util_total_attempts(request, start_time_js=None, end_time_js=None, exclude_s
     data = {
         'count': count,
     }
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    return create_js_success(data)
 
 
 
