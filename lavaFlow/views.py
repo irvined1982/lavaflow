@@ -214,10 +214,16 @@ FILTER_FIELDS=[
             'can_select_values':True,
         },
         {
-            'filter_string':'cluster__id',
-            'display_name':'Cluster ID',
+            'filter_string':'queue__id',
+            'display_name':'Queue ID',
             'can_select_values':True,
         },
+        {
+            'filter_string':'projects__id',
+            'display_name':'Project ID',
+            'can_select_values':True,
+        },
+        
 
     ]
 
