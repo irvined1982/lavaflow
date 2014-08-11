@@ -102,6 +102,8 @@ FILTER_FIELDS=[
         {
             'filter_string':'start_time',
             'display_name':'Start Time',
+            'can_select_date':True,
+            'can_enter_range':True,
         },
         {
             'filter_string':'end_hour_of_day',
@@ -136,6 +138,8 @@ FILTER_FIELDS=[
         {
             'filter_string':'end_time',
             'display_name':'End Time',
+            'can_select_date':True,
+            'can_enter_range':True,
         },
         {
             'filter_string':'submit_hour_of_day',
@@ -170,6 +174,9 @@ FILTER_FIELDS=[
         {
             'filter_string':'submit_time',
             'display_name':'Submit Time',
+            'can_select_date':True,
+            'can_enter_range':True,
+
         },
         {
             'filter_string':'execution_hosts__name',

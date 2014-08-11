@@ -163,9 +163,6 @@ $(function() {
         $("#timeSelectModal").modal("hide"); return false;
     });
 
-
-
-
     $("#timeSelectModal").on("show.bs.modal", function(e){
         timeModalCancelled=true;
 
@@ -246,46 +243,89 @@ function update_filter_widgets() {
 }
 
 
+
 // Updates the list of selected bounds/ranges, called when values are changed
-// or modal is displayed
+// or modal is displayed.
 function update_range_lists() {
-    operators = [
-        {
-            operator: "lt",
-            text: " is less than "
-        },
-        {
-            operator: "lte",
-            text: " is less than or equal to "
-        },
-        {
-            operator: "gt",
-            text: " is greater than "
-        },
-        {
-            operator: "gte",
-            text: " is greater than or equal to "
-        }
-    ];
     var html = "";
-    $.each(operators, function (index, value) {
-        if (current_filters[active_filter].filter[value.operator]) {
-            html += '<li>';
-            html += "Including data where: " + current_filters[active_filter].display_name + value.text + current_filters[active_filter].filter[value.operator];
-            html += '<a href="#" onClick=\'';
-            html += 'remove_bound("' + active_filter + '", "filter", "'+value.operator+'"); return false;\'>';
-            html += '<span class="glyphicon glyphicon-remove"></span></a>';
-            html += "</li>";
-        }
-        if (current_filters[active_filter].exclude[value.operator]) {
-            html += '<li>';
-            html += "Excluding data where: " + current_filters[active_filter].display_name + value.text + current_filters[active_filter].filter[value.operator];
-            html += '<a href="#" onClick=\'';
-            html += 'remove_bound("' + active_filter + '", "exclude", "'+value.operator+'"); return false;\'>';
-            html += '<span class="glyphicon glyphicon-remove"></span></a>';
-            html += "</li>";
-        }
-    });
+    var operators=[]
+    if (current_filters[active_filter].hasOwnProperty("can_select_date") && current_filters[active_filter].can_select_date) {
+        operators = [
+            {
+                operator: "lt",
+                text: " is before "
+            },
+            {
+                operator: "lte",
+                text: " is on or before "
+            },
+            {
+                operator: "gt",
+                text: " is after "
+            },
+            {
+                operator: "gte",
+                text: " is on or after "
+            }
+        ];
+
+        $.each(operators, function (index, value) {
+            if (current_filters[active_filter].filter[value.operator]) {
+                html += '<li>';
+                html += "Including data where: " + current_filters[active_filter].display_name + value.text + new Date (current_filters[active_filter].filter[value.operator]).toLocaleDateString());
+                html += '<a href="#" onClick=\'';
+                html += 'remove_bound("' + active_filter + '", "filter", "'+value.operator+'"); return false;\'>';
+                html += '<span class="glyphicon glyphicon-remove"></span></a>';
+                html += "</li>";
+            }
+            if (current_filters[active_filter].exclude[value.operator]) {
+                html += '<li>';
+                html += "Excluding data where: " + current_filters[active_filter].display_name + value.text + new Date (current_filters[active_filter].filter[value.operator]).toLocaleDateString());
+                html += '<a href="#" onClick=\'';
+                html += 'remove_bound("' + active_filter + '", "exclude", "'+value.operator+'"); return false;\'>';
+                html += '<span class="glyphicon glyphicon-remove"></span></a>';
+                html += "</li>";
+            }
+        });
+    }else {
+        operators = [
+            {
+                operator: "lt",
+                text: " is less than "
+            },
+            {
+                operator: "lte",
+                text: " is less than or equal to "
+            },
+            {
+                operator: "gt",
+                text: " is greater than "
+            },
+            {
+                operator: "gte",
+                text: " is greater than or equal to "
+            }
+        ];
+        var html = "";
+        $.each(operators, function (index, value) {
+            if (current_filters[active_filter].filter[value.operator]) {
+                html += '<li>';
+                html += "Including data where: " + current_filters[active_filter].display_name + value.text + current_filters[active_filter].filter[value.operator];
+                html += '<a href="#" onClick=\'';
+                html += 'remove_bound("' + active_filter + '", "filter", "' + value.operator + '"); return false;\'>';
+                html += '<span class="glyphicon glyphicon-remove"></span></a>';
+                html += "</li>";
+            }
+            if (current_filters[active_filter].exclude[value.operator]) {
+                html += '<li>';
+                html += "Excluding data where: " + current_filters[active_filter].display_name + value.text + current_filters[active_filter].filter[value.operator];
+                html += '<a href="#" onClick=\'';
+                html += 'remove_bound("' + active_filter + '", "exclude", "' + value.operator + '"); return false;\'>';
+                html += '<span class="glyphicon glyphicon-remove"></span></a>';
+                html += "</li>";
+            }
+        });
+    }
     $("#active_range_filters").html(html);
     update_model_count();
 }
@@ -296,8 +336,6 @@ function remove_bound(filter_name, action, operator){
     filtersModified=true;
     update_range_lists();
 }
-
-
 
 // Updates the modal to display the current filter.
 function update_selected_field(filter) {
@@ -318,6 +356,14 @@ function update_selected_field(filter) {
     if (current_filters[filter].hasOwnProperty("can_enter_range") && current_filters[filter].can_enter_range) {
         $("#field_name_label").text(current_filters[filter].display_name);
         $("#enter_range_panel").show();
+        if (current_filters[filter].hasOwnProperty("can_select_date") && current_filters[filter].can_select_date) {
+            $("#range_filter_value").datetimepicker();
+            $("#range_filter_operator").html('<option value="lt">Before</option><option value="lte">On or Before</option><option value="gt">After</option><option value="gte">On or After</option>';
+        }else{
+            $("#range_filter_value").datetimepicker("destroy");
+            $("#range_filter_operator").html('<option value="lt">Less Than</option><option value="lte">Less Than or Equal</option><option value="gt">Greater Than</option><option value="gte">Greater Than or Equal</option>';
+        }
+
     } else {
         $("#enter_range_panel").hide();
     }
@@ -360,7 +406,11 @@ function range_filter_add(action){
         $("#range_filter_input").addClass("has-error");
         return false;
     }
-    current_filters[active_filter][action][$("#range_filter_operator").val()]=$("#range_filter_value").val();
+    if (current_filters[active_filter].hasOwnProperty("can_select_date") && current_filters[active_filter].can_select_date) {
+        current_filters[active_filter][action][$("#range_filter_operator").val()] = $("#range_filter_value").datetimepicker.getTime();
+    }else{
+        current_filters[active_filter][action][$("#range_filter_operator").val()]=$("#range_filter_value").val();
+    }
     filtersModified=true;
     update_range_lists();
 }
@@ -468,8 +518,13 @@ function load_chart(chart_name, view_name, field){
 
     filterData.groups=chart_data[chart_name].data[view_name].groups;
     filterData.view=chart_data[chart_name].chart_view;
+    // Empty the chart...
+    d3.select(chart_selector)
+    .datum(empty_chart)
+    .transition().duration(500)
+    .call(chart_data[chart_name].chart);
     // Block the chart.....
-    $("#"+chart_name).block({ message: null,css: {
+    $("#"+chart_name).block({ message: "Updating...",css: {
             border: 'none',
             padding: '15px',
             backgroundColor: '#000',
