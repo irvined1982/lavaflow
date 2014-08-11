@@ -59,7 +59,7 @@ Enable the WSGI module::
 
 Enable mod-rewrite, this is used to automatically redirect users to the SSL enabled site.::
 
-    $ a2enmod rewrite
+    $ sudo a2enmod rewrite
 
 Edit the configuration for the default site.::
 
@@ -67,15 +67,18 @@ Edit the configuration for the default site.::
 
 Add the following text:::
 
-    RewriteCond %{HTTPS} !=on
-    RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+        RewriteEngine On
+        RewriteCond %{HTTPS} off
+        RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 
 It should look something like:::
 
     <VirtualHost *:80>
             ServerAdmin webmaster@localhost
-            RewriteCond %{HTTPS} !=on
-            RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+            RewriteEngine On
+            RewriteCond %{HTTPS} off
+            RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+            DocumentRoot /var/www/html
             ErrorLog ${APACHE_LOG_DIR}/error.log
             CustomLog ${APACHE_LOG_DIR}/access.log combined
     </VirtualHost>
@@ -94,6 +97,7 @@ It should look something like:::
             <VirtualHost _default_:443>
                     Alias /static /var/www/django_static
                     ServerAdmin webmaster@localhost
+                    DocumentRoot /var/www/html
                     ErrorLog ${APACHE_LOG_DIR}/error.log
                     CustomLog ${APACHE_LOG_DIR}/access.log combined
                     SSLEngine on
@@ -144,7 +148,7 @@ Create a new project using django-admin.::
 
 Edit the settings, and configure the database, and path to static files.::
 
-    $ vim /var/www/django_lavaflow/django_lavaflow/settings.py
+    $ sudo vim /var/www/django_lavaflow/django_lavaflow/settings.py
 
 Configure the DATABASES option as follows:::
 
@@ -164,13 +168,13 @@ Set the path on the webserver to the static files.::
 
 Add a setting for the path on the filesystem where the static files are stored.::
 
-    STATIC_ROOT = "/var/www/html/django_static/"
+    STATIC_ROOT = "/var/www/django_static/"
 
 Sync the database, and collect the static files::
 
     $ cd /var/www/django_lavaflow
-    $ python manage.py syncdb
-    $ python manage.py collectstatic --noinput
+    $ sudo python manage.py syncdb
+    $ sudo python manage.py collectstatic --noinput
 
 Add the WSGI configuration to Apache.::
 
@@ -194,6 +198,7 @@ The file should look something like:::
     <IfModule mod_ssl.c>
             <VirtualHost _default_:443>
                     Alias /static /var/www/django_static
+                    DocumentRoot /var/www/html
                     WSGIDaemonProcess lavaflow python-path=/var/www/django_lavaflow processes=10 threads=15 display-name=%{GROUP}
                     WSGIScriptAlias / /var/www/django_lavaflow/django_lavaflow/wsgi.py
                     ServerAdmin webmaster@localhost
@@ -217,7 +222,7 @@ The file should look something like:::
 
 Restart apache, and check that you can now view the Django project.::
 
-    $ service apache2 restart
+    $ sudo service apache2 restart
 
 .. image:: images/django_basic_install.*
     :width: 600px
@@ -257,7 +262,7 @@ Using git, checkout the latest version of LavaFlow from GitHub.::
 Once checked out, install LavaFlow using setup.py.::
 
     $ cd lavaflow
-    $ sudo python manage.py install
+    $ sudo python setup.py install
 
 Once installed, add LavaFlow to the installed applications in the projects settings.::
 
@@ -302,7 +307,7 @@ It should look something like this:::
 
 Restart Apache, and test that you can now view the LavaFlow page.::
 
-    $ service apache2 restart
+    $ sudo service apache2 restart
 
 .. image:: images/empty_lava.*
     :width: 600px
