@@ -1,6 +1,6 @@
 
-Web Server Installation
-=======================
+LavaFlow Server Installation
+============================
 
 LavaFlow is a django application. It is installed and configured just like any other Django application would be. The
 following steps are required to install LavaFlow.
@@ -52,4 +52,3 @@ Configure the URLs for lavaFlow. Open urls.py in your django project, and includ
         url(r'^', include('lavaFlow.urls')),
 
 You can now view lavaFlow by visiting your web server.
-
