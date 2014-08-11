@@ -72,7 +72,7 @@
       aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">Features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="server.html">Web Server Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server.html">LavaFlow Server Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client.html">Client Tools Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="import.html">Import Tools</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Views</a></li>
@@ -252,8 +252,13 @@ response using a HttpResponseBadRequest class.</p>
 <dd></dd></dl>
 
 <dl class="function">
+<dt id="lavaFlow.views.format_month_day">
+<tt class="descclassname">lavaFlow.views.</tt><tt class="descname">format_month_day</tt><big>(</big><em>day</em><big>)</big><a class="headerlink" href="#lavaFlow.views.format_month_day" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="lavaFlow.views.get_attempts">
-<tt class="descclassname">lavaFlow.views.</tt><tt class="descname">get_attempts</tt><big>(</big><em>start_time_js</em>, <em>end_time_js</em>, <em>exclude_string</em>, <em>filter_string</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#get_attempts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.get_attempts" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">lavaFlow.views.</tt><tt class="descname">get_attempts</tt><big>(</big><em>start_time_js</em>, <em>end_time_js</em>, <em>exclude_string</em>, <em>filter_string</em>, <em>noTimes=False</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#get_attempts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.get_attempts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets all attempts that are active between the specified time periods, after
 having applied the filters and exclude options.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -294,6 +299,23 @@ having applied the filters and exclude options.</p>
 <dl class="function">
 <dt id="lavaFlow.views.get_field_values">
 <tt class="descclassname">lavaFlow.views.</tt><tt class="descname">get_field_values</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#lavaFlow.views.get_field_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a distinct list of values for a single specified field.</p>
+<p>If the field is not in FILTER_LIST then bad request is returned</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> &#8211; Request Object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">JSON array of values</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="lavaFlow.views.get_friendly_val">
+<tt class="descclassname">lavaFlow.views.</tt><tt class="descname">get_friendly_val</tt><big>(</big><em>field</em>, <em>value</em><big>)</big><a class="headerlink" href="#lavaFlow.views.get_friendly_val" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
@@ -396,6 +418,11 @@ from AttemptResourceUsage.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="lavaFlow.views.set_filters">
+<tt class="descclassname">lavaFlow.views.</tt><tt class="descname">set_filters</tt><big>(</big><em>field</em>, <em>filter_string</em>, <em>structure</em><big>)</big><a class="headerlink" href="#lavaFlow.views.set_filters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="lavaFlow.views.submission_bar_data">
 <tt class="descclassname">lavaFlow.views.</tt><tt class="descname">submission_bar_data</tt><big>(</big><em>request</em>, <em>start_time_js=0</em>, <em>end_time_js=0</em>, <em>exclude_string=''</em>, <em>filter_string=''</em>, <em>group_string=''</em><big>)</big><a class="headerlink" href="#lavaFlow.views.submission_bar_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates chart data for the submission chart, this shows when jobs are being submitted into the cluster.</p>
@@ -419,11 +446,6 @@ from AttemptResourceUsage.</p>
 </tbody>
 </table>
 </dd></dl>
-
-<dl class="function">
-<dt id="lavaFlow.views.util_report_range">
-<tt class="descclassname">lavaFlow.views.</tt><tt class="descname">util_report_range</tt><big>(</big><em>request</em>, <em>exclude_string=''</em>, <em>filter_string=''</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/views.html#util_report_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.views.util_report_range" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="function">
 <dt id="lavaFlow.views.util_total_attempts">
