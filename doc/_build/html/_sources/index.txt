@@ -9,9 +9,10 @@ LavaFlow is written in Python, and uses the Django web framework. Reports are mo
 create using templates and Django's query set API. LavaFlow uses human readable RESTful URLS, making it easy to
 automate, and share links to reports.
 
+You can view a demo of LavaFlow
 
-Contents:
-
+Contents
+========
 .. toctree::
    :maxdepth: 3
 

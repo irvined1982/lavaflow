@@ -92,12 +92,14 @@
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">LavaFlow Server Installation</a><ul>
-<li><a class="reference internal" href="#install-django">Install Django</a></li>
-<li><a class="reference internal" href="#django-project">Django Project</a></li>
-<li><a class="reference internal" href="#web-server-configuration">Web Server Configuration</a></li>
-<li><a class="reference internal" href="#download-lavaflow">Download lavaFlow</a></li>
-<li><a class="reference internal" href="#install-lavaflow">Install lavaFlow</a></li>
-<li><a class="reference internal" href="#activate-lavaflow">Activate lavaFlow</a></li>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
+<li><a class="reference internal" href="#software-packages">Software Packages</a></li>
+<li><a class="reference internal" href="#basic-apache-configuration">Basic Apache Configuration</a></li>
+<li><a class="reference internal" href="#mysql-database">Mysql Database</a></li>
+<li><a class="reference internal" href="#django-project-installation">Django Project Installation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#installing-lavaflow">Installing LavaFlow</a></li>
 </ul>
 </li>
 </ul>
@@ -150,46 +152,265 @@
   <div class="section" id="lavaflow-server-installation">
 <h1>LavaFlow Server Installation<a class="headerlink" href="#lavaflow-server-installation" title="Permalink to this headline">¶</a></h1>
 <p>LavaFlow is a django application. It is installed and configured just like any other Django application would be. The
-following steps are required to install LavaFlow.</p>
-<div class="section" id="install-django">
-<h2>Install Django<a class="headerlink" href="#install-django" title="Permalink to this headline">¶</a></h2>
-<p>If you have not already done so, <a class="reference external" href="https://docs.djangoproject.com/en/1.6/intro/install/">Install Django</a>.</p>
+following steps are required to install LavaFlow.  Django has a bunch of documentation on
+<a class="reference external" href="https://docs.djangoproject.com/en/1.6/intro/install/">installing Django</a>, as well as documentation on how to
+<a class="reference external" href="https://docs.djangoproject.com/en/1.6/intro/tutorial01/#creating-a-project">configure</a>. a Django project.  Once
+configured.  You will need to configure a database, mysql is recommended for larger clusters, for smaller datasets
+SQLite3 will work just fine.  It is recommended to use WSGI to talk to the Django project, however FastCGI works just
+fine too.  This documentation assumes Apache, however Lighttpd and any other supported by Django should also work just
+fine.</p>
+<div class="admonition caution">
+<p class="first admonition-title">Caution</p>
+<p class="last">If using WSGI, then Django must run within the very first Python sub interpreter created when
+Python is initialised, as the C extensions will cause the project to hang intermittently otherwise.
+Read <a class="reference external" href="https://code.google.com/p/modwsgi/wiki/ApplicationIssues#Python_Simplified_GIL_State_API">more details on the issue and its solution</a>.</p>
 </div>
-<div class="section" id="django-project">
-<h2>Django Project<a class="headerlink" href="#django-project" title="Permalink to this headline">¶</a></h2>
-<p>Create and configure a django project. This can be done by following <a class="reference external" href="https://docs.djangoproject.com/en/1.6/intro/tutorial01/#creating-a-project">these steps</a>.</p>
-</div>
-<div class="section" id="web-server-configuration">
-<h2>Web Server Configuration<a class="headerlink" href="#web-server-configuration" title="Permalink to this headline">¶</a></h2>
-<p>Configure Lavaflow as a WSGI application as prescribed in the Django tutorial.</p>
-</div>
-<div class="section" id="download-lavaflow">
-<h2>Download lavaFlow<a class="headerlink" href="#download-lavaflow" title="Permalink to this headline">¶</a></h2>
-<p>Use git to checkout <a class="reference external" href="https://github.com/irvined1982/lavaflowb">lavaFlow</a>.:</p>
-<div class="highlight-python"><pre>$ git clone https://github.com/irvined1982/lavaflow.git
-$ git submodule update --init --recursive</pre>
-</div>
-</div>
-<div class="section" id="install-lavaflow">
-<h2>Install lavaFlow<a class="headerlink" href="#install-lavaflow" title="Permalink to this headline">¶</a></h2>
-<p>Use setuptools to install the module.:</p>
-<div class="highlight-python"><pre>$ sudo python setup.py install</pre>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="software-packages">
+<h3>Software Packages<a class="headerlink" href="#software-packages" title="Permalink to this headline">¶</a></h3>
+<p>LavaFlow requires Apache, (to serve the pages) Mysql, (To store the data) Django, (The application framework) Git, (To
+download the code) and SciPy. (For number crunching.)</p>
+<p>These can be installed as follows:</p>
+<div class="highlight-python"><pre>$ sudo apt-get install apache2 libapache2-mod-wsgi mysql-server python-django python-mysqldb python-setuptools python-scipy git</pre>
 </div>
 </div>
-<div class="section" id="activate-lavaflow">
-<h2>Activate lavaFlow<a class="headerlink" href="#activate-lavaflow" title="Permalink to this headline">¶</a></h2>
-<p>Install lavaFlow as an application in your django project.:</p>
-<div class="highlight-python"><pre>INSTALLED_APPS = (
+<div class="section" id="basic-apache-configuration">
+<h3>Basic Apache Configuration<a class="headerlink" href="#basic-apache-configuration" title="Permalink to this headline">¶</a></h3>
+<p>First, create a directory inside the document root of the web server that will hold the static files.  These will
+be served directly by the web server using an alias.:</p>
+<div class="highlight-python"><pre>$ mkdir /var/www/django_static</pre>
+</div>
+<p>Enable the SSL module, this isnt a hard requirement, but again a good practice - If you do not use mod SSL, then all log
+data and passwords used to authenticate users to lavaFlow will be sent in the clear.:</p>
+<div class="highlight-python"><pre>$ sudo a2enmod ssl
 ...
-    'lavaFlow',
+Enabling module ssl.</pre>
+</div>
+<p>Enable the SSL site.:</p>
+<div class="highlight-python"><pre>$ sudo a2ensite default-ssl
+....
+Enabling site default-ssl.</pre>
+</div>
+<p>Enable the WSGI module:</p>
+<div class="highlight-python"><pre>$ sudo a2enmod wsgi
 ...
-)</pre>
+Enabling module wsgi</pre>
 </div>
-<p>Configure the URLs for lavaFlow. Open urls.py in your django project, and include the url configuration for lavaFlow:</p>
-<div class="highlight-python"><pre>urlpatterns = patterns('',
-    url(r'^', include('lavaFlow.urls')),</pre>
+<p>Enable mod-rewrite, this is used to automatically redirect users to the SSL enabled site.:</p>
+<div class="highlight-python"><pre>$ a2enmod rewrite</pre>
 </div>
-<p>You can now view lavaFlow by visiting your web server.</p>
+<p>Edit the configuration for the default site.:</p>
+<div class="highlight-python"><pre>$ sudo vim /etc/apache2/sites-available/000-default.conf</pre>
+</div>
+<p>Add the following text::</p>
+<div class="highlight-python"><pre>RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]</pre>
+</div>
+<p>It should look something like::</p>
+<div class="highlight-python"><pre>&lt;VirtualHost *:80&gt;
+        ServerAdmin webmaster@localhost
+        RewriteCond %{HTTPS} !=on
+        RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+&lt;/VirtualHost&gt;</pre>
+</div>
+<p>Open the SSL configuration, add an alias for /static to the directory Django will use to store its static files.:</p>
+<div class="highlight-python"><pre>$ sudo vim /etc/apache2/sites-available/default-ssl.conf</pre>
+</div>
+<p>Add the following::</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Alias</span> <span class="o">/</span><span class="n">static</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">django_static</span>
+</pre></div>
+</div>
+<p>It should look something like::</p>
+<div class="highlight-python"><pre>&lt;IfModule mod_ssl.c&gt;
+        &lt;VirtualHost _default_:443&gt;
+                Alias /static /var/www/django_static
+                ServerAdmin webmaster@localhost
+                ErrorLog ${APACHE_LOG_DIR}/error.log
+                CustomLog ${APACHE_LOG_DIR}/access.log combined
+                SSLEngine on
+                SSLCertificateFile      /etc/ssl/certs/ssl-cert-snakeoil.pem
+                SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
+                &lt;FilesMatch "\.(cgi|shtml|phtml|php)$"&gt;
+                                SSLOptions +StdEnvVars
+                &lt;/FilesMatch&gt;
+                &lt;Directory /usr/lib/cgi-bin&gt;
+                                SSLOptions +StdEnvVars
+                &lt;/Directory&gt;
+                BrowserMatch "MSIE [2-6]" \
+                                nokeepalive ssl-unclean-shutdown \
+                                downgrade-1.0 force-response-1.0
+                BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
+        &lt;/VirtualHost&gt;
+&lt;/IfModule&gt;</pre>
+</div>
+<p>Restart the web server, and check that it is working.  Visit the web server, you should be redirected to the SSL site.
+The SSL site will have a self-signed certificate, which should cause your web browser to ask for permission before
+opening.:</p>
+<div class="highlight-python"><pre>$ sudo service apache2 restart</pre>
+</div>
+<img alt="_images/static_files.png" class="align-center" src="_images/static_files.png" style="width: 600px;" />
+<p>Check that visiting /static opens the django_static directory.</p>
+</div>
+<div class="section" id="mysql-database">
+<h3>Mysql Database<a class="headerlink" href="#mysql-database" title="Permalink to this headline">¶</a></h3>
+<p>Use the mysql client to create a new database that will be used by Django to store the data for LavaFlow.  Create a new
+user and give them access to the database:</p>
+<div class="highlight-python"><pre>$ mysql -u root -p
+mysql&gt; create database django_lavaflow;
+mysql&gt; GRANT ALL PRIVILEGES ON django_lavaflow.* to 'django_lavaflow'@'localhost' identified by 'lavaflow';</pre>
+</div>
+</div>
+<div class="section" id="django-project-installation">
+<h3>Django Project Installation<a class="headerlink" href="#django-project-installation" title="Permalink to this headline">¶</a></h3>
+<p>Create a new project using django-admin.:</p>
+<div class="highlight-python"><pre>$ cd /var/www
+$ sudo django-admin startproject django_lavaflow</pre>
+</div>
+<p>Edit the settings, and configure the database, and path to static files.:</p>
+<div class="highlight-python"><pre>$ vim /var/www/django_lavaflow/django_lavaflow/settings.py</pre>
+</div>
+<p>Configure the DATABASES option as follows::</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&#39;ENGINE&#39;</span><span class="p">:</span> <span class="s">&#39;django.db.backends.mysql&#39;</span><span class="p">,</span>
+        <span class="s">&#39;NAME&#39;</span><span class="p">:</span><span class="s">&#39;django_lavaflow&#39;</span><span class="p">,</span>
+        <span class="s">&#39;USER&#39;</span><span class="p">:</span> <span class="s">&#39;django_lavaflow&#39;</span><span class="p">,</span>
+        <span class="s">&#39;PASSWORD&#39;</span><span class="p">:</span> <span class="s">&#39;lavaflow&#39;</span><span class="p">,</span>
+
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Set the path on the webserver to the static files.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">STATIC_URL</span> <span class="o">=</span> <span class="s">&#39;/static/&#39;</span>
+</pre></div>
+</div>
+<p>Add a setting for the path on the filesystem where the static files are stored.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">STATIC_ROOT</span> <span class="o">=</span> <span class="s">&quot;/var/www/html/django_static/&quot;</span>
+</pre></div>
+</div>
+<p>Sync the database, and collect the static files:</p>
+<div class="highlight-python"><pre>$ cd /var/www/django_lavaflow
+$ python manage.py syncdb
+$ python manage.py collectstatic --noinput</pre>
+</div>
+<p>Add the WSGI configuration to Apache.:</p>
+<div class="highlight-python"><pre>$ sudo vim /etc/apache2/sites-available/default-ssl.conf</pre>
+</div>
+<p>Add global configuration options for Pythons path, and the application group.  These need to be in the global section
+and not inside the VirtualHost directive.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">WSGIPythonPath</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">django_lavaflow</span>
+<span class="n">WSGIApplicationGroup</span> <span class="o">%</span><span class="p">{</span><span class="n">GLOBAL</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Inside the VirtualHost directive configure the daemon and script alias for the Django project.:</p>
+<div class="highlight-python"><pre>WSGIDaemonProcess lavaflow python-path=/var/www/django_lavaflow processes=10 threads=15 display-name=%{GROUP}
+WSGIScriptAlias / /var/www/django_lavaflow/django_lavaflow/wsgi.py</pre>
+</div>
+<p>The file should look something like::</p>
+<div class="highlight-python"><pre>WSGIPythonPath /var/www/django_lavaflow
+WSGIApplicationGroup %{GLOBAL}
+&lt;IfModule mod_ssl.c&gt;
+        &lt;VirtualHost _default_:443&gt;
+                Alias /static /var/www/django_static
+                WSGIDaemonProcess lavaflow python-path=/var/www/django_lavaflow processes=10 threads=15 display-name=%{GROUP}
+                WSGIScriptAlias / /var/www/django_lavaflow/django_lavaflow/wsgi.py
+                ServerAdmin webmaster@localhost
+                ErrorLog ${APACHE_LOG_DIR}/error.log
+                CustomLog ${APACHE_LOG_DIR}/access.log combined
+                SSLEngine on
+                SSLCertificateFile      /etc/ssl/certs/ssl-cert-snakeoil.pem
+                SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
+                &lt;FilesMatch "\.(cgi|shtml|phtml|php)$"&gt;
+                                SSLOptions +StdEnvVars
+                &lt;/FilesMatch&gt;
+                &lt;Directory /usr/lib/cgi-bin&gt;
+                                SSLOptions +StdEnvVars
+                &lt;/Directory&gt;
+                BrowserMatch "MSIE [2-6]" \
+                                nokeepalive ssl-unclean-shutdown \
+                                downgrade-1.0 force-response-1.0
+                BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
+        &lt;/VirtualHost&gt;
+&lt;/IfModule&gt;</pre>
+</div>
+<p>Restart apache, and check that you can now view the Django project.:</p>
+<div class="highlight-python"><pre>$ service apache2 restart</pre>
+</div>
+<img alt="_images/django_basic_install.png" class="align-center" src="_images/django_basic_install.png" style="width: 600px;" />
+<p>Visit the web server using your browser, at the root of the server, the Django &#8216;Hello World&#8217; screen indicating that it is running
+successfully should be visible.</p>
+<img alt="_images/admin_login.png" class="align-center" src="_images/admin_login.png" style="width: 600px;" />
+<p>Visiting /admin should show the Django admin interface log on screen.</p>
+<img alt="_images/django_admin_home_nolava.png" class="align-center" src="_images/django_admin_home_nolava.png" style="width: 600px;" />
+<p>After logging in, you should see the Django admin interface, with users and groups menu.</p>
+</div>
+</div>
+<div class="section" id="installing-lavaflow">
+<h2>Installing LavaFlow<a class="headerlink" href="#installing-lavaflow" title="Permalink to this headline">¶</a></h2>
+<p>Using git, checkout the latest version of LavaFlow from GitHub.:</p>
+<div class="highlight-python"><pre>$ cd
+$ git clone --recursive https://github.com/irvined1982/lavaflow.git
+Cloning into 'lavaflow'...
+...
+Submodule 'lavaFlow/static/lavaFlow/blockUI' (https://github.com/malsup/blockui.git) registered for path 'lavaFlow/static/lavaFlow/blockUI'
+Submodule 'lavaFlow/static/lavaFlow/nvd3' (https://github.com/novus/nvd3.git) registered for path 'lavaFlow/static/lavaFlow/nvd3'
+Submodule 'lavaFlow/static/lavaFlow/timepicker' (https://github.com/trentrichardson/jQuery-Timepicker-Addon.git) registered for path 'lavaFlow/static/lavaFlow/timepicker'
+Submodule 'lavaFlow/static/lavaFlow/visjs' (https://github.com/irvined1982/vis.git) registered for path 'lavaFlow/static/lavaFlow/visjs'
+...
+$</pre>
+</div>
+<p>Once checked out, install LavaFlow using setup.py.:</p>
+<div class="highlight-python"><pre>$ cd lavaflow
+$ sudo python manage.py install</pre>
+</div>
+<p>Once installed, add LavaFlow to the installed applications in the projects settings.:</p>
+<div class="highlight-python"><pre>$ cd /var/www/django_lavaflow/
+$ sudo vim django_lavaflow/settings.py</pre>
+</div>
+<p>Set INSTALLED_APPS to include LavaFlow, it should look something like::</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s">&#39;lavaFlow&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.admin&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.auth&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.contenttypes&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.sessions&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.messages&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.staticfiles&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Run syncdb to create the tables needed for LavaFlow, then collect the static files.:</p>
+<div class="highlight-python"><pre>$ sudo python manage.py syncdb
+$ sudo python manage.py collectstatic --noinput</pre>
+</div>
+<p>Update urls.py to include the url config for LavaFlow.:</p>
+<div class="highlight-python"><pre>$ sudo vim django_lavaflow/urls.py</pre>
+</div>
+<p>Add the following line to urlpatterns below the admin urls::</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">url</span><span class="p">(</span><span class="s">r&#39;^&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;lavaFlow.urls&#39;</span><span class="p">)),</span>
+</pre></div>
+</div>
+<p>It should look something like this::</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+    <span class="c"># Examples:</span>
+    <span class="c"># url(r&#39;^$&#39;, &#39;django_lavaflow.views.home&#39;, name=&#39;home&#39;),</span>
+    <span class="c"># url(r&#39;^blog/&#39;, include(&#39;blog.urls&#39;)),</span>
+
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;lavaFlow.urls&#39;</span><span class="p">)),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Restart Apache, and test that you can now view the LavaFlow page.:</p>
+<div class="highlight-python"><pre>$ service apache2 restart</pre>
+</div>
+<img alt="_images/empty_lava.png" class="align-center" src="_images/empty_lava.png" style="width: 600px;" />
+<p>As you have not imported any data yet, you should see an empty page with a warning message, this is normal, and shows
+that LavaFlow is working and is ready to accept data from your clusters.</p>
 </div>
 </div>
 
