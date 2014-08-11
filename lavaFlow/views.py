@@ -228,7 +228,7 @@ FILTER_FIELDS=[
             'display_name':'Execution Host ID',
             'can_select_values':True,
         },
-        
+
 
 
     ]
@@ -1680,11 +1680,6 @@ def submission_bar_data(request, start_time_js=0, end_time_js=0, exclude_string=
 
     return create_js_success(data)
 
-
-
-
-
-
 @cache_page(60 * 60 * 2)
 def utilization_view(request, start_time_js=None, end_time_js=None, exclude_string="none", filter_string="none",
                      group_string=""):
@@ -1713,10 +1708,10 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
         last_end_time_js=times['last_end_time']*1000
 
 
-    if end_time_js is None:
+    if end_time_js is None or end_time_js == 0:
         end_time_js = last_end_time_js
 
-    if start_time_js is None:
+    if start_time_js is None or start_time_js == 0:
         start_time_js=end_time_js-(7*86400*1000)
         if start_time_js < first_start_time_js:
             start_time_js=first_start_time_js
