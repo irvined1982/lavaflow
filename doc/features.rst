@@ -5,7 +5,7 @@ Features
 Capacity Management
 -------------------
 
-Charts and tables showing demand (Requested capacity) with a one-minute resolution promote data driven decisions for
+Charts and tables showing demand (Requested capacity) with a accurate resolution promote data driven decisions for
 capacity management. Charts can be broken down by user, project, queue, job size and cluster, or rolled up to show
 global demand across the organization. Charts can be filtered to show only data for specific metrics, such as a project
 or queue. Alternatively metrics can be excluded in order to show demand for just the specific data needed.

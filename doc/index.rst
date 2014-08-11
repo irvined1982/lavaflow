@@ -9,7 +9,8 @@ LavaFlow is written in Python, and uses the Django web framework. Reports are mo
 create using templates and Django's query set API. LavaFlow uses human readable RESTful URLS, making it easy to
 automate, and share links to reports.
 
-You can view a demo of LavaFlow
+LavaFlow is `hosted on GitHub<https://github.com/irvined1982/lavaflow>`_, and you can try out
+the `online demo<https://www.clusterfsck.io/dev/lavaFlow>`_.
 
 Contents
 ========
