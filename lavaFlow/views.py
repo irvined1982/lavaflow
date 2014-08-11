@@ -223,7 +223,13 @@ FILTER_FIELDS=[
             'display_name':'Project ID',
             'can_select_values':True,
         },
+        {
+            'filter_string':'execution_hosts__id',
+            'display_name':'Execution Host ID',
+            'can_select_values':True,
+        },
         
+
 
     ]
 
