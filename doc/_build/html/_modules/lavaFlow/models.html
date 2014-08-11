@@ -74,8 +74,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../server.html">LavaFlow Server Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../client.html">Client Tools Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../import.html">Import Tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../views.html">Views</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../core_models.html">Core Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer.html">Developer Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary of Terms</a></li>
 </ul>
 </ul>
@@ -157,7 +156,7 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="ImportKey"><a class="viewcode-back" href="../../models.html#lavaFlow.models.ImportKey">[docs]</a><span class="k">class</span> <span class="nc">ImportKey</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="ImportKey"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.ImportKey">[docs]</a><span class="k">class</span> <span class="nc">ImportKey</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Any client that attempts to import data must present a valid key. Keys in general should be managed through the</span>
 <span class="sd">    admin control panel.::</span>
 
@@ -181,7 +180,7 @@
     <span class="n">client_key</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">help_text</span><span class="o">=</span><span class="s">&quot;Client key, passed by the client to authenticate&quot;</span><span class="p">)</span>
     <span class="n">comment</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">help_text</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;Optional description/comment.&quot;</span><span class="p">))</span>
 
-<div class="viewcode-block" id="ImportKey.__str__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.ImportKey.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImportKey.__str__"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.ImportKey.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a str containing the client key.</span>
 
@@ -190,7 +189,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client_key</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="ImportKey.__unicode__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.ImportKey.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImportKey.__unicode__"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.ImportKey.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the unicode represenation of the client_key</span>
 
@@ -386,7 +385,7 @@
         <span class="p">]</span>
 
 </div>
-<div class="viewcode-block" id="Cluster"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster">[docs]</a><span class="k">class</span> <span class="nc">Cluster</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Cluster">[docs]</a><span class="k">class</span> <span class="nc">Cluster</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Almost every bit of data stored in lavaFlow can be traced back to a cluster, clusters represent the physical compute</span>
@@ -426,7 +425,7 @@
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">ordering</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="Cluster.get_absolute_url"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.get_absolute_url"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Cluster.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The absolute URL to the cluster view.</span>
 
@@ -442,7 +441,7 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&quot;lf_utilization_view&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Cluster.__unicode__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.__unicode__"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Cluster.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a unicode str containing the name of the cluster.</span>
 
@@ -451,7 +450,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s">u&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </div>
-<div class="viewcode-block" id="Cluster.__str__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.__str__"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Cluster.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a  str containing the name of the cluster.</span>
 
@@ -460,7 +459,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </div>
-<div class="viewcode-block" id="Cluster.total_jobs"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.total_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">total_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.total_jobs"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Cluster.total_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">total_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns an total number of jobs that have been submitted to this cluster since time began.</span>
 
@@ -469,7 +468,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">attempt__cluster</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Cluster.total_tasks"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.total_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.total_tasks"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Cluster.total_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns an total number of tasks that have been submitted to this cluster since time began.</span>
 
@@ -478,7 +477,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Task</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">attempt__cluster</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Cluster.total_attempts"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.total_attempts">[docs]</a>    <span class="k">def</span> <span class="nf">total_attempts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.total_attempts"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Cluster.total_attempts">[docs]</a>    <span class="k">def</span> <span class="nf">total_attempts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns an total number of tasks that have been executed on this cluster since time began.</span>
 
@@ -487,7 +486,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Cluster.first_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.first_task">[docs]</a>    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.first_task"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Cluster.first_task">[docs]</a>    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the first task that was executed on the cluster.  If no tasks were executed on the cluster, returns None.</span>
 
@@ -499,7 +498,7 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Cluster.last_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.last_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.last_task"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Cluster.last_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the last task that ended on the cluster, regardless of exit status.  If no tasks have been executed on the</span>
 <span class="sd">        cluster, returns None</span>
@@ -512,7 +511,7 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Cluster.last_failed_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.last_failed_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_failed_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.last_failed_task"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Cluster.last_failed_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_failed_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the last task that exited with a non-successful exit state on the cluster.  If no tasks have been executed</span>
 <span class="sd">        on the cluster, or none of the tasks have exited witha  failure, returns None</span>
@@ -525,7 +524,7 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Cluster.average_pend_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.average_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.average_pend_time"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Cluster.average_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates the average pend time in seconds for all jobs that executed on the cluster.</span>
 
@@ -540,7 +539,7 @@
             <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pend</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">pend</span>
 </div>
-<div class="viewcode-block" id="Cluster.average_pend_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.average_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.average_pend_time_timedelta"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Cluster.average_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Timedelta object of the number of seconds that jobs pend for</span>
 
@@ -549,7 +548,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span>
 </div>
-<div class="viewcode-block" id="Cluster.average_pend_time_percent"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.average_pend_time_percent">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.average_pend_time_percent"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Cluster.average_pend_time_percent">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the average pend time of jobs on the cluster as a percent of their overall wall clock time.</span>
 
@@ -562,7 +561,7 @@
         <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">100</span>
 </div>
-<div class="viewcode-block" id="Cluster.average_wall_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.average_wall_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.average_wall_time"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Cluster.average_wall_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates the average wall clock time in seconds for all jobs that executed on the cluster.</span>
 
@@ -576,7 +575,7 @@
             <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">wall</span>
 </div>
-<div class="viewcode-block" id="Cluster.average_wall_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.average_wall_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cluster.average_wall_time_timedelta"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Cluster.average_wall_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Timedelta object of the number of seconds of the average wall clock time.</span>
 
@@ -586,7 +585,7 @@
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">())</span>
 
 </div></div>
-<div class="viewcode-block" id="ClusterLog"><a class="viewcode-back" href="../../models.html#lavaFlow.models.ClusterLog">[docs]</a><span class="k">class</span> <span class="nc">ClusterLog</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="ClusterLog"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.ClusterLog">[docs]</a><span class="k">class</span> <span class="nc">ClusterLog</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ClusterLog objects are log entries that relate to the cluster as a whole. These can be created by tools, or through</span>
 <span class="sd">    the admin interface by an administator.</span>
@@ -609,7 +608,7 @@
     <span class="n">message</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
 </div>
-<div class="viewcode-block" id="Project"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project">[docs]</a><span class="k">class</span> <span class="nc">Project</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="Project"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Project">[docs]</a><span class="k">class</span> <span class="nc">Project</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Projects are used to store the project name that jobs were submitted to, jobs of course can be submitted to</span>
 <span class="sd">    multiple projects, and this is also supported.  Projects are unique globally.</span>
@@ -621,7 +620,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Project.get_absolute_url"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.get_absolute_url"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Project.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The absolute URL to the project view.</span>
 
@@ -637,7 +636,7 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&quot;lf_utilization_view&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Project.__unicode__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.__unicode__"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Project.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a unicode str containing the name of the project.</span>
 
@@ -646,7 +645,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s">u&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </div>
-<div class="viewcode-block" id="Project.__str__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.__str__"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Project.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a  str containing the name of the project.</span>
 
@@ -655,7 +654,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </div>
-<div class="viewcode-block" id="Project.total_jobs"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.total_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">total_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.total_jobs"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Project.total_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">total_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns an total number of jobs that have been submitted to this project since time began.</span>
 
@@ -664,7 +663,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">attempt__projects</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Project.total_tasks"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.total_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.total_tasks"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Project.total_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns an total number of tasks that have been submitted to this project since time began.</span>
 
@@ -673,7 +672,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Task</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">attempt__projects</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Project.total_attempts"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.total_attempts">[docs]</a>    <span class="k">def</span> <span class="nf">total_attempts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.total_attempts"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Project.total_attempts">[docs]</a>    <span class="k">def</span> <span class="nf">total_attempts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns an total number of tasks that have been executed under this project since time began.</span>
 
@@ -682,7 +681,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Project.first_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.first_task">[docs]</a>    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.first_task"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Project.first_task">[docs]</a>    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the first task that was executed under this project.  If no tasks were executed, returns None.</span>
 
@@ -694,7 +693,7 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Project.last_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.last_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.last_task"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Project.last_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the last task under this project that ended, regardless of exit status.  If no tasks have been executed</span>
 <span class="sd">        on the under this project, returns None</span>
@@ -707,7 +706,7 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Project.last_failed_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.last_failed_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_failed_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.last_failed_task"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Project.last_failed_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_failed_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the last task that exited with a non-successful exit state under this project.  If no tasks have been</span>
 <span class="sd">        executed under this project, or none of the tasks have exited with a failure, returns None.</span>
@@ -720,7 +719,7 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Project.average_pend_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.average_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.average_pend_time"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Project.average_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates the average pend time in seconds for all jobs that were submitted under this project.</span>
 
@@ -734,7 +733,7 @@
             <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pend</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">pend</span>
 </div>
-<div class="viewcode-block" id="Project.average_pend_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.average_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.average_pend_time_timedelta"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Project.average_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Timedelta object of the number of seconds that jobs pend for</span>
 
@@ -743,7 +742,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span>
 </div>
-<div class="viewcode-block" id="Project.average_pend_time_percent"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.average_pend_time_percent">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.average_pend_time_percent"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Project.average_pend_time_percent">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the average pend time of jobs submitted under this project as a percent of their overall wall clock time.</span>
 
@@ -757,7 +756,7 @@
             <span class="k">return</span> <span class="mi">100</span>
 
 </div>
-<div class="viewcode-block" id="Project.average_wall_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.average_wall_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.average_wall_time"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Project.average_wall_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates the average wall clock time in seconds for all jobs that were submitted under this project.</span>
 
@@ -771,7 +770,7 @@
             <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">wall</span>
 </div>
-<div class="viewcode-block" id="Project.average_wall_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.average_wall_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Project.average_wall_time_timedelta"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Project.average_wall_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Timedelta object of the number of seconds of the average wall clock time.</span>
 
@@ -781,7 +780,7 @@
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">())</span>
 
 </div></div>
-<div class="viewcode-block" id="Host"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Host">[docs]</a><span class="k">class</span> <span class="nc">Host</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="Host"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Host">[docs]</a><span class="k">class</span> <span class="nc">Host</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Hosts represent actual hosts, these may be any arbitrary host, but generally are hosts that are either execution</span>
 <span class="sd">    hosts or submission hosts.</span>
@@ -840,11 +839,11 @@
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&quot;lf_utilization_view&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
 
 </div></div>
-<div class="viewcode-block" id="HostLog"><a class="viewcode-back" href="../../models.html#lavaFlow.models.HostLog">[docs]</a><span class="k">class</span> <span class="nc">HostLog</span><span class="p">(</span><span class="n">ClusterLog</span><span class="p">):</span>
+<div class="viewcode-block" id="HostLog"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.HostLog">[docs]</a><span class="k">class</span> <span class="nc">HostLog</span><span class="p">(</span><span class="n">ClusterLog</span><span class="p">):</span>
     <span class="n">host</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Host</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="Queue"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Queue">[docs]</a><span class="k">class</span> <span class="nc">Queue</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="Queue"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Queue">[docs]</a><span class="k">class</span> <span class="nc">Queue</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">cluster</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Cluster</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
 
@@ -928,11 +927,11 @@
         <span class="p">]</span>
 
 </div>
-<div class="viewcode-block" id="QueueLog"><a class="viewcode-back" href="../../models.html#lavaFlow.models.QueueLog">[docs]</a><span class="k">class</span> <span class="nc">QueueLog</span><span class="p">(</span><span class="n">ClusterLog</span><span class="p">):</span>
+<div class="viewcode-block" id="QueueLog"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.QueueLog">[docs]</a><span class="k">class</span> <span class="nc">QueueLog</span><span class="p">(</span><span class="n">ClusterLog</span><span class="p">):</span>
     <span class="n">queue</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Queue</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="User"><a class="viewcode-back" href="../../models.html#lavaFlow.models.User">[docs]</a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="User"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.User">[docs]</a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 <div class="viewcode-block" id="User.__unicode__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.User.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1009,7 +1008,7 @@
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&quot;lf_utilization_view&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
 
 </div></div>
-<div class="viewcode-block" id="UserLog"><a class="viewcode-back" href="../../models.html#lavaFlow.models.UserLog">[docs]</a><span class="k">class</span> <span class="nc">UserLog</span><span class="p">(</span><span class="n">ClusterLog</span><span class="p">):</span>
+<div class="viewcode-block" id="UserLog"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.UserLog">[docs]</a><span class="k">class</span> <span class="nc">UserLog</span><span class="p">(</span><span class="n">ClusterLog</span><span class="p">):</span>
     <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
 
 </div>
@@ -1029,7 +1028,7 @@
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
 
 </div></div>
-<div class="viewcode-block" id="Job"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job">[docs]</a><span class="k">class</span> <span class="nc">Job</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="Job"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Job">[docs]</a><span class="k">class</span> <span class="nc">Job</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">cluster</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Cluster</span><span class="p">)</span>
     <span class="n">job_id</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
@@ -1178,7 +1177,7 @@
         <span class="p">]</span>
 
 </div>
-<div class="viewcode-block" id="JobLog"><a class="viewcode-back" href="../../models.html#lavaFlow.models.JobLog">[docs]</a><span class="k">class</span> <span class="nc">JobLog</span><span class="p">(</span><span class="n">ClusterLog</span><span class="p">):</span>
+<div class="viewcode-block" id="JobLog"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.JobLog">[docs]</a><span class="k">class</span> <span class="nc">JobLog</span><span class="p">(</span><span class="n">ClusterLog</span><span class="p">):</span>
     <span class="n">job</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Job</span><span class="p">)</span>
 
 </div>
@@ -1257,7 +1256,7 @@
     <span class="n">login_shell</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>
     <span class="n">user_priority</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Task">[docs]</a><span class="k">class</span> <span class="nc">Task</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="Task"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Task">[docs]</a><span class="k">class</span> <span class="nc">Task</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">cluster</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Cluster</span><span class="p">)</span>
     <span class="n">job</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Job</span><span class="p">)</span>
     <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
@@ -1309,7 +1308,7 @@
     <span class="n">task</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Task</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="Attempt"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt">[docs]</a><span class="k">class</span> <span class="nc">Attempt</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="Attempt"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.Attempt">[docs]</a><span class="k">class</span> <span class="nc">Attempt</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Each time a task is started on one or more compute nodes, it is called an attempt.  Tasks that fail and are</span>
@@ -1546,7 +1545,7 @@
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">advanced_reservation_submit_time</span><span class="p">)</span>
 
 </div></div>
-<div class="viewcode-block" id="AttemptResourceUsage"><a class="viewcode-back" href="../../models.html#lavaFlow.models.AttemptResourceUsage">[docs]</a><span class="k">class</span> <span class="nc">AttemptResourceUsage</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="AttemptResourceUsage"><a class="viewcode-back" href="../../developer.html#lavaFlow.models.AttemptResourceUsage">[docs]</a><span class="k">class</span> <span class="nc">AttemptResourceUsage</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Resource usage measures for the attempt, taken from the getrusage() system call.  Not all schedulers support</span>
 <span class="sd">    this operation, and where not supported, this will not be created.</span>
