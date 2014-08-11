@@ -1,12 +1,14 @@
+Developer Documentation
+=======================
 
 Core Models
-===========
+^^^^^^^^^^^
 
 The following classes form the core lavaFlow functionality, they are used by all scheduling environments, and contain
 all the data required for the core reports.
 
 lavaFlow.models.ImportKey
--------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: lavaFlow.models.ImportKey
     :members:
@@ -14,7 +16,7 @@ lavaFlow.models.ImportKey
     :special-members:
 
 lavaFlow.models.Cluster
------------------------
+^^^^^^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: lavaFlow.models.Cluster
     :members:
@@ -22,12 +24,15 @@ lavaFlow.models.Cluster
     :special-members:
 
 lavaFlow.models.ClusterLog
---------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: lavaFlow.models.ClusterLog
     :members:
     :private-members:
     :special-members:
+
+lavaFlow.models.Job
+^^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: lavaFlow.models.Job
     :members:
@@ -88,4 +93,14 @@ lavaFlow.models.ClusterLog
     :members:
     :private-members:
     :special-members:
+
+Views
+-----
+
+.. automodule:: lavaFlow.views
+    :members:
+    :undoc-members:
+    :private-members:
+    :special-members:
+
 

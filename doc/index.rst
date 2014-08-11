@@ -21,8 +21,7 @@ Contents
    server
    client
    import
-   views
-   core_models
+   developer
    glossary
 
 Indices and tables
