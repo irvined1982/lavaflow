@@ -306,7 +306,7 @@ function update_range_lists() {
                 text: " is greater than or equal to "
             }
         ];
-        var html = "";
+
         $.each(operators, function (index, value) {
             if (current_filters[active_filter].filter[value.operator]) {
                 html += '<li>';
@@ -407,7 +407,7 @@ function range_filter_add(action){
         return false;
     }
     if (current_filters[active_filter].hasOwnProperty("can_select_date") && current_filters[active_filter].can_select_date) {
-        current_filters[active_filter][action][$("#range_filter_operator").val()] = $("#range_filter_value").datetimepicker.getTime();
+        current_filters[active_filter][action][$("#range_filter_operator").val()] = $("#range_filter_value").datetimepicker('getDate').getTime();
     }else{
         current_filters[active_filter][action][$("#range_filter_operator").val()]=$("#range_filter_value").val();
     }
