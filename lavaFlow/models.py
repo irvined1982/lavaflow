@@ -730,6 +730,7 @@ class Queue(models.Model):
         'filter_string': "queue__id__in.%s" % self.id,
         'group_string': "none",
         }
+        return reverse("lf_utilization_view", kwargs=args)
 
     def __unicode__(self):
         return u'%s' % self.name
