@@ -518,6 +518,9 @@ function load_chart(chart_name, view_name, field){
 
     filterData.groups=chart_data[chart_name].data[view_name].groups;
     filterData.view=chart_data[chart_name].chart_view;
+    if (!chart_data[chart_name].chart){
+        console.log("chart_name: " + chart_name +" Doesnt exist");
+    }
     // Empty the chart...
     //d3.select(chart_selector)
     //.datum(empty_chart)
