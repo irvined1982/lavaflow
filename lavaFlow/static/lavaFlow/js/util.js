@@ -519,10 +519,10 @@ function load_chart(chart_name, view_name, field){
     filterData.groups=chart_data[chart_name].data[view_name].groups;
     filterData.view=chart_data[chart_name].chart_view;
     // Empty the chart...
-    d3.select(chart_selector)
-    .datum(empty_chart)
-    .transition().duration(500)
-    .call(chart_data[chart_name].chart);
+    //d3.select(chart_selector)
+    //.datum(empty_chart)
+    //.transition().duration(500)
+    //.call(chart_data[chart_name].chart);
     // Block the chart.....
     $("#"+chart_name).block({ message: "Updating...",css: {
             border: 'none',
