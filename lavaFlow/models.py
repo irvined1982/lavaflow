@@ -1388,7 +1388,7 @@ class Attempt(models.Model):
             ['start_time','end_time','num_processors','cluster'],
             ['start_time','end_time','num_processors','user'],
             ['start_time','end_time','num_processors','queue'],
-            
+
             ['start_time','end_time','num_processors'],
             ['cluster', 'job', 'task'],
             ['cluster', 'job', 'task', 'start_time'],

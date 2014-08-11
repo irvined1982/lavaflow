@@ -483,7 +483,7 @@ function loadWidgets(){
     filterData.view='lf_util_total_attempts';
     $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
         $.getJSON(data.url, function(data) {
-            if (data.data.count < 0) {
+            if (data.data.count < 1) {
                 $("#noDataFound").show();
             } else {
                 $("#noDataFound").hide();
