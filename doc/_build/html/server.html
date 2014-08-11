@@ -75,8 +75,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="">LavaFlow Server Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client.html">Client Tools Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="import.html">Import Tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="views.html">Views</a></li>
-<li class="toctree-l1"><a class="reference internal" href="core_models.html">Core Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer.html">Developer Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary of Terms</a></li>
 </ul>
 </ul>
@@ -198,20 +197,23 @@ Enabling site default-ssl.</pre>
 Enabling module wsgi</pre>
 </div>
 <p>Enable mod-rewrite, this is used to automatically redirect users to the SSL enabled site.:</p>
-<div class="highlight-python"><pre>$ a2enmod rewrite</pre>
+<div class="highlight-python"><pre>$ sudo a2enmod rewrite</pre>
 </div>
 <p>Edit the configuration for the default site.:</p>
 <div class="highlight-python"><pre>$ sudo vim /etc/apache2/sites-available/000-default.conf</pre>
 </div>
 <p>Add the following text::</p>
-<div class="highlight-python"><pre>RewriteCond %{HTTPS} !=on
-RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]</pre>
+<div class="highlight-python"><pre>RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}</pre>
 </div>
 <p>It should look something like::</p>
 <div class="highlight-python"><pre>&lt;VirtualHost *:80&gt;
         ServerAdmin webmaster@localhost
-        RewriteCond %{HTTPS} !=on
-        RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+        RewriteEngine On
+        RewriteCond %{HTTPS} off
+        RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+        DocumentRoot /var/www/html
         ErrorLog ${APACHE_LOG_DIR}/error.log
         CustomLog ${APACHE_LOG_DIR}/access.log combined
 &lt;/VirtualHost&gt;</pre>
@@ -228,6 +230,7 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]</pre>
         &lt;VirtualHost _default_:443&gt;
                 Alias /static /var/www/django_static
                 ServerAdmin webmaster@localhost
+                DocumentRoot /var/www/html
                 ErrorLog ${APACHE_LOG_DIR}/error.log
                 CustomLog ${APACHE_LOG_DIR}/access.log combined
                 SSLEngine on
@@ -270,7 +273,7 @@ mysql&gt; GRANT ALL PRIVILEGES ON django_lavaflow.* to 'django_lavaflow'@'localh
 $ sudo django-admin startproject django_lavaflow</pre>
 </div>
 <p>Edit the settings, and configure the database, and path to static files.:</p>
-<div class="highlight-python"><pre>$ vim /var/www/django_lavaflow/django_lavaflow/settings.py</pre>
+<div class="highlight-python"><pre>$ sudo vim /var/www/django_lavaflow/django_lavaflow/settings.py</pre>
 </div>
 <p>Configure the DATABASES option as follows::</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
@@ -289,13 +292,13 @@ $ sudo django-admin startproject django_lavaflow</pre>
 </pre></div>
 </div>
 <p>Add a setting for the path on the filesystem where the static files are stored.:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">STATIC_ROOT</span> <span class="o">=</span> <span class="s">&quot;/var/www/html/django_static/&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">STATIC_ROOT</span> <span class="o">=</span> <span class="s">&quot;/var/www/django_static/&quot;</span>
 </pre></div>
 </div>
 <p>Sync the database, and collect the static files:</p>
 <div class="highlight-python"><pre>$ cd /var/www/django_lavaflow
-$ python manage.py syncdb
-$ python manage.py collectstatic --noinput</pre>
+$ sudo python manage.py syncdb
+$ sudo python manage.py collectstatic --noinput</pre>
 </div>
 <p>Add the WSGI configuration to Apache.:</p>
 <div class="highlight-python"><pre>$ sudo vim /etc/apache2/sites-available/default-ssl.conf</pre>
@@ -316,6 +319,7 @@ WSGIApplicationGroup %{GLOBAL}
 &lt;IfModule mod_ssl.c&gt;
         &lt;VirtualHost _default_:443&gt;
                 Alias /static /var/www/django_static
+                DocumentRoot /var/www/html
                 WSGIDaemonProcess lavaflow python-path=/var/www/django_lavaflow processes=10 threads=15 display-name=%{GROUP}
                 WSGIScriptAlias / /var/www/django_lavaflow/django_lavaflow/wsgi.py
                 ServerAdmin webmaster@localhost
@@ -338,7 +342,7 @@ WSGIApplicationGroup %{GLOBAL}
 &lt;/IfModule&gt;</pre>
 </div>
 <p>Restart apache, and check that you can now view the Django project.:</p>
-<div class="highlight-python"><pre>$ service apache2 restart</pre>
+<div class="highlight-python"><pre>$ sudo service apache2 restart</pre>
 </div>
 <img alt="_images/django_basic_install.png" class="align-center" src="_images/django_basic_install.png" style="width: 600px;" />
 <p>Visit the web server using your browser, at the root of the server, the Django &#8216;Hello World&#8217; screen indicating that it is running
@@ -365,7 +369,7 @@ $</pre>
 </div>
 <p>Once checked out, install LavaFlow using setup.py.:</p>
 <div class="highlight-python"><pre>$ cd lavaflow
-$ sudo python manage.py install</pre>
+$ sudo python setup.py install</pre>
 </div>
 <p>Once installed, add LavaFlow to the installed applications in the projects settings.:</p>
 <div class="highlight-python"><pre>$ cd /var/www/django_lavaflow/
@@ -406,7 +410,7 @@ $ sudo python manage.py collectstatic --noinput</pre>
 </pre></div>
 </div>
 <p>Restart Apache, and test that you can now view the LavaFlow page.:</p>
-<div class="highlight-python"><pre>$ service apache2 restart</pre>
+<div class="highlight-python"><pre>$ sudo service apache2 restart</pre>
 </div>
 <img alt="_images/empty_lava.png" class="align-center" src="_images/empty_lava.png" style="width: 600px;" />
 <p>As you have not imported any data yet, you should see an empty page with a warning message, this is normal, and shows
