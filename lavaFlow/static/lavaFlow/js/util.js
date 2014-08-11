@@ -356,6 +356,7 @@ function update_selected_field(filter) {
     if (current_filters[filter].hasOwnProperty("can_enter_range") && current_filters[filter].can_enter_range) {
         $("#field_name_label").text(current_filters[filter].display_name);
         $("#enter_range_panel").show();
+        $("#range_filter_value").val('')
         if (current_filters[filter].hasOwnProperty("can_select_date") && current_filters[filter].can_select_date) {
             $("#range_filter_value").datetimepicker();
             $("#range_filter_operator").html('<option value="lt">Before</option><option value="lte">On or Before</option><option value="gt">After</option><option value="gte">On or After</option>');
@@ -363,7 +364,7 @@ function update_selected_field(filter) {
             $("#range_filter_value").datetimepicker("destroy");
             $("#range_filter_operator").html('<option value="lt">Less Than</option><option value="lte">Less Than or Equal</option><option value="gt">Greater Than</option><option value="gte">Greater Than or Equal</option>');
         }
-
+        update_range_lists();
     } else {
         $("#enter_range_panel").hide();
     }
@@ -518,8 +519,12 @@ function load_chart(chart_name, view_name, field){
 
     filterData.groups=chart_data[chart_name].data[view_name].groups;
     filterData.view=chart_data[chart_name].chart_view;
-    if (!chart_data[chart_name].chart){
-        console.log("chart_name: " + chart_name +" Doesnt exist");
+    if (chart_data[chart_name].chart){
+        // Empty the chart...
+        d3.select(chart_selector)
+        .datum(empty_chart)
+        .transition().duration(500)
+        .call(chart_data[chart_name].chart);
     }
     // Empty the chart...
     //d3.select(chart_selector)
