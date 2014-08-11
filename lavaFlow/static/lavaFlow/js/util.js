@@ -272,7 +272,7 @@ function update_range_lists() {
         $.each(operators, function (index, value) {
             if (current_filters[active_filter].filter[value.operator]) {
                 html += '<li>';
-                html += "Including data where: " + current_filters[active_filter].display_name + value.text + new Date (current_filters[active_filter].filter[value.operator]).toLocaleDateString();
+                html += "Including data where: " + current_filters[active_filter].display_name + value.text + new Date (current_filters[active_filter].filter[value.operator]).toLocaleString();
                 html += '<a href="#" onClick=\'';
                 html += 'remove_bound("' + active_filter + '", "filter", "'+value.operator+'"); return false;\'>';
                 html += '<span class="glyphicon glyphicon-remove"></span></a>';
@@ -280,7 +280,7 @@ function update_range_lists() {
             }
             if (current_filters[active_filter].exclude[value.operator]) {
                 html += '<li>';
-                html += "Excluding data where: " + current_filters[active_filter].display_name + value.text + new Date (current_filters[active_filter].filter[value.operator]).toLocaleDateString();
+                html += "Excluding data where: " + current_filters[active_filter].display_name + value.text + new Date (current_filters[active_filter].filter[value.operator]).toLocaleString();
                 html += '<a href="#" onClick=\'';
                 html += 'remove_bound("' + active_filter + '", "exclude", "'+value.operator+'"); return false;\'>';
                 html += '<span class="glyphicon glyphicon-remove"></span></a>';
