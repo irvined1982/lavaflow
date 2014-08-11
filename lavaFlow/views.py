@@ -208,6 +208,11 @@ FILTER_FIELDS=[
             'display_name':'Cluster',
             'can_select_values':True,
         },
+        {
+            'filter_string':'cluster__id',
+            'display_name':'Cluster ID',
+            'can_select_values':True,
+        },
     ]
 
 
