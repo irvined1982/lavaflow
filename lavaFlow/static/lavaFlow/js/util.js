@@ -63,7 +63,7 @@ $(function() {
 
     // Reverts the filters if cancelled,
     // Updates the report if they have changed
-    $('#filterModal').on('hide.bs.modal', function (e) {
+    $('#filterModal').on('hidden.bs.modal', function (e) {
         if (filterModalCancelled){
             // revert the filters
             current_filters=backup_filters;
