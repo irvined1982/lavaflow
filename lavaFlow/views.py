@@ -1124,7 +1124,7 @@ def cpu_consumption(request, start_time_js=0, end_time_js=0, exclude_string="", 
     end_time_ep=end_time_js/1000
     # Attempts now contains all attempts that were active in this time period, ie, submitted before
     # the end and finished after the start time.
-    attempts = get_attempts(start_time_js, end_time_js, exclude_string, filter_string)
+    attempts = get_attempts(start_time_js, end_time_js, exclude_string, filter_string, noTimes=True)
 
     # Attempts now only contains the exact data needed to perform the query, no other data is retrieved.
     # This should in the best case only require data from a single table.
@@ -1322,7 +1322,7 @@ def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="",
     return create_js_success(sorted(serieses.values(), key=lambda a: a['key']), message="")
 
 
-def get_attempts(start_time_js, end_time_js, exclude_string, filter_string):
+def get_attempts(start_time_js, end_time_js, exclude_string, filter_string, noTimes=False):
     """
 
     Gets all attempts that are active between the specified time periods, after
@@ -1338,12 +1338,13 @@ def get_attempts(start_time_js, end_time_js, exclude_string, filter_string):
     filter_args = filter_string_to_params(filter_string)
     exclude_args = filter_string_to_params(exclude_string)
     attempts = Attempt.objects.all()
-    if start_time_js:
-        start_time = int(int(start_time_js) / 1000)
-        attempts = attempts.filter(end_time__gte=start_time)
-    if end_time_js:
-        end_time = int(int(end_time_js) / 1000)
-        attempts = attempts.filter(submit_time__lte=end_time)
+    if noTimes==False:
+        if start_time_js:
+            start_time = int(int(start_time_js) / 1000)
+            attempts = attempts.filter(end_time__gte=start_time)
+        if end_time_js:
+            end_time = int(int(end_time_js) / 1000)
+            attempts = attempts.filter(submit_time__lte=end_time)
     for key, val in filter_args.items():
         attempts = attempts.filter(**{key: val})
     for key, val in exclude_args.items():

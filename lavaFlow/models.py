@@ -1385,9 +1385,16 @@ class Attempt(models.Model):
         index_together = [
             ['start_time', 'submit_time'],
             ['start_time','end_time',],
+            ['start_time','end_time','num_processors','cluster'],
+            ['start_time','end_time','num_processors','user'],
+            ['start_time','end_time','num_processors','project'],
+            ['start_time','end_time','num_processors','queue'],
+            ['start_time','end_time','num_processors'],
             ['cluster', 'job', 'task'],
-            ['cluster', 'job', 'task', 'start_time', ],
-            ['job', 'end_time']
+            ['cluster', 'job', 'task', 'start_time'],
+            ['submit_time', 'end_time'],
+            ['end_time','submit_time'],
+            ['job', 'end_time'],
         ]
 
 
