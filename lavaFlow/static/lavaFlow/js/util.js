@@ -272,7 +272,7 @@ function update_range_lists() {
         $.each(operators, function (index, value) {
             if (current_filters[active_filter].filter[value.operator]) {
                 html += '<li>';
-                html += "Including data where: " + current_filters[active_filter].display_name + value.text + new Date (current_filters[active_filter].filter[value.operator]).toLocaleDateString());
+                html += "Including data where: " + current_filters[active_filter].display_name + value.text + new Date (current_filters[active_filter].filter[value.operator]).toLocaleDateString();
                 html += '<a href="#" onClick=\'';
                 html += 'remove_bound("' + active_filter + '", "filter", "'+value.operator+'"); return false;\'>';
                 html += '<span class="glyphicon glyphicon-remove"></span></a>';
@@ -280,7 +280,7 @@ function update_range_lists() {
             }
             if (current_filters[active_filter].exclude[value.operator]) {
                 html += '<li>';
-                html += "Excluding data where: " + current_filters[active_filter].display_name + value.text + new Date (current_filters[active_filter].filter[value.operator]).toLocaleDateString());
+                html += "Excluding data where: " + current_filters[active_filter].display_name + value.text + new Date (current_filters[active_filter].filter[value.operator]).toLocaleDateString();
                 html += '<a href="#" onClick=\'';
                 html += 'remove_bound("' + active_filter + '", "exclude", "'+value.operator+'"); return false;\'>';
                 html += '<span class="glyphicon glyphicon-remove"></span></a>';
@@ -358,10 +358,10 @@ function update_selected_field(filter) {
         $("#enter_range_panel").show();
         if (current_filters[filter].hasOwnProperty("can_select_date") && current_filters[filter].can_select_date) {
             $("#range_filter_value").datetimepicker();
-            $("#range_filter_operator").html('<option value="lt">Before</option><option value="lte">On or Before</option><option value="gt">After</option><option value="gte">On or After</option>';
+            $("#range_filter_operator").html('<option value="lt">Before</option><option value="lte">On or Before</option><option value="gt">After</option><option value="gte">On or After</option>');
         }else{
             $("#range_filter_value").datetimepicker("destroy");
-            $("#range_filter_operator").html('<option value="lt">Less Than</option><option value="lte">Less Than or Equal</option><option value="gt">Greater Than</option><option value="gte">Greater Than or Equal</option>';
+            $("#range_filter_operator").html('<option value="lt">Less Than</option><option value="lte">Less Than or Equal</option><option value="gt">Greater Than</option><option value="gte">Greater Than or Equal</option>');
         }
 
     } else {
