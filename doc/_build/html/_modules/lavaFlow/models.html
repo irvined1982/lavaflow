@@ -145,11 +145,10 @@
 <span class="c"># $Author: irvined $: </span>
 <span class="c"># $Date: 2012-10-31 23:42:17 +0100 (Wed, 31 Oct 2012) $:  </span>
 <span class="c">#</span>
-<span class="kn">import</span> <span class="nn">array</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
 <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Avg</span><span class="p">,</span> <span class="n">Count</span><span class="p">,</span> <span class="n">Sum</span><span class="p">,</span> <span class="n">Min</span><span class="p">,</span> <span class="n">Max</span>
 <span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">reverse</span>
@@ -159,12 +158,49 @@
 
 
 <div class="viewcode-block" id="ImportKey"><a class="viewcode-back" href="../../models.html#lavaFlow.models.ImportKey">[docs]</a><span class="k">class</span> <span class="nc">ImportKey</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Any client that attempts to import data must present a valid key. Keys are managed by the admin.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">client_key</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Any client that attempts to import data must present a valid key. Keys in general should be managed through the</span>
+<span class="sd">    admin control panel.::</span>
 
+<span class="sd">    &gt;&gt;&gt; from lavaFlow.models import ImportKey</span>
+<span class="sd">    &gt;&gt;&gt; try:</span>
+<span class="sd">    &gt;&gt;&gt;     key=ImportKey.objects.get(client_key=&quot;key_to_check&quot;)</span>
+<span class="sd">    &gt;&gt;&gt;     # Key is valid.</span>
+<span class="sd">    &gt;&gt;&gt; except ObjectDoesNotExist as e:</span>
+<span class="sd">    &gt;&gt;&gt;     # Key is invalid.</span>
+
+<span class="sd">    .. py:attribute:: client_key</span>
+
+<span class="sd">        The Client Key, used by each uploader to authenticate.  This is very rudimentary.</span>
+
+<span class="sd">    .. py:attribute:: comment</span>
+
+<span class="sd">        Optional comment/description field, free form, example might include which servers/clusters are using this key.</span>
+<span class="sd">        Not used in any way for authentication.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">client_key</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">help_text</span><span class="o">=</span><span class="s">&quot;Client key, passed by the client to authenticate&quot;</span><span class="p">)</span>
+    <span class="n">comment</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">help_text</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;Optional description/comment.&quot;</span><span class="p">))</span>
+
+<div class="viewcode-block" id="ImportKey.__str__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.ImportKey.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a str containing the client key.</span>
+
+<span class="sd">        :return: str(client_key)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client_key</span><span class="p">)</span>
 </div>
+<div class="viewcode-block" id="ImportKey.__unicode__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.ImportKey.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the unicode represenation of the client_key</span>
+
+<span class="sd">        :return: unicode(client_key)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">u&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__str__</span><span class="p">()</span>
+
+
+</div></div>
 <div class="viewcode-block" id="OpenLavaState"><a class="viewcode-back" href="../../models.html#lavaFlow.models.OpenLavaState">[docs]</a><span class="k">class</span> <span class="nc">OpenLavaState</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">code</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
@@ -344,13 +380,42 @@
 <div class="viewcode-block" id="JobStatus"><a class="viewcode-back" href="../../models.html#lavaFlow.models.JobStatus">[docs]</a><span class="k">class</span> <span class="nc">JobStatus</span><span class="p">(</span><span class="n">OpenLavaState</span><span class="p">):</span>
     <span class="n">exited_cleanly</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">()</span>
 
-<div class="viewcode-block" id="JobStatus.Meta"><a class="viewcode-back" href="../../lavaFlow.html#lavaFlow.models.JobStatus.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">index_together</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">(</span><span class="s">&#39;code&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;exited_cleanly&#39;</span><span class="p">)</span>
         <span class="p">]</span>
 
-</div></div>
+</div>
 <div class="viewcode-block" id="Cluster"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster">[docs]</a><span class="k">class</span> <span class="nc">Cluster</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Almost every bit of data stored in lavaFlow can be traced back to a cluster, clusters represent the physical compute</span>
+<span class="sd">    clusters that jobs are executed on.  There could be just one, for a simple departmental cluster, or many for an</span>
+<span class="sd">    entire organization with both regional and centralized compute services.  Cluster objects are generally created</span>
+<span class="sd">    automatically by the agents monitoring the cluster.  Extended information is generally added by the end user via</span>
+<span class="sd">    the admin interface.::</span>
+
+<span class="sd">    &gt;&gt;&gt; from lavaFlow.models import Cluster</span>
+<span class="sd">    &gt;&gt;&gt; (cluster, created) = Cluster.objects.get_or_create(name=&quot;openlava&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; cluster.name</span>
+<span class="sd">    u&#39;openlava&#39;</span>
+<span class="sd">    &gt;&gt;&gt; cluster.total_attempts()</span>
+<span class="sd">    9000</span>
+<span class="sd">    &gt;&gt;&gt; cluster.first_task()</span>
+<span class="sd">    &lt;Attempt: Attempt object&gt;</span>
+<span class="sd">    &gt;&gt;&gt; cluster.last_task()</span>
+<span class="sd">    &lt;Attempt: Attempt object&gt;</span>
+<span class="sd">    &gt;&gt;&gt; cluster.average_pend_time_timedelta()</span>
+<span class="sd">    datetime.timedelta(0, 12001, 831000)</span>
+<span class="sd">    &gt;&gt;&gt; cluster.average_pend_time()</span>
+<span class="sd">    12001.831</span>
+
+<span class="sd">    .. py:attribute:: name</span>
+
+<span class="sd">    This is the name of the cluster, generally this is whatever the scheduler thinks its name is, however it can be</span>
+<span class="sd">    overridden manually by the cluster administator.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
         <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
         <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
@@ -358,7 +423,16 @@
         <span class="n">help_text</span><span class="o">=</span><span class="s">&#39;The name of the cluster&#39;</span><span class="p">,</span>
     <span class="p">)</span>
 
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ordering</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+
 <div class="viewcode-block" id="Cluster.get_absolute_url"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The absolute URL to the cluster view.</span>
+
+<span class="sd">        :return: URL of the cluster view page for this instance.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">args</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&#39;start_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
         <span class="s">&#39;end_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -369,39 +443,96 @@
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&quot;lf_utilization_view&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Cluster.__unicode__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a unicode str containing the name of the cluster.</span>
+
+<span class="sd">        :return: unicode(self.__str__())</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s">u&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </div>
 <div class="viewcode-block" id="Cluster.__str__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a  str containing the name of the cluster.</span>
+
+<span class="sd">        :return: str(name)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </div>
 <div class="viewcode-block" id="Cluster.total_jobs"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.total_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">total_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns an total number of jobs that have been submitted to this cluster since time began.</span>
+
+<span class="sd">        :return: Integer containing total number of jobs</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">attempt__cluster</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Cluster.total_tasks"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.total_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns an total number of tasks that have been submitted to this cluster since time began.</span>
+
+<span class="sd">        :return: Integer containing total number of tasks</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Task</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">attempt__cluster</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Cluster.total_attempts"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.total_attempts">[docs]</a>    <span class="k">def</span> <span class="nf">total_attempts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns an total number of tasks that have been executed on this cluster since time began.</span>
+
+<span class="sd">        :return: Integer containing total number of tasks</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Cluster.first_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.first_task">[docs]</a>    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the first task that was executed on the cluster.  If no tasks were executed on the cluster, returns None.</span>
+
+<span class="sd">        :return: Attempt object of the first attempt executed.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;start_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
 <div class="viewcode-block" id="Cluster.last_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.last_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the last task that ended on the cluster, regardless of exit status.  If no tasks have been executed on the</span>
+<span class="sd">        cluster, returns None</span>
+
+<span class="sd">        :return: Attempt object of the last attempt ended, returns None of no attempts.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
 <div class="viewcode-block" id="Cluster.last_failed_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.last_failed_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_failed_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the last task that exited with a non-successful exit state on the cluster.  If no tasks have been executed</span>
+<span class="sd">        on the cluster, or none of the tasks have exited witha  failure, returns None</span>
+
+<span class="sd">        :return: Attempt object of the last attempt that failed, returns None of no failed attempts.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">status__exited_cleanly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
 <div class="viewcode-block" id="Cluster.average_pend_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.average_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the average pend time in seconds for all jobs that executed on the cluster.</span>
+
+<span class="sd">        :return: Number of seconds on average that jobs pend for on this cluster.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_cluster_average_pend_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
         <span class="n">pend</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">pend</span><span class="p">:</span>
@@ -410,12 +541,34 @@
         <span class="k">return</span> <span class="n">pend</span>
 </div>
 <div class="viewcode-block" id="Cluster.average_pend_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.average_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Timedelta object of the number of seconds that jobs pend for</span>
+
+<span class="sd">        :return: Average pend time as timedelta.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span>
 </div>
 <div class="viewcode-block" id="Cluster.average_pend_time_percent"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.average_pend_time_percent">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">()))</span> <span class="o">*</span> <span class="mi">100</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the average pend time of jobs on the cluster as a percent of their overall wall clock time.</span>
+
+<span class="sd">        :return: Average Pend Time as a percent</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># Added try/except to catch cases where there all jobs were cancelled before execution</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">()))</span> <span class="o">*</span> <span class="mi">100</span>
+        <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">100</span>
 </div>
 <div class="viewcode-block" id="Cluster.average_wall_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.average_wall_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the average wall clock time in seconds for all jobs that executed on the cluster.</span>
+
+<span class="sd">        :return: Number of seconds on average that jobs take from submission to completion.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_cluster_average_wall_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
         <span class="n">wall</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">wall</span><span class="p">:</span>
@@ -424,61 +577,156 @@
         <span class="k">return</span> <span class="n">wall</span>
 </div>
 <div class="viewcode-block" id="Cluster.average_wall_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Cluster.average_wall_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Timedelta object of the number of seconds of the average wall clock time.</span>
+
+<span class="sd">        :return: Average wall clock time as timedelta.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">())</span>
 
 </div></div>
 <div class="viewcode-block" id="ClusterLog"><a class="viewcode-back" href="../../models.html#lavaFlow.models.ClusterLog">[docs]</a><span class="k">class</span> <span class="nc">ClusterLog</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ClusterLog objects are log entries that relate to the cluster as a whole. These can be created by tools, or through</span>
+<span class="sd">    the admin interface by an administator.</span>
+
+<span class="sd">    .. py:attribute:: cluster</span>
+
+<span class="sd">    Foreign key to the Cluster that the log is part of</span>
+
+<span class="sd">    .. py:attribute:: time</span>
+
+<span class="sd">    Time of the log entry, in seconds since Epoch</span>
+
+<span class="sd">    .. py:attribute:: message</span>
+
+<span class="sd">    The message, a text field that can contain freeform text.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">cluster</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Cluster</span><span class="p">)</span>
     <span class="n">time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">message</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
 </div>
 <div class="viewcode-block" id="Project"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project">[docs]</a><span class="k">class</span> <span class="nc">Project</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Projects are used to store the project name that jobs were submitted to, jobs of course can be submitted to</span>
+<span class="sd">    multiple projects, and this is also supported.  Projects are unique globally.</span>
+
+<span class="sd">    .. py:attribute:: name</span>
+
+<span class="sd">    This is the name of the project, as reported by the scheduler.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Project.get_absolute_url"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The absolute URL to the project view.</span>
+
+<span class="sd">        :return: URL of the project view page for this instance.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">args</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&#39;start_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
         <span class="s">&#39;end_time_js&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
         <span class="s">&#39;exclude_string&#39;</span><span class="p">:</span> <span class="s">&quot;none&quot;</span><span class="p">,</span>
-        <span class="s">&#39;filter_string&#39;</span><span class="p">:</span> <span class="s">&quot;project__id__in.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="s">&#39;filter_string&#39;</span><span class="p">:</span> <span class="s">&quot;projects__id__in.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
         <span class="s">&#39;group_string&#39;</span><span class="p">:</span> <span class="s">&quot;none&quot;</span><span class="p">,</span>
         <span class="p">}</span>
+        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&quot;lf_utilization_view&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Project.__unicode__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a unicode str containing the name of the project.</span>
+
+<span class="sd">        :return: unicode(self.__str__())</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s">u&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </div>
 <div class="viewcode-block" id="Project.__str__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a  str containing the name of the project.</span>
+
+<span class="sd">        :return: str(name)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </div>
 <div class="viewcode-block" id="Project.total_jobs"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.total_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">total_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns an total number of jobs that have been submitted to this project since time began.</span>
+
+<span class="sd">        :return: Integer containing total number of jobs</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">attempt__projects</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Project.total_tasks"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.total_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns an total number of tasks that have been submitted to this project since time began.</span>
+
+<span class="sd">        :return: Integer containing total number of tasks</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Task</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">attempt__projects</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Project.total_attempts"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.total_attempts">[docs]</a>    <span class="k">def</span> <span class="nf">total_attempts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns an total number of tasks that have been executed under this project since time began.</span>
+
+<span class="sd">        :return: Integer containing total number of tasks</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Project.first_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.first_task">[docs]</a>    <span class="k">def</span> <span class="nf">first_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the first task that was executed under this project.  If no tasks were executed, returns None.</span>
+
+<span class="sd">        :return: Attempt object of the first attempt executed.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;start_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
 <div class="viewcode-block" id="Project.last_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.last_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the last task under this project that ended, regardless of exit status.  If no tasks have been executed</span>
+<span class="sd">        on the under this project, returns None</span>
+
+<span class="sd">        :return: Attempt object of the last attempt ended, returns None of no attempts.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
 <div class="viewcode-block" id="Project.last_failed_task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.last_failed_task">[docs]</a>    <span class="k">def</span> <span class="nf">last_failed_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the last task that exited with a non-successful exit state under this project.  If no tasks have been</span>
+<span class="sd">        executed under this project, or none of the tasks have exited with a failure, returns None.</span>
+
+<span class="sd">        :return: Attempt object of the last attempt that failed, returns None of no failed attempts.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">status__exited_cleanly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-end_time&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
 <div class="viewcode-block" id="Project.average_pend_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.average_pend_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the average pend time in seconds for all jobs that were submitted under this project.</span>
+
+<span class="sd">        :return: Number of seconds on average that jobs pend for this project.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_project_average_pend_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
         <span class="n">pend</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">pend</span><span class="p">:</span>
@@ -487,12 +735,35 @@
         <span class="k">return</span> <span class="n">pend</span>
 </div>
 <div class="viewcode-block" id="Project.average_pend_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.average_pend_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Timedelta object of the number of seconds that jobs pend for</span>
+
+<span class="sd">        :return: Average pend time as timedelta.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span>
 </div>
 <div class="viewcode-block" id="Project.average_pend_time_percent"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.average_pend_time_percent">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">()))</span> <span class="o">*</span> <span class="mi">100</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the average pend time of jobs submitted under this project as a percent of their overall wall clock time.</span>
+
+<span class="sd">        :return: Average Pend Time as a percent</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># Added try/except to catch cases where there all jobs were cancelled before execution</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">()))</span> <span class="o">*</span> <span class="mi">100</span>
+        <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">100</span>
+
 </div>
 <div class="viewcode-block" id="Project.average_wall_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.average_wall_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the average wall clock time in seconds for all jobs that were submitted under this project.</span>
+
+<span class="sd">        :return: Number of seconds on average that jobs take from submission to completion.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_project_average_wall_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
         <span class="n">wall</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">wall</span><span class="p">:</span>
@@ -501,10 +772,25 @@
         <span class="k">return</span> <span class="n">wall</span>
 </div>
 <div class="viewcode-block" id="Project.average_wall_time_timedelta"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Project.average_wall_time_timedelta">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time_timedelta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Timedelta object of the number of seconds of the average wall clock time.</span>
+
+<span class="sd">        :return: Average wall clock time as timedelta.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">())</span>
 
 </div></div>
 <div class="viewcode-block" id="Host"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Host">[docs]</a><span class="k">class</span> <span class="nc">Host</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Hosts represent actual hosts, these may be any arbitrary host, but generally are hosts that are either execution</span>
+<span class="sd">    hosts or submission hosts.</span>
+
+<span class="sd">    .. py:attribute:: name</span>
+
+<span class="sd">    This is the name of the host. It is generally not the fully qualified domain name, but simply the local hostname.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Host.__unicode__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Host.__unicode__">[docs]</a>    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -616,7 +902,12 @@
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span>
 </div>
 <div class="viewcode-block" id="Queue.average_pend_time_percent"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Queue.average_pend_time_percent">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">()))</span> <span class="o">*</span> <span class="mi">100</span>
+        <span class="c"># Added try/except to catch cases where there all jobs were cancelled before execution</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">()))</span> <span class="o">*</span> <span class="mi">100</span>
+        <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">100</span>
+
 </div>
 <div class="viewcode-block" id="Queue.average_wall_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Queue.average_wall_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_queue_average_wall_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
@@ -689,7 +980,12 @@
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span>
 </div>
 <div class="viewcode-block" id="User.average_pend_time_percent"><a class="viewcode-back" href="../../models.html#lavaFlow.models.User.average_pend_time_percent">[docs]</a>    <span class="k">def</span> <span class="nf">average_pend_time_percent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">()))</span> <span class="o">*</span> <span class="mi">100</span>
+        <span class="c"># Added try/except to catch cases where there all jobs were cancelled before execution</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_pend_time</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_wall_time</span><span class="p">()))</span> <span class="o">*</span> <span class="mi">100</span>
+        <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">100</span>
+
 </div>
 <div class="viewcode-block" id="User.average_wall_time"><a class="viewcode-back" href="../../models.html#lavaFlow.models.User.average_wall_time">[docs]</a>    <span class="k">def</span> <span class="nf">average_wall_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_user_average_wall_time&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
@@ -717,13 +1013,85 @@
     <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
 
 </div>
+<div class="viewcode-block" id="JSNode"><a class="viewcode-back" href="../../models.html#lavaFlow.models.JSNode">[docs]</a><span class="k">class</span> <span class="nc">JSNode</span><span class="p">():</span>
+    <span class="n">current_node_id</span><span class="o">=</span><span class="mi">0</span>
+<div class="viewcode-block" id="JSNode.__init__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.JSNode.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="o">=</span><span class="n">JSNode</span><span class="o">.</span><span class="n">current_node_id</span>
+        <span class="n">JSNode</span><span class="o">.</span><span class="n">current_node_id</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="JSEdge"><a class="viewcode-back" href="../../models.html#lavaFlow.models.JSEdge">[docs]</a><span class="k">class</span> <span class="nc">JSEdge</span><span class="p">():</span>
+<div class="viewcode-block" id="JSEdge.__init__"><a class="viewcode-back" href="../../models.html#lavaFlow.models.JSEdge.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frm</span><span class="p">,</span> <span class="n">to</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;from&quot;</span><span class="p">,</span> <span class="n">frm</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to</span><span class="o">=</span><span class="n">to</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+
+</div></div>
 <div class="viewcode-block" id="Job"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job">[docs]</a><span class="k">class</span> <span class="nc">Job</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">cluster</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Cluster</span><span class="p">)</span>
     <span class="n">job_id</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
     <span class="n">submit_host</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Host</span><span class="p">)</span>
     <span class="n">submit_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">submit_hour_of_day</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">submit_day_of_week</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">submit_day_of_month</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">submit_week_of_year</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">submit_month</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 
+<div class="viewcode-block" id="Job.save"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_time_datetime</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_hour_of_day</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">hour</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_day_of_week</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">weekday</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_day_of_month</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">day</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_week_of_year</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">isocalendar</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_month</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">month</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">Job</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+<div class="viewcode-block" id="Job.job_flow"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.job_flow">[docs]</a>    <span class="k">def</span> <span class="nf">job_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">edges</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">users</span><span class="o">=</span><span class="p">{}</span>
+        <span class="n">jobs</span><span class="o">=</span><span class="p">{}</span>
+        <span class="n">clusters</span><span class="o">=</span><span class="p">{}</span>
+        <span class="n">queues</span><span class="o">=</span><span class="p">{}</span>
+        <span class="n">tasks</span><span class="o">=</span><span class="p">{}</span>
+        <span class="n">attempts</span><span class="o">=</span><span class="p">{}</span>
+        <span class="n">hosts</span><span class="o">=</span><span class="p">{}</span>
+
+
+        <span class="n">jobs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">]</span><span class="o">=</span><span class="n">JSNode</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">u&quot;Job: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span>
+
+        <span class="n">hosts</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_host</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">=</span><span class="n">JSNode</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_host</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">users</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSNode</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">JSEdge</span><span class="p">(</span><span class="n">hosts</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_host</span><span class="o">.</span><span class="n">name</span><span class="p">],</span> <span class="n">users</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="p">]))</span>
+        <span class="n">clusters</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">=</span><span class="n">JSNode</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">JSEdge</span><span class="p">(</span><span class="n">users</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="p">],</span> <span class="n">clusters</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">name</span><span class="p">]))</span>
+        <span class="n">jobs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">]</span><span class="o">=</span><span class="n">JSNode</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">u&quot;Job: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span>
+        <span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">JSEdge</span><span class="p">(</span><span class="n">clusters</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">name</span><span class="p">],</span> <span class="n">jobs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">]))</span>
+        <span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">JSEdge</span><span class="p">(</span><span class="n">users</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="p">],</span> <span class="n">jobs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">]))</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_set</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+            <span class="n">tasks</span><span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">task_id</span><span class="p">]</span><span class="o">=</span><span class="n">JSNode</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Task: </span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">task_id</span><span class="p">)</span> <span class="p">)</span>
+            <span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">JSEdge</span><span class="p">(</span><span class="n">jobs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">],</span> <span class="n">tasks</span><span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">task_id</span><span class="p">]))</span>
+            <span class="k">for</span> <span class="n">at</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">attempt_set</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">at</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">queues</span><span class="p">:</span>
+                    <span class="n">queues</span><span class="p">[</span><span class="n">at</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSNode</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">at</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">JSEdge</span><span class="p">(</span><span class="n">tasks</span><span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">task_id</span><span class="p">],</span><span class="n">queues</span><span class="p">[</span><span class="n">at</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">name</span><span class="p">]))</span>
+                <span class="n">attempts</span><span class="p">[</span><span class="n">at</span><span class="o">.</span><span class="n">attempt_id</span><span class="p">()]</span><span class="o">=</span><span class="n">JSNode</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Attempt: </span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="n">at</span><span class="o">.</span><span class="n">attempt_id</span><span class="p">()))</span>
+                <span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">JSEdge</span><span class="p">(</span><span class="n">tasks</span><span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">task_id</span><span class="p">],</span> <span class="n">attempts</span><span class="p">[</span><span class="n">at</span><span class="o">.</span><span class="n">attempt_id</span><span class="p">()]))</span>
+                <span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">JSEdge</span><span class="p">(</span><span class="n">queues</span><span class="p">[</span><span class="n">at</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">name</span><span class="p">],</span> <span class="n">attempts</span><span class="p">[</span><span class="n">at</span><span class="o">.</span><span class="n">attempt_id</span><span class="p">()]))</span>
+                <span class="k">for</span> <span class="n">host</span> <span class="ow">in</span> <span class="n">at</span><span class="o">.</span><span class="n">execution_hosts</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">host</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hosts</span><span class="p">:</span>
+                        <span class="n">hosts</span><span class="p">[</span><span class="n">host</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSNode</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">host</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">JSEdge</span><span class="p">(</span><span class="n">attempts</span><span class="p">[</span><span class="n">at</span><span class="o">.</span><span class="n">attempt_id</span><span class="p">()],</span> <span class="n">hosts</span><span class="p">[</span><span class="n">host</span><span class="o">.</span><span class="n">name</span><span class="p">]))</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">users</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="o">+</span> <span class="n">jobs</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="o">+</span> <span class="n">clusters</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="o">+</span> <span class="n">queues</span><span class="o">.</span><span class="n">values</span><span class="p">()</span><span class="o">+</span><span class="n">tasks</span><span class="o">.</span><span class="n">values</span><span class="p">()</span><span class="o">+</span><span class="n">attempts</span><span class="o">.</span><span class="n">values</span><span class="p">()</span><span class="o">+</span><span class="n">hosts</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="n">nodes</span><span class="o">=</span><span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">__dict__</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">]</span>
+        <span class="n">edges</span><span class="o">=</span><span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">__dict__</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s">&#39;nodes&#39;</span><span class="p">:</span><span class="n">nodes</span><span class="p">,</span> <span class="s">&#39;edges&#39;</span><span class="p">:</span><span class="n">edges</span><span class="p">})</span>
+
+</div>
 <div class="viewcode-block" id="Job.util_chart_url"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Job.util_chart_url">[docs]</a>    <span class="k">def</span> <span class="nf">util_chart_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">start_time_js</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_time</span> <span class="o">-</span> <span class="mi">60</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
         <span class="n">end_time_js</span> <span class="o">=</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_time</span><span class="p">()</span> <span class="o">+</span> <span class="mi">60</span> <span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
@@ -888,14 +1256,22 @@
     <span class="n">schedule_host_type</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>
     <span class="n">login_shell</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>
     <span class="n">user_priority</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
-
 </div>
 <div class="viewcode-block" id="Task"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Task">[docs]</a><span class="k">class</span> <span class="nc">Task</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">cluster</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Cluster</span><span class="p">)</span>
     <span class="n">job</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Job</span><span class="p">)</span>
     <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
     <span class="n">task_id</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">submit_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">submit_hour_of_day</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">submit_day_of_week</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">submit_day_of_month</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">submit_week_of_year</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">submit_month</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 
+<div class="viewcode-block" id="Task.submit_time_datetime"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Task.submit_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">submit_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_time</span><span class="p">)</span>
+</div>
 <div class="viewcode-block" id="Task.get_absolute_url"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Task.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&#39;lf_task_detail&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">])</span>
 </div>
@@ -919,12 +1295,93 @@
             <span class="p">[</span><span class="s">&#39;task_id&#39;</span><span class="p">],</span>
         <span class="p">]</span>
 
-</div>
+<div class="viewcode-block" id="Task.save"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Task.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">submit_time</span>
+        <span class="n">d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_time_datetime</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_hour_of_day</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">hour</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_day_of_week</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">weekday</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_day_of_month</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">day</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_week_of_year</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">isocalendar</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_month</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">month</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Task</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div></div>
 <div class="viewcode-block" id="TaskLog"><a class="viewcode-back" href="../../models.html#lavaFlow.models.TaskLog">[docs]</a><span class="k">class</span> <span class="nc">TaskLog</span><span class="p">(</span><span class="n">JobLog</span><span class="p">):</span>
     <span class="n">task</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Task</span><span class="p">)</span>
 
 </div>
 <div class="viewcode-block" id="Attempt"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt">[docs]</a><span class="k">class</span> <span class="nc">Attempt</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Each time a task is started on one or more compute nodes, it is called an attempt.  Tasks that fail and are</span>
+<span class="sd">    restarted may have multiple attempts.</span>
+
+<span class="sd">    .. py:attribute:: cluster</span>
+
+<span class="sd">    Cluster object that this attempt is part of.</span>
+
+<span class="sd">    .. py:attribute:: job</span>
+
+<span class="sd">    Job object that this attempt is part of.</span>
+
+<span class="sd">    .. py:attribute:: task</span>
+
+<span class="sd">    Task object that this attempt is part of.</span>
+
+<span class="sd">    .. py:attribute:: user</span>
+
+<span class="sd">    User object that this attempt belongs to</span>
+
+<span class="sd">    .. py:attribute:: num_processors</span>
+
+<span class="sd">    Number of processors this attempt was dispatched to</span>
+
+<span class="sd">    .. py:attribute:: projects</span>
+
+<span class="sd">    QuerySet containing all Project objects that this attempt is part of.  May be part of multiple projects</span>
+<span class="sd">    where supported by the scheduling environment.</span>
+
+<span class="sd">    .. py:attribute:: execution_hosts</span>
+
+<span class="sd">    QuerySet containing all Host objects that where assigned to this attempt.  Not all scheduling systems are able to</span>
+<span class="sd">    report which hosts were used for a task.  In that case only the primary host will be given.</span>
+
+<span class="sd">    .. py:attribute:: submit_time</span>
+
+<span class="sd">    The time in seconds since epoch UTC that the task was submitted to the cluster</span>
+
+<span class="sd">    .. py:attribute:: start_time</span>
+
+<span class="sd">    The time in seconds since epoch UTC that the task was executed</span>
+
+<span class="sd">    .. py:attribute:: end_time</span>
+
+<span class="sd">    The time in seconds since epoch UTC that the task ended</span>
+
+<span class="sd">    .. py:attribute:: cpu_time</span>
+
+<span class="sd">    The cpu time in seconds for the job.</span>
+
+<span class="sd">    .. py:attribute:: wall_time</span>
+
+<span class="sd">    The wall clock time in seconds for the job.</span>
+
+<span class="sd">    .. py:attribute:: pend_time</span>
+
+<span class="sd">    The number of seconds the job was pending</span>
+
+<span class="sd">    .. py:attribute:: queue</span>
+
+<span class="sd">    The Queue object the job was in</span>
+
+<span class="sd">    .. py:attribute:: status</span>
+
+<span class="sd">    The Exit Status of the job</span>
+
+<span class="sd">    .. py:attribute:: command</span>
+
+<span class="sd">    The command executed by the job</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">cluster</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Cluster</span><span class="p">)</span>
     <span class="n">job</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Job</span><span class="p">)</span>
     <span class="n">task</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Task</span><span class="p">)</span>
@@ -932,6 +1389,51 @@
     <span class="n">num_processors</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">projects</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Project</span><span class="p">)</span>
     <span class="n">execution_hosts</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Host</span><span class="p">)</span>
+    <span class="n">submit_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">submit_hour_of_day</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">submit_day_of_week</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">submit_day_of_month</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">submit_week_of_year</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">submit_month</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+
+    <span class="n">start_hour_of_day</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">start_day_of_week</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">start_day_of_month</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">start_week_of_year</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">start_month</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">end_hour_of_day</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">end_day_of_week</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">end_day_of_month</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">end_week_of_year</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">end_month</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+<div class="viewcode-block" id="Attempt.attempt_id"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt.attempt_id">[docs]</a>    <span class="k">def</span> <span class="nf">attempt_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Attempt</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="n">start_time__lt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Attempt.save"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">submit_time</span>
+        <span class="n">d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_time_datetime</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_hour_of_day</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">hour</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_day_of_week</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">weekday</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_day_of_month</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">day</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_week_of_year</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">isocalendar</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_month</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">month</span>
+        <span class="n">d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">start_time_datetime</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_hour_of_day</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">hour</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_day_of_week</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">weekday</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_day_of_month</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">day</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_week_of_year</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">isocalendar</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_month</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">month</span>
+        <span class="n">d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">end_time_datetime</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end_hour_of_day</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">hour</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end_day_of_week</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">weekday</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end_day_of_month</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">day</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end_week_of_year</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">isocalendar</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end_month</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">month</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Attempt</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Attempt.submit_time_datetime"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt.submit_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">submit_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_time</span><span class="p">)</span>
+</div>
     <span class="n">start_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Attempt.start_time_datetime"><a class="viewcode-back" href="../../models.html#lavaFlow.models.Attempt.start_time_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">start_time_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1007,14 +1509,23 @@
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">unique_together</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;cluster&#39;</span><span class="p">,</span> <span class="s">&#39;job&#39;</span><span class="p">,</span> <span class="s">&#39;task&#39;</span><span class="p">,</span> <span class="s">&#39;start_time&#39;</span><span class="p">)</span>
         <span class="n">index_together</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="s">&#39;start_time&#39;</span><span class="p">,</span> <span class="s">&#39;submit_time&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s">&#39;start_time&#39;</span><span class="p">,</span><span class="s">&#39;end_time&#39;</span><span class="p">,],</span>
+            <span class="p">[</span><span class="s">&#39;start_time&#39;</span><span class="p">,</span><span class="s">&#39;end_time&#39;</span><span class="p">,</span><span class="s">&#39;num_processors&#39;</span><span class="p">,</span><span class="s">&#39;cluster&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s">&#39;start_time&#39;</span><span class="p">,</span><span class="s">&#39;end_time&#39;</span><span class="p">,</span><span class="s">&#39;num_processors&#39;</span><span class="p">,</span><span class="s">&#39;user&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s">&#39;start_time&#39;</span><span class="p">,</span><span class="s">&#39;end_time&#39;</span><span class="p">,</span><span class="s">&#39;num_processors&#39;</span><span class="p">,</span><span class="s">&#39;queue&#39;</span><span class="p">],</span>
+
+            <span class="p">[</span><span class="s">&#39;start_time&#39;</span><span class="p">,</span><span class="s">&#39;end_time&#39;</span><span class="p">,</span><span class="s">&#39;num_processors&#39;</span><span class="p">],</span>
             <span class="p">[</span><span class="s">&#39;cluster&#39;</span><span class="p">,</span> <span class="s">&#39;job&#39;</span><span class="p">,</span> <span class="s">&#39;task&#39;</span><span class="p">],</span>
-            <span class="p">[</span><span class="s">&#39;cluster&#39;</span><span class="p">,</span> <span class="s">&#39;job&#39;</span><span class="p">,</span> <span class="s">&#39;task&#39;</span><span class="p">,</span> <span class="s">&#39;start_time&#39;</span><span class="p">,</span> <span class="p">],</span>
-            <span class="p">[</span><span class="s">&#39;end_time&#39;</span><span class="p">],</span>
-            <span class="p">[</span><span class="s">&#39;cluster&#39;</span><span class="p">,</span> <span class="s">&#39;end_time&#39;</span><span class="p">,</span> <span class="s">&#39;job&#39;</span><span class="p">],</span>
-            <span class="p">[</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="s">&#39;end_time&#39;</span><span class="p">,</span> <span class="s">&#39;job&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s">&#39;cluster&#39;</span><span class="p">,</span> <span class="s">&#39;job&#39;</span><span class="p">,</span> <span class="s">&#39;task&#39;</span><span class="p">,</span> <span class="s">&#39;start_time&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s">&#39;submit_time&#39;</span><span class="p">,</span> <span class="s">&#39;end_time&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s">&#39;end_time&#39;</span><span class="p">,</span><span class="s">&#39;submit_time&#39;</span><span class="p">],</span>
             <span class="p">[</span><span class="s">&#39;job&#39;</span><span class="p">,</span> <span class="s">&#39;end_time&#39;</span><span class="p">],</span>
-            <span class="p">[</span><span class="s">&#39;end_time&#39;</span><span class="p">,</span> <span class="s">&#39;job&#39;</span><span class="p">],</span>
+
         <span class="p">]</span>
+
+
+
 
 </div>
 <div class="viewcode-block" id="GridEngineAttemptInfo"><a class="viewcode-back" href="../../models.html#lavaFlow.models.GridEngineAttemptInfo">[docs]</a><span class="k">class</span> <span class="nc">GridEngineAttemptInfo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
@@ -1036,7 +1547,95 @@
 
 </div></div>
 <div class="viewcode-block" id="AttemptResourceUsage"><a class="viewcode-back" href="../../models.html#lavaFlow.models.AttemptResourceUsage">[docs]</a><span class="k">class</span> <span class="nc">AttemptResourceUsage</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">attempt</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">Attempt</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Resource usage measures for the attempt, taken from the getrusage() system call.  Not all schedulers support</span>
+<span class="sd">    this operation, and where not supported, this will not be created.</span>
+
+<span class="sd">    .. py:attribute:: attempt</span>
+
+<span class="sd">    The attempt object that this instance refers to.</span>
+
+<span class="sd">    .. py:attribute:: user_time</span>
+
+<span class="sd">    This is the total amount of time spent executing in user mode, in seconds.</span>
+
+<span class="sd">    .. py:attribute:: system_time</span>
+
+<span class="sd">    This is the total amount of time spent executing in kernel mode, in seconds.</span>
+
+<span class="sd">    .. py:attribute:: max_rss</span>
+
+<span class="sd">    This is the maximum resident set size used (in kilobytes).</span>
+
+<span class="sd">    .. py:attribute:: integral_shared_text</span>
+
+<span class="sd">    Integral shared text size.</span>
+
+<span class="sd">    .. py:attribute:: integral_shared_memory</span>
+
+<span class="sd">    Integral shared memory size.</span>
+
+<span class="sd">    .. py:attribute:: integral_unshared_data</span>
+
+<span class="sd">    Integral unshared data.</span>
+
+<span class="sd">    .. py:attribute:: integral_unshared_stack</span>
+
+<span class="sd">    Integral unshared stack.</span>
+
+<span class="sd">    .. py:attribute:: page_reclaims</span>
+
+<span class="sd">    The number of page faults serviced without any I/O activity; Here I/O activity is avoided by &quot;reclaiming&quot; a page</span>
+<span class="sd">    frame from the list of pages awaiting reallocation.</span>
+
+<span class="sd">    .. py:attribute:: page_faults</span>
+
+<span class="sd">    The number of page faults serviced that required I/O activity.</span>
+
+<span class="sd">    .. py:attribute:: swaps</span>
+
+<span class="sd">    Swap Operations.</span>
+
+<span class="sd">    .. py:attribute:: input_block_ops</span>
+
+<span class="sd">    The number of times the filesystem had to perform input.</span>
+
+<span class="sd">    .. py:attribute:: output_block_ops</span>
+
+<span class="sd">    The number of times the filesystem had to perform output.</span>
+
+<span class="sd">    .. py:attribute:: character_io_ops</span>
+
+<span class="sd">    # of characters read/written.</span>
+
+<span class="sd">    .. py:attribute:: messages_sent</span>
+
+<span class="sd">    Messages sent.</span>
+
+<span class="sd">    .. py:attribute:: messages_received</span>
+
+<span class="sd">    Messages received.</span>
+
+<span class="sd">    .. py:attribute:: num_signals</span>
+
+<span class="sd">    Signals received.</span>
+
+<span class="sd">    .. py:attribute:: voluntary_context_switches</span>
+
+<span class="sd">    The number of times a context switch resulted due to a process voluntarily giving up the processor before its</span>
+<span class="sd">    time slice was completed (usually to await availability of a resource).</span>
+
+<span class="sd">    .. py:attribute:: involuntary_context_switches</span>
+
+<span class="sd">    The number of times a context switch resulted due to a higher priority process becoming runnable or because</span>
+<span class="sd">    the current process exceeded its time slice.</span>
+
+<span class="sd">    .. py:attribute:: exact_user_time</span>
+
+<span class="sd">    Exact user time used.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">attempt</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">Attempt</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="n">user_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
     <span class="n">system_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
     <span class="n">max_rss</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
@@ -1049,7 +1648,7 @@
     <span class="n">swaps</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
     <span class="n">input_block_ops</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
     <span class="n">output_block_ops</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
-    <span class="n">charecter_io_ops</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
+    <span class="n">character_io_ops</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
     <span class="n">messages_sent</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
     <span class="n">messages_received</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
     <span class="n">num_signals</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">()</span>
