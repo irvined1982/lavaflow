@@ -484,9 +484,9 @@ function loadWidgets(){
     $.post(buildFilterUrl,JSON.stringify(filterData),function( data ){
         $.getJSON(data.url, function(data) {
             if (data.data.count < 1) {
-                $("#noDataFound").show();
+                $("#noDataFound").removeClass('hidden')();
             } else {
-                $("#noDataFound").hide();
+                $("#noDataFound").addClass('hidden');
             }
             $("#counterText").text(data.data.count);
         });
