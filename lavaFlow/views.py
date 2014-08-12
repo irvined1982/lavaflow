@@ -990,7 +990,7 @@ def openlava_import_job_finish(cluster, event):
                 ol.asked_hosts.add(h)
             ol.save()
 
-
+@cache_page(60 * 5)
 def resource_data(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
     """
     Generates resource usage data for the resource chart, this is the average of each field that is available on linux
@@ -1128,6 +1128,7 @@ def consumption_bucket(attempts, group_args, req_start_time, req_end_time):
     }
     return attempts.extra(select=select).values(*group_args)
 
+@cache_page(60 * 5)
 def cpu_consumption(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
     """
     Generates CPU consumption data for the cpu usage chart.  CPU Usage is the cpu time for the given time period.
@@ -1223,7 +1224,7 @@ def cpu_consumption(request, start_time_js=0, end_time_js=0, exclude_string="", 
         s['values']=sorted(s['values'].values(), key=lambda x: x['x'])
     return create_js_success(sorted(serieses.values(), key=lambda a: a['key']), message="")
 
-
+@cache_page(60 * 5)
 def utilization_data(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
     """
     Generates utilization data for the utilization chart, this is essentially number of processors requested, vs
@@ -1377,7 +1378,7 @@ def get_attempts(start_time_js, end_time_js, exclude_string, filter_string, noTi
     return attempts
 
 
-@cache_page(60 * 60 * 2)
+@cache_page(60 * 5)
 def utilization_table(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
     """
     Generates utilization table for the utilization table
@@ -1462,7 +1463,7 @@ def utilization_table(request, start_time_js=0, end_time_js=0, exclude_string=""
         rows.append(row)
     return render(request, "lavaFlow/widgets/utilization_chart.html", {'header': header, 'rows': rows})
 
-
+@cache_page(60 *5)
 def consumption_bar_data(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
     """
     Generates consumption data for the consumption chart, this is a total of CPU time, wall time, pend time and the
@@ -1682,7 +1683,7 @@ def submission_bar_data(request, start_time_js=0, end_time_js=0, exclude_string=
 
     return create_js_success(data)
 
-@cache_page(60 * 60 * 2)
+@cache_page(60 *5)
 def utilization_view(request, start_time_js=None, end_time_js=None, exclude_string="none", filter_string="none",
                      group_string=""):
     """
@@ -1763,7 +1764,7 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
     }
     return render(request, "lavaFlow/utilization_view.html", data)
 
-
+@cache_page(60 * 5)
 def util_total_attempts(request, start_time_js=None, end_time_js=None, exclude_string="", filter_string="",
                         group_string=""):
     start_time_js = int(start_time_js)
