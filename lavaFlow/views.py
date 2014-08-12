@@ -228,9 +228,11 @@ FILTER_FIELDS=[
             'display_name':'Execution Host ID',
             'can_select_values':True,
         },
-
-
-
+        {
+            'filter_string':'user__id',
+            'display_name':'User FK ID',
+            'can_select_values':True,
+        },
     ]
 
 
