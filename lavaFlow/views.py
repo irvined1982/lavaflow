@@ -1709,13 +1709,17 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
     if times['last_end_time']:
         last_end_time_js=times['last_end_time']*1000
 
-
+    print end_time_js
     if end_time_js is None or end_time_js == 0:
+        print "setting to end"
         end_time_js = last_end_time_js
 
+    print start_time_js
     if start_time_js is None or start_time_js == 0:
+        print "setting_to_start"
         start_time_js=end_time_js-(7*86400*1000)
         if start_time_js < first_start_time_js:
+            print "clipping..."
             start_time_js=first_start_time_js
 
 
