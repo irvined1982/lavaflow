@@ -118,6 +118,7 @@ html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 # documentation.
 html_theme_options = {
     'navbar_links': [
+        ("ClusterFsck", "https://www.clusterfsck.io/", True),
         ("Demo", "https://www.clusterfsck.io/dev/lavaFlow", True),
         ("Code", "https://github.com/irvined1982/lavaflow", True),
     ],
