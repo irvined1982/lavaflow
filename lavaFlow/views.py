@@ -413,10 +413,35 @@ def create_js_bad_request(data=None, message=""):
     }
     return HttpResponseBadRequest(json.dumps(data, indent=3, sort_keys=True), content_type="application/json")
 
-@csrf_exempt
+
 def gridengine_import(request, cluster_name):
-    data = json.loads(request.body)
+        # Parse the body for json data
+    try:
+        data = json.loads(request.body)
+    except ValueError:
+        return HttpResponseBadRequest("Invalid JSON data")
+
+    # check it contains the upload key
+    if 'key' not in data:
+        return HttpResponseBadRequest("key not specified")
+
+    # Check the key is valid
+    try:
+        ImportKey.objects.get(client_key=data['key'])
+    except ObjectDoesNotExist:
+        return HttpResponseForbidden("Invalid key specified")
+
+    # Get or create the cluster
     (cluster, created) = Cluster.objects.get_or_create(name=cluster_name)
+
+    # Process each entry in the array of entries
+    for event in data['payload']:
+        gridengine_job_import(cluster, event)
+
+    return create_js_success(message="Import Successful")
+
+
+def gridengine_job_import(cluster, data):
     (user, created) = User.objects.get_or_create(name=data['owner'])
     (submit_host, created) = Host.objects.get_or_create(name="Unspecified")
     (job, created) = Job.objects.get_or_create(cluster=cluster, job_id=data['job_number'], user=user,
@@ -711,7 +736,7 @@ def gridengine_import(request, cluster_name):
         a.advanced_reservation_id = data['arid']
         a.advanced_reservation_submit_time = data['ar_submission_time']
         a.save()
-    return HttpResponse("OK", content_type="text/plain")
+
 
 
 @csrf_exempt
