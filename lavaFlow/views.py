@@ -429,6 +429,7 @@ def gridengine_import(request, cluster_name):
     try:
         ImportKey.objects.get(client_key=data['key'])
     except ObjectDoesNotExist:
+        print "failed Key"
         return HttpResponseForbidden("Invalid key specified")
 
     # Get or create the cluster
