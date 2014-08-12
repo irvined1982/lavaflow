@@ -1547,7 +1547,7 @@ def consumption_bar_data(request, start_time_js=0, end_time_js=0, exclude_string
 
     return create_js_success(data)
 
-
+@cache_page(60 * 5)
 def submission_bar_data(request, start_time_js=0, end_time_js=0, exclude_string="", filter_string="", group_string=""):
     """
     Generates chart data for the submission chart, this shows when jobs are being submitted into the cluster.
