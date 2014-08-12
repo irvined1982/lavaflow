@@ -116,7 +116,13 @@ html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#html_theme_options = {}
+html_theme_options = {
+    'navbar_links': [
+        ("Demo", "https://www.clusterfsck.io/dev/lavaFlow", True),
+        ("Code", "https://github.com/irvined1982/lavaflow", True),
+    ],
+    'navbar_class': "navbar navbar-inverse",
+}
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
