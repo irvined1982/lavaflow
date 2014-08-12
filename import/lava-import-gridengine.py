@@ -129,6 +129,7 @@ for row in acct_file:
 fh.close()
 
 if len(rows) > 0:
+    logging.debug("Importing %s rows" % row_num )
     upload(rows)
 
 logging.info("EOF Reached, exiting....")
