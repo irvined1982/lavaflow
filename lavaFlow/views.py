@@ -413,7 +413,7 @@ def create_js_bad_request(data=None, message=""):
     }
     return HttpResponseBadRequest(json.dumps(data, indent=3, sort_keys=True), content_type="application/json")
 
-
+@csrf_exempt
 def gridengine_import(request, cluster_name):
         # Parse the body for json data
     try:
