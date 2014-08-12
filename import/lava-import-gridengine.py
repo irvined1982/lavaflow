@@ -121,7 +121,8 @@ row_num = 0
 rows = []
 for row in acct_file:
     row_num += 1
-    if len(rows) % args.chunk_size == 0:
+    if len(rows) > 0 and len(rows) % args.chunk_size == 0:
+        logging.debug("Importing %s rows" % row_num )
         upload(rows)
         rows = []
     rows.append(row.to_json())
