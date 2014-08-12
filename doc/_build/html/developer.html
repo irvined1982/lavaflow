@@ -1,0 +1,1006 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Developer Documentation &mdash; LavaFlow 1.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="LavaFlow 1.2 documentation" href="index.html" />
+    <link rel="next" title="Glossary of Terms" href="glossary.html" />
+    <link rel="prev" title="Import Tools" href="import.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          LavaFlow</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server.html">LavaFlow Server Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">Client Tools Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="import.html">Import Tools</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Developer Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary of Terms</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Developer Documentation</a><ul>
+<li><a class="reference internal" href="#core-models">Core Models</a></li>
+<li><a class="reference internal" href="#lavaflow-models-importkey">lavaFlow.models.ImportKey</a></li>
+<li><a class="reference internal" href="#lavaflow-models-cluster">lavaFlow.models.Cluster</a></li>
+<li><a class="reference internal" href="#lavaflow-models-clusterlog">lavaFlow.models.ClusterLog</a></li>
+<li><a class="reference internal" href="#lavaflow-models-job">lavaFlow.models.Job</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="import.html" title="Previous Chapter: Import Tools"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Import Tools</span>
+    </a>
+  </li>
+  <li>
+    <a href="glossary.html" title="Next Chapter: Glossary of Terms"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Glossary of Term... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/developer.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="developer-documentation">
+<h1>Developer Documentation<a class="headerlink" href="#developer-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="core-models">
+<h2>Core Models<a class="headerlink" href="#core-models" title="Permalink to this headline">¶</a></h2>
+<p>The following classes form the core lavaFlow functionality, they are used by all scheduling environments, and contain
+all the data required for the core reports.</p>
+</div>
+<div class="section" id="lavaflow-models-importkey">
+<h2>lavaFlow.models.ImportKey<a class="headerlink" href="#lavaflow-models-importkey" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lavaFlow.models.ImportKey">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">ImportKey</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#ImportKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.ImportKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Any client that attempts to import data must present a valid key. Keys in general should be managed through the
+admin control panel.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lavaFlow.models</span> <span class="kn">import</span> <span class="n">ImportKey</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">key</span><span class="o">=</span><span class="n">ImportKey</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">client_key</span><span class="o">=</span><span class="s">&quot;key_to_check&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="c"># Key is valid.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">except</span> <span class="n">ObjectDoesNotExist</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="c"># Key is invalid.</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="ImportKey.client_key">
+<tt class="descname">client_key</tt><a class="headerlink" href="#ImportKey.client_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Client Key, used by each uploader to authenticate.  This is very rudimentary.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ImportKey.comment">
+<tt class="descname">comment</tt><a class="headerlink" href="#ImportKey.comment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional comment/description field, free form, example might include which servers/clusters are using this key.
+Not used in any way for authentication.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.ImportKey.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#ImportKey.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.ImportKey.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a str containing the client key.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str(client_key)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.ImportKey.__unicode__">
+<tt class="descname">__unicode__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#ImportKey.__unicode__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.ImportKey.__unicode__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the unicode represenation of the client_key</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">unicode(client_key)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="lavaflow-models-cluster">
+<h2>lavaFlow.models.Cluster<a class="headerlink" href="#lavaflow-models-cluster" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lavaFlow.models.Cluster">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Cluster</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Almost every bit of data stored in lavaFlow can be traced back to a cluster, clusters represent the physical compute
+clusters that jobs are executed on.  There could be just one, for a simple departmental cluster, or many for an
+entire organization with both regional and centralized compute services.  Cluster objects are generally created
+automatically by the agents monitoring the cluster.  Extended information is generally added by the end user via
+the admin interface.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lavaFlow.models</span> <span class="kn">import</span> <span class="n">Cluster</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">created</span><span class="p">)</span> <span class="o">=</span> <span class="n">Cluster</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;openlava&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cluster</span><span class="o">.</span><span class="n">name</span>
+</pre></div>
+</div>
+<p>u&#8217;openlava&#8217;
+&gt;&gt;&gt; cluster.total_attempts()
+9000
+&gt;&gt;&gt; cluster.first_task()
+&lt;Attempt: Attempt object&gt;
+&gt;&gt;&gt; cluster.last_task()
+&lt;Attempt: Attempt object&gt;
+&gt;&gt;&gt; cluster.average_pend_time_timedelta()
+datetime.timedelta(0, 12001, 831000)
+&gt;&gt;&gt; cluster.average_pend_time()
+12001.831</p>
+<dl class="attribute">
+<dt id="Cluster.name">
+<tt class="descname">name</tt><a class="headerlink" href="#Cluster.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This is the name of the cluster, generally this is whatever the scheduler thinks its name is, however it can be
+overridden manually by the cluster administator.</p>
+<dl class="method">
+<dt id="lavaFlow.models.Cluster.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a  str containing the name of the cluster.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str(name)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Cluster.__unicode__">
+<tt class="descname">__unicode__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.__unicode__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.__unicode__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a unicode str containing the name of the cluster.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">unicode(self.__str__())</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Cluster.average_pend_time">
+<tt class="descname">average_pend_time</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.average_pend_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.average_pend_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the average pend time in seconds for all jobs that executed on the cluster.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Number of seconds on average that jobs pend for on this cluster.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Cluster.average_pend_time_percent">
+<tt class="descname">average_pend_time_percent</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.average_pend_time_percent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.average_pend_time_percent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the average pend time of jobs on the cluster as a percent of their overall wall clock time.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Average Pend Time as a percent</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Cluster.average_pend_time_timedelta">
+<tt class="descname">average_pend_time_timedelta</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.average_pend_time_timedelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.average_pend_time_timedelta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timedelta object of the number of seconds that jobs pend for</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Average pend time as timedelta.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Cluster.average_wall_time">
+<tt class="descname">average_wall_time</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.average_wall_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.average_wall_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the average wall clock time in seconds for all jobs that executed on the cluster.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Number of seconds on average that jobs take from submission to completion.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Cluster.average_wall_time_timedelta">
+<tt class="descname">average_wall_time_timedelta</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.average_wall_time_timedelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.average_wall_time_timedelta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timedelta object of the number of seconds of the average wall clock time.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Average wall clock time as timedelta.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Cluster.first_task">
+<tt class="descname">first_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.first_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.first_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the first task that was executed on the cluster.  If no tasks were executed on the cluster, returns None.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Attempt object of the first attempt executed.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Cluster.get_absolute_url">
+<tt class="descname">get_absolute_url</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.get_absolute_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.get_absolute_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>The absolute URL to the cluster view.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">URL of the cluster view page for this instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Cluster.last_failed_task">
+<tt class="descname">last_failed_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.last_failed_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.last_failed_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the last task that exited with a non-successful exit state on the cluster.  If no tasks have been executed
+on the cluster, or none of the tasks have exited witha  failure, returns None</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Attempt object of the last attempt that failed, returns None of no failed attempts.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Cluster.last_task">
+<tt class="descname">last_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.last_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.last_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the last task that ended on the cluster, regardless of exit status.  If no tasks have been executed on the
+cluster, returns None</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Attempt object of the last attempt ended, returns None of no attempts.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Cluster.total_attempts">
+<tt class="descname">total_attempts</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.total_attempts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.total_attempts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an total number of tasks that have been executed on this cluster since time began.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Integer containing total number of tasks</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Cluster.total_jobs">
+<tt class="descname">total_jobs</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.total_jobs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.total_jobs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an total number of jobs that have been submitted to this cluster since time began.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Integer containing total number of jobs</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Cluster.total_tasks">
+<tt class="descname">total_tasks</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Cluster.total_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Cluster.total_tasks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an total number of tasks that have been submitted to this cluster since time began.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Integer containing total number of tasks</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="lavaflow-models-clusterlog">
+<h2>lavaFlow.models.ClusterLog<a class="headerlink" href="#lavaflow-models-clusterlog" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lavaFlow.models.ClusterLog">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">ClusterLog</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#ClusterLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.ClusterLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>ClusterLog objects are log entries that relate to the cluster as a whole. These can be created by tools, or through
+the admin interface by an administator.</p>
+<dl class="attribute">
+<dt id="ClusterLog.cluster">
+<tt class="descname">cluster</tt><a class="headerlink" href="#ClusterLog.cluster" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Foreign key to the Cluster that the log is part of</p>
+<dl class="attribute">
+<dt id="ClusterLog.time">
+<tt class="descname">time</tt><a class="headerlink" href="#ClusterLog.time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Time of the log entry, in seconds since Epoch</p>
+<dl class="attribute">
+<dt id="ClusterLog.message">
+<tt class="descname">message</tt><a class="headerlink" href="#ClusterLog.message" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The message, a text field that can contain freeform text.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="lavaflow-models-job">
+<h2>lavaFlow.models.Job<a class="headerlink" href="#lavaflow-models-job" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="lavaFlow.models.Job">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Job</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Job(id, cluster_id, job_id, user_id, submit_host_id, submit_time, submit_hour_of_day, submit_day_of_week, submit_day_of_month, submit_week_of_year, submit_month)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.JobLog">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">JobLog</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#JobLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.JobLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>JobLog(id, cluster_id, time, message, clusterlog_ptr_id, job_id)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.Task">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Task</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Task(id, cluster_id, job_id, user_id, task_id, submit_time, submit_hour_of_day, submit_day_of_week, submit_day_of_month, submit_week_of_year, submit_month)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.Attempt">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Attempt</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Attempt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Attempt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Each time a task is started on one or more compute nodes, it is called an attempt.  Tasks that fail and are
+restarted may have multiple attempts.</p>
+<dl class="attribute">
+<dt id="Attempt.cluster">
+<tt class="descname">cluster</tt><a class="headerlink" href="#Attempt.cluster" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Cluster object that this attempt is part of.</p>
+<dl class="attribute">
+<dt id="Attempt.job">
+<tt class="descname">job</tt><a class="headerlink" href="#Attempt.job" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Job object that this attempt is part of.</p>
+<dl class="attribute">
+<dt id="Attempt.task">
+<tt class="descname">task</tt><a class="headerlink" href="#Attempt.task" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Task object that this attempt is part of.</p>
+<dl class="attribute">
+<dt id="Attempt.user">
+<tt class="descname">user</tt><a class="headerlink" href="#Attempt.user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>User object that this attempt belongs to</p>
+<dl class="attribute">
+<dt id="Attempt.num_processors">
+<tt class="descname">num_processors</tt><a class="headerlink" href="#Attempt.num_processors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Number of processors this attempt was dispatched to</p>
+<dl class="attribute">
+<dt id="Attempt.projects">
+<tt class="descname">projects</tt><a class="headerlink" href="#Attempt.projects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>QuerySet containing all Project objects that this attempt is part of.  May be part of multiple projects
+where supported by the scheduling environment.</p>
+<dl class="attribute">
+<dt id="Attempt.execution_hosts">
+<tt class="descname">execution_hosts</tt><a class="headerlink" href="#Attempt.execution_hosts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>QuerySet containing all Host objects that where assigned to this attempt.  Not all scheduling systems are able to
+report which hosts were used for a task.  In that case only the primary host will be given.</p>
+<dl class="attribute">
+<dt id="Attempt.submit_time">
+<tt class="descname">submit_time</tt><a class="headerlink" href="#Attempt.submit_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The time in seconds since epoch UTC that the task was submitted to the cluster</p>
+<dl class="attribute">
+<dt id="Attempt.start_time">
+<tt class="descname">start_time</tt><a class="headerlink" href="#Attempt.start_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The time in seconds since epoch UTC that the task was executed</p>
+<dl class="attribute">
+<dt id="Attempt.end_time">
+<tt class="descname">end_time</tt><a class="headerlink" href="#Attempt.end_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The time in seconds since epoch UTC that the task ended</p>
+<dl class="attribute">
+<dt id="Attempt.cpu_time">
+<tt class="descname">cpu_time</tt><a class="headerlink" href="#Attempt.cpu_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The cpu time in seconds for the job.</p>
+<dl class="attribute">
+<dt id="Attempt.wall_time">
+<tt class="descname">wall_time</tt><a class="headerlink" href="#Attempt.wall_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The wall clock time in seconds for the job.</p>
+<dl class="attribute">
+<dt id="Attempt.pend_time">
+<tt class="descname">pend_time</tt><a class="headerlink" href="#Attempt.pend_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The number of seconds the job was pending</p>
+<dl class="attribute">
+<dt id="Attempt.queue">
+<tt class="descname">queue</tt><a class="headerlink" href="#Attempt.queue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The Queue object the job was in</p>
+<dl class="attribute">
+<dt id="Attempt.status">
+<tt class="descname">status</tt><a class="headerlink" href="#Attempt.status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The Exit Status of the job</p>
+<dl class="attribute">
+<dt id="Attempt.command">
+<tt class="descname">command</tt><a class="headerlink" href="#Attempt.command" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The command executed by the job</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.Queue">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Queue</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queue(id, cluster_id, name)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.Project">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Project</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project" title="Permalink to this definition">¶</a></dt>
+<dd><p>Projects are used to store the project name that jobs were submitted to, jobs of course can be submitted to
+multiple projects, and this is also supported.  Projects are unique globally.</p>
+<dl class="attribute">
+<dt id="Project.name">
+<tt class="descname">name</tt><a class="headerlink" href="#Project.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This is the name of the project, as reported by the scheduler.</p>
+<dl class="method">
+<dt id="lavaFlow.models.Project.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a  str containing the name of the project.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str(name)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Project.__unicode__">
+<tt class="descname">__unicode__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.__unicode__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.__unicode__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a unicode str containing the name of the project.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">unicode(self.__str__())</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Project.average_pend_time">
+<tt class="descname">average_pend_time</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.average_pend_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.average_pend_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the average pend time in seconds for all jobs that were submitted under this project.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Number of seconds on average that jobs pend for this project.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Project.average_pend_time_percent">
+<tt class="descname">average_pend_time_percent</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.average_pend_time_percent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.average_pend_time_percent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the average pend time of jobs submitted under this project as a percent of their overall wall clock time.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Average Pend Time as a percent</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Project.average_pend_time_timedelta">
+<tt class="descname">average_pend_time_timedelta</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.average_pend_time_timedelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.average_pend_time_timedelta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timedelta object of the number of seconds that jobs pend for</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Average pend time as timedelta.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Project.average_wall_time">
+<tt class="descname">average_wall_time</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.average_wall_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.average_wall_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the average wall clock time in seconds for all jobs that were submitted under this project.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Number of seconds on average that jobs take from submission to completion.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Project.average_wall_time_timedelta">
+<tt class="descname">average_wall_time_timedelta</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.average_wall_time_timedelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.average_wall_time_timedelta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timedelta object of the number of seconds of the average wall clock time.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Average wall clock time as timedelta.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Project.first_task">
+<tt class="descname">first_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.first_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.first_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the first task that was executed under this project.  If no tasks were executed, returns None.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Attempt object of the first attempt executed.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Project.get_absolute_url">
+<tt class="descname">get_absolute_url</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.get_absolute_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.get_absolute_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>The absolute URL to the project view.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">URL of the project view page for this instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Project.last_failed_task">
+<tt class="descname">last_failed_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.last_failed_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.last_failed_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the last task that exited with a non-successful exit state under this project.  If no tasks have been
+executed under this project, or none of the tasks have exited with a failure, returns None.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Attempt object of the last attempt that failed, returns None of no failed attempts.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Project.last_task">
+<tt class="descname">last_task</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.last_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.last_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the last task under this project that ended, regardless of exit status.  If no tasks have been executed
+on the under this project, returns None</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Attempt object of the last attempt ended, returns None of no attempts.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Project.total_attempts">
+<tt class="descname">total_attempts</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.total_attempts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.total_attempts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an total number of tasks that have been executed under this project since time began.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Integer containing total number of tasks</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Project.total_jobs">
+<tt class="descname">total_jobs</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.total_jobs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.total_jobs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an total number of jobs that have been submitted to this project since time began.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Integer containing total number of jobs</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lavaFlow.models.Project.total_tasks">
+<tt class="descname">total_tasks</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Project.total_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Project.total_tasks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an total number of tasks that have been submitted to this project since time began.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Integer containing total number of tasks</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.Host">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">Host</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#Host"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.Host" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hosts represent actual hosts, these may be any arbitrary host, but generally are hosts that are either execution
+hosts or submission hosts.</p>
+<dl class="attribute">
+<dt id="Host.name">
+<tt class="descname">name</tt><a class="headerlink" href="#Host.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This is the name of the host. It is generally not the fully qualified domain name, but simply the local hostname.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.HostLog">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">HostLog</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#HostLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.HostLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>HostLog(id, cluster_id, time, message, clusterlog_ptr_id, host_id)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.QueueLog">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">QueueLog</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#QueueLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.QueueLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>QueueLog(id, cluster_id, time, message, clusterlog_ptr_id, queue_id)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.User">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">User</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#User"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.User" title="Permalink to this definition">¶</a></dt>
+<dd><p>User(id, name)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.UserLog">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">UserLog</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#UserLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.UserLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>UserLog(id, cluster_id, time, message, clusterlog_ptr_id, user_id)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="lavaFlow.models.AttemptResourceUsage">
+<em class="property">class </em><tt class="descclassname">lavaFlow.models.</tt><tt class="descname">AttemptResourceUsage</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/lavaFlow/models.html#AttemptResourceUsage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lavaFlow.models.AttemptResourceUsage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resource usage measures for the attempt, taken from the getrusage() system call.  Not all schedulers support
+this operation, and where not supported, this will not be created.</p>
+<dl class="attribute">
+<dt id="AttemptResourceUsage.attempt">
+<tt class="descname">attempt</tt><a class="headerlink" href="#AttemptResourceUsage.attempt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The attempt object that this instance refers to.</p>
+<dl class="attribute">
+<dt id="AttemptResourceUsage.user_time">
+<tt class="descname">user_time</tt><a class="headerlink" href="#AttemptResourceUsage.user_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This is the total amount of time spent executing in user mode, in seconds.</p>
+<dl class="attribute">
+<dt id="AttemptResourceUsage.system_time">
+<tt class="descname">system_time</tt><a class="headerlink" href="#AttemptResourceUsage.system_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This is the total amount of time spent executing in kernel mode, in seconds.</p>
+<dl class="attribute">
+<dt id="AttemptResourceUsage.max_rss">
+<tt class="descname">max_rss</tt><a class="headerlink" href="#AttemptResourceUsage.max_rss" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This is the maximum resident set size used (in kilobytes).</p>
+<dl class="attribute">
+<dt id="AttemptResourceUsage.integral_shared_text">
+<tt class="descname">integral_shared_text</tt><a class="headerlink" href="#AttemptResourceUsage.integral_shared_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Integral shared text size.</p>
+<dl class="attribute">
+<dt id="AttemptResourceUsage.integral_shared_memory">
+<tt class="descname">integral_shared_memory</tt><a class="headerlink" href="#AttemptResourceUsage.integral_shared_memory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Integral shared memory size.</p>
+<dl class="attribute">
+<dt id="AttemptResourceUsage.integral_unshared_data">
+<tt class="descname">integral_unshared_data</tt><a class="headerlink" href="#AttemptResourceUsage.integral_unshared_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Integral unshared data.</p>
+<dl class="attribute">
+<dt id="AttemptResourceUsage.integral_unshared_stack">
+<tt class="descname">integral_unshared_stack</tt><a class="headerlink" href="#AttemptResourceUsage.integral_unshared_stack" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Integral unshared stack.</p>
+<dl class="attribute">
+<dt id="AttemptResourceUsage.page_reclaims">
+<tt class="descname">page_reclaims</tt><a class="headerlink" href="#AttemptResourceUsage.page_reclaims" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The number of page faults serviced without any I/O activity; Here I/O activity is avoided by &#8220;reclaiming&#8221; a page
+frame from the list of pages awaiting reallocation.</p>
+<dl class="attribute">
+<dt id="AttemptResourceUsage.page_faults">
+<tt class="descname">page_faults</tt><a class="headerlink" href="#AttemptResourceUsage.page_faults" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The number of page faults serviced that required I/O activity.</p>
+<dl class="attribute">
+<dt id="AttemptResourceUsage.swaps">
+<tt class="descname">swaps</tt><a class="headerlink" href="#AttemptResourceUsage.swaps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Swap Operations.</p>
+<dl class="attribute">
+<dt id="AttemptResourceUsage.input_block_ops">
+<tt class="descname">input_block_ops</tt><a class="headerlink" href="#AttemptResourceUsage.input_block_ops" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The number of times the filesystem had to perform input.</p>
+<dl class="attribute">
+<dt id="AttemptResourceUsage.output_block_ops">
+<tt class="descname">output_block_ops</tt><a class="headerlink" href="#AttemptResourceUsage.output_block_ops" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The number of times the filesystem had to perform output.</p>
+<dl class="attribute">
+<dt id="AttemptResourceUsage.character_io_ops">
+<tt class="descname">character_io_ops</tt><a class="headerlink" href="#AttemptResourceUsage.character_io_ops" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p># of characters read/written.</p>
+<dl class="attribute">
+<dt id="AttemptResourceUsage.messages_sent">
+<tt class="descname">messages_sent</tt><a class="headerlink" href="#AttemptResourceUsage.messages_sent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Messages sent.</p>
+<dl class="attribute">
+<dt id="AttemptResourceUsage.messages_received">
+<tt class="descname">messages_received</tt><a class="headerlink" href="#AttemptResourceUsage.messages_received" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Messages received.</p>
+<dl class="attribute">
+<dt id="AttemptResourceUsage.num_signals">
+<tt class="descname">num_signals</tt><a class="headerlink" href="#AttemptResourceUsage.num_signals" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Signals received.</p>
+<dl class="attribute">
+<dt id="AttemptResourceUsage.voluntary_context_switches">
+<tt class="descname">voluntary_context_switches</tt><a class="headerlink" href="#AttemptResourceUsage.voluntary_context_switches" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The number of times a context switch resulted due to a process voluntarily giving up the processor before its
+time slice was completed (usually to await availability of a resource).</p>
+<dl class="attribute">
+<dt id="AttemptResourceUsage.involuntary_context_switches">
+<tt class="descname">involuntary_context_switches</tt><a class="headerlink" href="#AttemptResourceUsage.involuntary_context_switches" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The number of times a context switch resulted due to a higher priority process becoming runnable or because
+the current process exceeded its time slice.</p>
+<dl class="attribute">
+<dt id="AttemptResourceUsage.exact_user_time">
+<tt class="descname">exact_user_time</tt><a class="headerlink" href="#AttemptResourceUsage.exact_user_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Exact user time used.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2014, David Irvine.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
