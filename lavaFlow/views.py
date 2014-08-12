@@ -1715,7 +1715,7 @@ def utilization_view(request, start_time_js=None, end_time_js=None, exclude_stri
     if start_time_js is None:
         start_time_js = 0
     start_time_js=int(start_time_js)
-    
+
     if end_time_js == 0:
         print "setting to end"
         end_time_js = last_end_time_js
