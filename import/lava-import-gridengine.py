@@ -30,7 +30,7 @@ def upload(rows):
     :param rows: Array of objects to try to upload
     :return: None
     """
-
+    logging.debug(rows)
     # loop X times, then bail on error
     request = urllib2.Request(url, json.dumps({'key': args.key, 'payload': rows}), {'Content-Type': 'application/json'})
     # Ensure server knows this is an AJAX request.
