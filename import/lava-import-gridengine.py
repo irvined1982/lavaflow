@@ -125,7 +125,7 @@ for row in acct_file:
         logging.debug("Importing %s rows" % row_num )
         upload(rows)
         rows = []
-    rows.append(row.to_json())
+    rows.append(row.to_dict())
 fh.close()
 
 if len(rows) > 0:
