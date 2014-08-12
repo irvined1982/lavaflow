@@ -91,14 +91,8 @@
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">Features</a><ul>
-<li><a class="reference internal" href="#capacity-management">Capacity Management</a></li>
-<li><a class="reference internal" href="#contention-management">Contention Management</a></li>
+<li><a class="reference internal" href="#capacity-and-contention-management">Capacity and Contention Management</a></li>
 <li><a class="reference internal" href="#job-information">Job Information</a></li>
-<li><a class="reference internal" href="#job-search">Job Search</a></li>
-<li><a class="reference internal" href="#job-view">Job View</a></li>
-<li><a class="reference internal" href="#resource-usage">Resource Usage</a></li>
-<li><a class="reference internal" href="#contending-tasks">Contending Tasks</a></li>
-<li><a class="reference internal" href="#job-size-chart">Job Size Chart</a></li>
 <li><a class="reference internal" href="#powerful-filters">Powerful Filters</a></li>
 </ul>
 </li>
@@ -151,54 +145,47 @@
       
   <div class="section" id="features">
 <h1>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="capacity-management">
-<h2>Capacity Management<a class="headerlink" href="#capacity-management" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="capacity-and-contention-management">
+<h2>Capacity and Contention Management<a class="headerlink" href="#capacity-and-contention-management" title="Permalink to this headline">¶</a></h2>
 <p>Charts and tables showing demand (Requested capacity) with a accurate resolution promote data driven decisions for
-capacity management. Charts can be broken down by user, project, queue, job size and cluster, or rolled up to show
-global demand across the organization. Charts can be filtered to show only data for specific metrics, such as a project
-or queue. Alternatively metrics can be excluded in order to show demand for just the specific data needed.</p>
-</div>
-<div class="section" id="contention-management">
-<h2>Contention Management<a class="headerlink" href="#contention-management" title="Permalink to this headline">¶</a></h2>
-<p>Charts and tables showing actual utilization (Delivered capacity) with a one-minute resolution make it easy to see who
-used what capacity. Combined with the capacity management graphs, this provides insight into who is getting access to
+capacity management. Charts can be broken down by fields such as user, project, queue, job size and cluster, or
+rolled up to show global demand across the organization. Charts can be filtered to show only data for specific metrics,
+such as a project or queue. Alternatively metrics can be excluded in order to show demand for just the specific data
+needed.</p>
+<img alt="images/utilization_chart.*" class="align-center" src="images/utilization_chart.*" style="width: 600px;" />
+<p>Actual utilization (Delivered capacity) with a one-minute resolution make it easy to see who used what capacity.
+Combined with the capacity management graphs, this provides insight into who is getting access to
 your HPC clusters. Graphs make it clear how much capacity was actually delivered, and makes it easy to demonstrate the
 effectiveness of any sharing policies in place.</p>
+<img alt="images/job_submission_times.*" class="align-center" src="images/job_submission_times.*" style="width: 600px;" />
+<p>View aggregated information on job submission times, this shows when users are most active on the cluster.  Compare this
+with job throughput information to understand how your cluster is used.</p>
+<img alt="images/resource_consumption.*" class="align-center" src="images/resource_consumption.*" style="width: 600px;" />
+<p>Charts of job resource usage provide an overview of consumed resources during the jobs execution.  Tasks that ran on
+the same hosts at the same time. When physical resources are shared between multiple jobs, enables users and admins to
+find jobs that may have used more than their fair share.</p>
 </div>
 <div class="section" id="job-information">
 <h2>Job Information<a class="headerlink" href="#job-information" title="Permalink to this headline">¶</a></h2>
 <p>The job view shows detailed information on jobs that have finished, including graphs of pending time, resource usage,
 and exit status for each task. Detailed information on job submission and execution information is available. Support
 staff and end users benefit from detailed information on the job submission and execution requirements.</p>
-</div>
-<div class="section" id="job-search">
-<h2>Job Search<a class="headerlink" href="#job-search" title="Permalink to this headline">¶</a></h2>
-<p>Job Search makes it easy to find details about specific jobs. Both users and admins can easily interrogate the cluster
-for detailed information about jobs.</p>
-</div>
-<div class="section" id="job-view">
-<h2>Job View<a class="headerlink" href="#job-view" title="Permalink to this headline">¶</a></h2>
-<p>Job view shows detailed information on jobs that have finished, including graphs of pending time, resource usage, and
-exit status for each task. Detailed information on job submission and execution information.</p>
-</div>
-<div class="section" id="resource-usage">
-<h2>Resource Usage<a class="headerlink" href="#resource-usage" title="Permalink to this headline">¶</a></h2>
-<p>Charts of job resource usage provide an overview of consumed resources during the jobs execution.</p>
-</div>
-<div class="section" id="contending-tasks">
-<h2>Contending Tasks<a class="headerlink" href="#contending-tasks" title="Permalink to this headline">¶</a></h2>
-<p>View tasks that ran on the same hosts at the same time. When physical resources are shared between multiple jobs,
-enables users and admins to find jobs that may have used more than their fair share.</p>
-</div>
-<div class="section" id="job-size-chart">
-<h2>Job Size Chart<a class="headerlink" href="#job-size-chart" title="Permalink to this headline">¶</a></h2>
-<p>See throughput per job size, spot job sizes that don’t schedule well, and understand the most common job sizes in the
-environment.</p>
+<img alt="images/job_exit_messages.*" class="align-center" src="images/job_exit_messages.*" style="width: 600px;" />
+<p>Job view highlights potential problems with the job, such as failed tasks, and tasks with a very short run time.</p>
+<img alt="images/job_flow.*" class="align-center" src="images/job_flow.*" style="width: 600px;" />
+<p>The job flow diagram shows how jobs, tasks, queues, hosts, and clusters relate to the job.</p>
+<img alt="images/job_throughput.*" class="align-center" src="images/job_throughput.*" style="width: 600px;" />
+<p>Job Throughput shows the state of each task in the job, and shows how the job was processed by the scheduler.  Job
+throughput charts help users with job arrays see the how long each task was pending for. Job Search makes it easy to
+find details about specific jobs. Both users and admins can easily interrogate the cluster for detailed information
+about jobs.</p>
 </div>
 <div class="section" id="powerful-filters">
 <h2>Powerful Filters<a class="headerlink" href="#powerful-filters" title="Permalink to this headline">¶</a></h2>
+<img alt="images/filters.*" class="align-center" src="images/filters.*" style="width: 600px;" />
 <p>Use include and exclude features to show filter on any data metric to create a report with the exact data you want to
-see.</p>
+see.  Set a range of values either by selecting them, (Such as a submit week) or by using an operator such as
+selecting jobs with a high pend time.</p>
 </div>
 </div>
 
