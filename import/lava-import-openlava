@@ -115,7 +115,7 @@ try:
         fh.readline()
         if i % 100 == 0:
             logging.debug("Skipped %d lines" % i)
-        logging.info("Skipped %d lines." % i)
+    logging.info("Skipped %d lines." % i)
 except IOError as e:
     logging.critical("Error: Unable to open %s: %s. Exiting.\n" % (args.log_file, str(e)))
     sys.exit(1)
