@@ -95,7 +95,7 @@ parser.add_argument('--chunk_size', metavar="CHUNK_SIZE", type=int, default=200,
 parser.add_argument('--log_level', metavar="LOG_LEVEL", type=str, default="warn", help="Log level to use")
 parser.add_argument("--retry_forever", action="store_true", default="False",
                     help="Keep trying, even when server responds with an error")
-parser.add_argument("--skip", default=0, help="Number of lines to skip")
+parser.add_argument("--skip", default=0, type=int, help="Number of lines to skip")
 
 args = parser.parse_args()
 
