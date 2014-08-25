@@ -95,7 +95,7 @@ parser.add_argument('--chunk_size', metavar="CHUNK_SIZE", type=int, default=200,
 parser.add_argument('--log_level', metavar="LOG_LEVEL", type=str, default="warn", help="Log level to use")
 parser.add_argument("--retry_forever", action="store_true", default="False",
                     help="Keep trying, even when server responds with an error")
-
+parser.add_argument("--skip", default=0, help="Number of lines to skip")
 
 args = parser.parse_args()
 
@@ -111,6 +111,8 @@ if not os.path.exists(args.log_file):
     sys.exit(1)
 try:
     fh = open(args.log_file)
+    for i in xrange(args.skip):
+        fh.readline()
 except IOError as e:
     logging.critical("Error: Unable to open %s: %s. Exiting.\n" % (args.log_file, str(e)))
     sys.exit(1)
