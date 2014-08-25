@@ -106,7 +106,11 @@ Number of records to group together before sending to server.
 
 Log level to use, can be one of debug, info, warn, error, critical.
 
-.. option::retry_forever
+.. option:: retry_forever
 
 When enabled, will not exit when the end of the input file is reached.  Instead, it will wait for new data,
 or if the file is rotated, reopen the file and continue reading.
+
+.. option:: skip
+
+Skip N number of lines from the start of the file.
