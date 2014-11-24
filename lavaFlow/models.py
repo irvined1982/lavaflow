@@ -1410,7 +1410,7 @@ class GridEngineAttemptInfo(models.Model):
     cpu_time = models.FloatField()
     integral_mem_usage = models.FloatField()
     io_usage = models.FloatField()
-    catagory = models.CharField(max_length=1024)
+    category = models.CharField(max_length=1024)
     io_wait = models.FloatField()
     pe_task_id = models.IntegerField(null=True)
     max_vmem = models.FloatField()

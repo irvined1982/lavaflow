@@ -37,6 +37,8 @@ urlpatterns = patterns('',
                            name='lf_openlava_import'),
                        url(r'^clusters/(.*?)/import/gridengine$', 'lavaFlow.views.gridengine_import',
                            name='lf_gridengine_import'),
+                       url(r'^clusters/(.*?)/import/univa82$', 'lavaFlow.views.univa82_import',
+                           name='lf_univa82_import'),
 
                        url(r'^hosts/$', ListView.as_view(model=Host, paginate_by=20), name="lf_host_list"),
                        url(r'^users/$', ListView.as_view(model=User, paginate_by=20), name="lf_user_list"),
@@ -66,7 +68,8 @@ urlpatterns = patterns('',
                        url(
                            r'^util/(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$',
                            'lavaFlow.views.utilization_data', name='lf_util_chart_view'),
-                       url(r'^utilization_table/(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$',
+                       url(
+                           r'^utilization_table/(?P<start_time_js>\d+)/(?P<end_time_js>\d+)/exclude/(?P<exclude_string>.+?)/exclude/filter/(?P<filter_string>.+?)/filter/group/(?P<group_string>.+?)/group$',
                            'lavaFlow.views.utilization_table', name='lf_utilization_table'),
 
                        url(r'^util_build_filter$', 'lavaFlow.views.build_filter', name="lf_build_filter"),
