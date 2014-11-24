@@ -7,3 +7,4 @@ build
 dist
 django_lavaflow.egg-info
 lavaflow-bootstrap.py
+.idea
