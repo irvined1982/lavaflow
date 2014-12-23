@@ -111,6 +111,7 @@ if not os.path.exists(args.log_file):
     sys.exit(1)
 try:
     fh = open(args.log_file)
+    i = 0
     for i in xrange(args.skip):
         fh.readline()
         if i % 100 == 0:

@@ -1830,7 +1830,10 @@ def utilization_table(request, start_time_js=0, end_time_js=0, exclude_string=""
         for a in aggs:
             for i in ["avg", "min", "max", "sum"]:
                 name = "%s__%s" % (a, i)
-                row[name] = datetime.timedelta(seconds=int(r[name]))
+                try:
+                    row[name] = datetime.timedelta(seconds=int(r[name]))
+                except TypeError:
+                    row[name] = datetime.timedelta(seconds=0)
         rows.append(row)
     return render(request, "lavaFlow/widgets/utilization_chart.html", {'header': header, 'rows': rows})
 

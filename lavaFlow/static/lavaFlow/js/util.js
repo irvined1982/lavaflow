@@ -603,7 +603,6 @@ function load_chart(chart_name, view_name, field){
 
 
 
-
 // Creates a chart of given name
 function create_chart(chart_name){
     var chart_selector="#" + chart_name + " svg";
