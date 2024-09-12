@@ -18,7 +18,7 @@ import pwd
 import sys
 
 LAVAFLOW_DIST_LOCATION='https://github.com/irvined1982/lavaflow.git'
-LAVAFLOW_DIST_BRANCH='master'
+LAVAFLOW_DIST_BRANCH='main'
 
 def extend_parser(parser):
     parser.add_option(

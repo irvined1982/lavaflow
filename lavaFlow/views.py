@@ -362,8 +362,8 @@ OPENLAVA_JOB_STATES = {
     0x10000: {
         'friendly': "Unknown",
         'name': "JOB_STAT_UNKWN",
-        'description': "The slave batch daemon (sbatchd) on the host on which the job is processed has lost contact \
-        with the master batch daemon (mbatchd).",
+        'description': "The subordinate batch daemon (sbatchd) on the host on which the job is processed has lost contact \
+        with the main batch daemon (mbatchd).",
     },
 }
 
@@ -568,7 +568,7 @@ def gridengine_job_import(cluster, data):
         21: {
             'code': 21,
             'name': 'In recognizing job',
-            'description': 'qmaster asked about an unknown job (Not in accounting)',
+            'description': 'qmain asked about an unknown job (Not in accounting)',
             'exited_cleanly': False,
         },
         24: {
@@ -651,7 +651,7 @@ def gridengine_job_import(cluster, data):
         },
         37: {
             'code': 37,
-            'name': 'qmaster enforced h_rt, h_cpu, or h_vmem limit',
+            'name': 'qmain enforced h_rt, h_cpu, or h_vmem limit',
             'description': 'ran, but killed due to exceeding run time limit',
             'exited_cleanly': True,
         },
@@ -895,7 +895,7 @@ def univa82_job_import(cluster, data):
         21: {
             'code': 21,
             'name': 'In recognizing job',
-            'description': 'qmaster asked about an unknown job (Not in accounting)',
+            'description': 'qmain asked about an unknown job (Not in accounting)',
             'exited_cleanly': False,
         },
         24: {
@@ -978,7 +978,7 @@ def univa82_job_import(cluster, data):
         },
         37: {
             'code': 37,
-            'name': 'qmaster enforced h_rt, h_cpu, or h_vmem limit',
+            'name': 'qmain enforced h_rt, h_cpu, or h_vmem limit',
             'description': 'ran, but killed due to exceeding run time limit',
             'exited_cleanly': True,
         },
